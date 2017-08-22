@@ -7,8 +7,8 @@ Created on Wed Jul 19 11:31:02 2017
 import numpy as np
 import pyart
 
-
-def calculate_radial_vel_cost_function(rad_vel1, rad_vel2, u, v, w, wt1, 
+def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
+                                       w, wt1,
                                        wt2, coeff=10.0, dudt=0.0, dvdt=0.0, 
                                        vel_name=None):
     """
@@ -37,12 +37,6 @@ def calculate_radial_vel_cost_function(rad_vel1, rad_vel2, u, v, w, wt1,
     vel_name: str
         Background velocity field name
     """
-    vr_1 = Grid1.fields[vel_name]['data']
-    vr_1 = Grid2.fields[vel_name]['data']
-    az1 = Grid1.fields['AZ']['data']
-    az2 = Grid2.fields['AZ']['data']
-    el1 = Grid1.fields['EL']['data']
-    el2 = Grid2.fields['EL']['data']
     ## Need to implement time of observation 
     v_ar1 = (np.cos(el1)*np.sin(az1)*u + 
              np.cos(el1)*np.cos(az1)*v + 
@@ -50,8 +44,8 @@ def calculate_radial_vel_cost_function(rad_vel1, rad_vel2, u, v, w, wt1,
     v_ar2 = (np.cos(el1)*np.sin(az1)*u + 
              np.cos(el2)*np.cos(az2)*v + 
              np.sin(el2)*(w - wt2))
-    J_o = np.sum(coeff*np.square(v_r1 - v_ar1) +
-          np.sum(coeff*np.square(v_r2 - v_ar2)))
+    J_o = np.sum(coeff*np.square(vr_1 - v_ar1) +
+          np.sum(coeff*np.square(vr_2 - v_ar2)))
     del az1, az2, el1, el2, v_ar1, v_ar2, vr_1, vr_2
     return J_o
 
@@ -89,6 +83,15 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
                      np.logical_and(refl >= 55, refl < 60))] = 0.013
     A[np.logical_and(grid_z < frz, refl > 60)] = -3.95
     B[np.logical_and(grid_z < frz, refl > 60)] = 0.0148
+    A[np.logical_and(grid_z > frz, refl < 33)] = -0.817
+    B[np.logical_and(grid_z > frz, refl < 33)] = 0.0063
+    A[np.logical_and(grid_z > frz,
+                     np.logical_and(refl >= 55, refl < 49))] = -2.5
+    B[np.logical_and(grid_z > frz,
+                     np.logical_and(refl >= 55, refl < 49))] = 0.013
+    A[np.logical_and(grid_z > frz, refl > 49)] = -3.95
+    B[np.logical_and(grid_z > frz, refl > 49)] = 0.0148
+
     fallspeed = A*np.power(10, refl*B)*np.power(1.2/rho, 0.4)
-    
+    return fallspeed
     del A,B,rho
