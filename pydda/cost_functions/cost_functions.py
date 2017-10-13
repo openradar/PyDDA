@@ -6,7 +6,9 @@ Created on Wed Jul 19 11:31:02 2017
 
 import numpy as np
 import pyart
+from numba import jit
 
+#@jit(parallel=True)
 def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
                                        w, wt1,
                                        wt2, coeff=10.0, dudt=0.0, dvdt=0.0, 
@@ -41,15 +43,26 @@ def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
     v_ar1 = (np.cos(el1)*np.sin(az1)*u + 
              np.cos(el1)*np.cos(az1)*v + 
              np.sin(el1)*(w - wt1))
-    v_ar2 = (np.cos(el1)*np.sin(az1)*u + 
+    v_ar2 = (np.cos(el2)*np.sin(az2)*u + 
              np.cos(el2)*np.cos(az2)*v + 
              np.sin(el2)*(w - wt2))
-    J_o = np.sum(coeff*np.square(vr_1 - v_ar1) +
-          np.sum(coeff*np.square(vr_2 - v_ar2)))
-    del az1, az2, el1, el2, v_ar1, v_ar2, vr_1, vr_2
+    J_o = coeff*(np.sum(coeff*np.square(vr_1 - v_ar1) +
+                 np.sum(coeff*np.square(vr_2 - v_ar2))))
+    
     return J_o
 
-
+#@jit(parallel=True)
+def calculate_grad_radial_vel(el, az, u, v, w,
+                              wt, coeff=10.0):
+    v_ar1 = (np.cos(el)*np.sin(az)*u + 
+            np.cos(el)*np.cos(az)*v + 
+            np.sin(el)*(w - wt))
+    p_x1 = coeff*(2*(v_ar1 - u)*np.cos(el)*np.sin(az)) 
+    p_y1 = coeff*(2*(v_ar1 - v)*np.cos(el)*np.cos(az)) 
+    p_z1 = coeff*(2*(v_ar1 - w)*np.sin(el))
+    y = np.stack([p_x1, p_y1, p_z1], axis=0)
+    return np.reshape(y, np.prod((y.shape,)))
+           
 def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     """
     Estimates fall speed based on reflectivity
