@@ -11,7 +11,7 @@ from numba import jit
 #@jit(parallel=True)
 def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
                                        w, wt1,
-                                       wt2, coeff=10.0, dudt=0.0, dvdt=0.0, 
+                                       wt2, coeff=1.0, dudt=0.0, dvdt=0.0, 
                                        vel_name=None):
     """
     Calculates the cost function due to difference of wind field from
@@ -40,14 +40,18 @@ def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
         Background velocity field name
     """
     ## Need to implement time of observation 
+    M1 = len(np.where(vr_1.mask == False))
+    M2 = len(np.where(vr_2.mask == False))
     v_ar1 = (np.cos(el1)*np.sin(az1)*u + 
              np.cos(el1)*np.cos(az1)*v + 
              np.sin(el1)*(w - wt1))
     v_ar2 = (np.cos(el2)*np.sin(az2)*u + 
              np.cos(el2)*np.cos(az2)*v + 
              np.sin(el2)*(w - wt2))
-    J_o = coeff*(np.sum(coeff*np.square(vr_1 - v_ar1) +
-                 np.sum(coeff*np.square(vr_2 - v_ar2))))
+    lambda_o = coeff*(1/(M1+M2)/(np.sum(np.square(vr_1)) +
+                      np.sum(np.square(vr_2)))) 
+    J_o = lambda_o*(np.sum(coeff*np.square(vr_1 - v_ar1) +
+                    np.sum(coeff*np.square(vr_2 - v_ar2))))
     
     return J_o
 
@@ -62,7 +66,77 @@ def calculate_grad_radial_vel(el, az, u, v, w,
     p_z1 = coeff*(2*(v_ar1 - w)*np.sin(el))
     y = np.stack([p_x1, p_y1, p_z1], axis=0)
     return np.reshape(y, np.prod((y.shape,)))
-           
+
+#def calculate_smoothness_cost():
+    
+def calculate_mass_continuity(u, v, w, z, el, dx, dy, dz, coeff=1500.0, anel=1):
+    dudx = np.empty_like(u)
+    dudx[:,:,:-1] = np.diff(u, axis=2)/dx
+    dudx[:,:,-1] = -u[:,:,-1]/dx
+    dvdy = np.empty_like(v)
+    dvdy[:,:-1,:] = np.diff(v, axis=1)/dy
+    dvdy[:,-1,:] = -v[:,-1,:]/dy
+    dwdz = np.empty_like(w)
+    dwdz[:-1,:,:] = np.diff(w, axis=0)/dz
+    dwdz[-1] = -w[-1]/dz
+    if(anel == 1):
+        rho = np.exp(-z/10000.0)
+        drho_dz = np.empty_like(rho)
+        drho_dz[:-1] = np.diff(rho, axis=0)/dz
+        drho_dz[-1] = -rho[-1]/dz
+        anel_term = w/rho*drho_dz
+    else:
+        anel_term = np.zeros(w.shape)
+    return coeff*np.sum(np.square((dudx[:-1,1:,1:] + dudx[:-1,1:,:-1])/2.0 + 
+                                  (dvdy[:-1,1:,1:] + dvdy[:-1,1:,:-1])/2.0 +
+                                   dwdz[:-1,1:,1:] + anel_term[:-1,1:,1:]))
+
+def calculate_mass_continuity_gradient(u, v, w, z, el, dx, 
+                                        dy, dz, coeff=1500.0, anel=1):
+    dudx = np.empty_like(u)
+    dudx[:,:,:-1] = np.diff(u, axis=2)/dx
+    dudx[:,:,-1] = -u[:,:,-1]/dx
+    dvdy = np.empty_like(v)
+    dvdy[:,:-1,:] = np.diff(v, axis=1)/dy
+    dvdy[:,-1,:] = -v[:,-1,:]/dy
+    dwdz = np.empty_like(w)
+    dwdz[:-1,:,:] = np.diff(w, axis=0)/dz
+    dwdz[-1] = -w[-1]/dz
+    if(anel == 1):
+        rho = np.exp(-z/10000.0)
+        drho_dz = np.empty_like(rho)
+        drho_dz[:-1] = np.diff(rho, axis=0)/dz
+        drho_dz[-1] = -rho[-1]/dz
+        anel_term = w/rho*drho_dz
+        anel_term_adj = np.empty_like(anel_term)
+        anel_term_adj[-1] = rho[-1]/dz
+        anel_term_adj[:-1,:,:] = 2/(rho[:-1,:,:]+rho[1:,:,:])*(rho[1:,:,:]-rho[:-1,:,:])/dz
+    else:
+        anel_term = np.zeros(w.shape)
+        anel_term_adj = np.zeros(w.shape)
+        
+    div2 = np.empty_like(w)
+    div2[:-1,1:-1,1:-1] = coeff*((dudx[:-1,1:-1,1:-1] + dudx[:-1,1:-1,1:-1])/2.0 +
+        (dvdy[:-1,1:-1,1:-1] + dvdy[:-1,1:-1,1:-1])/2.0 +
+        (dwdz[:-1,1:-1,1:-1] + anel_term[:-1,1:-1,1:-1]))
+    grad_u = np.zeros(w.shape)
+    grad_v = np.zeros(w.shape)
+    grad_w = np.zeros(w.shape)
+    grad_u[:-1,1:-1,:-2] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
+    grad_u[:-1,1:-1,2:] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
+    grad_u[1:,1:-1,:-2] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
+    grad_u[1:,1:-1,2:] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
+    
+    grad_v[:-1,2:,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
+    grad_v[:-1:,:-2,1:-1] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
+    grad_v[1:,2:,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
+    grad_v[1:,:-2,1:-1] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
+    
+    grad_w[1:,1:-1,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]//dz
+    grad_w[:-1,1:-1,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]*(anel_term_adj[:-1,1:-1,1:-1]-1/dz)
+    y = np.stack([grad_u, grad_v, grad_w], axis=0)
+    return np.reshape(y, np.prod((y.shape,)))
+    
 def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     """
     Estimates fall speed based on reflectivity
@@ -87,7 +161,7 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     term_vel = np.zeros(refl.shape)    
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
-    rho = grid_z/10000.0
+    rho = np.exp(grid_z/10000.0)
     A[np.logical_and(grid_z < frz, refl < 55)] = -2.6
     B[np.logical_and(grid_z < frz, refl < 55)] = 0.0107
     A[np.logical_and(grid_z < frz, 
