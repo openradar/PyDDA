@@ -7,13 +7,15 @@ Created on Wed Jul 19 11:31:02 2017
 import numpy as np
 import pyart
 
-from numba import jit
+from numba import jit, cuda
+from numba import vectorize
+import scipy.ndimage.filters 
 
 
 def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
                                        w, wt1,
-                                       wt2, rmsVr, weights, coeff=1.0, dudt=0.0, dvdt=0.0,
-                                       vel_name=None):
+                                       wt2, rmsVr, weights, coeff=1.0, 
+                                       dudt=0.0, dvdt=0.0):
     """
     Calculates the cost function due to difference of wind field from
     radar radial velocities. Radar 1 and Radar 2 must be in 
@@ -41,11 +43,6 @@ def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
         Background velocity field name
     """
     ## Need to implement time of observation 
-    vr_1 = np.ma.filled(vr_1, 0)
-    vr_2 = np.ma.filled(vr_2, 0)
-    wt1 = np.ma.filled(wt1, 0)
-    wt2 = np.ma.filled(wt2, 0)
-
     v_ar1 = (np.cos(el1)*np.sin(az1)*u + 
              np.cos(el1)*np.cos(az1)*v + 
              np.sin(el1)*(w - np.abs(wt1)))
@@ -66,10 +63,7 @@ def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
 
 def calculate_grad_radial_vel(vr_1, vr_2, el1, az1, el2, az2, u, v, w,
                               wt1, wt2, weights, rmsVr, coeff=10.0):
-    vr_1 = np.ma.filled(vr_1,0)
-    vr_2 = np.ma.filled(vr_2,0)
-    wt1 = np.ma.filled(wt1, 0)
-    wt2 = np.ma.filled(wt2, 0)
+
     v_ar1 = (np.cos(el1)*np.sin(az1)*u +
             np.cos(el1)*np.cos(az1)*v +
             np.sin(el1)*(w - np.abs(wt1)))
@@ -89,146 +83,45 @@ def calculate_grad_radial_vel(vr_1, vr_2, el1, az1, el2, az2, u, v, w,
     # Impermeability condition
     p_z1[0, :, :] = 0
     p_z1[-1, :, :] = 0
-    y = np.stack([p_x1, p_y1, p_z1], axis=0)
+    y = np.stack((p_x1, p_y1, p_z1), axis=0)
 
     return y.flatten()
 
 
+
 def calculate_smoothness_cost(u, v, w, z, el, dx, dy, dz, cutoff=1000.0,
-                              C4=50.0, C5=0.0, C6=0.0, C7=50.0, laplace=0):
-    if(laplace == 1):
-        dudx = np.gradient(u, dx, axis=2)
-        dudx2 = np.gradient(dudx, dx, axis=2)
-        dvdx = np.gradient(v, dx, axis=2)
-        dvdx2 = np.gradient(dvdx, dx, axis=2)
-        dwdx = np.gradient(w, dx, axis=2)
-        dwdx2 = np.gradient(dwdx, dx, axis=2)
-
-        dudy = np.gradient(u, dy, axis=1)
-        dudy2 = np.gradient(dudy, dy, axis=1)
-        dvdy = np.gradient(v, dy, axis=1)
-        dvdy2 = np.gradient(dvdy, dy, axis=1)
-        dwdy = np.gradient(w, dy, axis=1)
-        dwdy2 = np.gradient(dwdy, dy, axis=1)
-
-        dudz = np.gradient(u, dz, axis=0)
-        dudz2 = np.gradient(dudz, dz, axis=0)
-        dvdz = np.gradient(v, dz, axis=0)
-        dvdz2 = np.gradient(dvdz, dz, axis=0)
-        dwdz = np.gradient(w, dz, axis=0)
-        dwdz2 = np.gradient(dwdz, dz, axis=0)
-
-        return np.sum(C5*(np.square(dudz2) + np.square(dvdz2)) +
-                      C6*(np.square(dwdz2)) +
-                      C7*(np.square(dwdx2) + np.square(dwdy2)) +
-                      C4*(np.square(dudx2) + np.square(dudy2) +
-                          np.square(dvdy2) + np.square(dvdx2)))
-    else:
-        dudx = np.gradient(u, dx, axis=2)
-        dudy = np.gradient(u, dy, axis=1)
-        dudz = np.gradient(u, dz, axis=0)
-        dvdx = np.gradient(v, dx, axis=2)
-        dvdy = np.gradient(v, dy, axis=1)
-        dvdz = np.gradient(v, dz, axis=0)
-        dwdx = np.gradient(w, dx, axis=2)
-        dwdy = np.gradient(w, dy, axis=1)
-        dwdz = np.gradient(w, dz, axis=0)
-        return np.sum(C5 * (np.square(dudz) + np.square(dvdz)) +
-                      C6 * (np.square(dwdz)) +
-                      C7 * (np.square(dwdx) + np.square(dwdy)) +
-                      C4 * (np.square(dudx) + np.square(dudy) +
-                            np.square(dvdy) + np.square(dvdx)))
+                              Cx=0.0, Cy=0.0, Cz=0.0, laplace=1):
+    du = np.zeros(w.shape)
+    dv = np.zeros(w.shape)
+    dw = np.zeros(w.shape)
+    scipy.ndimage.filters.laplace(u,du, mode='wrap')
+    scipy.ndimage.filters.laplace(v,dv, mode='wrap')
+    scipy.ndimage.filters.laplace(w,dw, mode='wrap')
+    return np.sum(Cx*du**2 + Cy*dy**2 + Cz*dw**2)         
 
 
 
 def calculate_smoothness_gradient(u, v, w, z, el, dx, dy, dz, cutoff=1000.0,
-                                  C4=50.0, C5=0.0, C6=0.0, C7=50.0, laplace=0):
+                                  Cx=0.0, Cy=0.0, Cz=0.0, laplace=0):
+    du = np.zeros(w.shape)
+    dv = np.zeros(w.shape)
+    dw = np.zeros(w.shape)
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    if(laplace == 1):
-        dudx = np.gradient(u, dx, axis=2)
-        dudx2 = np.gradient(dudx, dx, axis=2)
-        dvdx = np.gradient(v, dx, axis=2)
-        dvdx2 = np.gradient(dvdx, dx, axis=2)
-        dwdx = np.gradient(w, dx, axis=2)
-        dwdx2 = np.gradient(dwdx, dx, axis=2)
-
-        dudy = np.gradient(u, dy, axis=1)
-        dudy2 = np.gradient(dudy, dy, axis=1)
-        dvdy = np.gradient(v, dy, axis=1)
-        dvdy2 = np.gradient(dvdy, dy, axis=1)
-        dwdy = np.gradient(w, dy, axis=1)
-        dwdy2 = np.gradient(dwdy, dy, axis=1)
-
-        dudz = np.gradient(u, dz, axis=0)
-        dudz2 = np.gradient(dudz, dz, axis=0)
-        dvdz = np.gradient(v, dz, axis=0)
-        dvdz2 = np.gradient(dvdz, dz, axis=0)
-        dwdz = np.gradient(w, dz, axis=0)
-        dwdz2 = np.gradient(dwdz, dz, axis=0)
-
-        grad_u = 2*C4*(dudx2 + dudy2) + 2*C5*(dudz2)
-        grad_v = 2*C4*(dvdx2 + dvdy2) + 2*C5*(dvdz2)
-        grad_w = 2*C6*(dwdx2 + dwdy2) + 2*C7*(dwdz2)
-    else:
-        dudx = np.gradient(u, dx, axis=2)
-        dvdx = np.gradient(v, dx, axis=2)
-        dwdx = np.gradient(w, dx, axis=2)
-
-        dudy = np.gradient(u, dy, axis=1)
-        dvdy = np.gradient(v, dy, axis=1)
-        dwdy = np.gradient(w, dy, axis=1)
-
-        dudz = np.gradient(u, dz, axis=0)
-        dvdz = np.gradient(v, dz, axis=0)
-        dwdz = np.gradient(w, dz, axis=0)
-
-        grad_u = 2 * C4 * (dudx + dudy) + 2 * C5 * (dudz)
-        grad_v = 2 * C4 * (dvdx + dvdy) + 2 * C5 * (dvdz)
-        grad_w = 2 * C6 * (dwdx + dwdy) + 2 * C7 * (dwdz)
-
-    #grad_u[1:,1:,1:-1] += (8*u[1:,1:,1:-1] - 4 * (u[1:,1:,1:-1] + u[1:,1:,:-2]))/np.power(dx, 4)*C4
-    #grad_u[1:,1:,:-2] += (2*u[1:,1:,:-2]-4*u[1:,1:,1:-1]+ 2*u[1:,1:,2:])/np.power(dx,4)*C4
-    #grad_u[1:,1:,2:] += (2*u[1:,1:,:-2]-4*u[1:,1:,1:-1] + 2*u[1:,1:,2:])/np.power(dx,4)*C4
-
-    #grad_v[1:, 1:, 1:-1] += (8 * v[1:,1:,1:-1] - 4 * (v[1:, 1:, 1:-1] + v[1:, 1:, :-2])) / np.power(dx, 4) * C4
-    #grad_v[1:, 1:, :-2] += (2 * v[1:, 1:, :-2] - 4 * v[1:, 1:, 1:-1] + 2 * v[1:, 1:, 2:]) / np.power(dx, 4) * C4
-    #grad_v[1:, 1:, 2:] += (2 * v[1:, 1:, :-2] - 4 * v[1:, 1:, 1:-1] + 2 * v[1:, 1:, 2:]) / np.power(dx, 4) * C4
-
-    #grad_w[1:, 1:, 1:-1] += (8 * w[1:,1:,1:-1] - 4 * (w[1:, 1:, 1:-1] + w[1:, 1:, :-2])) / np.power(dx, 4) * C7
-    #grad_w[1:, 1:, :-2] += (2 * w[1:, 1:, :-2] - 4 * w[1:, 1:, 1:-1] + 2 * w[1:, 1:, 2:]) / np.power(dx, 4) * C7
-    #grad_w[1:, 1:, 2:] += (2 * w[1:, 1:, :-2] - 4 * w[1:, 1:, 1:-1] + 2 * w[1:, 1:, 2:]) / np.power(dx, 4) * C7
-
-    #grad_u[1:, 1:-1, 1:] += (8 * u[1:, 1:-1, 1:] - 4 * (u[1:, 1:-1, 1:] + u[1:, :-2, 1:])) / np.power(dy, 4) * C4
-    #grad_u[1:, :-2, 1:] += (2 * u[1:, :-2, 1:] - 4 * u[1:, 1:-1, 1:] + 2 * u[1:, 2:, 1:]) / np.power(dy, 4) * C4
-    #grad_u[1:, 2:, 1:] += (2 * u[1:, :-2, 1:] - 4 * u[1:, 1:-1, 1:] + 2 * u[1:, 2:, 1:]) / np.power(dy, 4) * C4
-
-    #grad_v[1:, 1:-1, 1:] += (8 * v[1:,1:-1,1:] - 4 * (v[1:, 1:-1, 1:] + v[1:, :-2, 1:])) / np.power(dy, 4) * C4
-    #grad_v[1:, :-2, 1:] += (2 * v[1:, :-2, 1:] - 4 * v[1:, 1:-1, 1:] + 2 * v[1:, 2:, 1:]) / np.power(dy, 4) * C4
-    #grad_v[1:, 2:, 1:] += (2 * v[1:, :-2, 1:] - 4 * v[1:, 1:-1, 1:] + 2 * v[1:, 2:, 1:]) / np.power(dy, 4) * C4
-
-    #grad_w[1:, 1:-1, 1:] += (8 * w[1:,1:-1,1:] - 4 * (w[1:, 1:-1, 1:] + w[1:, :-2, 1:])) / np.power(dy, 4) * C7
-    #grad_w[1:, :-2, 1:] += (2 * w[1:, :-2, 1:] - 4 * w[1:, 1:-1, 1:] + 2 * w[1:, 2:, 1:]) / np.power(dy, 4) * C7
-    #grad_w[1:, 2:, 1:] += (2 * w[1:, :-2, 1:] - 4 * w[1:, 1:-1, 1:] + 2 * w[1:, 2:, 1:]) / np.power(dy, 4) * C7
-
-    #grad_u[1:-1, 1:, 1:] += (8 * u[1:-1, 1:, 1:] - 4 * (u[1:-1, 1:, 1:] + u[:-2, 1:, 1:])) / np.power(dz, 4) * C5
-    #grad_u[:-2, 1:, 1:] += (2 * u[:-2, 1:, 1:] - 4 * u[1:-1, 1:, 1:] + 2 * u[2:, 1:, 1:]) / np.power(dz, 4) * C5
-    #grad_u[2:, 1:, 1:] += (2 * u[2:, 1:, :1] - 4 * u[1:-1, 1:, 1:] + 2 * u[2:, 1:, 1:]) / np.power(dz, 4) * C5
-
-    #grad_v[1:-1, 1:, 1:] += (8 * v[1:-1, 1:, 1:] - 4 * (v[1:-1, 1:, 1:] + v[:-2, 1:, 1:])) / np.power(dz, 4) * C5
-    #grad_v[:-2, 1:, 1:] += (2 * v[:-2, 1:, 1:] - 4 * v[1:-1, 1:, 1:] + 2 * v[2:, 1:, 1:]) / np.power(dz, 4) * C5
-    #grad_v[2:, 1:, 1:] += (2 * v[2:, 1:, 1:] - 4 * v[1:-1, 1:, 1:] + 2 * v[2:, 1:, 1:]) / np.power(dz, 4) * C5
-
-    #grad_w[1:-1, 1:, 1:] += (8 * w[1:-1, 1:, 1:] - 4 * (w[1:-1, 1:, 1:] + w[:-2, 1:, 1:])) / np.power(dz, 4) * C6
-    #grad_w[:-2, 1:, 1:] += (2 * w[:-2, 1:, 1:] - 4 * w[1:-1, 1:, 1:] + 2 * w[2:, 1:, 1:]) / np.power(dz, 4) * C6
-    #grad_w[2:, 1:, 1:] += (2 * w[:-2, 1:, 1:] - 4 * w[1:-1, 1:, 1:] + 2 * w[2:, 1:, 1:]) / np.power(dz, 4) * C6
-
+    scipy.ndimage.filters.laplace(u,du, mode='wrap')
+    scipy.ndimage.filters.laplace(v,dv, mode='wrap')
+    scipy.ndimage.filters.laplace(w,dw, mode='wrap')
+    scipy.ndimage.filters.laplace(du, grad_u, mode='wrap')
+    scipy.ndimage.filters.laplace(dv, grad_v, mode='wrap')
+    scipy.ndimage.filters.laplace(dw, grad_w, mode='wrap')
+           
     # Impermeability condition
     grad_w[0, :, :] = 0
     grad_w[-1, :, :] = 0
-    y = np.stack([grad_u, grad_v, grad_w], axis=0)
+    y = np.stack([grad_u*Cx*2, grad_v*Cy*2, grad_w*Cz*2], axis=0)
     return y.flatten()
+
 
 
 def calculate_mass_continuity(u, v, w, z, el, dx, dy, dz, coeff=1500.0, anel=1):
@@ -242,7 +135,8 @@ def calculate_mass_continuity(u, v, w, z, el, dx, dy, dz, coeff=1500.0, anel=1):
         anel_term = w/rho*drho_dz
     else:
         anel_term = np.zeros(w.shape)
-    return coeff*np.sum(np.square(dudx + dvdy + dwdz + anel_term))
+    return coeff*np.sum(np.square(dudx + dvdy + dwdz + anel_term))/2.0
+
 
 
 def calculate_mass_continuity_gradient(u, v, w, z, el, dx,
@@ -254,28 +148,16 @@ def calculate_mass_continuity_gradient(u, v, w, z, el, dx,
         rho = np.exp(-z/10000.0)
         drho_dz = np.gradient(rho, dz, axis=0)
         anel_term = w/rho*drho_dz
-        anel_term_adj = 1 + drho_dz/rho
     else:
-        anel_term = np.zeros(w.shape)
-        anel_term_adj = np.ones(w.shape)
+        anel_term = 0
 
     div2 = dudx + dvdy + dwdz + anel_term
-    grad_u = 2*div2*coeff
-    grad_v = 2*div2*coeff
-    grad_w = 2*div2*anel_term_adj*coeff
-    #grad_u[:-1,1:-1,:-2] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
-    #grad_u[:-1,1:-1,2:] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
-    #grad_u[1:,1:-1,:-2] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
-    #grad_u[1:,1:-1,2:] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dx)
     
-    #grad_v[:-1,2:,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
-    #grad_v[:-1,:-2,1:-1] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
-    #grad_v[1:,2:,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
-    #grad_v[1:,:-2,1:-1] -= 2*coeff*div2[:-1,1:-1,1:-1]/(4*dy)
+    grad_u = -np.gradient(div2, dx, axis=2)*coeff
+    grad_v = -np.gradient(div2, dy, axis=1)*coeff
+    grad_w = -np.gradient(div2, dz, axis=0)*coeff
+   
     
-    #grad_w[1:,1:-1,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]/dz
-    #grad_w[:-1,1:-1,1:-1] += 2*coeff*div2[:-1,1:-1,1:-1]*(anel_term_adj[:-1,1:-1,1:-1]-1/dz)
-
     # Impermeability condition
     grad_w[0,:,:] = 0
     grad_w[-1,:,:] = 0
@@ -330,12 +212,14 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     return fallspeed
 
 
+
 def calculate_background_cost(u, v, w, weights, u_back, v_back, C8=0.01):
     the_shape = u.shape
     cost = 0
     for i in range(the_shape[0]):
-        cost += C8*np.sum(np.square(u[i]-u_back[i])*(weights) + np.square(v[i]-v_back[i])*(weights))
+        cost += C8*np.sum(np.square(u[i]-u_back[i])*(weights[i]) + np.square(v[i]-v_back[i])*(weights[i]))
     return cost
+
 
 
 def calculate_background_gradient(u, v, w, weights, u_back, v_back, C8=0.01):
