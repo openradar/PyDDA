@@ -23,28 +23,22 @@ from .angles import add_azimuth_as_field, add_elevation_as_field
 num_evaluations = 0
 
 
-def J_function(winds, vr_1, vr_2, az1, az2, el1, el2,
-                   wt1, wt2, u_back, v_back,
+def J_function(winds, vrs, azs, els, wts, u_back, v_back,
                    C1, C2, C4, Cx, Cy, Cz, C8, 
                    dudt, dvdt, grid_shape,
                    vel_name, dx, dy, dz, z, rmsVr, weights, bg_weights):
         global num_evaluations
         winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
                                       grid_shape[2]))
-        vr1a = np.ma.filled(vr_1, 0)
-        vr2a = np.ma.filled(vr_2, 0)
-        wt1a = np.ma.filled(wt1, 0)
-        wt2a = np.ma.filled(wt2, 0)
+
 
         
-        Jvel = (cost_functions.calculate_radial_vel_cost_function(vr1a, vr2a,
-                                                                  az1,
-                                                                  az2, el1,
-                                                                  el2,
+        Jvel = (cost_functions.calculate_radial_vel_cost_function(vrs, azs,
+                                                                  els,
                                                                   winds[0],
                                                                   winds[1],
                                                                   winds[2],
-                                                                  wt1a, wt2a,
+                                                                  wts,
                                                                   rmsVr=rmsVr,
                                                                   weights=weights,
                                                                   coeff=C1,
@@ -54,16 +48,14 @@ def J_function(winds, vr_1, vr_2, az1, az2, el1, el2,
             Jmass = (cost_functions.calculate_mass_continuity(winds[0], 
                                                               winds[1],
                                                               winds[2], z, 
-                                                              el1, 
-                                                              dx, dy, dz, 
+                                                              dx, dy, dz,
                                                               coeff=C2))
         else:
             Jmass = 0
             
         if(Cx > 0 or Cy > 0 or Cz > 0):
             Jsmooth = cost_functions.calculate_smoothness_cost(
-                winds[0], winds[1], winds[2], z, el1,
-                dx, dy, dz, cutoff=1000.0, Cx=Cx, Cy=Cy, Cz=Cz)
+                winds[0], winds[1], winds[2], Cx=Cx, Cy=Cy, Cz=Cz)
         else:
             Jsmooth = 0
         if(C8 > 0):
@@ -86,32 +78,23 @@ def J_function(winds, vr_1, vr_2, az1, az2, el1, el2,
         return Jvel + Jmass + Jsmooth + Jbackground
 
     
-def grad_J(winds, vr_1, vr_2, az1, az2, el1, el2,
-               wt1, wt2, u_back, v_back,
+def grad_J(winds, vrs, azs, els,
+               wts, u_back, v_back,
                C1, C2, C4, Cx, Cy, Cz, C8,  
                dudt, dvdt, grid_shape,
                vel_name, dx, dy, dz, z, rmsVr, weights, bg_weights):
 
     winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
                                       grid_shape[2]))
-    vr1a = np.ma.filled(vr_1, 0)
-    vr2a = np.ma.filled(vr_2, 0)
-    wt1a = np.ma.filled(wt1, 0)
-    wt2a = np.ma.filled(wt2, 0)
-    vr1a[np.isnan(vr1a)] = 0
-    vr2a[np.isnan(vr2a)] = 0
-    wt1a[np.isnan(wt1a)] = 0
-    wt2a[np.isnan(wt2a)] = 0
-    grad = cost_functions.calculate_grad_radial_vel(vr1a, vr2a, el1, az1,
-                                                     el2, az2, winds[0], 
+    grad = cost_functions.calculate_grad_radial_vel(vrs, els, azs, winds[0],
                                                      winds[1], winds[2],
-                                                     wt1a, wt2a, weights, 
+                                                     wts, weights,
                                                      rmsVr, coeff=C1)
     if(C2 > 0):
          grad +=  cost_functions.calculate_mass_continuity_gradient(winds[0],
                                                                     winds[1],
                                                                     winds[2],
-                                                                    z, el1,
+                                                                    z,
                                                                     dx, dy, dz,
                                                                     coeff=C2
                                                                     )
@@ -119,9 +102,6 @@ def grad_J(winds, vr_1, vr_2, az1, az2, el1, el2,
         grad += cost_functions.calculate_smoothness_gradient(winds[0], 
                                                              winds[1], 
                                                              winds[2],
-                                                             z, el1,
-                                                             dx, dy, dz, 
-                                                             cutoff=1000.0,
                                                              Cx=Cx, Cy=Cy,
                                                              Cz=Cz)
     if(C8 > 0):
@@ -131,7 +111,7 @@ def grad_J(winds, vr_1, vr_2, az1, az2, el1, el2,
     return grad
 
 
-def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
+def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
                       frz=4500.0, C1=1.0, C2=1500.0, C4=50.0, Cx=0.0,
                       Cy=0.0, Cz=5.0, C8=0.001, dudt=0.0, dvdt=0.0,
@@ -151,14 +131,15 @@ def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
         print('Interpolating sounding to radar grid')
         u_interp = interp1d(z_back, u_back, bounds_error=False)
         v_interp = interp1d(z_back, v_back, bounds_error=False)
-        u_back2 = u_interp(Grid1.z['data'])
-        v_back2 = v_interp(Grid1.z['data'])
+        u_back2 = u_interp(Grids[0].z['data'])
+        v_back2 = v_interp(Grids[0].z['data'])
         print('Interpolated U field:')
         print(u_back2)
         print('Interpolated V field:')
         print(v_back2)
         print('Grid levels:')
-        print(Grid1.z['data'])
+        print(Grids[0].z['data'])
+
     # Parse names of velocity field
     if refl_field is None:
         refl_field = pyart.config.get_field_name('reflectivity')
@@ -167,13 +148,49 @@ def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
     if vel_name is None:
         vel_name = pyart.config.get_field_name('corrected_velocity')    
     winds = np.stack([u_init, v_init, w_init])
-    wt1 = cost_functions.calculate_fall_speed(Grid1, refl_field=refl_field)
-    wt2 = cost_functions.calculate_fall_speed(Grid2, refl_field=refl_field)
-    add_azimuth_as_field(Grid1)
-    add_azimuth_as_field(Grid2)
-    add_elevation_as_field(Grid1)
-    add_elevation_as_field(Grid2)
-
+    wts = []
+    vrs = []
+    azs = []
+    els = []
+    # Set up wind fields and weights from each radar
+    weights = np.zeros(
+        (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+    bg_weights = np.zeros(v_init.shape)
+    bca = np.zeros(
+        (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]))
+    M = np.zeros(len(Grids))
+    sum_Vr = np.zeros(len(Grids))
+    for i in range(len(Grids)):
+        wts.append(cost_functions.calculate_fall_speed(Grids[i], refl_field=refl_field))
+        add_azimuth_as_field(Grids[i])
+        add_elevation_as_field(Grids[i])
+        vrs.append(Grids[i].fields[vel_name]['data'])
+        azs.append(Grids[i].fields['AZ']['data']*np.pi/180)
+        els.append(Grids[i].fields['EL']['data']*np.pi/180)
+        sum_Vr[i] = np.sum(np.square(vrs[i]))
+        M[i] = len(np.where(vrs[i].mask == False)[0])
+        for j in range(i+1, len(Grids)):
+            bca[i,j] = get_bca(Grids[i].radar_longitude['data'],
+                               Grids[i].radar_latitude['data'],
+                               Grids[j].radar_longitude['data'],
+                               Grids[j].radar_latitude['data'],
+                               Grids[i].point_x['data'][0],
+                               Grids[i].point_y['data'][0],
+                               Grids[i].get_projparams())
+            for k in range(vrs[i].shape[0]):
+                cur_array = weights[i,k]
+                cur_array[np.logical_and(
+                     vrs[i][k].mask == False,
+                     np.logical_and(bca[i,j] > np.pi / 6, bca[i,j] < 5 * np.pi / 6))] += 1
+                weights[i,k] = cur_array
+                cur_array = bg_weights[k]
+                cur_array[np.logical_or(bca[i,j] < np.pi / 6, bca[i,j] > 5 * np.pi / 6)] = 1
+                cur_array[vrs[i][k].mask == True] = 1
+                bg_weights[i] = cur_array
+    print(M)
+    rmsVr = np.sum(sum_Vr)/np.sum(M)
+    weights[weights > 1] = 1
+    del bca
     grid_shape = u_init.shape
     # Parse names of velocity field
 
@@ -183,49 +200,12 @@ def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
     ndims = len(winds)
     print(len(winds.shape))
     print(("Starting solver for " + str(ndims) + " dimensional problem..."))
-    vr_1 = Grid1.fields[vel_name]['data']
-    vr_2 = Grid2.fields[vel_name]['data']
-    z_1 = Grid1.fields[refl_field]['data']
-    z_2 = Grid1.fields[refl_field]['data']
-    az1 = Grid1.fields['AZ']['data']*np.pi/180
-    az2 = Grid2.fields['AZ']['data']*np.pi/180
-    el1 = Grid1.fields['EL']['data']*np.pi/180
-    el2 = Grid2.fields['EL']['data']*np.pi/180
-
-    dx = np.diff(Grid1.x['data'], axis=0)[0]
-    dy = np.diff(Grid1.y['data'], axis=0)[0]
-    dz = np.diff(Grid1.z['data'], axis=0)[0]
-    bca = get_bca(Grid1.radar_longitude['data'],
-                  Grid1.radar_latitude['data'],
-                  Grid2.radar_longitude['data'],
-                  Grid2.radar_latitude['data'],
-                  Grid1.point_x['data'][0],
-                  Grid1.point_y['data'][0],
-                  Grid1.get_projparams())
-
-    M1 = len(np.where(vr_1.mask == False)[1])
-    M2 = len(np.where(vr_2.mask == False)[1])
-    weights = np.ones(vr_1.shape)
-    bg_weights = np.ones(vr_1.shape)
-    weights = np.ma.where(
-        np.logical_or(vr_1.mask == True, vr_2.mask == True), 0, 1)
-    bg_weights = np.zeros(vr_1.shape)
-
-    for i in range(vr_1.shape[0]):
-        cur_array = weights[i]
-        cur_array[np.logical_or(bca < np.pi/6, bca > 5*np.pi/6)] = 0
-        weights[i] = cur_array
-        cur_array = bg_weights[i]
-        cur_array[np.logical_or(bca < np.pi / 6, bca > 5 * np.pi / 6)] = 1
-        cur_array[vr_1[i].mask == True] = 1
-        cur_array[vr_2[i].mask == True] = 1
-        bg_weights[i] = cur_array
-
-
-    rmsVr = ((np.sum(np.square(vr_1)) + np.sum(np.square(vr_2))) / (M1 + M2))
+    dx = np.diff(Grids[0].x['data'], axis=0)[0]
+    dy = np.diff(Grids[0].y['data'], axis=0)[0]
+    dz = np.diff(Grids[0].z['data'], axis=0)[0]
     print('rmsVR = ' + str(rmsVr))
-    print('Total points:' +str(M1+M2))
-    z = Grid1.point_z['data']
+    print('Total points:' +str(M.sum()))
+    z = Grids[0].point_z['data']
 
     the_time = time.time()
     bt = time.time()
@@ -238,12 +218,11 @@ def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
     maxwprev = 99
     iterations = 0
     warnflag = 99999
-    while(iterations < max_iterations and warnflag > 0):
+    while(iterations < max_iterations and warnflag > 0 and (abs(wprev-wcurr).max() > 0.2)):
         wprev = wcurr
         bounds = [(-x,x) for x in 100*np.ones(winds.shape)]
-        winds = fmin_l_bfgs_b(J_function, winds, args=(vr_1, vr_2, az1, az2,
-                                                 el1, el2,
-                                                 wt1, wt2, u_back2, 
+        winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs,
+                                                 els, wts, u_back2,
                                                  v_back2, C1, C2, C4, Cx, 
                                                  Cy, Cz, C8, dudt,
                                                  dvdt, grid_shape,
@@ -259,15 +238,6 @@ def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
                                            grid_shape[2]))
         iterations = iterations+10
-        if(np.abs(wprev-winds[2]).max() > 0.2 and
-                   iterations % filt_iterations == 0 and
-                   filt_iterations != 1):
-            print('Applying filter...')
-            for i in range(vr_1.shape[0]):
-                winds[0,i] = mean_filter(winds[0,i], 4)
-                winds[1,i] = mean_filter(winds[1,i], 4)
-                winds[2,i] = mean_filter(winds[2,i], 4)
-
         wcurr = winds[2]
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
@@ -281,33 +251,29 @@ def get_dd_wind_field(Grid1, Grid2, u_init, v_init, w_init, vel_name=None,
 
     # First pass - no filter
 
-    print("Done! Time = " + str(time.time() - bt))
     the_winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
                                        grid_shape[2]))
     u = the_winds[0]
     v = the_winds[1]
     w = the_winds[2]
-    
+
+    where_mask = np.sum(weights, axis=0)
     if(mask_outside_opt==True):
-        u = np.ma.masked_where(
-            np.logical_or(vr_1.mask == True, vr_2.mask == True), u)
-        v = np.ma.masked_where(
-            np.logical_or(vr_1.mask == True, vr_2.mask == True), u)
-        w = np.ma.masked_where(
-            np.logical_or(vr_1.mask == True, vr_2.mask == True), u)
-    
+        u = np.ma.masked_where(where_mask < 1, u)
+        v = np.ma.masked_where(where_mask < 1, v)
+        w = np.ma.masked_where(where_mask < 1, w)
     if(mask_w_outside_opt==True):
-        w = np.ma.masked_where(
-            np.logical_or(vr_1.mask == True, vr_2.mask == True), w)
-    u_field = deepcopy(Grid1.fields[vel_name])
+        w = np.ma.masked_where(where_mask < 1, w)
+
+    u_field = deepcopy(Grids[0].fields[vel_name])
     u_field['data'] = u
     u_field['standard_name'] = 'u_wind'
     u_field['long_name'] = 'meridional component of wind velocity'
-    v_field = deepcopy(Grid1.fields[vel_name])
+    v_field = deepcopy(Grids[0].fields[vel_name])
     v_field['data'] = v
     v_field['standard_name'] = 'v_wind'
     v_field['long_name'] = 'zonal component of wind velocity'  
-    w_field = deepcopy(Grid1.fields[vel_name])
+    w_field = deepcopy(Grids[0].fields[vel_name])
     w_field['data'] = w
     w_field['standard_name'] = 'w_wind'
     w_field['long_name'] = 'vertical component of wind velocity' 

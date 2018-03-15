@@ -11,10 +11,8 @@ from numba import jit, cuda
 from numba import vectorize
 import scipy.ndimage.filters 
 
-
-def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
-                                       w, wt1,
-                                       wt2, rmsVr, weights, coeff=1.0, 
+def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
+                                       w, wts, rmsVr, weights, coeff=1.0,
                                        dudt=0.0, dvdt=0.0):
     """
     Calculates the cost function due to difference of wind field from
@@ -22,11 +20,12 @@ def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
     
     Parameters
     ----------
-    rad_vel1: float
-        Grid object from Radar 1
-    rad_vel2: float
-        Grid object from Radar 2. Radar 1 and Radar 2 must be gridded to same
-        locations.
+    vrs: List of float arrays
+        List of radial velocities from each radar
+    els: List of float arrays
+        List of elevations from each radar
+    azs: List of azimuths
+        List of azimuths from each radar
     u: Float array
         Float array with u component of wind field
     v: Float array
@@ -41,44 +40,46 @@ def calculate_radial_vel_cost_function(vr_1, vr_2, az1, az2, el1, el2, u, v,
         Background storm motion
     vel_name: str
         Background velocity field name
+    weights: n_radars x_bins x y_bins float array
+        Data weights for each pair of radars
     """
-    ## Need to implement time of observation 
-    v_ar1 = (np.cos(el1)*np.sin(az1)*u + 
-             np.cos(el1)*np.cos(az1)*v + 
-             np.sin(el1)*(w - np.abs(wt1)))
-    v_ar2 = (np.cos(el2)*np.sin(az2)*u + 
-             np.cos(el2)*np.cos(az2)*v + 
-             np.sin(el2)*(w - np.abs(wt2)))
+    ## Need to implement time of observation
+    for i in range(len(vrs)):
+        vrs[i] = np.ma.filled(vrs[i], 0)
+        wts[i] = np.ma.filled(wts[i], 0)
+        vrs[i][np.isnan(vrs[i])] = 0
+        wts[i][np.isnan(wts[i])] = 0
 
-    lambda_o = coeff/(rmsVr*rmsVr)
+    J_o = 0
+    lambda_o = coeff / (rmsVr * rmsVr)
+    for i in range(len(vrs)-1):
+        v_ar = (np.cos(els[i])*np.sin(azs[i])*u +
+                np.cos(els[i])*np.cos(azs[i])*v +
+                np.sin(els[i])*(w - np.abs(wts[i])))
+        J_o += lambda_o*np.sum(np.square(vrs[i]-v_ar)*weights[i])
 
-    ## Do not consider points where vr_1 or vr_2 is masked
-
-    J_o = lambda_o*(np.sum(np.square(vr_1 - v_ar1)*weights) +
-                    np.sum(np.square(vr_2 - v_ar2)*weights))
-    
     return J_o
 
 
+def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
+                              wts, weights, rmsVr, coeff=10.0):
+    for i in range(len(vrs)):
+        vrs[i] = np.ma.filled(vrs[i], 0)
+        wts[i] = np.ma.filled(wts[i], 0)
+        vrs[i][np.isnan(vrs[i])] = 0
+        wts[i][np.isnan(wts[i])] = 0
 
-def calculate_grad_radial_vel(vr_1, vr_2, el1, az1, el2, az2, u, v, w,
-                              wt1, wt2, weights, rmsVr, coeff=10.0):
-
-    v_ar1 = (np.cos(el1)*np.sin(az1)*u +
-            np.cos(el1)*np.cos(az1)*v +
-            np.sin(el1)*(w - np.abs(wt1)))
-    v_ar2 = (np.cos(el2) * np.sin(az2) * u +
-             np.cos(el2) * np.cos(az2) * v +
-             np.sin(el2) * (w - np.abs(wt2)))
-
+    p_x1 = np.zeros(vrs[1].shape)
+    p_y1 = np.zeros(vrs[1].shape)
+    p_z1 = np.zeros(vrs[1].shape)
     lambda_o = coeff / (rmsVr * rmsVr)
-    p_x1 = (2*(v_ar1 - vr_1)*np.cos(el1)*np.sin(az1)*weights)*lambda_o
-    p_y1 = (2*(v_ar1 - vr_1)*np.cos(el1)*np.cos(az1)*weights)*lambda_o
-    p_z1 = (2*(v_ar1 - vr_1)*np.sin(el1)*weights)*lambda_o
-
-    p_x1 += (2*(v_ar2 - vr_2)*np.cos(el2)*np.sin(az2)*weights)*lambda_o
-    p_y1 += (2*(v_ar2 - vr_2)*np.cos(el2)*np.cos(az2)*weights)*lambda_o
-    p_z1 += (2*(v_ar2 - vr_2)*np.sin(el2)*weights)*lambda_o
+    for i in range(len(vrs)-1):
+        v_ar = (np.cos(els[i])*np.sin(azs[i])*u +
+            np.cos(els[i])*np.cos(azs[i])*v +
+            np.sin(els[i])*(w - np.abs(wts[i])))
+        p_x1 += (2*(v_ar - vrs[i])*np.cos(els[i])*np.sin(azs[i])*weights[i])*lambda_o
+        p_y1 += (2*(v_ar - vrs[i])*np.cos(els[i])*np.cos(azs[i])*weights[i])*lambda_o
+        p_z1 += (2*(v_ar - vrs[i])*np.sin(els[i])*weights[i])*lambda_o
 
     # Impermeability condition
     p_z1[0, :, :] = 0
@@ -88,21 +89,18 @@ def calculate_grad_radial_vel(vr_1, vr_2, el1, az1, el2, az2, u, v, w,
     return y.flatten()
 
 
-
-def calculate_smoothness_cost(u, v, w, z, el, dx, dy, dz, cutoff=1000.0,
-                              Cx=0.0, Cy=0.0, Cz=0.0, laplace=1):
+def calculate_smoothness_cost(u, v, w, Cx=0.0, Cy=0.0, Cz=0.0):
     du = np.zeros(w.shape)
     dv = np.zeros(w.shape)
     dw = np.zeros(w.shape)
     scipy.ndimage.filters.laplace(u,du, mode='wrap')
     scipy.ndimage.filters.laplace(v,dv, mode='wrap')
     scipy.ndimage.filters.laplace(w,dw, mode='wrap')
-    return np.sum(Cx*du**2 + Cy*dy**2 + Cz*dw**2)         
+    return np.sum(Cx*du**2 + Cy*dv**2 + Cz*dw**2)
 
 
 
-def calculate_smoothness_gradient(u, v, w, z, el, dx, dy, dz, cutoff=1000.0,
-                                  Cx=0.0, Cy=0.0, Cz=0.0, laplace=0):
+def calculate_smoothness_gradient(u, v, w, Cx=0.0, Cy=0.0, Cz=0.0):
     du = np.zeros(w.shape)
     dv = np.zeros(w.shape)
     dw = np.zeros(w.shape)
@@ -124,7 +122,7 @@ def calculate_smoothness_gradient(u, v, w, z, el, dx, dy, dz, cutoff=1000.0,
 
 
 
-def calculate_mass_continuity(u, v, w, z, el, dx, dy, dz, coeff=1500.0, anel=1):
+def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dudx = np.gradient(u, dx, axis=2)
     dvdy = np.gradient(v, dy, axis=1)
     dwdz = np.gradient(w, dz, axis=0)
@@ -139,7 +137,7 @@ def calculate_mass_continuity(u, v, w, z, el, dx, dy, dz, coeff=1500.0, anel=1):
 
 
 
-def calculate_mass_continuity_gradient(u, v, w, z, el, dx,
+def calculate_mass_continuity_gradient(u, v, w, z, dx,
                                         dy, dz, coeff=1500.0, anel=1):
     dudx = np.gradient(u, dx, axis=2)
     dvdy = np.gradient(v, dy, axis=1)
