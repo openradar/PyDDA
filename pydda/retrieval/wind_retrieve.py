@@ -10,11 +10,13 @@ import pyart
 import numpy as np
 import time
 import cartopy.crs as ccrs
+import math
 
 from .. import cost_functions
-from scipy.optimize import fmin_cg, fmin_l_bfgs_b
+from ..cost_functions import J_function, grad_J
+from scipy.optimize import fmin_l_bfgs_b
 from scipy.interpolate import interp1d
-from scipy.signal import convolve2d, gaussian
+from scipy.signal import savgol_filter
 from matplotlib import pyplot as plt
 from copy import deepcopy
 
@@ -23,100 +25,13 @@ from .angles import add_azimuth_as_field, add_elevation_as_field
 num_evaluations = 0
 
 
-def J_function(winds, vrs, azs, els, wts, u_back, v_back,
-                   C1, C2, C4, Cx, Cy, Cz, C8, 
-                   dudt, dvdt, grid_shape,
-                   vel_name, dx, dy, dz, z, rmsVr, weights, bg_weights):
-        global num_evaluations
-        winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
-                                      grid_shape[2]))
-
-
-        
-        Jvel = (cost_functions.calculate_radial_vel_cost_function(vrs, azs,
-                                                                  els,
-                                                                  winds[0],
-                                                                  winds[1],
-                                                                  winds[2],
-                                                                  wts,
-                                                                  rmsVr=rmsVr,
-                                                                  weights=weights,
-                                                                  coeff=C1,
-                                                                  dudt=dudt,
-                                                                  dvdt=dvdt))
-        if(C2 > 0):
-            Jmass = (cost_functions.calculate_mass_continuity(winds[0], 
-                                                              winds[1],
-                                                              winds[2], z, 
-                                                              dx, dy, dz,
-                                                              coeff=C2))
-        else:
-            Jmass = 0
-            
-        if(Cx > 0 or Cy > 0 or Cz > 0):
-            Jsmooth = cost_functions.calculate_smoothness_cost(
-                winds[0], winds[1], winds[2], Cx=Cx, Cy=Cy, Cz=Cz)
-        else:
-            Jsmooth = 0
-        if(C8 > 0):
-            Jbackground = cost_functions.calculate_background_cost(winds[0], 
-                                                                   winds[1], 
-                                                                   winds[2],
-                                                                   bg_weights,
-                                                                   u_back,
-                                                                   v_back,
-                                                                   C8=C8)
-        else:
-            Jbackground = 0
-
-        print('Jvel = ' + str(Jvel))
-        print('Jmass = ' + str(Jmass))
-        print('Jsmooth = ' + str(Jsmooth))
-        print('Jbackground = ' + str(Jbackground))
-        print('Maximum w: ' + str(np.abs(winds[2]).max()))
-
-        return Jvel + Jmass + Jsmooth + Jbackground
-
-    
-def grad_J(winds, vrs, azs, els,
-               wts, u_back, v_back,
-               C1, C2, C4, Cx, Cy, Cz, C8,  
-               dudt, dvdt, grid_shape,
-               vel_name, dx, dy, dz, z, rmsVr, weights, bg_weights):
-
-    winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
-                                      grid_shape[2]))
-    grad = cost_functions.calculate_grad_radial_vel(vrs, els, azs, winds[0],
-                                                     winds[1], winds[2],
-                                                     wts, weights,
-                                                     rmsVr, coeff=C1)
-    if(C2 > 0):
-         grad +=  cost_functions.calculate_mass_continuity_gradient(winds[0],
-                                                                    winds[1],
-                                                                    winds[2],
-                                                                    z,
-                                                                    dx, dy, dz,
-                                                                    coeff=C2
-                                                                    )
-    if(Cx > 0 or Cy > 0 or Cz > 0):
-        grad += cost_functions.calculate_smoothness_gradient(winds[0], 
-                                                             winds[1], 
-                                                             winds[2],
-                                                             Cx=Cx, Cy=Cy,
-                                                             Cz=Cz)
-    if(C8 > 0):
-        grad += cost_functions.calculate_background_gradient(winds[0], winds[1], winds[2],
-                                                          bg_weights, u_back, v_back, C8=C8)
-    print('Norm of gradient: ' + str(np.linalg.norm(grad, 2)))
-    return grad
-
-
 def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
-                      frz=4500.0, C1=1.0, C2=1500.0, C4=50.0, Cx=0.0,
-                      Cy=0.0, Cz=5.0, C8=0.001, dudt=0.0, dvdt=0.0,
-                      filt_iterations=50, mask_outside_opt=False,
-                      max_iterations=200, mask_w_outside_opt=True):
+                      frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
+                      Cy=0.0, Cz=0.0, Cb=0.0, filt_iterations=2, 
+                      mask_outside_opt=False, max_iterations=200, 
+                      mask_w_outside_opt=True, filter_window=9, 
+                      filter_order=4, min_bca=30.0, max_bca=150.0):
     
     # Returns a field dictionary
     num_evaluations = 0
@@ -152,6 +67,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     vrs = []
     azs = []
     els = []
+    
     # Set up wind fields and weights from each radar
     weights = np.zeros(
         (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
@@ -160,16 +76,20 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]))
     M = np.zeros(len(Grids))
     sum_Vr = np.zeros(len(Grids))
+
     for i in range(len(Grids)):
-        wts.append(cost_functions.calculate_fall_speed(Grids[i], refl_field=refl_field))
+        wts.append(cost_functions.calculate_fall_speed(Grids[i], 
+                                                       refl_field=refl_field))
         add_azimuth_as_field(Grids[i])
         add_elevation_as_field(Grids[i])
         vrs.append(Grids[i].fields[vel_name]['data'])
         azs.append(Grids[i].fields['AZ']['data']*np.pi/180)
         els.append(Grids[i].fields['EL']['data']*np.pi/180)
-        sum_Vr[i] = np.sum(np.square(vrs[i]))
-        M[i] = len(np.where(vrs[i].mask == False)[0])
+        
+    for i in range(len(Grids)):    
         for j in range(i+1, len(Grids)):
+            print(("Calculating weights for radars " + str(i) +
+                   " and " + str(j)))
             bca[i,j] = get_bca(Grids[i].radar_longitude['data'],
                                Grids[i].radar_latitude['data'],
                                Grids[j].radar_longitude['data'],
@@ -177,19 +97,35 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                Grids[i].point_x['data'][0],
                                Grids[i].point_y['data'][0],
                                Grids[i].get_projparams())
+
             for k in range(vrs[i].shape[0]):
                 cur_array = weights[i,k]
                 cur_array[np.logical_and(
-                     vrs[i][k].mask == False,
-                     np.logical_and(bca[i,j] > np.pi / 6, bca[i,j] < 5 * np.pi / 6))] += 1
+                    vrs[i][k].mask == False,
+                    np.logical_and(
+                        bca[i,j] >= math.radians(min_bca), 
+                        bca[i,j] <= math.radians(max_bca)))] += 1
                 weights[i,k] = cur_array
+                cur_array = weights[j,k]
+                cur_array[np.logical_and(
+                    vrs[j][k].mask == False,
+                    np.logical_and(
+                        bca[i,j] >= math.radians(min_bca), 
+                        bca[i,j] <= math.radians(max_bca)))] += 1
+                weights[j,k] = cur_array
                 cur_array = bg_weights[k]
-                cur_array[np.logical_or(bca[i,j] < np.pi / 6, bca[i,j] > 5 * np.pi / 6)] = 1
-                cur_array[vrs[i][k].mask == True] = 1
+                cur_array[np.logical_or(
+                    bca[i,j] >= math.radians(min_bca),
+                    bca[i,j] <= math.radians(max_bca))] = 1
+                cur_array[vrs[i][k].mask == True] = 0
                 bg_weights[i] = cur_array
-    print(M)
-    rmsVr = np.sum(sum_Vr)/np.sum(M)
-    weights[weights > 1] = 1
+    
+    weights[weights > 0] = 1            
+    sum_Vr = np.sum(np.square(vrs*weights))
+    print(np.sum(weights))
+    
+    rmsVr = np.sum(sum_Vr)/np.sum(weights)
+    
     del bca
     grid_shape = u_init.shape
     # Parse names of velocity field
@@ -204,13 +140,11 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     dy = np.diff(Grids[0].y['data'], axis=0)[0]
     dz = np.diff(Grids[0].z['data'], axis=0)[0]
     print('rmsVR = ' + str(rmsVr))
-    print('Total points:' +str(M.sum()))
+    print('Total points:' +str(weights.sum()))
     z = Grids[0].point_z['data']
 
     the_time = time.time()
     bt = time.time()
-
-    filter_winds = lambda winds: filter_wind(winds, grid_shape)
     
     # First pass - no filter
     wcurr = w_init
@@ -218,27 +152,45 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     maxwprev = 99
     iterations = 0
     warnflag = 99999
-    while(iterations < max_iterations and warnflag > 0 and (abs(wprev-wcurr).max() > 0.2)):
+    coeff_max = np.max([Co, Cb, Cm, Cx, Cy, Cz, Cb])
+    while(iterations < max_iterations and 
+          warnflag > 0 and 
+          (abs(wprev-wcurr).max() > 0.2)):
         wprev = wcurr
         bounds = [(-x,x) for x in 100*np.ones(winds.shape)]
-        winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs,
-                                                 els, wts, u_back2,
-                                                 v_back2, C1, C2, C4, Cx, 
-                                                 Cy, Cz, C8, dudt,
-                                                 dvdt, grid_shape,
-                                                 vel_name, dx, dy, dz, z, 
-                                                 rmsVr, weights,
-                                                 bg_weights),
-                                maxiter=10, pgtol=5e-4, bounds=bounds, 
-                                fprime=grad_J, disp=True)
+        winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
+                                                       wts, u_back, v_back,
+                                                       Co, Cm, Cx, Cy, Cz, Cb, 
+                                                       grid_shape,  
+                                                       dx, dy, dz, z, rmsVr, 
+                                                       weights, bg_weights),
+                                maxiter=1, pgtol=1e-2, bounds=bounds, 
+                                fprime=grad_J, disp=1)
 
         warnflag = winds[2]['warnflag']
+        
         if(warnflag > 1):
             raise ArithmeticError('Cost function does not converge!')
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
                                            grid_shape[2]))
-        iterations = iterations+10
+        iterations = iterations+5
+        print('Iterations: ' + str(iterations))
         wcurr = winds[2]
+        if(filt_iterations > 0):
+            if(iterations % filt_iterations == 0 and filt_iterations > 0 and
+                abs(wprev-wcurr).max() > 0.2):
+                print('Applying low pass filter to wind field...')
+                winds[0] = savgol_filter(winds[0], 9, 3, axis=0)
+                winds[0] = savgol_filter(winds[0], 9, 3, axis=1)
+                winds[0] = savgol_filter(winds[0], 9, 3, axis=2)
+                winds[1] = savgol_filter(winds[1], 9, 3, axis=0)
+                winds[1] = savgol_filter(winds[1], 9, 3, axis=1)
+                winds[1] = savgol_filter(winds[1], 9, 3, axis=2)
+                winds[2] = savgol_filter(winds[2], 9, 3, axis=0)
+                winds[2] = savgol_filter(winds[2], 9, 3, axis=1)
+                winds[2] = savgol_filter(winds[2], 9, 3, axis=2)
+            
+        
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
     print("Done! Time = " + str(time.time() - bt))
@@ -269,15 +221,33 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     u_field['data'] = u
     u_field['standard_name'] = 'u_wind'
     u_field['long_name'] = 'meridional component of wind velocity'
+    u_field['min_bca'] = min_bca
+    u_field['max_bca'] = max_bca
     v_field = deepcopy(Grids[0].fields[vel_name])
     v_field['data'] = v
     v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity'  
+    v_field['long_name'] = 'zonal component of wind velocity' 
+    v_field['min_bca'] = min_bca
+    v_field['max_bca'] = max_bca
     w_field = deepcopy(Grids[0].fields[vel_name])
     w_field['data'] = w
     w_field['standard_name'] = 'w_wind'
     w_field['long_name'] = 'vertical component of wind velocity' 
-    return u_field, v_field, w_field
+    w_field['min_bca'] = min_bca
+    w_field['max_bca'] = max_bca
+
+    
+    new_grid_list = []
+    
+    for grid in Grids:
+        temp_grid = deepcopy(grid)
+        temp_grid.add_field('u', u_field, replace_existing=True)
+        temp_grid.add_field('v', v_field, replace_existing=True)
+        temp_grid.add_field('w', w_field, replace_existing=True)
+        
+        new_grid_list.append(temp_grid)
+        
+    return new_grid_list
 
 
 """ Makes a initialization wind field that is a constant everywhere"""
@@ -348,6 +318,7 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     w = np.ma.filled(w, 0)
     return u, v, w
 
+
 """ Makes a test wind field that converges at center near ground and
     Diverges aloft at center """
 def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
@@ -407,14 +378,6 @@ def get_bca(rad1_lon, rad1_lat,
     theta_1 = np.arccos(x/a)
     theta_2 = np.arccos((x-rad2[1])/b)
     return np.arccos((a*a+b*b-c*c)/(2*a*b))
-
-
-def mean_filter(array, N):
-    # Calculate convolution
-    kernel = np.outer(gaussian(4,1), gaussian(4,1))
-    xs = convolve2d(array, kernel, mode="same", boundary="symm")
-    ns = N ** 2
-    return xs/ns
 
 
 
