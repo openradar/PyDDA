@@ -4,4 +4,4 @@ The user has an option to adjust strength of data, mass continuity constraints a
 
 The code here is based off of Potvin et al. (2012) and Shapiro et al. (2009).
 
-Angles.py is from Multidop and was written by Timothy Lang of NASA. Right now I recommend you use Multidop instead of this, as this is still very much in alpha.
+Angles.py is from Multidop and was written by Timothy Lang of NASA. 
