@@ -1,7 +1,6 @@
-This is an example on how to use SciPy's optimize package to integrate measurements from multiple radars to create a 3D wind field. 
-The user has an option to adjust strength of data, mass continuity constraints.
+This package is a rewrite of DDA into a purely Pythonic package for easier integration with Py-ART (and works on Windows!) 
 
-This code is currently incredibly barebones and still a work in progress.
+The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background field from a grid. More documentation to be coming in the next few weeks!
 
 The code here is based off of Potvin et al. (2012) and Shapiro et al. (2009).
 
