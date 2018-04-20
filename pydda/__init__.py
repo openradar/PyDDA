@@ -6,3 +6,5 @@ Created on Mon Aug 14 11:09:37 2017
 
 from . import cost_functions
 from . import retrieval
+from . import vis
+

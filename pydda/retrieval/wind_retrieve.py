@@ -31,7 +31,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       Cy=0.0, Cz=0.0, Cb=0.0, filt_iterations=2, 
                       mask_outside_opt=False, max_iterations=200, 
                       mask_w_outside_opt=True, filter_window=9, 
-                      filter_order=4, min_bca=30.0, max_bca=150.0):
+                      filter_order=4, min_bca=30.0, max_bca=150.0,
+                      upper_bc=True):
     
     # Returns a field dictionary
     num_evaluations = 0
@@ -122,8 +123,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     
     weights[weights > 0] = 1            
     sum_Vr = np.sum(np.square(vrs*weights))
-    print(np.sum(weights))
-    
+
     rmsVr = np.sum(sum_Vr)/np.sum(weights)
     
     del bca
@@ -134,8 +134,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     #ones = np.ones(winds.shape)
 
     ndims = len(winds)
-    print(len(winds.shape))
-    print(("Starting solver for " + str(ndims) + " dimensional problem..."))
+
+    print(("Starting solver "))
     dx = np.diff(Grids[0].x['data'], axis=0)[0]
     dy = np.diff(Grids[0].y['data'], axis=0)[0]
     dz = np.diff(Grids[0].z['data'], axis=0)[0]
@@ -149,57 +149,86 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     # First pass - no filter
     wcurr = w_init
     wprev = 100*np.ones(w_init.shape)
-    maxwprev = 99
+    wprevmax = 99
+    wcurrmax = w_init.max()
     iterations = 0
     warnflag = 99999
     coeff_max = np.max([Co, Cb, Cm, Cx, Cy, Cz, Cb])
+    bounds = [(-x,x) for x in 100*np.ones(winds.shape)]
     while(iterations < max_iterations and 
-          warnflag > 0 and 
-          (abs(wprev-wcurr).max() > 0.2)):
-        wprev = wcurr
-        bounds = [(-x,x) for x in 100*np.ones(winds.shape)]
+          (abs(wprevmax-wcurrmax) > 0.02)):
+        wprevmax = wcurrmax
         winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
                                                        wts, u_back, v_back,
                                                        Co, Cm, Cx, Cy, Cz, Cb, 
                                                        grid_shape,  
                                                        dx, dy, dz, z, rmsVr, 
-                                                       weights, bg_weights),
-                                maxiter=1, pgtol=1e-2, bounds=bounds, 
+                                                       weights, bg_weights,
+                                                       upper_bc),
+                                maxiter=10, pgtol=1e-3, bounds=bounds, 
                                 fprime=grad_J, disp=1)
+        
 
+        # Print out cost function values after 10 iterations
+        J = J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
+                       Co, Cm, Cx, Cy, Cz, Cb, grid_shape,  
+                       dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
+                       print_out=True)
+        J = grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
+                   Co, Cm, Cx, Cy, Cz, Cb, grid_shape,  
+                   dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
+                   print_out=True)
+        
         warnflag = winds[2]['warnflag']
         
-        if(warnflag > 1):
-            raise ArithmeticError('Cost function does not converge!')
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
                                            grid_shape[2]))
-        iterations = iterations+5
-        print('Iterations: ' + str(iterations))
-        wcurr = winds[2]
-        if(filt_iterations > 0):
-            if(iterations % filt_iterations == 0 and filt_iterations > 0 and
-                abs(wprev-wcurr).max() > 0.2):
-                print('Applying low pass filter to wind field...')
-                winds[0] = savgol_filter(winds[0], 9, 3, axis=0)
-                winds[0] = savgol_filter(winds[0], 9, 3, axis=1)
-                winds[0] = savgol_filter(winds[0], 9, 3, axis=2)
-                winds[1] = savgol_filter(winds[1], 9, 3, axis=0)
-                winds[1] = savgol_filter(winds[1], 9, 3, axis=1)
-                winds[1] = savgol_filter(winds[1], 9, 3, axis=2)
-                winds[2] = savgol_filter(winds[2], 9, 3, axis=0)
-                winds[2] = savgol_filter(winds[2], 9, 3, axis=1)
-                winds[2] = savgol_filter(winds[2], 9, 3, axis=2)
-            
+        iterations = iterations+10
+        print('Iterations before filter: ' + str(iterations))
+        
+        wcurrmax = winds[2].max()
         
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
-    print("Done! Time = " + str(time.time() - bt))
 
-    print('Filtering wind field...')
-    bt = time.time()
+        
+    if(filt_iterations > 0):
+        print('Applying low pass filter to wind field...')
+        winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
+                                           grid_shape[2]))
+        winds[0] = savgol_filter(winds[0], 9, 3, axis=0)
+        winds[0] = savgol_filter(winds[0], 9, 3, axis=1)
+        winds[0] = savgol_filter(winds[0], 9, 3, axis=2)
+        winds[1] = savgol_filter(winds[1], 9, 3, axis=0)
+        winds[1] = savgol_filter(winds[1], 9, 3, axis=1)
+        winds[1] = savgol_filter(winds[1], 9, 3, axis=2)
+        winds[2] = savgol_filter(winds[2], 9, 3, axis=0)
+        winds[2] = savgol_filter(winds[2], 9, 3, axis=1)
+        winds[2] = savgol_filter(winds[2], 9, 3, axis=2)  
+        
+        winds = np.stack([winds[0], winds[1], winds[2]])
+        winds = winds.flatten()
+        iterations = 0
+        while(iterations < filt_iterations):
+            winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
+                                  wts, u_back, v_back,
+                                  Co, Cm, Cx, Cy, Cz, Cb, 
+                                  grid_shape, dx, dy, dz, z, rmsVr, 
+                                  weights, bg_weights, upper_bc),
+                                  maxiter=1, pgtol=1e-3, bounds=bounds, 
+                                  fprime=grad_J, disp=1)
 
-    #the_winds = np.stack([u, v, w])
-    print("Done! Time = " + str(time.time() - bt))
+            warnflag = winds[2]['warnflag']
+        
+            winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
+                                             grid_shape[2]))
+            iterations = iterations+1
+            print('Iterations after filter: ' + str(iterations))
+                
+            winds = np.stack([winds[0], winds[1], winds[2]])
+            winds = winds.flatten()
+            
+    print("Done! Time = " + "{:2.1f}".format(time.time() - bt))
 
     # First pass - no filter
 
@@ -309,7 +338,6 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
         z_back, v_back, bounds_error=False, fill_value='extrapolate')
     u_back2 = u_interp(Grid.z['data'])
     v_back2 = v_interp(Grid.z['data'])
-    print(u_back2)
     for i in range(analysis_grid_shape[0]):
         u[i] = u_back2[i]
         v[i] = v_back2[i]

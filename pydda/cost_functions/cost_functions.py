@@ -9,13 +9,249 @@ import pyart
 
 from numba import jit, cuda
 from numba import vectorize
-import scipy.ndimage.filters 
+import scipy.ndimage.filters
+
+ 
+def J_function(winds, vrs, azs, els, wts, u_back, v_back,
+               Co, Cm, Cx, Cy, Cz, Cb, grid_shape,
+               dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc,
+               print_out=False):
+    """
+    Calculates the cost function.
+    
+    Parameters
+    ----------
+    winds: 1-D float array
+        The wind field, flattened to 1-D for f_min
+    vrs: List of float arrays
+        List of radial velocities from each radar    
+    azs: List of float arrays
+        List of azimuths from each radar
+    els: List of float arrays
+        List of elevations from each radar    
+    wts: List of float arrays
+        Float array containing fall speed from radar.
+    u_back: 1D float array (number of vertical levels):
+        Background u wind
+    v_back: 1D float array (number of vertical levels):
+        Background u wind    
+    Co: float
+        Weighting coefficient for data constraint.
+    Cm: float
+        Weighting coefficient for mass continuity constraint.
+    Cx: float
+        Smoothing coefficient for x-direction
+    Cy: float
+        Smoothing coefficient for y-direction
+    Cz: float
+        Smoothing coefficient for z-direction
+    Cb: float
+        Coefficient for sounding constraint
+    grid_shape:
+        Shape of wind grid
+    dx:
+        Spacing of grid in x direction
+    dy:
+        Spacing of grid in y direction
+    dz:
+        Spacing of grid in z direction
+    z:
+        Grid vertical levels in m
+    rmsVr: float
+        The sum of squares of velocity/num_points. Use for normalization
+        of data weighting coefficient
+    weights: n_radars x_bins x y_bins float array
+        Data weights for each pair of radars
+    bg_weights: z_bins x x_bins x y_bins float array
+        Data weights for sounding constraint
+    upper_bc: bool
+        True to enforce w=0 at top of domain (impermeability condition),
+        False to not enforce impermeability at top of domain
+        
+    Returns
+    -------
+    J: float
+        The value of the cost function
+    """
+    winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
+                                  grid_shape[2]))
+      
+    Jvel = calculate_radial_vel_cost_function(vrs, azs, els, winds[0],
+                                              winds[1], winds[2], wts,
+                                              rmsVr=rmsVr, weights=weights,
+                                              coeff=Co)
+    if(Cm > 0):
+        Jmass = calculate_mass_continuity(
+            winds[0], winds[1], winds[2], z, dx, dy, dz, coeff=Cm)
+    else:
+        Jmass = 0
+          
+    if(Cx > 0 or Cy > 0 or Cz > 0):
+        Jsmooth = calculate_smoothness_cost(
+            winds[0], winds[1], winds[2], Cx=Cx, Cy=Cy, Cz=Cz)
+    else:
+        Jsmooth = 0
+        
+    if(Cb > 0):
+        Jbackground = calculate_background_cost(
+            winds[0], winds[1], winds[2], bg_weights, u_back, v_back, Cb)
+    else:
+        Jbackground = 0
+    if(print_out==True):
+        print('| Jvel    | Jmass   | Jsmooth | Jbg     | Max w  ')
+        print(('|' + "{:9.2f}".format(Jvel) + '|' + 
+               "{:9.2f}".format(Jmass) + '|' + 
+               "{:9.2f}".format(Jsmooth) + '|' + 
+               "{:9.2f}".format(Jbackground) + '|' + 
+               "{:9.2f}".format(np.abs(winds[2]).max())))
+           
+
+    return Jvel + Jmass + Jsmooth + Jbackground
+
+    
+def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy, 
+           Cz, Cb, grid_shape, dx, dy, dz, z, rmsVr, 
+           weights, bg_weights, upper_bc, print_out=False):
+    """
+    Calculates the cost function.
+    
+    Parameters
+    ----------
+    winds: 1-D float array
+        The wind field, flattened to 1-D for f_min
+    vrs: List of float arrays
+        List of radial velocities from each radar    
+    azs: List of float arrays
+        List of azimuths from each radar
+    els: List of float arrays
+        List of elevations from each radar    
+    wts: List of float arrays
+        Float array containing fall speed from radar.
+    u_back: 1D float array (number of vertical levels):
+        Background u wind
+    v_back: 1D float array (number of vertical levels):
+        Background u wind    
+    Co: float
+        Weighting coefficient for data constraint.
+    Cm: float
+        Weighting coefficient for mass continuity constraint.
+    Cx: float
+        Smoothing coefficient for x-direction
+    Cy: float
+        Smoothing coefficient for y-direction
+    Cz: float
+        Smoothing coefficient for z-direction
+    Cb: float
+        Coefficient for sounding constraint
+    grid_shape:
+        Shape of wind grid
+    dx:
+        Spacing of grid in x direction
+    dy:
+        Spacing of grid in y direction
+    dz:
+        Spacing of grid in z direction
+    z:
+        Grid vertical levels in m
+    rmsVr: float
+        The sum of squares of velocity/num_points. Use for normalization
+        of data weighting coefficient
+    weights: n_radars x_bins x y_bins float array
+        Data weights for each pair of radars
+    bg_weights: z_bins x x_bins x y_bins float array
+        Data weights for sounding constraint
+    upper_bc: bool
+        True to enforce w=0 at top of domain (impermeability condition),
+        False to not enforce impermeability at top of domain
+        
+    Returns
+    -------
+    grad: 1D float array
+        Gradient vector of cost function
+    """ 
+    winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
+                                      grid_shape[2]))
+    grad = calculate_grad_radial_vel(
+        vrs, els, azs, winds[0], winds[1], winds[2], wts, weights,
+        rmsVr, coeff=Co, upper_bc=upper_bc)
+    
+    if(Cm > 0):
+        grad += calculate_mass_continuity_gradient(
+            winds[0], winds[1], winds[2], z, dx, dy, dz, coeff=Cm, 
+            upper_bc=upper_bc)
+                                                                    
+    if(Cx > 0 or Cy > 0 or Cz > 0):
+        grad += calculate_smoothness_gradient(
+            winds[0], winds[1], winds[2], Cx=Cx, Cy=Cy, Cz=Cz, 
+            upper_bc=upper_bc)
+        
+    if(Cb > 0):
+        grad += calculate_background_gradient(
+            winds[0], winds[1], winds[2], bg_weights, u_back, v_back, Cb,
+            upper_bc=upper_bc)
+        
+    if(print_out==True):    
+        print('Norm of gradient: ' + str(np.linalg.norm(grad, np.inf)))
+    return grad
+
 
 def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
                                        w, wts, rmsVr, weights, coeff=1.0,
-                                       dudt=0.0, dvdt=0.0):
+                                       ):
     """
     Calculates the cost function due to difference of wind field from
+    radar radial velocities. Radar 1 and Radar 2 must be in 
+    
+    Parameters
+    ----------
+    vrs: List of float arrays
+        List of radial velocities from each radar
+    els: List of float arrays
+        List of elevations from each radar
+    azs: List of float arrays
+        List of azimuths from each radar
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    wts: List of float arrays
+        Float array containing fall speed from radar.
+    rmsVr: float
+        The sum of squares of velocity/num_points. Use for normalization
+        of data weighting coefficient
+    weights: n_radars x_bins x y_bins float array
+        Data weights for each pair of radars
+    coeff: float
+        Constant for cost function  
+    
+    Returns
+    -------
+    J_o: float
+         Observational cost function
+    """
+         
+    J_o = 0
+    lambda_o = coeff / (rmsVr * rmsVr)
+    for i in range(len(vrs)):
+        v_ar = (np.cos(els[i])*np.sin(azs[i])*u +
+                np.cos(els[i])*np.cos(azs[i])*v +
+                np.sin(els[i])*(w - np.abs(wts[i])))
+        the_weight = weights[i]
+        the_weight[els[i].mask == True] = 0
+        the_weight[azs[i].mask == True] = 0
+        the_weight[vrs[i].mask == True] = 0
+        the_weight[wts[i].mask == True] = 0
+        J_o += lambda_o*np.sum(np.square(vrs[i]-v_ar)*the_weight)
+    
+    return J_o
+
+
+def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
+                              wts, weights, rmsVr, coeff=1.0, upper_bc=True):
+    """
+    Calculates the gradient of the cost function due to difference of wind field from
     radar radial velocities. Radar 1 and Radar 2 must be in 
     
     Parameters
@@ -42,54 +278,86 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
         Background velocity field name
     weights: n_radars x_bins x y_bins float array
         Data weights for each pair of radars
+    
+    Returns
+    -------
+    y: 1-D float array 
+         Gradient vector of observational cost function    
     """
-    ## Need to implement time of observation
-    for i in range(len(vrs)):
-        vrs[i] = np.ma.filled(vrs[i], 0)
-        wts[i] = np.ma.filled(wts[i], 0)
-        vrs[i][np.isnan(vrs[i])] = 0
-        wts[i][np.isnan(wts[i])] = 0
-
-    J_o = 0
-    lambda_o = coeff / (rmsVr * rmsVr)
-    for i in range(len(vrs)-1):
-        v_ar = (np.cos(els[i])*np.sin(azs[i])*u +
-                np.cos(els[i])*np.cos(azs[i])*v +
-                np.sin(els[i])*(w - np.abs(wts[i])))
-        J_o += lambda_o*np.sum(np.square(vrs[i]-v_ar)*weights[i])
-
-    return J_o
-
-
-def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
-                              wts, weights, rmsVr, coeff=10.0):
-    for i in range(len(vrs)):
-        vrs[i] = np.ma.filled(vrs[i], 0)
-        wts[i] = np.ma.filled(wts[i], 0)
-        vrs[i][np.isnan(vrs[i])] = 0
-        wts[i][np.isnan(wts[i])] = 0
-
+    
+    # Use zero for all masked values since we don't want to add them into
+    # the cost function
+    
     p_x1 = np.zeros(vrs[1].shape)
     p_y1 = np.zeros(vrs[1].shape)
     p_z1 = np.zeros(vrs[1].shape)
     lambda_o = coeff / (rmsVr * rmsVr)
-    for i in range(len(vrs)-1):
+    
+    for i in range(len(vrs)):
         v_ar = (np.cos(els[i])*np.sin(azs[i])*u +
             np.cos(els[i])*np.cos(azs[i])*v +
             np.sin(els[i])*(w - np.abs(wts[i])))
-        p_x1 += (2*(v_ar - vrs[i])*np.cos(els[i])*np.sin(azs[i])*weights[i])*lambda_o
-        p_y1 += (2*(v_ar - vrs[i])*np.cos(els[i])*np.cos(azs[i])*weights[i])*lambda_o
-        p_z1 += (2*(v_ar - vrs[i])*np.sin(els[i])*weights[i])*lambda_o
-
+            
+        x_grad = (2*(v_ar - vrs[i])*np.cos(els[i])*np.sin(azs[i])*weights[i])*lambda_o
+        y_grad = (2*(v_ar - vrs[i])*np.cos(els[i])*np.cos(azs[i])*weights[i])*lambda_o
+        z_grad = (2*(v_ar - vrs[i])*np.sin(els[i])*weights[i])*lambda_o
+    
+        x_grad[els[i].mask == True] = 0
+        y_grad[els[i].mask == True] = 0
+        z_grad[els[i].mask == True] = 0
+        x_grad[azs[i].mask == True] = 0
+        y_grad[azs[i].mask == True] = 0
+        z_grad[azs[i].mask == True] = 0
+        
+        x_grad[els[i].mask == True] = 0
+        x_grad[azs[i].mask == True] = 0
+        x_grad[vrs[i].mask == True] = 0
+        x_grad[wts[i].mask == True] = 0
+        y_grad[els[i].mask == True] = 0
+        y_grad[azs[i].mask == True] = 0
+        y_grad[vrs[i].mask == True] = 0
+        y_grad[wts[i].mask == True] = 0
+        z_grad[els[i].mask == True] = 0
+        z_grad[azs[i].mask == True] = 0
+        z_grad[vrs[i].mask == True] = 0
+        z_grad[wts[i].mask == True] = 0
+        
+        p_x1 += x_grad
+        p_y1 += y_grad
+        p_z1 += z_grad
     # Impermeability condition
     p_z1[0, :, :] = 0
-    p_z1[-1, :, :] = 0
+    if(upper_bc == True):
+        p_z1[-1, :, :] = 0
     y = np.stack((p_x1, p_y1, p_z1), axis=0)
-
     return y.flatten()
 
 
-def calculate_smoothness_cost(u, v, w, Cx=0.0, Cy=0.0, Cz=0.0):
+def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
+    """
+    Calculates the smoothness cost function by taking the Laplacian of the
+    wind field
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    Cx: float
+        Constant controlling smoothness in x-direction
+    Cy: float
+        Constant controlling smoothness in y-direction
+    Cz: float
+        Constant controlling smoothness in z-direction
+    
+    Returns
+    -------
+    Js: float
+        value of smoothness cost function
+    """
     du = np.zeros(w.shape)
     dv = np.zeros(w.shape)
     dw = np.zeros(w.shape)
@@ -100,7 +368,33 @@ def calculate_smoothness_cost(u, v, w, Cx=0.0, Cy=0.0, Cz=0.0):
 
 
 
-def calculate_smoothness_gradient(u, v, w, Cx=0.0, Cy=0.0, Cz=0.0):
+def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
+                                  upper_bc=True):
+    """
+    Calculates the gradient of the smoothness cost function 
+    by taking the Laplacian of the Laplacian of the
+    wind field
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    Cx: float
+        Constant controlling smoothness in x-direction
+    Cy: float
+        Constant controlling smoothness in y-direction
+    Cz: float
+        Constant controlling smoothness in z-direction
+    
+    Returns
+    -------
+    y: float array
+        value of gradient of smoothness cost function
+    """
     du = np.zeros(w.shape)
     dv = np.zeros(w.shape)
     dw = np.zeros(w.shape)
@@ -116,13 +410,38 @@ def calculate_smoothness_gradient(u, v, w, Cx=0.0, Cy=0.0, Cz=0.0):
            
     # Impermeability condition
     grad_w[0, :, :] = 0
-    grad_w[-1, :, :] = 0
+    if(upper_bc == True):
+        grad_w[-1, :, :] = 0
     y = np.stack([grad_u*Cx*2, grad_v*Cy*2, grad_w*Cz*2], axis=0)
     return y.flatten()
 
 
 
 def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
+    """
+    Calculates the mass continuity cost function by
+    by taking del * V
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    z: Float array (1D)
+        1D Float array with heights of grid
+    coeff: float
+        Constant controlling contribution of mass continuity to cost function
+    anel: int
+        =1 use anelastic approximation, 0=don't
+        
+    Returns
+    -------
+    J: float 
+        value of mass continuity cost function
+    """
     dudx = np.gradient(u, dx, axis=2)
     dvdy = np.gradient(v, dy, axis=1)
     dwdz = np.gradient(w, dz, axis=0)
@@ -138,7 +457,32 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
 
 
 def calculate_mass_continuity_gradient(u, v, w, z, dx,
-                                        dy, dz, coeff=1500.0, anel=1):
+                                       dy, dz, coeff=1500.0, anel=1,
+                                       upper_bc=True):
+    """
+    Calculates the gradient of mass continuity cost function by
+    by taking the gradient of del * V
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    z: Float array (1D)
+        1D Float array with heights of grid
+    coeff: float
+        Constant controlling contribution of mass continuity to cost function
+    anel: int
+        =1 use anelastic approximation, 0=don't
+        
+    Returns
+    -------
+    y: float array
+        value of gradient of mass continuity cost function
+    """
     dudx = np.gradient(u, dx, axis=2)
     dvdy = np.gradient(v, dy, axis=1)
     dwdz = np.gradient(w, dz, axis=0)
@@ -158,7 +502,8 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
     
     # Impermeability condition
     grad_w[0,:,:] = 0
-    grad_w[-1,:,:] = 0
+    if(upper_bc == True):
+        grad_w[-1,:,:] = 0
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 
@@ -171,10 +516,16 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     Parameters
     ----------
     Grid: Py-ART Grid
-    
+        Py-ART Grid containing reflectivity to calculate fall speed from
+    refl_field: str
+        String containing name of reflectivity field. None will automatically
+        determine the name.
+    frz: float
+        Height of freezing level in m
+        
     Returns
     -------
-    Field dict:
+    3D float array:
         Float array of terminal velocities
     
     """
@@ -211,24 +562,75 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
 
 
-def calculate_background_cost(u, v, w, weights, u_back, v_back, C8=0.01):
+def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
+    """
+    Calculates the background cost function
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    weights: Float array 
+        Weights for each point to consider into cost function
+    u_back: 1D float array
+        Zonal winds vs height from sounding
+    w_back: 1D float array
+        Meridional winds vs height from sounding    
+    Cb: float
+        Weight of background constraint to total cost function
+        
+    Returns
+    -------
+    cost: float 
+        value of background cost function
+    """
     the_shape = u.shape
     cost = 0
     for i in range(the_shape[0]):
-        cost += C8*np.sum(np.square(u[i]-u_back[i])*(weights[i]) + np.square(v[i]-v_back[i])*(weights[i]))
+        cost += (Cb*np.sum(np.square(u[i]-u_back[i])*(weights[i]) +
+                           np.square(v[i]-v_back[i])*(weights[i])))
     return cost
 
 
 
-def calculate_background_gradient(u, v, w, weights, u_back, v_back, C8=0.01):
+def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
+    """
+    Calculates the gradient of the background cost function
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    weights: Float array 
+        Weights for each point to consider into cost function
+    u_back: 1D float array
+        Zonal winds vs height from sounding
+    w_back: 1D float array
+        Meridional winds vs height from sounding    
+    Cb: float
+        Weight of background constraint to total cost function
+        
+    Returns
+    -------
+    y: float array
+        value of gradient of background cost function
+    """
     the_shape = u.shape
     u_grad = np.zeros(the_shape)
     v_grad = np.zeros(the_shape)
     w_grad = np.zeros(the_shape)
 
     for i in range(the_shape[0]):
-        u_grad[i] = C8*2*(u[i]-u_back[i])*(weights[i])
-        v_grad[i] = C8*2*(v[i]-v_back[i])*(weights[i])
+        u_grad[i] = Cb*2*(u[i]-u_back[i])*(weights[i])
+        v_grad[i] = Cb*2*(v[i]-v_back[i])*(weights[i])
 
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
