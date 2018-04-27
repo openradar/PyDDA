@@ -28,15 +28,103 @@ num_evaluations = 0
 def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
                       frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
-                      Cy=0.0, Cz=0.0, Cb=0.0, filt_iterations=2, 
-                      mask_outside_opt=False, max_iterations=200, 
-                      mask_w_outside_opt=True, filter_window=9, 
-                      filter_order=4, min_bca=30.0, max_bca=150.0,
-                      upper_bc=True):
+                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Ut=None, Vt=None,
+                      filt_iterations=2, mask_outside_opt=False, 
+                      max_iterations=200, mask_w_outside_opt=True, 
+                      filter_window=9, filter_order=4, min_bca=30.0, 
+                      max_bca=150.0, upper_bc=True):
+    """
+    Parameters
+    __________
     
-    # Returns a field dictionary
+    Grids: list of Py-ART Grids
+        The list of Py-ART grids to take in corresponding to each radar.
+        All grids must have the same specification.
+    u_init: 3D ndarray
+        The intial u field, input as a 3D array with the same shape as the
+        fields in Grids.
+    v_init: 3D ndarray
+        The intial c field, input as a 3D array with the same shape as the
+        fields in Grids.    
+    w_init: 3D ndarray
+        The intial w field, input as a 3D array with the same shape as the
+        fields in Grids.
+    vel_name: string
+        Name of radial velocity field. None will attempt to autodetect the 
+        velocity field name.
+    refl_field: string
+        Name of reflectivity field. None will attempt to autodetect the 
+        reflectivity field name.
+    u_back: 1D array
+        Background zonal wind field, has same dimensions as z_back
+    v_back: 1D array
+        Background meridional wind field, has same dimensions as z_back
+    z_back: 1D array
+        Heights corresponding to background wind field levels
+    frz: float
+        Freezing level used for fall speed calculation in meters.
+    Co: float
+        Weight for cost function related to observed radial velocities.
+    Cm: float
+        Weight for cost function related to the mass continuity equation.
+    Cx: float
+        Weight for cost function related to smoothness in x direction
+    Cy: float
+        Weight for cost function related to smoothness in y direction    
+    Cz: float
+        Weight for cost function related to smoothness in z direction    
+    Cv: float
+        Weight for cost function related to vertical vorticity equation.
+    Ut: float
+        Prescribed storm motion. This is only needed if Cv is not zero.
+    Vt: float
+        Prescribed storm motion. This is only needed if Cv is not zero.  
+    filt_iterations: int
+        If this is greater than 0, PyDDA will run a low pass filter on 
+        the retrieved wind field and then do the optimization step for
+        filt_iterations iterations. Set to 0 to disable the low pass filter.
+    max_outside_opt: bool
+        If set to true, wind values outside the multiple doppler lobes will
+        be masked, i.e. if less than 2 radars provide coverage for a given
+        point.
+    max_iterations: int
+        The maximum number of iterations to run the optimization loop for. 
+    max_w_outside_opt: bool
+        If set to true, vertical winds outside the multiple doppler lobes will
+        be masked, i.e. if less than 2 radars provide coverage for a given
+        point.    
+    filter_window: int
+        Window size to use for the low pass filter. A larger window will 
+        increase the number of points factored into the polynomial fit for 
+        the filter, and hence will increase the smoothness.
+    filter_order: int
+        The order of the polynomial to use for the low pass filter. Higher 
+        order polynomials allow for the retention of smaller scale features
+        but may also not remove enough noise.
+    min_bca: float
+        Minimum beam crossing angle in degrees between two radars. 30.0 is the
+        typical value used in many publications.
+    max_bca: float
+        Minimum beam crossing angle in degrees between two radars. 150.0 is the
+        typical value used in many publications.    
+    upper_bc: bool
+        Set this to true to enforce w = 0 at the top of the atmosphere. This is
+        commonly called the impermeability condition.
+    
+    Returns
+    _______
+    Grids: list
+        A list of Py-ART grids containing the derived wind field. These fields
+        are displayable by the visualization moudle.
+    """
+    
     num_evaluations = 0
-
+    
+    if(Ut == None or Vt == None):
+        if(Cv != 0.0):
+            raise ValueError(('Ut and Vt cannot be None if vertical ' +
+                              'vorticity constraint is enabled!'))
+            
     # Disable background constraint if none provided
     if(u_back == None or v_back == None):
         u_back2 = np.zeros(u_init.shape[0])
@@ -160,7 +248,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         wprevmax = wcurrmax
         winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
                                                        wts, u_back, v_back,
-                                                       Co, Cm, Cx, Cy, Cz, Cb, 
+                                                       Co, Cm, Cx, Cy, Cz, Cb,
+                                                       Cv, Ut, Vt,
                                                        grid_shape,  
                                                        dx, dy, dz, z, rmsVr, 
                                                        weights, bg_weights,
@@ -171,11 +260,11 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
 
         # Print out cost function values after 10 iterations
         J = J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
-                       Co, Cm, Cx, Cy, Cz, Cb, grid_shape,  
+                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,  
                        dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
                        print_out=True)
         J = grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
-                   Co, Cm, Cx, Cy, Cz, Cb, grid_shape,  
+                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,  
                    dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
                    print_out=True)
         

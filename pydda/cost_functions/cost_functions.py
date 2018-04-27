@@ -13,7 +13,7 @@ import scipy.ndimage.filters
 
  
 def J_function(winds, vrs, azs, els, wts, u_back, v_back,
-               Co, Cm, Cx, Cy, Cz, Cb, grid_shape,
+               Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,
                dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc,
                print_out=False):
     """
@@ -47,6 +47,12 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
         Smoothing coefficient for z-direction
     Cb: float
         Coefficient for sounding constraint
+    Cv: float
+        Weight for cost function related to vertical vorticity equation.
+    Ut: float
+        Prescribed storm motion. This is only needed if Cv is not zero.
+    Vt: float
+        Prescribed storm motion. This is only needed if Cv is not zero.  
     grid_shape:
         Shape of wind grid
     dx:
@@ -97,20 +103,30 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
             winds[0], winds[1], winds[2], bg_weights, u_back, v_back, Cb)
     else:
         Jbackground = 0
+        
+    if(Cv > 0):
+        Jvorticity =  calculate_vertical_vorticity_cost(winds[0], winds[1],
+                                                        winds[2], dx, dy, 
+                                                        dz, Ut, Vt, 
+                                                        coeff=Cv)
+    else:
+        Jvorticity = 0
+        
     if(print_out==True):
-        print('| Jvel    | Jmass   | Jsmooth | Jbg     | Max w  ')
-        print(('|' + "{:9.2f}".format(Jvel) + '|' + 
-               "{:9.2f}".format(Jmass) + '|' + 
-               "{:9.2f}".format(Jsmooth) + '|' + 
-               "{:9.2f}".format(Jbackground) + '|' + 
-               "{:9.2f}".format(np.abs(winds[2]).max())))
+        print('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Max w  ')
+        print(('|' + "{:9.4f}".format(Jvel) + '|' + 
+               "{:9.4f}".format(Jmass) + '|' + 
+               "{:9.4f}".format(Jsmooth) + '|' + 
+               "{:9.4f}".format(Jbackground) + '|' + 
+               "{:9.4f}".format(Jvorticity) + '|' +
+               "{:9.4f}".format(np.abs(winds[2]).max())))
            
 
-    return Jvel + Jmass + Jsmooth + Jbackground
+    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity
 
     
 def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy, 
-           Cz, Cb, grid_shape, dx, dy, dz, z, rmsVr, 
+           Cz, Cb, Cv, Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, 
            weights, bg_weights, upper_bc, print_out=False):
     """
     Calculates the cost function.
@@ -143,6 +159,12 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
         Smoothing coefficient for z-direction
     Cb: float
         Coefficient for sounding constraint
+    Cv: float
+        Weight for cost function related to vertical vorticity equation.
+    Ut: float
+        Prescribed storm motion. This is only needed if Cv is not zero.
+    Vt: float
+        Prescribed storm motion. This is only needed if Cv is not zero.  
     grid_shape:
         Shape of wind grid
     dx:
@@ -189,6 +211,11 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
         grad += calculate_background_gradient(
             winds[0], winds[1], winds[2], bg_weights, u_back, v_back, Cb,
             upper_bc=upper_bc)
+    if(Cv > 0):
+        grad += calculate_vertical_vorticity_gradient(winds[0], winds[1], 
+                                                      winds[2], dx, dy, 
+                                                      dz, Ut, Vt, 
+                                                      coeff=Cv)    
         
     if(print_out==True):    
         print('Norm of gradient: ' + str(np.linalg.norm(grad, np.inf)))
@@ -599,7 +626,9 @@ def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
 
 def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
     """
-    Calculates the gradient of the background cost function
+    Calculates the gradient of the background cost function.
+    Gradient from Qui and Xu, 1995: Least squares retrieval of single-doppler
+    radar data.
     
     Parameters
     ----------
@@ -635,3 +664,146 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
 
+
+def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, 
+                                      coeff=1e-5):
+    """
+    Calculates the cost function due to deviance from vertical vorticity
+    equation.
+    
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    dx: float array
+        Spacing in x grid
+    dy: float array
+        Spacing in y grid
+    dz: float array
+        Spacing in z grid
+    coeff: float
+        Weighting coefficient
+    Ut: float
+        U component of storm motion
+    Vt: float
+        V component of storm motion
+        
+    Returns
+    -------
+    Jv: float
+        Value of vertical vorticity cost function.
+    """
+    dvdz = np.gradient(v, dz, axis=0)
+    dudz = np.gradient(u, dz, axis=0)
+    dwdz = np.gradient(w, dx, axis=2)
+    dvdx = np.gradient(v, dx, axis=2)
+    dwdy = np.gradient(w, dy, axis=1)
+    dwdx = np.gradient(w, dx, axis=2)
+    dudx = np.gradient(u, dx, axis=2)
+    dvdy = np.gradient(v, dy, axis=2)
+    dudy = np.gradient(u, dy, axis=1)
+    zeta = dvdx - dudy
+    dzeta_dx = np.gradient(zeta, dx, axis=2)
+    dzeta_dy = np.gradient(zeta, dy, axis=1)
+    dzeta_dz = np.gradient(zeta, dz, axis=0)
+    jv_array = (u- Ut)*dzeta_dx + (v - Vt)*dzeta_dy + w*dzeta_dz + (dvdz*dwdx -
+               dudz*dwdy) + zeta*(dudx + dvdy)
+    return np.sum(coeff*jv_array**2)
+    
+
+def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt, 
+                                          coeff=1e-5):
+    """
+    Calculates the gradient of the cost function due to deviance from vertical 
+    vorticity equation.
+    
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    dx: float array
+        Spacing in x grid
+    dy: float array
+        Spacing in y grid
+    dz: float array
+        Spacing in z grid
+    Ut: float
+        U component of storm motion
+    Vt: float
+        V component of storm motion
+    coeff: float
+        Weighting coefficient        
+    Returns
+    -------
+    Jv: 1D float array
+        Value of the gradient of the vertical vorticity cost function.
+    """
+    
+    # First we will calculate dzeta_dt
+    
+    # First derivatives
+    dvdz = np.gradient(v, dz, axis=0)
+    dudz = np.gradient(u, dz, axis=0)
+    dwdy = np.gradient(w, dy, axis=1)
+    dudx = np.gradient(u, dx, axis=2)
+    dvdy = np.gradient(v, dy, axis=2)
+    dwdx = np.gradient(w, dx, axis=2)
+    dvdx = np.gradient(v, dx, axis=2)
+    dwdx = np.gradient(w, dx, axis=2)
+    dudz = np.gradient(u, dz, axis=0)
+    dudy = np.gradient(u, dy, axis=1)
+    
+    zeta = dvdx - dudy
+    dzeta_dx = np.gradient(zeta, dx, axis=2)
+    dzeta_dy = np.gradient(zeta, dy, axis=1)
+    dzeta_dz = np.gradient(zeta, dz, axis=0)
+    
+    # Second deriviatives
+    dwdydz = np.gradient(dwdy, dz, axis=0)
+    dwdxdz = np.gradient(dwdx, dz, axis=0)
+    dudzdy = np.gradient(dudz, dy, axis=1)
+    dvdxdy = np.gradient(dvdx, dy, axis=1)
+    dudx2 = np.gradient(dudx, dx, axis=2)
+    dudxdy = np.gradient(dudx, dy, axis=1)
+    dudxdz = np.gradient(dudx, dz, axis=0)
+    dudy2 = np.gradient(dudx, dy, axis=1)
+    
+    
+    dzeta_dt = ((u - Ut)*dzeta_dx + (v - Vt)*dzeta_dy + w*dzeta_dz + 
+        (dvdz*dwdx - dudz*dwdy) + zeta*(dudx + dvdy))
+    
+    # Now we intialize our gradient value
+    u_grad = np.zeros(u.shape)
+    v_grad = np.zeros(v.shape)
+    w_grad = np.zeros(w.shape)
+    
+
+    # Vorticity Advection
+    u_grad += dzeta_dx + (Ut - u)*dudxdy + (Vt - v)*dudxdy
+    v_grad += dzeta_dy + (Vt - v)*dvdxdy + (Ut - u)*dvdxdy
+    w_grad += dzeta_dz
+    
+    # Tilting term
+    u_grad += dwdydz
+    v_grad += dwdxdz
+    w_grad += dudzdy - dudxdz
+    
+    # Stretching term
+    u_grad += -dudxdy + dudy2 - dzeta_dx
+    u_grad += -dudx2 + dudxdy - dzeta_dy
+    
+    # Multiply by 2*dzeta_dt according to chain rule
+    u_grad = u_grad*2*dzeta_dt*coeff
+    v_grad = v_grad*2*dzeta_dt*coeff
+    w_grad = w_grad*2*dzeta_dt*coeff
+    
+    y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    return y.flatten()
