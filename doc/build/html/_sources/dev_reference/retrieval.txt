@@ -1,7 +1,0 @@
-===============
-pydda.retrieval
-===============
-
-Main module for wind retrieval.
-
-.. automodule:: pydda.retrieval
