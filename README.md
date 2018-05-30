@@ -15,3 +15,14 @@ Right now this has been tested on and depends on:
     numpy 1.13.1
     matplotlib 1.5.3
     
+# Installation instructions
+Right now there is only one method to install PyDDA, which is from source. To
+do this, just type in the following commands assuming you have the above 
+dependencies installed.
+
+```
+git clone https://github.com/rcjackson/PyDDA
+cd PyDDA
+python setup.py install
+```
+    
