@@ -34,8 +34,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       filter_window=9, filter_order=4, min_bca=30.0, 
                       max_bca=150.0, upper_bc=True):
     """
+    This function takes in a list of Py-ART Grids and derives a wind field.
+
+    Every Py-ART Grid in Grids must have the same grid specification.
+
     Parameters
-    __________
+    ==========
     
     Grids: list of Py-ART Grids
         The list of Py-ART grids to take in corresponding to each radar.
@@ -112,10 +116,10 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         commonly called the impermeability condition.
     
     Returns
-    _______
-    Grids: list
+    =======
+    new_grid_list: list
         A list of Py-ART grids containing the derived wind field. These fields
-        are displayable by the visualization moudle.
+        are displayable by the visualization module.
     """
     
     num_evaluations = 0
@@ -255,7 +259,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                                        weights, bg_weights,
                                                        upper_bc),
                                 maxiter=10, pgtol=1e-3, bounds=bounds, 
-                                fprime=grad_J, disp=1)
+                                fprime=grad_J, disp=1, iprint=-1)
         
 
         # Print out cost function values after 10 iterations
@@ -299,13 +303,13 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         winds = winds.flatten()
         iterations = 0
         while(iterations < filt_iterations):
-            winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
-                                  wts, u_back, v_back,
-                                  Co, Cm, Cx, Cy, Cz, Cb, 
-                                  grid_shape, dx, dy, dz, z, rmsVr, 
-                                  weights, bg_weights, upper_bc),
-                                  maxiter=1, pgtol=1e-3, bounds=bounds, 
-                                  fprime=grad_J, disp=1)
+            winds = fmin_l_bfgs_b(
+               J_function, winds, args=(
+                   vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy, Cz, Cb,
+                   Cv, Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, weights, 
+                   bg_weights,upper_bc),
+               maxiter=10, pgtol=1e-3, bounds=bounds, 
+               fprime=grad_J, disp=1, iprint=-1)
 
             warnflag = winds[2]['warnflag']
         
@@ -371,16 +375,35 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
 """ Makes a initialization wind field that is a constant everywhere"""
 def make_constant_wind_field(Grid, wind=(0.0,0.0,0.0), vel_field=None):
     """
+    This function makes a constant wind field given a wind vector.
 
-    :param Grid: Py-ART Grid object
-         This is the Py-ART Grid containing the coordinates for the analysis 
-         grid.
-    :param wind: 3-tuple of floats
-         The 3-tuple specifying the (u,v,w) of the wind field.
-    :param vel_field: String
-         The name of the velocity field
-    :return: 3 float arrays 
-         The u, v, and w inital conditions.
+    This function is useful for specifying the intialization arrays
+    for get_dd_wind_field. 
+
+    Parameters
+    ==========
+
+    Grid: Py-ART Grid object
+        This is the Py-ART Grid containing the coordinates for the analysis 
+        grid.
+    wind: 3-tuple of floats
+        The 3-tuple specifying the (u,v,w) of the wind field.
+    vel_field: String
+        The name of the velocity field. None will automatically
+        try to detect this field.
+
+    Returns
+    =======
+
+    u: 3D float array 
+        Returns a 3D float array containing the u component of the wind field.
+        The shape will be the same shape as the fields in Grid.
+    v: 3D float array 
+        Returns a 3D float array containing the v component of the wind field.
+        The shape will be the same shape as the fields in Grid.
+    w: 3D float array 
+        Returns a 3D float array containing the u component of the wind field.
+        The shape will be the same shape as the fields in Grid.
     """
     # Parse names of velocity field
     if vel_field is None:
@@ -398,18 +421,36 @@ def make_constant_wind_field(Grid, wind=(0.0,0.0,0.0), vel_field=None):
 
 def make_wind_field_from_profile(Grid, profile, vel_field=None):
     """
+    This function makes a 3D wind field from a sounding. 
 
-        :param Grid: Py-ART Grid object
-             This is the Py-ART Grid containing the coordinates for the analysis 
-             grid.
-        :param profile: Py-ART HorizontalWindProfile
-             This is the horizontal wind profile from the sounding
-        :param wind: 3-tuple of floats
-             The 3-tuple specifying the (u,v,w) of the wind field.
-        :param vel_field: String
-             The name of the velocity field
-        :return: 3 float arrays 
-             The u, v, and w inital conditions.
+    This function is useful for using sounding data as an initialization
+    for get_dd_wind_field.
+
+    Parameters
+    ==========
+    Grid: Py-ART Grid object
+        This is the Py-ART Grid containing the coordinates for the analysis 
+        grid.
+    profile: Py-ART HorizontalWindProfile
+        This is the horizontal wind profile from the sounding
+    wind: 3-tuple of floats
+        The 3-tuple specifying the (u,v,w) of the wind field.
+    vel_field: String
+        The name of the velocity field in Grid. None will automatically
+        try to detect this field.
+
+    Returns
+    =======
+
+    u: 3D float array 
+        Returns a 3D float array containing the u component of the wind field.
+        The shape will be the same shape as the fields in Grid.
+    v: 3D float array 
+        Returns a 3D float array containing the v component of the wind field.
+        The shape will be the same shape as the fields in Grid.
+    w: 3D float array 
+        Returns a 3D float array containing the u component of the wind field.
+        The shape will be the same shape as the fields in Grid.
         """
     # Parse names of velocity field
     if vel_field is None:
@@ -439,20 +480,36 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
 """ Makes a test wind field that converges at center near ground and
     Diverges aloft at center """
 def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
-                               back_u, back_v, x_center, y_center,):
+                               back_u, back_v, x_center, y_center):
     """
+    This function makes a test field with wind convergence at the surface
+    and divergence aloft.
+
+    This function makes a useful test for the mass continuity equation.
+
     Parameters
     ----------
     Grid: Py-ART Grid object
-             This is the Py-ART Grid containing the coordinates for the analysis 
-             grid.
+        This is the Py-ART Grid containing the coordinates for the analysis 
+        grid.
     wind_vel: float
         The maximum wind velocity.
     z_ground: float 
         The bottom height where the maximum convergence occurs
     z_top: float
         The height where the maximum divergence occurrs
-        
+    back_u: float
+        The u component of the wind outside of the area of convergence.
+    back_v: float
+        The v component of the wind outside of the area of convergence.
+    x_center: float
+        The X-coordinate of the center of the area of convergence in the 
+        Grid's coordinates.
+    y_center: float
+        The Y-coordinate of the center of the area of convergence in the 
+        Grid's coordinates.
+    
+ 
     Returns
     -------
     u_init, v_init, w_init: ndarrays of floats
@@ -481,7 +538,33 @@ def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
 def get_bca(rad1_lon, rad1_lat,
             rad2_lon, rad2_lat,
             x, y, projparams):
+    """
+    This function gets the beam crossing angle between two lat/lon pairs.
 
+    Parameters
+    ==========
+    rad1_lon: float
+        The longitude of the first radar.
+    rad1_lat: float
+        The latitude of the first radar. 
+    rad2_lon: float
+        The longitude of the second radar.
+    rad2_lat: float
+        The latitude of the second radar. 
+    x: nD float array
+        The x coordinates of the grid
+    y: nD float array
+        The y corrdinates of the grid
+    projparams: Py-ART projparams
+        The projection parameters of the Grid
+
+    Returns
+    =======
+    bca: nD float array
+        The beam crossing angle between the two radars in radians.
+
+    """
+ 
     rad1 = pyart.core.geographic_to_cartesian(rad1_lon, rad1_lat, projparams)
     rad2 = pyart.core.geographic_to_cartesian(rad2_lon, rad2_lat, projparams)
     # Create grid with Radar 1 in center

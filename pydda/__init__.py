@@ -1,10 +1,11 @@
 """
-Created on Mon Aug 14 11:09:37 2017
-
-@author: rjackson
+=====================================
+PyDDA: Pythonic Dual Doppler Analysis
+=====================================
 """
 
 from . import cost_functions
 from . import retrieval
 from . import vis
 
+__version__ = '0.1.0'

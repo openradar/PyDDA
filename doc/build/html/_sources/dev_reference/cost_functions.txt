@@ -1,0 +1,7 @@
+====================
+pydda.cost_functions
+====================
+
+Module containing cost functions and their gradients.
+
+.. automodule:: pydda.cost_functions

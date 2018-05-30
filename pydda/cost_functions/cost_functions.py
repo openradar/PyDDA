@@ -73,6 +73,8 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
     upper_bc: bool
         True to enforce w=0 at top of domain (impermeability condition),
         False to not enforce impermeability at top of domain
+    print_out: bool
+        Set to True to print out the value of the cost function.
         
     Returns
     -------
@@ -129,7 +131,7 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
            Cz, Cb, Cv, Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, 
            weights, bg_weights, upper_bc, print_out=False):
     """
-    Calculates the cost function.
+    Calculates the gradient of the cost function.
     
     Parameters
     ----------
@@ -226,8 +228,10 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
                                        w, wts, rmsVr, weights, coeff=1.0,
                                        ):
     """
-    Calculates the cost function due to difference of wind field from
-    radar radial velocities. Radar 1 and Radar 2 must be in 
+    Calculates the cost function due to difference of the wind field from
+    radar radial velocities. 
+    
+    All grids must have the same grid specification.
     
     Parameters
     ----------
@@ -279,7 +283,9 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
                               wts, weights, rmsVr, coeff=1.0, upper_bc=True):
     """
     Calculates the gradient of the cost function due to difference of wind field from
-    radar radial velocities. Radar 1 and Radar 2 must be in 
+    radar radial velocities. 
+
+    All grids must have the same grid specification.
     
     Parameters
     ----------
@@ -363,7 +369,9 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
 def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
-    wind field
+    wind field. 
+
+    All grids must have the same grid specification. 
     
     Parameters
     ----------
@@ -399,8 +407,9 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
                                   upper_bc=True):
     """
     Calculates the gradient of the smoothness cost function 
-    by taking the Laplacian of the Laplacian of the
-    wind field
+    by taking the Laplacian of the Laplacian of the wind field.
+    
+    All grids must have the same grid specification.
     
     Parameters
     ----------
@@ -446,8 +455,9 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
 
 def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     """
-    Calculates the mass continuity cost function by
-    by taking del * V
+    Calculates the mass continuity cost function.
+    
+    All grids must have the same grid specification.
     
     Parameters
     ----------
@@ -487,8 +497,9 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
                                        dy, dz, coeff=1500.0, anel=1,
                                        upper_bc=True):
     """
-    Calculates the gradient of mass continuity cost function by
-    by taking the gradient of del * V
+    Calculates the gradient of mass continuity cost function. 
+    
+    All grids must have the same grid specification.
     
     Parameters
     ----------
@@ -537,7 +548,8 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
 
 def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     """
-    Estimates fall speed based on reflectivity
+    Estimates fall speed based on reflectivity.
+
     Uses methodology of Mike Biggerstaff and Dan Betten
     
     Parameters
@@ -591,7 +603,7 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
 def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
     """
-    Calculates the background cost function
+    Calculates the background cost function.
     
     Parameters
     ----------
@@ -627,8 +639,6 @@ def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
 def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
     """
     Calculates the gradient of the background cost function.
-    Gradient from Qui and Xu, 1995: Least squares retrieval of single-doppler
-    radar data.
     
     Parameters
     ----------
