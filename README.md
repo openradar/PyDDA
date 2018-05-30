@@ -1,7 +1,7 @@
 # PyDDA
 Pythonic multiple doppler package
 
-This package is a rewrite of DDA into a purely Pythonic package for easier integration with Py-ART (and works on Windows!)
+This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus using Multidop, as well as a more elegant syntax.
 
 The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background field from a grid. 
 
@@ -20,7 +20,12 @@ Right now this has been tested on and depends on:
     numpy 1.13.1
     
     matplotlib 1.5.3
-    
+
+## Links to important documentation
+
+1. Examples
+2. Developer reference guide
+
 ## Installation instructions
 Right now there is only one method to install PyDDA, which is from source. To
 do this, just type in the following commands assuming you have the above 
@@ -31,3 +36,10 @@ git clone https://github.com/rcjackson/PyDDA
 cd PyDDA
 python setup.py install
 ```
+
+## References
+You must cite these papers if you use PyDDA:
+
+Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, https://doi.org/10.1175/JTECH-D-11-00019.1
+
+Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1
