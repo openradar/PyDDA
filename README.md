@@ -9,10 +9,15 @@ The code here is based off of Potvin et al. (2012) and Shapiro et al. (2009).
 Angles.py is from Multidop and was written by Timothy Lang of NASA.
 
 Right now this has been tested on and depends on:
+
     Python 3.5+
+
     Py-ART 1.9.0
+    
     scipy 1.0.1
+    
     numpy 1.13.1
+    
     matplotlib 1.5.3
     
 ## Installation instructions
