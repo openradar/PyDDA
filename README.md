@@ -23,8 +23,8 @@ Right now this has been tested on and depends on:
 
 ## Links to important documentation
 
-1. `Examples`<https://rcjackson.github.io/PyDDA/source/auto_examples/plot_examples.html>
-2. `Developer reference guide`<https://rcjackson.github.io/PyDDA/dev_reference/index.html>
+1. `Examples<https://rcjackson.github.io/PyDDA/source/auto_examples/plot_examples.html>`_
+2. `Developer reference guide<https://rcjackson.github.io/PyDDA/dev_reference/index.html>`_
 
 ## Installation instructions
 Right now there is only one method to install PyDDA, which is from source. To
