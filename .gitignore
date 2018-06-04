@@ -1,0 +1,19 @@
+# Python files #
+################
+
+# setup.py working directory
+build
+__pycache__
+
+# sphinx build directory
+_build
+
+# setup.py dist directory
+dist
+doc/build
+doc/cdoc/build
+
+# Documentation files #
+#######################
+/doc/build
+/doc/source/dev_reference/generated
