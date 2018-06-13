@@ -9,7 +9,11 @@ The module containing the core techniques for the multiple doppler wind retrieva
 
 .. autosummary::
     :toctree: generated/
-
+    
+    make_constant_wind_field
+    make_wind_field_from_profile
+    make_test_divergence_field
+    make_background_from_wrf
 
 """
 
