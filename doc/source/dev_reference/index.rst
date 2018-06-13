@@ -43,4 +43,15 @@ Visualization module for PyDDA.
     :undoc-members:
     :show-inheritance:
     
+===========================
+:mod:`initalization` Module
+===========================
+
+The module for creating custom initial states for the PyDDA retrieval.
+
+.. automodule:: pydda.initialization
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 

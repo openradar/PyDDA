@@ -23,7 +23,7 @@ sounding = pyart.io.read_arm_sonde(
 
 
 # Load sounding data and insert as an intialization
-u_init, v_init, w_init = pydda.retrieval.make_wind_field_from_profile(
+u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
         cpol_grid, sounding, vel_field='VT')
 
 # Start the wind retrieval. This example only uses the mass continuity
