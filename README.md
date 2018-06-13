@@ -1,4 +1,6 @@
 # PyDDA
+![alt text](https://github.com/rcjackson/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
+
 Pythonic multiple doppler package
 
 This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus using Multidop, as well as a more elegant syntax.
