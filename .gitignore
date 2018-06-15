@@ -17,3 +17,6 @@ doc/cdoc/build
 #######################
 /doc/build
 /doc/source/dev_reference/generated
+
+# Data in notebooks #
+notebooks/*.nc
