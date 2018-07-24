@@ -1,9 +1,3 @@
-"""
-Created on Wed Jul 19 11:31:02 2017
-
-@author: rjackson
-"""
-
 import numpy as np
 import pyart
 
@@ -282,8 +276,8 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
 def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
                               wts, weights, rmsVr, coeff=1.0, upper_bc=True):
     """
-    Calculates the gradient of the cost function due to difference of wind field from
-    radar radial velocities. 
+    Calculates the gradient of the cost function due to difference of wind 
+    field from radar radial velocities. 
 
     All grids must have the same grid specification.
     
@@ -321,9 +315,9 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     # Use zero for all masked values since we don't want to add them into
     # the cost function
     
-    p_x1 = np.zeros(vrs[1].shape)
-    p_y1 = np.zeros(vrs[1].shape)
-    p_z1 = np.zeros(vrs[1].shape)
+    p_x1 = np.zeros(vrs[0].shape)
+    p_y1 = np.zeros(vrs[0].shape)
+    p_z1 = np.zeros(vrs[0].shape)
     lambda_o = coeff / (rmsVr * rmsVr)
     
     for i in range(len(vrs)):
