@@ -20,3 +20,7 @@ doc/cdoc/build
 
 # Data in notebooks #
 notebooks/*.nc
+
+# Built data "
+*.py[cdx]
+

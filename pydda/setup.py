@@ -18,6 +18,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('retrieval')
     config.add_subpackage('vis')
     config.add_subpackage('initialization')
+    config.add_subpackage('tests')
     return config
 
 if __name__ == '__main__':
