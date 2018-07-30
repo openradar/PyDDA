@@ -1,12 +1,28 @@
+sudo: false
 language: python
 
-python:
-  # We don't actually use the Travis Python, but this keeps it organized.
-  - "2.7"
-  - "3.5"
-  - "3.6"
+matrix:
+    include:
+    - python: 2.7
+      env:
+        - PYTHON_VERSION="2.7"
+        - COVERALLS="true"
+        - DOC_BUILD="true"
+    - python: 3.4
+      env:
+        - PYTHON_VERSION="3.4"
+    - python: 3.5
+      env:
+        - PYTHON_VERSION="3.5"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
+- FROM_RECIPE="true"
 install:
-  - bash continuous_integration/install.sh
+  - source continuous_integration/install.sh
 script:
   - pytest
   
