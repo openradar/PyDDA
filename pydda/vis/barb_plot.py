@@ -325,7 +325,7 @@ def plot_yz_xsection_barbs(Grids, ax=None,
                            title_flag=True, axes_labels_flag=True, 
                            colorbar_flag=True,
                            bg_grid_no=0, barb_spacing_y_km=10.0,
-                           barb_spacing_z_km=1.0):
+                           barb_spacing_z_km=1.0,
                            contour_alpha=0.7):
 
 

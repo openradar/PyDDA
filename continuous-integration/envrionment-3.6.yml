@@ -10,4 +10,5 @@ dependencies:
   - netcdf4
   - pytest
   - pytest-mpl
+  - pytest-cov
   - arm_pyart

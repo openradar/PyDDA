@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 set -e
 # use next line to debug this script
@@ -19,14 +19,6 @@ conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
 source activate testenv
 
 # install coverage modules
-pip install nose-cov
-if [[ "$COVERALLS" == "true" ]]; then
-    pip install python-coveralls
-fi
-
-# install Py-ART
-export RSL_PATH=~/miniconda3/envs/testenv
-
 if [[ "$FROM_RECIPE" == "true" ]]; then
     source deactivate
     conda install -q conda-build
