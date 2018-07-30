@@ -6,7 +6,7 @@ python:
   - "3.5"
   - "3.6"
 install:
-  - continuous_integration/install.sh
+  - bash continuous_integration/install.sh
 script:
   - pytest
   
