@@ -3,7 +3,7 @@
 
 Pythonic multiple doppler package
 
-This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus using Multidop, as well as a more elegant syntax.
+This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus using Multidop, as well as a more elegant syntax as well as support for an arbitrary number of radars (at least 2).
 
 The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background field from a grid. 
 

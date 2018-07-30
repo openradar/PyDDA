@@ -1,8 +1,6 @@
 import numpy as np
 import pyart
 
-from numba import jit, cuda
-from numba import vectorize
 import scipy.ndimage.filters
 
  
