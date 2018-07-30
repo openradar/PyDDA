@@ -3,7 +3,7 @@ import pyart
 
 from netCDF4 import Dataset
 from datetime import datetime
-from scipy.interpolate import RegularGridInterpolator, interp1d
+from scipy.interpolate import RegularGridInterpolator, interp1d, griddata
 
 
 def make_constant_wind_field(Grid, wind=(0.0,0.0,0.0), vel_field=None):
@@ -64,8 +64,8 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     Grid: Py-ART Grid object
         This is the Py-ART Grid containing the coordinates for the analysis 
         grid.
-    profile: Py-ART HorizontalWindProfile
-        This is the horizontal wind profile from the sounding
+    profile: PyART HorizontalWindProfile
+        This is the HorizontalWindProfile of the sounding
     wind: 3-tuple of floats
         The 3-tuple specifying the (u,v,w) of the wind field.
     vel_field: String
@@ -92,9 +92,9 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     u = np.ones(analysis_grid_shape)
     v = np.ones(analysis_grid_shape)
     w = np.zeros(analysis_grid_shape)
-    u_back = profile[1].u_wind
-    v_back = profile[1].v_wind
-    z_back = profile[1].height
+    u_back = profile.u_wind
+    v_back = profile.v_wind
+    z_back = profile.height
     u_interp = interp1d(
         z_back, u_back, bounds_error=False, fill_value='extrapolate')
     v_interp = interp1d(
@@ -246,30 +246,27 @@ def make_background_from_wrf(Grid, file_path, wrf_time,
     x = np.arange(0, x_len)*dx-radar_loc[0]*1e3
     y = np.arange(0, y_len)*dy-radar_loc[1]*1e3
     z = np.mean(alt_wrf[timestep[0],:,:,:], axis=(0,2,3))
-    z_stag = (z[1:]+z[:-1])/2.0
-    x_stag = (x[1:]+x[:-1])/2.0
-    y_stag = (y[1:]+y[:-1])/2.0
+    x, y, z = np.meshgrid(x,y,z)
+    z = np.squeeze(alt_wrf[timestep[0],:,:,:])
+
+    z_stag = (z[1:,:,:]+z[:-1,:,:])/2.0
+    x_stag = (x[:,:,1:]+x[:,:,:-1])/2.0
+    y_stag = (y[:,1:,:]+y[:,:-1,:])/2.0
     
     
     W_wrf = np.squeeze(W_wrf[timestep[0],:,:,:])
     V_wrf = np.squeeze(V_wrf[timestep[0],:,:,:])
     U_wrf = np.squeeze(U_wrf[timestep[0],:,:,:])
     
-    w_interp = RegularGridInterpolator((z, y_stag, x_stag), W_wrf, 
-                                       bounds_error=False,
-                                       fill_value=0.)
-    v_interp = RegularGridInterpolator((z_stag, y, x_stag), V_wrf,
-                                       bounds_error=False,
-                                       fill_value=0.)
-    u_interp = RegularGridInterpolator((z_stag, y_stag, x), U_wrf,
-                                       bounds_error=False,
-                                       fill_value=0.)
-    
-    u = u_interp((new_grid_z,new_grid_y,new_grid_x))
-    v = v_interp((new_grid_z,new_grid_y,new_grid_x))    
-    w = np.zeros(u.shape)
-    
-
+    w = griddata((z_stag, y, x), W_wrf, 
+                        (new_grid_z,new_grid_y,new_grid_x),
+                        fill_value=0.)
+    v = griddata((z, y_stag, x), V_wrf, 
+                        (new_grid_z,new_grid_y,new_grid_x),
+                        fill_value=0.)
+    u = griddata((z, y, x_stag), U_wrf, 
+                        (new_grid_z,new_grid_y,new_grid_x),
+                        fill_value=0.)
     return u, v, w
     
     

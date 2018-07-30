@@ -173,46 +173,50 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     for i in range(len(Grids)):
         wts.append(cost_functions.calculate_fall_speed(Grids[i], 
                                                        refl_field=refl_field))
-        add_azimuth_as_field(Grids[i])
-        add_elevation_as_field(Grids[i])
+        add_azimuth_as_field(Grids[i], dz_name=refl_field)
+        add_elevation_as_field(Grids[i], dz_name=refl_field)
         vrs.append(Grids[i].fields[vel_name]['data'])
         azs.append(Grids[i].fields['AZ']['data']*np.pi/180)
         els.append(Grids[i].fields['EL']['data']*np.pi/180)
-        
-    for i in range(len(Grids)):    
-        for j in range(i+1, len(Grids)):
-            print(("Calculating weights for radars " + str(i) +
-                   " and " + str(j)))
-            bca[i,j] = get_bca(Grids[i].radar_longitude['data'],
-                               Grids[i].radar_latitude['data'],
-                               Grids[j].radar_longitude['data'],
-                               Grids[j].radar_latitude['data'],
-                               Grids[i].point_x['data'][0],
-                               Grids[i].point_y['data'][0],
-                               Grids[i].get_projparams())
+       
+    if(len(Grids) > 1):    
+        for i in range(len(Grids)):    
+            for j in range(i+1, len(Grids)):
+                print(("Calculating weights for radars " + str(i) +
+                       " and " + str(j)))
+                bca[i,j] = get_bca(Grids[i].radar_longitude['data'],
+                                   Grids[i].radar_latitude['data'],
+                                   Grids[j].radar_longitude['data'],
+                                   Grids[j].radar_latitude['data'],
+                                   Grids[i].point_x['data'][0],
+                                   Grids[i].point_y['data'][0],
+                                   Grids[i].get_projparams())
 
-            for k in range(vrs[i].shape[0]):
-                cur_array = weights[i,k]
-                cur_array[np.logical_and(
-                    vrs[i][k].mask == False,
-                    np.logical_and(
-                        bca[i,j] >= math.radians(min_bca), 
-                        bca[i,j] <= math.radians(max_bca)))] += 1
-                weights[i,k] = cur_array
-                cur_array = weights[j,k]
-                cur_array[np.logical_and(
-                    vrs[j][k].mask == False,
-                    np.logical_and(
-                        bca[i,j] >= math.radians(min_bca), 
-                        bca[i,j] <= math.radians(max_bca)))] += 1
-                weights[j,k] = cur_array
-                cur_array = bg_weights[k]
-                cur_array[np.logical_or(
-                    bca[i,j] >= math.radians(min_bca),
-                    bca[i,j] <= math.radians(max_bca))] = 1
-                cur_array[vrs[i][k].mask == True] = 0
-                bg_weights[i] = cur_array
-    
+                for k in range(vrs[i].shape[0]):
+                    cur_array = weights[i,k]
+                    cur_array[np.logical_and(
+                        vrs[i][k].mask == False,
+                        np.logical_and(
+                            bca[i,j] >= math.radians(min_bca), 
+                            bca[i,j] <= math.radians(max_bca)))] += 1
+                    weights[i,k] = cur_array
+                    cur_array = weights[j,k]
+                    cur_array[np.logical_and(
+                        vrs[j][k].mask == False,
+                        np.logical_and(
+                            bca[i,j] >= math.radians(min_bca), 
+                            bca[i,j] <= math.radians(max_bca)))] += 1
+                    weights[j,k] = cur_array
+                    cur_array = bg_weights[k]
+                    cur_array[np.logical_or(
+                        bca[i,j] >= math.radians(min_bca),
+                        bca[i,j] <= math.radians(max_bca))] = 1
+                    cur_array[vrs[i][k].mask == True] = 0
+                    bg_weights[i] = cur_array
+    else:
+        weights[0] = np.where(vrs[0].mask == False, 1, 0)
+        bg_weights[0] = np.where(vrs[0].mask == False, 0, 1)
+        
     weights[weights > 0] = 1            
     sum_Vr = np.sum(np.square(vrs*weights))
 

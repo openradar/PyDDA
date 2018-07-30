@@ -87,9 +87,9 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
     if(vmax == None):
         vmax = grid_bg.max()
         
-    grid_h = Grids[0].point_altitude['data']
-    grid_x = Grids[0].point_x['data']
-    grid_y = Grids[0].point_y['data']
+    grid_h = Grids[0].point_altitude['data']/1e3
+    grid_x = Grids[0].point_x['data']/1e3
+    grid_y = Grids[0].point_y['data']/1e3
     dx = np.diff(grid_x, axis=2)[0,0,0]
     dy = np.diff(grid_y, axis=1)[0,0,0]
     u = Grids[0].fields[u_field]['data']
@@ -158,12 +158,12 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                
     
     if(axes_labels_flag == True):
-        ax.set_xlabel(('X [' + Grids[0].point_x['units'] + ']'))
-        ax.set_ylabel(('Y [' + Grids[0].point_y['units'] + ']'))
+        ax.set_xlabel(('X [km]'))
+        ax.set_ylabel(('Y [km]'))
     
     if(title_flag == True):
-        ax.set_title(('PyDDA retreived winds @' + str(grid_h[level,0,0]) + ' ' +
-                   str(Grids[0].point_altitude['units'])))
+        ax.set_title(('PyDDA retreived winds @' + str(grid_h[level,0,0]) + 
+                      ' km'))
         
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_y.min(), grid_y.max()])
@@ -243,9 +243,9 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
     if(vmax == None):
         vmax = grid_bg.max()
         
-    grid_h = Grids[0].point_altitude['data']
-    grid_x = Grids[0].point_x['data']
-    grid_y = Grids[0].point_y['data']
+    grid_h = Grids[0].point_altitude['data']/1e3
+    grid_x = Grids[0].point_x['data']/1e3
+    grid_y = Grids[0].point_y['data']/1e3
     dx = np.diff(grid_x, axis=2)[0,0,0]
     dz = np.diff(grid_y, axis=1)[0,0,0]
     u = Grids[0].fields[u_field]['data']
@@ -294,18 +294,16 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
   
     
     if(axes_labels_flag == True):
-        ax.set_xlabel(('X [' + Grids[0].point_x['units'] + ']'))
-        ax.set_ylabel(('Z [' + Grids[0].point_z['units'] + ']'))
+        ax.set_xlabel(('X [km]'))
+        ax.set_ylabel(('Z [km]'))
     
     if(title_flag == True):
         if(grid_y[0,level,0] > 0):
-            ax.set_title(('PyDDA retreived winds @' + str(grid_y[0,level,0]) + ' ' +
-                       str(Grids[0].point_altitude['units']) + ' north of ' + 
-                       'origin.'))
+            ax.set_title(('PyDDA retreived winds @' + str(grid_y[0,level,0]) + 
+                          ' km north of origin.'))
         else:
-            ax.set_title(('PyDDA retreived winds @' + str(-grid_y[0,level,0]) + ' ' +
-                       str(Grids[0].point_altitude['units']) + ' south of ' + 
-                       'origin.'))
+            ax.set_title(('PyDDA retreived winds @' + str(-grid_y[0,level,0]) + 
+                          ' km south of origin.'))
         
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
@@ -386,9 +384,9 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
     if(vmax == None):
         vmax = grid_bg.max()
         
-    grid_h = Grids[0].point_altitude['data']
-    grid_x = Grids[0].point_x['data']
-    grid_y = Grids[0].point_y['data']
+    grid_h = Grids[0].point_altitude['data']/1e3
+    grid_x = Grids[0].point_x['data']/1e3
+    grid_y = Grids[0].point_y['data']/1e3
     dx = np.diff(grid_x, axis=2)[0,0,0]
     dz = np.diff(grid_y, axis=1)[0,0,0]
     u = Grids[0].fields[u_field]['data']
@@ -436,18 +434,16 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
 
     
     if(axes_labels_flag == True):
-        ax.set_xlabel(('Y [' + Grids[0].point_y['units'] + ']'))
-        ax.set_ylabel(('Z [' + Grids[0].point_z['units'] + ']'))
+        ax.set_xlabel(('Y [km]'))
+        ax.set_ylabel(('Z [km]'))
     
     if(title_flag == True):
-        if(grid_x[0,0, level] > 0):
-            ax.set_title(('PyDDA retreived winds @' + str(grid_x[0,0,level]) +
-                       ' ' + str(Grids[0].point_altitude['units']) +
-                       ' east of origin.'))
+        if(grid_x[0,0,level] > 0):
+            ax.set_title(('PyDDA retreived winds @' + str(grid_x[0,level,0]) + 
+                          ' km east of origin.'))
         else:
-            ax.set_title(('PyDDA retreived winds @' + str(-grid_x[0,0,level]) +
-                       ' ' + str(Grids[0].point_altitude['units']) +
-                       ' west of origin.'))
+            ax.set_title(('PyDDA retreived winds @' + str(-grid_x[0,level,0]) + 
+                          ' km west of origin.'))
         
     ax.set_xlim([grid_y.min(), grid_y.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
