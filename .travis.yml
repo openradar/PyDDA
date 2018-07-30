@@ -1,0 +1,26 @@
+sudo: false
+language: python
+
+matrix:
+    include:
+    - python: 2.7
+      env:
+        - PYTHON_VERSION="2.7"
+        - COVERALLS="true"
+        - DOC_BUILD="true"
+    - python: 3.4
+      env:
+        - PYTHON_VERSION="3.4"
+    - python: 3.5
+      env:
+        - PYTHON_VERSION="3.5"
+        - PYTEST_ARGS="-v --cov pyart"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
+
+install: source continuous_integration/install.sh
+script: eval xvfb-run pytest
