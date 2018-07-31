@@ -1,15 +1,7 @@
 sudo: false
 language: python
 
-addons:
-  artifacts:
-    s3_region: "us-east-1" # defaults to "us-east-1"
-    paths: 
-      - /home/travis/build/rcjackson/PyDDA/results/
-    bucket: pydda-testing
-    target_paths: $TRAVIS_BUILD_NUMBER
-    debug: true
-    
+   
 matrix:
     include:
     - python: 3.5
