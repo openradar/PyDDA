@@ -21,5 +21,5 @@ matrix:
       env:
         - PYTHON_VERSION="3.6"
 
-install: source continuous-integration/install.sh
+install: source continuous_integration/install.sh
 script: eval xvfb-run pytest
