@@ -11,4 +11,5 @@ dependencies:
   - pytest
   - pytest-mpl
   - pytest-cov
+  - cartopy
   - arm_pyart
