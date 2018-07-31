@@ -15,7 +15,7 @@ conda config --set show_channel_urls true
 conda update -q conda
 
 ## Create a testenv with the correct Python version
-conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
+conda env create -f continuous-integration/environment-$PYTHON_VERSION.yml
 source activate testenv
 
 # install coverage modules
