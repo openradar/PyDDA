@@ -4,9 +4,11 @@ language: python
 addons:
   artifacts:
     s3_region: "us-east-1" # defaults to "us-east-1"
-    paths: "./results"
+    paths: 
+      - /home/travis/build/rcjackson/PyDDA/results/
     bucket: pydda-testing
-
+    target_paths: $TRAVIS_BUILD_NUMBER
+    
 matrix:
     include:
     - python: 3.5
