@@ -13,25 +13,11 @@ export PATH=/home/travis/miniconda3/bin:$PATH
 conda config --set always_yes yes
 conda config --set show_channel_urls true
 conda update -q conda
+conda info -a 
 
 ## Create a testenv with the correct Python version
 conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
 source activate testenv
 
-# install coverage modules
-if [[ "$FROM_RECIPE" == "true" ]]; then
-    source deactivate
-    conda install -q conda-build
-    conda install -q jinja2 setuptools
-    conda config --add channels conda-forge
-    conda config --add channels jjhelmus
-    conda build --no-test --python $PYTHON_VERSION -q conda_recipe/
-   
-    export CONDA_PACKAGE=`conda build --python $PYTHON_VERSION --output conda_recipe/ | grep bz2`
-    source activate testenv
-    conda install -q $CONDA_PACKAGE
-    mkdir foo   # required so source directory not picked up during tests
-    cd foo
-else
-    python setup.py build_ext --inplace
-fi
+python setup.py build_ext --inplace
+
