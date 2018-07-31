@@ -8,6 +8,7 @@ addons:
       - /home/travis/build/rcjackson/PyDDA/results/
     bucket: pydda-testing
     target_paths: $TRAVIS_BUILD_NUMBER
+    debug: true
     
 matrix:
     include:
