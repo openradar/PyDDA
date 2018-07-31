@@ -99,8 +99,8 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
         z_back, u_back, bounds_error=False, fill_value='extrapolate')
     v_interp = interp1d(
         z_back, v_back, bounds_error=False, fill_value='extrapolate')
-    u_back2 = u_interp(Grid.z['data'])
-    v_back2 = v_interp(Grid.z['data'])
+    u_back2 = u_interp(np.asarray(Grid.z['data']))
+    v_back2 = v_interp(np.asarray(Grid.z['data']))
     for i in range(analysis_grid_shape[0]):
         u[i] = u_back2[i]
         v[i] = v_back2[i]
