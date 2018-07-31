@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 set -e
 # use next line to debug this script
