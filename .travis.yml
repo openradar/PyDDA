@@ -5,21 +5,16 @@ addons:
   artifacts:
     s3_region: "us-east-1" # defaults to "us-east-1"
     paths: "./results"
+    bucket: pydda-testing
 
 matrix:
     include:
     - python: 3.5
       env:
         - PYTHON_VERSION="3.5"
-        - ARTIFACTS_KEY=AKIAI6DO2EOPMP3UC4VA
-        - ARTIFACTS_SECRET=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
-        - ARTIFACTS_BUCKET=pydda-testing
     - python: 3.6
       env:
         - PYTHON_VERSION="3.6"
-        - ARTIFACTS_KEY=AKIAI6DO2EOPMP3UC4VA
-        - ARTIFACTS_SECRET=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
-        - ARTIFACTS_BUCKET=pydda-testing
     
 install: source continuous_integration/install.sh
 script: eval xvfb-run pytest
