@@ -1,12 +1,15 @@
+sudo: false
 language: python
 
-python:
-  # We don't actually use the Travis Python, but this keeps it organized.
-  - "2.7"
-  - "3.5"
-  - "3.6"
-install:
-  - bash continuous_integration/install.sh
-script:
-  - pytest
-  
+   
+matrix:
+    include:
+    - python: 3.5
+      env:
+        - PYTHON_VERSION="3.5"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
+    
+install: source continuous_integration/install.sh
+script: eval xvfb-run pytest
