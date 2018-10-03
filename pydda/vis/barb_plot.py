@@ -78,9 +78,11 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
         The spacing in km between each wind barb in the y direction.   
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
+
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
     
     if(bg_grid_no > -1):
@@ -179,6 +181,7 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
         
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_y.min(), grid_y.max()])
+    return ax
     
         
 def plot_horiz_xsection_barbs_map(Grids, ax=None, 
@@ -257,9 +260,11 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
         Set to true to display coastlines
     gridlines: bool
         Set to true to show grid lines.
+    
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
     
     if(bg_grid_no > -1):
@@ -353,8 +358,8 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                
     
     if(axes_labels_flag == True):
-        ax.set_xlabel(('X [km]'))
-        ax.set_ylabel(('Y [km]'))
+        ax.set_xlabel(('Latitiude [$\degree$]'))
+        ax.set_ylabel(('Longitude [$\degree$]'))
     
     if(title_flag == True):
         ax.set_title(
@@ -367,6 +372,11 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
         ax.gridlines()      
     ax.set_extent([grid_lon.min(), grid_lon.max(), 
                    grid_lat.min(), grid_lat.max()])    
+    the_ticks_x = np.linspace(round(grid_lon.min()), round(grid_lon.max()), 6)
+    the_ticks_y = np.linspace(round(grid_lat.min()), round(grid_lat.max()), 6)
+    ax.set_xticks(the_ticks_x)
+    ax.set_yticks(the_ticks_y)
+    return ax
         
 def plot_xz_xsection_barbs(Grids, ax=None,
                            background_field='reflectivity', level=1, 
@@ -434,7 +444,8 @@ def plot_xz_xsection_barbs(Grids, ax=None,
         
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
     
     if(bg_grid_no > -1):
@@ -514,6 +525,7 @@ def plot_xz_xsection_barbs(Grids, ax=None,
         
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
+    return ax
 
 
 def plot_yz_xsection_barbs(Grids, ax=None,
@@ -584,7 +596,8 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
     
     if(bg_grid_no > -1):
@@ -663,5 +676,5 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         
     ax.set_xlim([grid_y.min(), grid_y.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
-        
+    return ax    
                 
