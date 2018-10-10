@@ -35,7 +35,7 @@ def test_make_updraft_from_convergence_field():
         x_center, y_center)
     
     new_grids = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
-                                                  Cz = 0, Cm=500.0,
+                                                  Cz = 0, Cm=500.0, Cmod=0.0,
                                                   mask_outside_opt=False,
                                                   vel_name='one_field',
                                                   refl_field='one_field')
@@ -56,7 +56,7 @@ def test_twpice_case():
     
     Grids = pydda.retrieval.get_dd_wind_field([Grid0, Grid1], u_init, v_init,
                                               w_init, Co=100, Cm=1500.0,
-                                              Cz=0, vel_name='VT',
+                                              Cz=0, Cmod=0.0, vel_name='VT',
                                               refl_field='DT', frz=5000.0,
                                               filt_iterations=0,
                                               mask_outside_opt=True,
@@ -89,6 +89,7 @@ def test_smoothing():
     w = np.zeros((20,40,40))
     new_grids = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
                                                   Cx=1e-4, Cy=1e-4, Cm=0.0,
+                                                  Cmod=0.0,
                                                   mask_outside_opt=False,
                                                   filt_iterations=0,
                                                   vel_name='one_field',
@@ -100,6 +101,7 @@ def test_smoothing():
     
     new_grids = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
                                                   Cx=1e-2, Cy=1e-2, Cm=0.0,
+                                                  Cmod=0.0, 
                                                   mask_outside_opt=False,
                                                   filt_iterations=0,
                                                   vel_name='one_field',
