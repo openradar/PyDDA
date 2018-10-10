@@ -198,8 +198,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         mod_weights = None
 
     if(model_fields is None):
-        if(Cmod is not 0.0):
-            raise(ValueError, 
+        if(Cmod != 0.0):
+            raise ValueError( 
                  'Cmod must be zero if model fields are not specified!')
 
     bca = np.zeros(
