@@ -28,11 +28,14 @@ num_evaluations = 0
 def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
                       frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
-                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Ut=None, Vt=None,
-                      filt_iterations=2, mask_outside_opt=False, 
+                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Cmod=0.0,
+                      Ut=None, Vt=None, filt_iterations=2, 
+                      mask_outside_opt=False, weights_obs=None,
+                      weights_model=None, weights_bg=None, 
                       max_iterations=200, mask_w_outside_opt=True, 
                       filter_window=9, filter_order=4, min_bca=30.0, 
-                      max_bca=150.0, upper_bc=True):
+                      max_bca=150.0, upper_bc=True, model_fields=None,
+                      output_cost_functions=True):
     """
     This function takes in a list of Py-ART Grids and derives a wind field.
 
@@ -79,6 +82,17 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         Weight for cost function related to smoothness in z direction    
     Cv: float
         Weight for cost function related to vertical vorticity equation.
+    Cmod: float
+        Weight for cost function related to vertical vorticity equation.
+    weights_obs: list of floating point arrays or None
+        List of weights for each point in grid from each radar. Set to None
+        to let PyDDA determine this automatically.
+    weights_model: list of floating point arrays or None
+        List of weights for each point in grid from each model. Set to None
+        to let PyDDA determine this automatically.
+    weights_bg: list of floating point arrays or None
+        List of weights for each point in grid from the sounding. Set to None
+        to let PyDDA determine this automatically.
     Ut: float
         Prescribed storm motion. This is only needed if Cv is not zero.
     Vt: float
@@ -114,6 +128,17 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     upper_bc: bool
         Set this to true to enforce w = 0 at the top of the atmosphere. This is
         commonly called the impermeability condition.
+    model_fields: list of strings
+        The list of fields in the first grid in Grids that contain the model 
+        data interpolated to the Grid's grid specification. Helper functions 
+        to create such gridded fields for HRRR and NetCDF WRF data exist 
+        in pydda.initialization. PyDDA will look for fields named U_(model 
+        field name), V_(model field name), and W_(model field name). For 
+        example, if you have U_hrrr, V_hrrr, and W_hrrr, then specify ["hrrr"]
+        into model_fields.
+    output_cost_functions: bool
+        Set to True to output the value of each cost function every 
+        10 iterations.
     
     Returns
     =======
@@ -164,7 +189,19 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     # Set up wind fields and weights from each radar
     weights = np.zeros(
         (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+    
     bg_weights = np.zeros(v_init.shape)
+    if(model_fields is not None):
+        mod_weights = np.ones(
+            (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+    else:
+        mod_weights = None
+
+    if(model_fields is None):
+        if(Cmod is not 0.0):
+            raise(ValueError, 
+                 'Cmod must be zero if model fields are not specified!')
+
     bca = np.zeros(
         (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]))
     M = np.zeros(len(Grids))
@@ -193,26 +230,54 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                    Grids[i].get_projparams())
 
                 for k in range(vrs[i].shape[0]):
-                    cur_array = weights[i,k]
-                    cur_array[np.logical_and(
-                        vrs[i][k].mask == False,
-                        np.logical_and(
+                    if(weights_obs is None):
+                        cur_array = weights[i,k]
+                        cur_array[np.logical_and(
+                            vrs[i][k].mask == False,
+                            np.logical_and(
                             bca[i,j] >= math.radians(min_bca), 
                             bca[i,j] <= math.radians(max_bca)))] += 1
-                    weights[i,k] = cur_array
-                    cur_array = weights[j,k]
-                    cur_array[np.logical_and(
-                        vrs[j][k].mask == False,
-                        np.logical_and(
-                            bca[i,j] >= math.radians(min_bca), 
-                            bca[i,j] <= math.radians(max_bca)))] += 1
-                    weights[j,k] = cur_array
-                    cur_array = bg_weights[k]
-                    cur_array[np.logical_or(
-                        bca[i,j] >= math.radians(min_bca),
-                        bca[i,j] <= math.radians(max_bca))] = 1
-                    cur_array[vrs[i][k].mask == True] = 0
-                    bg_weights[i] = cur_array
+                        weights[i,k] = cur_array
+                    else:
+                        weights[i,k] = weights_obs[i][k,:,:]
+
+                    if(weights_obs is None):
+                        cur_array = weights[j,k]
+                        cur_array[np.logical_and(
+                            vrs[j][k].mask == False,
+                            np.logical_and(
+                                bca[i,j] >= math.radians(min_bca), 
+                                bca[i,j] <= math.radians(max_bca)))] += 1
+                        weights[j,k] = cur_array
+                    else:
+                        weights[j,k] = weights_obs[j][k,:,:]
+                    
+                    if(weights_bg is None):
+                        cur_array = bg_weights[k]
+                        cur_array[np.logical_or(
+                            bca[i,j] >= math.radians(min_bca),
+                            bca[i,j] <= math.radians(max_bca))] = 1
+                        cur_array[vrs[i][k].mask == True] = 0
+                        bg_weights[i] = cur_array
+                    else:
+                        bg_weights[i] = weights_bg[i]
+
+                 
+        print("Calculating weights for models...")
+        coverage_grade = weights.sum(axis=0)
+        coverage_grade = coverage_grade/coverage_grade.max()
+
+        # Weigh in model input more when we have no coverage
+        # Model only weighs 1/(# of grids + 1) when there is full
+        # Coverage
+        if(model_fields is not None):
+            if(weights_model is None):
+                for i in range(len(model_fields)): 
+                    mod_weights[i] = 1-(coverage_grade/(len(Grids)+1))
+            else:
+                for i in range(len(model_fields)): 
+                    mod_weights[i] = weights_model[i]
+                
     else:
         weights[0] = np.where(vrs[0].mask == False, 1, 0)
         bg_weights[0] = np.where(vrs[0].mask == False, 0, 1)
@@ -251,31 +316,50 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     warnflag = 99999
     coeff_max = np.max([Co, Cb, Cm, Cx, Cy, Cz, Cb])
     bounds = [(-x,x) for x in 100*np.ones(winds.shape)]
+    
+    u_model = []
+    v_model = []
+    w_model = []
+    if(model_fields is not None):
+        for the_field in model_fields:
+            u_field = ("U_" + the_field)
+            v_field = ("V_" + the_field) 
+            w_field = ("W_" + the_field)
+            u_model.append(Grids[0].fields[u_field]["data"])
+            v_model.append(Grids[0].fields[v_field]["data"])
+            w_model.append(Grids[0].fields[w_field]["data"])
+
+    
     while(iterations < max_iterations and 
           (abs(wprevmax-wcurrmax) > 0.02)):
         wprevmax = wcurrmax
         winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
                                                        wts, u_back, v_back,
+                                                       u_model, v_model, 
+                                                       w_model, 
                                                        Co, Cm, Cx, Cy, Cz, Cb,
-                                                       Cv, Ut, Vt,
+                                                       Cv, Cmod, Ut, Vt,
                                                        grid_shape,  
                                                        dx, dy, dz, z, rmsVr, 
                                                        weights, bg_weights,
-                                                       upper_bc),
+                                                       mod_weights,
+                                                       upper_bc,
+                                                       False),
                                 maxiter=10, pgtol=1e-3, bounds=bounds, 
                                 fprime=grad_J, disp=1, iprint=-1)
-        
-
-        # Print out cost function values after 10 iterations
-        J = J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
-                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,  
-                       dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
-                       print_out=True)
-        J = grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
-                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,  
-                   dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
-                   print_out=True)
-        
+        if(output_cost_functions == True):
+            J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
+                       u_model, v_model, w_model, 
+                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
+                       grid_shape, dx, dy, dz, z, rmsVr, 
+                       weights, bg_weights, mod_weights,
+                       upper_bc, True)
+            grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
+                   u_model, v_model, w_model, 
+                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
+                   grid_shape, dx, dy, dz, z, rmsVr, 
+                   weights, bg_weights, mod_weights,
+                   upper_bc, True)
         warnflag = winds[2]['warnflag']
         
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
@@ -308,10 +392,17 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         iterations = 0
         while(iterations < filt_iterations):
             winds = fmin_l_bfgs_b(
-               J_function, winds, args=(
-                   vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy, Cz, Cb,
-                   Cv, Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, weights, 
-                   bg_weights,upper_bc),
+               J_function, winds, args=(vrs, azs, els, 
+                                        wts, u_back, v_back,
+                                        u_model, v_model, w_model, 
+                                        Co, Cm, Cx, Cy, Cz, Cb,
+                                        Cv, Cmod, Ut, Vt,
+                                        grid_shape,  
+                                        dx, dy, dz, z, rmsVr, 
+                                        weights, bg_weights,
+                                        mod_weights,
+                                        upper_bc,
+                                        output_cost_functions),
                maxiter=10, pgtol=1e-3, bounds=bounds, 
                fprime=grad_J, disp=1, iprint=-1)
 
@@ -335,11 +426,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     v = the_winds[1]
     w = the_winds[2]
 
-    where_mask = np.sum(weights, axis=0)
+    where_mask = np.sum(weights + mod_weights, axis=0)
     if(mask_outside_opt==True):
         u = np.ma.masked_where(where_mask < 1, u)
         v = np.ma.masked_where(where_mask < 1, v)
         w = np.ma.masked_where(where_mask < 1, w)
+
     if(mask_w_outside_opt==True):
         w = np.ma.masked_where(where_mask < 1, w)
 

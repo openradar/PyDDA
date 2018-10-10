@@ -4,9 +4,10 @@ import pyart
 import scipy.ndimage.filters
 
  
-def J_function(winds, vrs, azs, els, wts, u_back, v_back,
-               Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,
-               dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc,
+def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
+               v_model, w_model, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, 
+               Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, weights, 
+               bg_weights, model_weights, upper_bc,
                print_out=False):
     """
     Calculates the cost function.
@@ -27,6 +28,12 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
         Background u wind
     v_back: 1D float array (number of vertical levels):
         Background u wind    
+    u_model: list of 3D float arrays
+        U from each model integrated into the retrieval
+    v_model: list of 3D float arrays
+        V from each model integrated into the retrieval
+    w_model:
+        W from each model integrated into the retrieval
     Co: float
         Weighting coefficient for data constraint.
     Cm: float
@@ -41,6 +48,8 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
         Coefficient for sounding constraint
     Cv: float
         Weight for cost function related to vertical vorticity equation.
+    Cmod: float
+        Coefficient for model constraint
     Ut: float
         Prescribed storm motion. This is only needed if Cv is not zero.
     Vt: float
@@ -58,10 +67,12 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
     rmsVr: float
         The sum of squares of velocity/num_points. Use for normalization
         of data weighting coefficient
-    weights: n_radars x_bins x y_bins float array
+    weights: n_radars by z_bins by y_bins by x_bins float array
         Data weights for each pair of radars
-    bg_weights: z_bins x x_bins x y_bins float array
+    bg_weights: z_bins by y_bins by x_bins float array
         Data weights for sounding constraint
+    model_weights: n_models by z_bins by y_bins by x_bins float array
+        Data weights for each model.
     upper_bc: bool
         True to enforce w=0 at top of domain (impermeability condition),
         False to not enforce impermeability at top of domain
@@ -105,23 +116,34 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back,
                                                         coeff=Cv)
     else:
         Jvorticity = 0
+
+    if(Cmod > 0):
+        Jmod = calculate_model_cost(winds[0], winds[1], winds[2], 
+                                    model_weights, u_model, v_model, w_model, 
+                                    coeff=Cmod)
+    else:
+        Jmod = 0
+        
         
     if(print_out==True):
-        print('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Max w  ')
+        print('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  ')
         print(('|' + "{:9.4f}".format(Jvel) + '|' + 
                "{:9.4f}".format(Jmass) + '|' + 
                "{:9.4f}".format(Jsmooth) + '|' + 
                "{:9.4f}".format(Jbackground) + '|' + 
                "{:9.4f}".format(Jvorticity) + '|' +
+               "{:9.4f}".format(Jmod) + '|' + 
                "{:9.4f}".format(np.abs(winds[2]).max())))
            
 
-    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity
+    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod
 
     
-def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy, 
-           Cz, Cb, Cv, Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, 
-           weights, bg_weights, upper_bc, print_out=False):
+def grad_J(winds, vrs, azs, els, wts, u_back, v_back, u_model,
+           v_model, w_model,Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, 
+           Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, 
+           weights, bg_weights, model_weights, upper_bc, 
+           print_out=False):
     """
     Calculates the gradient of the cost function.
     
@@ -140,7 +162,13 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
     u_back: 1D float array (number of vertical levels):
         Background u wind
     v_back: 1D float array (number of vertical levels):
-        Background u wind    
+        Background u wind  
+    u_model: list of 3D float arrays
+        U from each model integrated into the retrieval
+    v_model: list of 3D float arrays
+        V from each model integrated into the retrieval
+    w_model:
+        W from each model integrated into the retrieval  
     Co: float
         Weighting coefficient for data constraint.
     Cm: float
@@ -155,6 +183,8 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
         Coefficient for sounding constraint
     Cv: float
         Weight for cost function related to vertical vorticity equation.
+    Cmod: float
+        Coefficient for model constraint
     Ut: float
         Prescribed storm motion. This is only needed if Cv is not zero.
     Vt: float
@@ -172,10 +202,12 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
     rmsVr: float
         The sum of squares of velocity/num_points. Use for normalization
         of data weighting coefficient
-    weights: n_radars x_bins x y_bins float array
+    weights: n_radars by z_bins by y_bins x x_bins float array
         Data weights for each pair of radars
-    bg_weights: z_bins x x_bins x y_bins float array
+    bg_weights: z_bins by y_bins x x_bins float array
         Data weights for sounding constraint
+    model_weights: n_models by z_bins by y_bins by x_bins float array
+        Data weights for each model.
     upper_bc: bool
         True to enforce w=0 at top of domain (impermeability condition),
         False to not enforce impermeability at top of domain
@@ -209,8 +241,13 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy,
         grad += calculate_vertical_vorticity_gradient(winds[0], winds[1], 
                                                       winds[2], dx, dy, 
                                                       dz, Ut, Vt, 
-                                                      coeff=Cv)    
-        
+                                                      coeff=Cv)   
+    
+    if(Cmod > 0):
+        grad += calculate_model_gradient(winds[0], winds[1], winds[2], 
+                                    model_weights, u_model, v_model, w_model, 
+                                    coeff=Cmod)
+
     if(print_out==True):    
         print('Norm of gradient: ' + str(np.linalg.norm(grad, np.inf)))
     return grad
@@ -809,3 +846,85 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
     
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
+
+
+def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, 
+                         coeff=1.0):
+    """
+    Calculates the cost function due to deviance from vertical vorticity
+    equation.
+    
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    weights: list of 3D arrays
+        Float array showing how much each point from model weighs into
+        constratint.
+    u_model: list of 3D arrays
+        Float array with u component of wind field from model
+    v_model: list of 3D arrays
+        Float array with v component of wind field from model
+    w_model: list of 3D arrays
+        Float array with w component of wind field from model
+    coeff: float
+        Weighting coefficient
+        
+    Returns
+    -------
+    Jv: float
+        Value of model cost function
+    """
+    
+    cost = 0
+    for i in range(len(u_model)):
+        cost += (coeff*np.sum(np.square(u-u_model[i])*weights[i] +
+                              np.square(v-v_model[i])*weights[i]))
+    return cost
+
+
+def calculate_model_gradient(u, v, w, weights, u_model, 
+                             v_model, w_model, coeff=1.0):
+    """
+    Calculates the gradient of the background cost function.
+    
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    weights: list of 3D float arrays
+        Weights for each point to consider into cost function
+    u_model: list of 3D float arrays
+        Zonal wind field from model
+    v_model: list of 3D float arrays
+        Meridional wind field from model
+    w_model: list of 3D float arrays
+        Vetical wind field from model
+    coeff: float
+        Weight of background constraint to total cost function
+        
+    Returns
+    -------
+    y: float array
+        value of gradient of background cost function
+    """
+    the_shape = u.shape
+    u_grad = np.zeros(the_shape)
+    v_grad = np.zeros(the_shape)
+    w_grad = np.zeros(the_shape)
+    for i in range(len(u_model)):    
+        u_grad += coeff*2*(u-u_model[i])*weights[i]
+        v_grad += coeff*2*(v-v_model[i])*weights[i]
+
+    y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    return y.flatten()
+
+    

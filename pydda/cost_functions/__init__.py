@@ -22,6 +22,8 @@ The procedures in this module calculate the individual cost functions and their 
     calculate_background_gradient 
     calculate_vertical_vorticity_cost
     calculate_vertical_vorticity_gradient
+    calculate_model_cost
+    calculate_model_gradient
     calculate_fall_speed
 """
 
@@ -37,4 +39,6 @@ from .cost_functions import calculate_background_gradient
 from .cost_functions import calculate_background_cost
 from .cost_functions import calculate_vertical_vorticity_cost
 from .cost_functions import calculate_vertical_vorticity_gradient
+from .cost_functions import calculate_model_cost
+from .cost_functions import calculate_model_gradient
 from .cost_functions import J_function, grad_J
