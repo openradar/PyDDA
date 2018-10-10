@@ -196,7 +196,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
             (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
     else:
         mod_weights = np.zeros(
-            (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]))
 
     if(model_fields is None):
         if(Cmod != 0.0):
@@ -403,7 +403,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                         weights, bg_weights,
                                         mod_weights,
                                         upper_bc,
-                                        output_cost_functions),
+                                        False),
                maxiter=10, pgtol=1e-3, bounds=bounds, 
                fprime=grad_J, disp=1, iprint=-1)
 
@@ -427,7 +427,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     v = the_winds[1]
     w = the_winds[2]
 
-    where_mask = np.sum(weights + mod_weights, axis=0)
+    where_mask = np.sum(weights, axis=0) + np.sum(mod_weights, axis=0)
     if(mask_outside_opt==True):
         u = np.ma.masked_where(where_mask < 1, u)
         v = np.ma.masked_where(where_mask < 1, v)
