@@ -195,7 +195,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         mod_weights = np.ones(
             (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
     else:
-        mod_weights = None
+        mod_weights = np.zeros(
+            (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
 
     if(model_fields is None):
         if(Cmod != 0.0):
