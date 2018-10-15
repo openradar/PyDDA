@@ -39,6 +39,11 @@ cd PyDDA
 python setup.py install
 ```
 
+## Acknowledgments
+Core components of the software are adopted from the [Multidop](https://github.com/nasa/MultiDop) package by converting the C code to Python. 
+
+The development of this software is supported by the Climate Model Development and Validation (CMDV) activity which is funded by the Office of Biological and Environmental Research in the US Department of Energy Office of Science.
+
 ## References
 You must cite these papers if you use PyDDA:
 
