@@ -1,13 +1,23 @@
 # PyDDA (Pythonic Direct Data Assimilation)
 ![alt text](https://github.com/rcjackson/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
-Pythonic multiple doppler package
+### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
-This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus using Multidop, as well as a more elegant syntax as well as support for an arbitrary number of radars (at least 2).
+This software is designed to retrieve wind kinematics (u,v,w) in precipitation storm systems from
+ one or more Doppler weather radars using three dimensional data assimilation. Other constraints, including 
+ background fields (eg reanalysis) can be added. 
 
-The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background field from a grid. 
+This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely
+ Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique,
+  L-BFGS-B, which provides a factor of 2 to 5 speedup versus using the predecessor code, 
+   [NASA-Multidop](https://github.com/nasa/MultiDop), as well as a more elegant syntax as well as support for an 
+   arbitrary number of radars. The code is also threadsafe and has been tested using HPC tools such as Dask on large 
+   (100+ core) clusers. 
 
-The code here is based off of Potvin et al. (2012) and Shapiro et al. (2009).
+
+The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. 
+This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background 
+field from a grid. 
 
 Angles.py is from Multidop and was written by Timothy Lang of NASA.
 
