@@ -1,4 +1,4 @@
-# PyDDA
+# PyDDA (Pythonic Direct Data Assimilation)
 ![alt text](https://github.com/rcjackson/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
 Pythonic multiple doppler package
