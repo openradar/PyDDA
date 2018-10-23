@@ -37,9 +37,13 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       max_bca=150.0, upper_bc=True, model_fields=None,
                       output_cost_functions=True):
     """
-    This function takes in a list of Py-ART Grids and derives a wind field.
-
-    Every Py-ART Grid in Grids must have the same grid specification.
+    This function takes in a list of Py-ART Grid objects and derives a 
+    wind field. Every Py-ART Grid in Grids must have the same grid 
+    specification. In order for the model data constraint to be used,
+    the model data must be added as a field to at least one of the 
+    grids in Grids. This involves interpolating the model data to the
+    Grids' coordinates. There are helper functions for this for WRF
+    and HRRR data in pydda.constraints.
 
     Parameters
     ==========
@@ -48,14 +52,14 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         The list of Py-ART grids to take in corresponding to each radar.
         All grids must have the same specification.
     u_init: 3D ndarray
-        The intial u field, input as a 3D array with the same shape as the
-        fields in Grids.
+        The intial guess for the zonal wind field, input as a 3D array 
+        with the same shape as the fields in Grids.
     v_init: 3D ndarray
-        The intial c field, input as a 3D array with the same shape as the
-        fields in Grids.    
+        The intial guess for the meridional wind field, input as a 3D array 
+        with the same shape as the fields in Grids. 
     w_init: 3D ndarray
-        The intial w field, input as a 3D array with the same shape as the
-        fields in Grids.
+        The intial guess for the vertical wind field, input as a 3D array 
+        with the same shape as the fields in Grids.
     vel_name: string
         Name of radial velocity field. None will attempt to autodetect the 
         velocity field name.
@@ -63,11 +67,13 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         Name of reflectivity field. None will attempt to autodetect the 
         reflectivity field name.
     u_back: 1D array
-        Background zonal wind field, has same dimensions as z_back
+        Background zonal wind field from a sounding as a function of height. 
+        This should be given in the original coordinates.
     v_back: 1D array
-        Background meridional wind field, has same dimensions as z_back
+        Background meridional wind field from a sounding as a function of height. 
+        This should be given in the original coordinates.
     z_back: 1D array
-        Heights corresponding to background wind field levels
+        Heights corresponding to background wind field levels in meters.
     frz: float
         Freezing level used for fall speed calculation in meters.
     Co: float
@@ -85,18 +91,20 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     Cmod: float
         Weight for cost function related to vertical vorticity equation.
     weights_obs: list of floating point arrays or None
-        List of weights for each point in grid from each radar. Set to None
-        to let PyDDA determine this automatically.
+        List of weights for each point in grid from each radar in Grids. 
+        Set to None to let PyDDA determine this automatically.
     weights_model: list of floating point arrays or None
-        List of weights for each point in grid from each model. Set to None
-        to let PyDDA determine this automatically.
+        List of weights for each point in grid from each model in model_fields.
+        Set to None to let PyDDA determine this automatically.
     weights_bg: list of floating point arrays or None
         List of weights for each point in grid from the sounding. Set to None
         to let PyDDA determine this automatically.
     Ut: float
-        Prescribed storm motion. This is only needed if Cv is not zero.
+        Prescribed storm motion in zonal direction. 
+        This is only needed if Cv is not zero.
     Vt: float
-        Prescribed storm motion. This is only needed if Cv is not zero.  
+        Prescribed storm motion in meridional direction. 
+        This is only needed if Cv is not zero.  
     filt_iterations: int
         If this is greater than 0, PyDDA will run a low pass filter on 
         the retrieved wind field and then do the optimization step for
@@ -132,7 +140,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         The list of fields in the first grid in Grids that contain the model 
         data interpolated to the Grid's grid specification. Helper functions 
         to create such gridded fields for HRRR and NetCDF WRF data exist 
-        in pydda.initialization. PyDDA will look for fields named U_(model 
+        in ::pydda.constraints::. PyDDA will look for fields named U_(model 
         field name), V_(model field name), and W_(model field name). For 
         example, if you have U_hrrr, V_hrrr, and W_hrrr, then specify ["hrrr"]
         into model_fields.
@@ -143,7 +151,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     Returns
     =======
     new_grid_list: list
-        A list of Py-ART grids containing the derived wind field. These fields
+        A list of Py-ART grids containing the derived wind fields. These fields
         are displayable by the visualization module.
     """
     
@@ -467,167 +475,6 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         new_grid_list.append(temp_grid)
         
     return new_grid_list
-
-
-""" Makes a initialization wind field that is a constant everywhere"""
-def make_constant_wind_field(Grid, wind=(0.0,0.0,0.0), vel_field=None):
-    """
-    This function makes a constant wind field given a wind vector.
-
-    This function is useful for specifying the intialization arrays
-    for get_dd_wind_field. 
-
-    Parameters
-    ==========
-
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the analysis 
-        grid.
-    wind: 3-tuple of floats
-        The 3-tuple specifying the (u,v,w) of the wind field.
-    vel_field: String
-        The name of the velocity field. None will automatically
-        try to detect this field.
-
-    Returns
-    =======
-
-    u: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    v: 3D float array 
-        Returns a 3D float array containing the v component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    w: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    """
-    # Parse names of velocity field
-    if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
-
-    u = wind[0]*np.ones(analysis_grid_shape)
-    v = wind[1]*np.ones(analysis_grid_shape)
-    w = wind[2]*np.ones(analysis_grid_shape)
-    u = np.ma.filled(u, 0)
-    v = np.ma.filled(v, 0)
-    w = np.ma.filled(w, 0)
-    return u, v, w
-
-
-def make_wind_field_from_profile(Grid, profile, vel_field=None):
-    """
-    This function makes a 3D wind field from a sounding. 
-
-    This function is useful for using sounding data as an initialization
-    for get_dd_wind_field.
-
-    Parameters
-    ==========
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the analysis 
-        grid.
-    profile: Py-ART HorizontalWindProfile
-        This is the horizontal wind profile from the sounding
-    wind: 3-tuple of floats
-        The 3-tuple specifying the (u,v,w) of the wind field.
-    vel_field: String
-        The name of the velocity field in Grid. None will automatically
-        try to detect this field.
-
-    Returns
-    =======
-
-    u: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    v: 3D float array 
-        Returns a 3D float array containing the v component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    w: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-        """
-    # Parse names of velocity field
-    if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
-    u = np.ones(analysis_grid_shape)
-    v = np.ones(analysis_grid_shape)
-    w = np.zeros(analysis_grid_shape)
-    u_back = profile[1].u_wind
-    v_back = profile[1].v_wind
-    z_back = profile[1].height
-    u_interp = interp1d(
-        z_back, u_back, bounds_error=False, fill_value='extrapolate')
-    v_interp = interp1d(
-        z_back, v_back, bounds_error=False, fill_value='extrapolate')
-    u_back2 = u_interp(Grid.z['data'])
-    v_back2 = v_interp(Grid.z['data'])
-    for i in range(analysis_grid_shape[0]):
-        u[i] = u_back2[i]
-        v[i] = v_back2[i]
-    u = np.ma.filled(u, 0)
-    v = np.ma.filled(v, 0)
-    w = np.ma.filled(w, 0)
-    return u, v, w
-
-
-""" Makes a test wind field that converges at center near ground and
-    Diverges aloft at center """
-def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
-                               back_u, back_v, x_center, y_center):
-    """
-    This function makes a test field with wind convergence at the surface
-    and divergence aloft.
-
-    This function makes a useful test for the mass continuity equation.
-
-    Parameters
-    ----------
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the analysis 
-        grid.
-    wind_vel: float
-        The maximum wind velocity.
-    z_ground: float 
-        The bottom height where the maximum convergence occurs
-    z_top: float
-        The height where the maximum divergence occurrs
-    back_u: float
-        The u component of the wind outside of the area of convergence.
-    back_v: float
-        The v component of the wind outside of the area of convergence.
-    x_center: float
-        The X-coordinate of the center of the area of convergence in the 
-        Grid's coordinates.
-    y_center: float
-        The Y-coordinate of the center of the area of convergence in the 
-        Grid's coordinates.
-    
- 
-    Returns
-    -------
-    u_init, v_init, w_init: ndarrays of floats
-         Initial U, V, W field
-    """
-    
-    x = Grid.point_x['data']
-    y = Grid.point_y['data']
-    z = Grid.point_z['data']
-    
-    
-    theta = np.arctan2(x-x_center, y-y_center)
-    phi = np.pi*((z-z_ground)/(z_top-z_ground))
-    r = np.sqrt(np.square(x-x_center) + np.square(y-y_center))
-    
-    u = wind_vel*(r/radius)**2*np.cos(phi)*np.sin(theta)*np.ones(x.shape)
-    v = wind_vel*(r/radius)**2*np.cos(phi)*np.cos(theta)*np.ones(x.shape)
-    w = np.zeros(x.shape)
-    u[r > radius] = back_u
-    v[r > radius] = back_v
-    return u,v,w
 
 
 # Gets beam crossing angle over 2D grid centered over Radar 1.

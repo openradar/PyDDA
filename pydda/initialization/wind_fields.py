@@ -279,114 +279,10 @@ def make_background_from_wrf(Grid, file_path, wrf_time,
     return u, v, w
     
 
-def make_constraint_from_wrf(Grid, file_path, wrf_time, 
-                             radar_loc, vel_field=None):
+def make_intialization_from_hrrr(Grid, file_path):
     """
-    This function makes an initalization field based off of the u and w
-    from a WRF run in netCDF format. 
-    Only u and v are used from the WRF netCDF file.
-    
-    Parameters
-    ----------
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the 
-        analysis grid.
-    file_path: str
-        This is the path to the WRF grid
-    wrf_time: datetime
-        The timestep to derive the intialization field from.
-    radar_loc: tuple
-        The (X, Y) location of the radar in the WRF grid. The output
-        coordinate system will be centered around this location
-        and given the same grid specification that is specified
-        in Grid.
-    vel_field: str, or None
-        This string contains the name of the velocity field in the 
-        Grid. None will try to automatically detect this value.
-        
-    Returns
-    -------
-    Grid: Py-ART Grid object
-        This Py-ART Grid will contain the model u, v, and w.
-        
-    """
-    # Parse names of velocity field
-    if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-        
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
-    u = np.ones(analysis_grid_shape)
-    v = np.ones(analysis_grid_shape)
-    w = np.zeros(analysis_grid_shape)
-    
-    # Load WRF grid
-    wrf_cdf = Dataset(file_path, mode='r')
-    W_wrf = wrf_cdf.variables['W'][:]
-    V_wrf = wrf_cdf.variables['V'][:]
-    U_wrf = wrf_cdf.variables['U'][:]
-    PH_wrf = wrf_cdf.variables['PH'][:]
-    PHB_wrf = wrf_cdf.variables['PHB'][:]
-    alt_wrf = (PH_wrf+PHB_wrf)/9.81
-    
-    new_grid_x = Grid.point_x['data']
-    new_grid_y = Grid.point_y['data']
-    new_grid_z = Grid.point_z['data']
-    
-    # Find timestep from datetime
-    time_wrf = wrf_cdf.variables['Times']
-    ntimes = time_wrf.shape[0]
-    dts_wrf = []
-    for i in range(ntimes):
-        x = ''.join([x.decode() for x in time_wrf[i]])
-        dts_wrf.append(datetime.strptime(x, '%Y-%m-%d_%H:%M:%S'))
-    
-    dts_wrf = np.array(dts_wrf)
-    timestep = np.where(dts_wrf == wrf_time)
-    if(len(timestep[0]) == 0):
-        raise ValueError(("Time " + str(wrf_time) + " not found in WRF file!"))
-        
-    x_len = wrf_cdf.__getattribute__('WEST-EAST_GRID_DIMENSION')
-    y_len = wrf_cdf.__getattribute__('SOUTH-NORTH_GRID_DIMENSION')
-    dx = wrf_cdf.DX
-    dy = wrf_cdf.DY
-    x = np.arange(0, x_len)*dx-radar_loc[0]*1e3
-    y = np.arange(0, y_len)*dy-radar_loc[1]*1e3
-    z = np.mean(alt_wrf[timestep[0],:,:,:], axis=(0,2,3))
-    x, y, z = np.meshgrid(x,y,z)
-    z = np.squeeze(alt_wrf[timestep[0],:,:,:])
-
-    z_stag = (z[1:,:,:]+z[:-1,:,:])/2.0
-    x_stag = (x[:,:,1:]+x[:,:,:-1])/2.0
-    y_stag = (y[:,1:,:]+y[:,:-1,:])/2.0
-    
-    
-    W_wrf = np.squeeze(W_wrf[timestep[0],:,:,:])
-    V_wrf = np.squeeze(V_wrf[timestep[0],:,:,:])
-    U_wrf = np.squeeze(U_wrf[timestep[0],:,:,:])
-    
-    w = griddata((z_stag, y, x), W_wrf, 
-                        (new_grid_z,new_grid_y,new_grid_x),
-                        fill_value=0.)
-    v = griddata((z, y_stag, x), V_wrf, 
-                        (new_grid_z,new_grid_y,new_grid_x),
-                        fill_value=0.)
-    u = griddata((z, y, x_stag), U_wrf, 
-                        (new_grid_z,new_grid_y,new_grid_x),
-                        fill_value=0.)
-    u_dict = {'data': u, 'long_name': "U from WRF", 'units': "m/s"}
-    v_dict = {'data': v, 'long_name': "V from WRF", 'units': "m/s"}
-    w_dict = {'data': w, 'long_name': "W from WRF", 'units': "m/s"}
-    Grid.add_field("U_wrf", u_dict, replace_existing=True)
-    Grid.add_field("V_wrf", v_dict, replace_existing=True)
-    Grid.add_field("W_wrf", w_dict, replace_existing=True)
-
-    return Grid
-
-    
-def add_hrrr_constraint_to_grid(Grid, file_path):
-    """
-    This function will read an HRRR GRIB2 file and create the constraining
-    u, v, and w fields for the model constraint
+    This function will read an HRRR GRIB2 file and return initial guess
+    u, v, and w fields from the model
 
     Parameters
     ----------
@@ -463,13 +359,7 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
 
     new_grid = deepcopy(Grid)
     
-    u_dict = {'data': u_new, 'long_name': "U from HRRR ", 'units': "m/s"}
-    v_dict = {'data': v_new, 'long_name': "V from HRRR ", 'units': "m/s"}
-    w_dict = {'data': w_new, 'long_name': "W from HRRR ", 'units': "m/s"}
-
-    new_grid.add_field("U_hrrr", u_dict, replace_existing=True)
-    new_grid.add_field("V_hrrr", v_dict, replace_existing=True)    
-    new_grid.add_field("W_hrrr", v_dict, replace_existing=True) 
-
-    return new_grid
+    return u_new, v_new, w_new
     
+    
+

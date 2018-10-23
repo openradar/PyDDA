@@ -4,6 +4,8 @@
 # setup.py working directory
 build
 __pycache__
+.coverage
+.pytest_cache
 
 # sphinx build directory
 _build
@@ -17,6 +19,7 @@ doc/cdoc/build
 #######################
 /doc/build
 /doc/source/dev_reference/generated
+/doc/source/source/auto_examples
 
 # Data in notebooks #
 notebooks/*.nc

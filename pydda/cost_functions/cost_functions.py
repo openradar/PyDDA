@@ -10,30 +10,48 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
                bg_weights, model_weights, upper_bc,
                print_out=False):
     """
-    Calculates the cost function.
+    Calculates the total cost function. This typically does not need to be
+    called directly as get_dd_wind_field is a wrapper around this function and
+    grad_J. In order to add more terms to the cost function, modify this function
+    and grad_J. 
     
     Parameters
     ----------
     winds: 1-D float array
-        The wind field, flattened to 1-D for f_min
-    vrs: List of float arrays
-        List of radial velocities from each radar    
-    azs: List of float arrays
-        List of azimuths from each radar
-    els: List of float arrays
-        List of elevations from each radar    
-    wts: List of float arrays
-        Float array containing fall speed from radar.
+        The wind field, flattened to 1-D for f_min. The total size of the
+        array will be a 1D array of 3*nx*ny*nz elements.
+    vrs: List of 3D float arrays
+        List of radial velocities from each radar. All arrays in list
+        must have the same dimensions.
+    azs: List of 3D float arrays
+        List of azimuths from each radar. All arrays in list
+        must have the same dimensions.
+    els: List of 3D float arrays
+        List of elevations from each radar. All arrays in list
+        must have the same dimensions.    
+    wts: List of 3D float arrays
+        Float array containing fall speeds from radar. All arrays in list
+        must have the same dimensions.
     u_back: 1D float array (number of vertical levels):
-        Background u wind
+        Background u wind. This takes in a 1D float array of length nz,
+        with each element corresponding to the u component of the wind at a given
+        vertical level from the sounding.
     v_back: 1D float array (number of vertical levels):
-        Background u wind    
+        Background v wind. This takes in a 1D float array of length nz,
+        with each element corresponding to the v component of the wind at a given
+        vertical level from the sounding.    
     u_model: list of 3D float arrays
-        U from each model integrated into the retrieval
+        U from each model integrated into the retrieval. The U from each model
+        is given as a list of array of the same dimensions, with the U from the model
+        interpolated on to the radar analysis grid.
     v_model: list of 3D float arrays
-        V from each model integrated into the retrieval
+        V from each model integrated into the retrieval. The V from each model
+        is given as a list of array of the same dimensions, with the V from the model
+        interpolated on to the radar analysis grid.
     w_model:
-        W from each model integrated into the retrieval
+        W from each model integrated into the retrieval. The W from each model
+        is given as a list of array of the same dimensions, with the W from the model
+        interpolated on to the radar analysis grid.
     Co: float
         Weighting coefficient for data constraint.
     Cm: float
@@ -68,9 +86,10 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
         The sum of squares of velocity/num_points. Use for normalization
         of data weighting coefficient
     weights: n_radars by z_bins by y_bins by x_bins float array
-        Data weights for each pair of radars
+        Data weights for each pair of radars. This is usually automatically
+        determined by get_dd_wind_field. 
     bg_weights: z_bins by y_bins by x_bins float array
-        Data weights for sounding constraint
+        Data weights for sounding constraint.
     model_weights: n_models by z_bins by y_bins by x_bins float array
         Data weights for each model.
     upper_bc: bool
@@ -145,7 +164,10 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, u_model,
            weights, bg_weights, model_weights, upper_bc, 
            print_out=False):
     """
-    Calculates the gradient of the cost function.
+    Calculates the gradient of the cost function. This typically does not need to be
+    called directly as get_dd_wind_field is a wrapper around this function and
+    J_function. In order to add more terms to the cost function, modify this function
+    and grad_J. 
     
     Parameters
     ----------
@@ -258,9 +280,11 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
                                        ):
     """
     Calculates the cost function due to difference of the wind field from
-    radar radial velocities. 
+    radar radial velocities. For more information on this cost function, see
+    Potvin et al. (2012) and Shapiro et al. (2009).
     
-    All grids must have the same grid specification.
+    All arrays in the given lists must have the same dimensions and represent
+    the same spatial coordinates.
     
     Parameters
     ----------
@@ -290,6 +314,18 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
     -------
     J_o: float
          Observational cost function
+
+    References
+    -----------
+
+    Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity 
+    Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and 
+    Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, 
+    https://doi.org/10.1175/JTECH-D-11-00019.1
+
+    Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity
+    Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic 
+    Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1 
     """
          
     J_o = 0
@@ -314,7 +350,8 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     Calculates the gradient of the cost function due to difference of wind 
     field from radar radial velocities. 
 
-    All grids must have the same grid specification.
+    All arrays in the given lists must have the same dimensions and represent
+    the same spatial coordinates.
     
     Parameters
     ----------
@@ -345,6 +382,14 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     -------
     y: 1-D float array 
          Gradient vector of observational cost function    
+
+    More information
+    ----------------
+    The gradient is calculated by taking the functional derivative of the cost function.
+    For more information on functional derivatives, see the Euler-Lagrange Equation:
+    
+    https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation
+    
     """
     
     # Use zero for all masked values since we don't want to add them into
@@ -387,6 +432,7 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
         p_x1 += x_grad
         p_y1 += y_grad
         p_z1 += z_grad
+
     # Impermeability condition
     p_z1[0, :, :] = 0
     if(upper_bc == True):
@@ -400,7 +446,8 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     Calculates the smoothness cost function by taking the Laplacian of the
     wind field. 
 
-    All grids must have the same grid specification. 
+    All arrays in the given lists must have the same dimensions and represent
+    the same spatial coordinates. 
     
     Parameters
     ----------
@@ -438,7 +485,8 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
     Calculates the gradient of the smoothness cost function 
     by taking the Laplacian of the Laplacian of the wind field.
     
-    All grids must have the same grid specification.
+    All arrays in the given lists must have the same dimensions and represent
+    the same spatial coordinates.
     
     Parameters
     ----------
@@ -484,9 +532,11 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
 
 def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     """
-    Calculates the mass continuity cost function.
+    Calculates the mass continuity cost function by taking the divergence
+    of the wind field.
     
-    All grids must have the same grid specification.
+    All arrays in the given lists must have the same dimensions and represent
+    the same spatial coordinates.
     
     Parameters
     ----------
@@ -496,6 +546,12 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         Float array with v component of wind field
     w: Float array
         Float array with w component of wind field
+    dx: float 
+        Grid spacing in x direction.
+    dy: float
+        Grid spacing in y direction.
+    dz: float
+        Grid spacing in z direction.
     z: Float array (1D)
         1D Float array with heights of grid
     coeff: float
@@ -526,7 +582,8 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
                                        dy, dz, coeff=1500.0, anel=1,
                                        upper_bc=True):
     """
-    Calculates the gradient of mass continuity cost function. 
+    Calculates the gradient of mass continuity cost function. This is done by
+    taking the negative gradient of the divergence of the wind field. 
     
     All grids must have the same grid specification.
     
@@ -540,6 +597,12 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
         Float array with w component of wind field
     z: Float array (1D)
         1D Float array with heights of grid
+    dx: float 
+        Grid spacing in x direction.
+    dy: float
+        Grid spacing in y direction.
+    dz: float
+        Grid spacing in z direction.
     coeff: float
         Constant controlling contribution of mass continuity to cost function
     anel: int
@@ -632,7 +695,9 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
 def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
     """
-    Calculates the background cost function.
+    Calculates the background cost function. The background cost function is 
+    simply the sum of the squared differences between the wind field and the 
+    background wind field multiplied by the weighting coefficient.
     
     Parameters
     ----------
@@ -667,7 +732,8 @@ def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
 
 def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
     """
-    Calculates the gradient of the background cost function.
+    Calculates the gradient of the background cost function. For each u, v
+    this is given as 2*coefficent*(analysis wind - background wind).
     
     Parameters
     ----------
@@ -708,7 +774,8 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
                                       coeff=1e-5):
     """
     Calculates the cost function due to deviance from vertical vorticity
-    equation.
+    equation. For more information of the vertical vorticity cost function, 
+    see Potvin et al. (2012) and Shapiro et al. (2009).
     
     Parameters
     ----------
@@ -735,6 +802,18 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     -------
     Jv: float
         Value of vertical vorticity cost function.
+
+    References
+    ----------
+
+    Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity 
+    Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and 
+    Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, 
+    https://doi.org/10.1175/JTECH-D-11-00019.1
+
+    Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity
+    Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic 
+    Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1 
     """
     dvdz = np.gradient(v, dz, axis=0)
     dudz = np.gradient(u, dz, axis=0)
@@ -758,7 +837,8 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
                                           coeff=1e-5):
     """
     Calculates the gradient of the cost function due to deviance from vertical 
-    vorticity equation.
+    vorticity equation. This is done by taking the functional deriviative of the
+    vertical vorticity cost function.
     
     Parameters
     ----------
@@ -779,11 +859,24 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
     Vt: float
         V component of storm motion
     coeff: float
-        Weighting coefficient        
+        Weighting coefficient
+        
     Returns
     -------
     Jv: 1D float array
         Value of the gradient of the vertical vorticity cost function.
+   
+    References
+    ----------
+
+    Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity 
+    Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and 
+    Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, 
+    https://doi.org/10.1175/JTECH-D-11-00019.1
+
+    Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity
+    Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic 
+    Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1 
     """
     
     # First we will calculate dzeta_dt
@@ -851,8 +944,11 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
 def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, 
                          coeff=1.0):
     """
-    Calculates the cost function due to deviance from vertical vorticity
-    equation.
+    Calculates the cost function for the model constraint. 
+    This is calculated simply as the sum of squares of the differences
+    between the model wind field and the analysis wind field. Vertical 
+    velocities are not factored into this cost function as there is typically 
+    a high amount of uncertainty in model derived vertical velocities.
     
     Parameters
     ----------
@@ -890,7 +986,12 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
 def calculate_model_gradient(u, v, w, weights, u_model, 
                              v_model, w_model, coeff=1.0):
     """
-    Calculates the gradient of the background cost function.
+    Calculates the cost function for the model constraint. 
+    This is calculated simply as twice the differences
+    between the model wind field and the analysis wind field for each u, v. 
+    Vertical velocities are not factored into this cost function as there is 
+    typically a high amount of uncertainty in model derived vertical 
+    velocities. Therefore, the gradient for all of the w's will be 0.
     
     Parameters
     ----------

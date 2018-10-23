@@ -15,8 +15,7 @@ The module containing the core techniques for the multiple doppler wind retrieva
     
 """
 
-from .wind_retrieve import get_dd_wind_field, make_constant_wind_field
-from .wind_retrieve import make_wind_field_from_profile
+from .wind_retrieve import get_dd_wind_field
 from .wind_retrieve import get_bca
-from .wind_retrieve import make_test_divergence_field
+
 
