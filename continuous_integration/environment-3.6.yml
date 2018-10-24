@@ -14,5 +14,4 @@ dependencies:
   - cartopy
   - arm_pyart
   - eccodes
-  pip:
-    - cfgrib 
+
