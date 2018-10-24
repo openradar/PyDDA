@@ -162,4 +162,25 @@ def test_vert_vorticity():
         u, v, w, z, dx, dy, dz, 10, 10)
     assert cost > 0
     
+
+def test_model_cost():
+    u = 10*np.ones((10,10,10))
+    v = 10*np.ones((10,10,10))
+    w = 0*np.ones((10,10,10))
+    weights = np.ones((10,10,10))
     
+    cost = pydda.cost_functions.calculate_model_cost(
+        u, v, w, weights, u, v, w)
+    cost_grad = pydda.cost_functions.calculate_model_gradient(
+        u, v, w, weights, u, v, w)
+
+    # If model == observations, then cost is zero
+    assert cost == 0
+    assert np.all(cost_grad == 0) 
+
+    # If model is further from obs, cost is greater
+    cost1 = pydda.cost_functions.calculate_model_cost(
+        u, v, w, weights, u-1, v, w)
+    cost2 = pydda.cost_functions.calculate_model_cost(
+        u, v, w, weights, u-1, v-1, w)
+    assert cost2 > cost1
