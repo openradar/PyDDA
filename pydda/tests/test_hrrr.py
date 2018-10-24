@@ -21,8 +21,8 @@ def test_hrrr_constraint():
         f.write(r.content)
     
         
-    grid_mhx = pyart.io.read_grid('../tests/data/grid_ltx.nc')
-    grid_ltx = pyart.io.read_grid('../tests/data/grid_mhx.nc')
+    grid_mhx = pyart.io.read_grid(pydda.tests.MHX_GRID)
+    grid_ltx = pyart.io.read_grid(pydda.tests.LTX_GRID)
 
     grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                temp_file.name)
