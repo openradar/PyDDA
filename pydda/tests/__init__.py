@@ -18,5 +18,5 @@ wind retrieval.
 """
 
 from .sample_files import EXAMPLE_RADAR0, EXAMPLE_RADAR1
-from .sample_files import SOUNDING_PATH
+from .sample_files import SOUNDING_PATH, MHX_GRID, LTX_GRID
 
