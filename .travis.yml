@@ -15,4 +15,6 @@ install:
     - source continuous_integration/install.sh
 script: 
     - eval xvfb-run pytest
+    - source continuous_integration/build_docs.sh
+
         
