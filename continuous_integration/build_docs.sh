@@ -1,7 +1,7 @@
 set -e
 
 echo "Building Docs"
-conda install -q sphinx doctr
+conda install -c conda-forge -q sphinx doctr
 
 cd docs
 make clean
