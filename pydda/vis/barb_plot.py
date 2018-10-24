@@ -378,7 +378,6 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
     ax.set_yticks(the_ticks_y)
     return ax
         
-
 def plot_xz_xsection_barbs(Grids, ax=None,
                            background_field='reflectivity', level=1, 
                            cmap='pyart_LangRainbow12', 
