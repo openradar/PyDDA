@@ -7,15 +7,16 @@ matrix:
     - python: 3.5
       env:
         - PYTHON_VERSION="3.5"
+        - DOC_BUILD="true"
     - python: 3.6
       env:
         - PYTHON_VERSION="3.6"
-    
+        - DOC_BUILD="true"
 install: 
     - source continuous_integration/install.sh
 script: 
     - eval xvfb-run pytest
 after_success:
-    - if [[ "$DOC_BUILD" == "true"]]; then cd $TRAVIS_BUILD_DIR; source continuous_integration/build_docs.sh
-
+    - if [[ "$DOC_BUILD" == "true"]]; then cd $TRAVIS_BUILD_DIR; source continuous_integration/build_docs.sh;
+    fi
         
