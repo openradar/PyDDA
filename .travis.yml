@@ -17,6 +17,6 @@ install:
 script: 
     - eval xvfb-run pytest
 after_success:
-    - if [[ "$DOC_BUILD" == "true"]]; then cd $TRAVIS_BUILD_DIR; source continuous_integration/build_docs.sh;
+    - source continuous_integration/build_docs.sh;
     
         
