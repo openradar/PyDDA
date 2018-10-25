@@ -1,7 +1,7 @@
 """
-=====================================
-PyDDA: Pythonic Dual Doppler Analysis
-=====================================
+========================================
+PyDDA: Pythonic Direct Data Assimilation
+========================================
 """
 
 from . import cost_functions
