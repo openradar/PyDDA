@@ -20,7 +20,7 @@ conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
 source activate testenv
 pip install cfgrib
 
-python setup.py build_ext --inplace
+pip install -e .
 pip install sphinx sphinx_rtd_theme
 
 
