@@ -3,7 +3,7 @@ set -e
 echo "Building Docs"
 conda install -c conda-forge -q sphinx doctr
 
-cd docs
+cd doc
 make clean
 make html
 cd ..
