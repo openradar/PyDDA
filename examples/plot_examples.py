@@ -38,6 +38,7 @@ pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='DT', level=6,
                                     w_vel_contours=[3, 6, 9, 12, 15],
                                     barb_spacing_x_km=5.0,
                                     barb_spacing_y_km=15.0)
+plt.show()
 
 # Plot a vertical X-Z cross section
 plt.figure(figsize=(9,9))
@@ -45,6 +46,7 @@ pydda.vis.plot_xz_xsection_barbs(Grids, background_field='DT', level=40,
                                  w_vel_contours=[3, 6, 9, 12, 15],
                                  barb_spacing_x_km=10.0,
                                  barb_spacing_z_km=2.0)
+plt.show()
 
 # Plot a vertical Y-Z cross section
 plt.figure(figsize=(9,9))
@@ -52,3 +54,4 @@ pydda.vis.plot_yz_xsection_barbs(Grids, background_field='DT', level=40,
                                  w_vel_contours=[3, 6, 9, 12, 15],
                                  barb_spacing_y_km=10.0,
                                  barb_spacing_z_km=2.0)
+plt.show()

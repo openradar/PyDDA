@@ -6,6 +6,12 @@
 Welcome to the PyDDA documentation!
 ===================================
 
+.. image:: logo.png
+    :width: 400px
+    :align: center
+    :height: 200px
+    :alt: alternate text
+
 This is the main page for the documentation of PyDDA. Below are links that 
 provide documentation on the installation and use of PyDDA as well as 
 description of each of PyDDA's subroutines.
@@ -14,10 +20,24 @@ description of each of PyDDA's subroutines.
 System Requirements
 =========================
 
+This works on any modern version of Linux, Mac OS X, and Windows. For Windows,
+HRRR data integration is not supported. In addition, since PyDDA takes advtange
+of parallelism we recommend:
+::
+    An Intel machine with at least 4 cores
+    8 GB RAM
+    1 GB hard drive space
+::
+
+While PyDDA will work on less than this, you may run into performance issues.
 
 =========================
 Installation instructions
 =========================
+
+The GitHub repository for PyDDA is available at:
+
+`<https://github.com/openradar/PyDDA>`
 
 Before you install PyDDA, ensure that the following dependencies are installed:
 ::
@@ -30,10 +50,10 @@ Before you install PyDDA, ensure that the following dependencies are installed:
     cartopy 0.16.0+
 ::
 
-In order to use the HRRR data constraint, cfgrib needs to be installed. _cfgrib
-currently only works on Mac OS and Linux, so this is an optional dependency of
-PyDDA so that Windows users can still use PyDDA. In order to install cfgrib, simply
-do: 
+In order to use the HRRR data constraint, cfgrib needs to be installed. `cfgrib 
+<http://github.com/ecmwf/cfgrib>`_ currently only works on Mac OS and Linux, so 
+this is an optional dependency of PyDDA so that Windows users can still use PyDDA. 
+In order to install cfgrib, simply do: 
 
 .. _cfgrib: https://github.com/ecmwf/cfgrib
 
@@ -57,7 +77,8 @@ Contents:
 
 .. toctree::
    :maxdepth: 3
-
+    
+   contributors_guide/index
    source/auto_examples/index
    dev_reference/index
 

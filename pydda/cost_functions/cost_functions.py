@@ -330,10 +330,10 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
                 np.cos(els[i])*np.cos(azs[i])*v +
                 np.sin(els[i])*(w - np.abs(wts[i])))
         the_weight = weights[i]
-        the_weight[els[i].mask is True] = 0
-        the_weight[azs[i].mask is True] = 0
-        the_weight[vrs[i].mask is True] = 0
-        the_weight[wts[i].mask is True] = 0
+        the_weight[els[i].mask] = 0
+        the_weight[azs[i].mask] = 0
+        the_weight[vrs[i].mask] = 0
+        the_weight[wts[i].mask] = 0
         J_o += lambda_o*np.sum(np.square(vrs[i] - v_ar)*the_weight)
 
     return J_o
@@ -407,25 +407,25 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
                   np.cos(azs[i]) * weights[i]) * lambda_o
         z_grad = (2*(v_ar - vrs[i]) * np.sin(els[i]) * weights[i]) * lambda_o
 
-        x_grad[els[i].mask is True] = 0
-        y_grad[els[i].mask is True] = 0
-        z_grad[els[i].mask is True] = 0
-        x_grad[azs[i].mask is True] = 0
-        y_grad[azs[i].mask is True] = 0
-        z_grad[azs[i].mask is True] = 0
+        x_grad[els[i].mask] = 0
+        y_grad[els[i].mask] = 0
+        z_grad[els[i].mask] = 0
+        x_grad[azs[i].mask] = 0
+        y_grad[azs[i].mask] = 0
+        z_grad[azs[i].mask] = 0
 
-        x_grad[els[i].mask is True] = 0
-        x_grad[azs[i].mask is True] = 0
-        x_grad[vrs[i].mask is True] = 0
-        x_grad[wts[i].mask is True] = 0
-        y_grad[els[i].mask is True] = 0
-        y_grad[azs[i].mask is True] = 0
-        y_grad[vrs[i].mask is True] = 0
-        y_grad[wts[i].mask is True] = 0
-        z_grad[els[i].mask is True] = 0
-        z_grad[azs[i].mask is True] = 0
-        z_grad[vrs[i].mask is True] = 0
-        z_grad[wts[i].mask is True] = 0
+        x_grad[els[i].mask] = 0
+        x_grad[azs[i].mask] = 0
+        x_grad[vrs[i].mask] = 0
+        x_grad[wts[i].mask] = 0
+        y_grad[els[i].mask] = 0
+        y_grad[azs[i].mask] = 0
+        y_grad[vrs[i].mask] = 0
+        y_grad[wts[i].mask] = 0
+        z_grad[els[i].mask] = 0
+        z_grad[azs[i].mask] = 0
+        z_grad[vrs[i].mask] = 0
+        z_grad[wts[i].mask] = 0
 
         p_x1 += x_grad
         p_y1 += y_grad
