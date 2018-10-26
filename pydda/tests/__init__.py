@@ -5,7 +5,7 @@
 pydda.tests (pydda.tests)
 ===========================================
 
-.. currentmodule:: pydda.testing
+.. currentmodule:: pydda.tests
 
 The module containing the core techniques for the multiple doppler 
 wind retrieval.

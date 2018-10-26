@@ -3,7 +3,7 @@
 pydda.constraints (pydda.constraints)
 ========================================
 
-.. currentmodule:: pydda.cost_functions
+.. currentmodule:: pydda.constraints
 
 The procedures in this module calculate the individual cost functions and their gradients.
 

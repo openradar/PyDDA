@@ -15,11 +15,11 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-berr_grid = pyart.io.read_grid("../tests/data/example_grid_radar0.nc")
-cpol_grid = pyart.io.read_grid("../tests/data/example_grid_radar1.nc")
+berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
 
 sounding = pyart.io.read_arm_sonde(
-    "./tests/data/test_sounding.cdf")
+    pydda.tests.SOUNDING_PATH)
 
 
 # Load sounding data and insert as an intialization
