@@ -12,19 +12,18 @@ Author: Robert C. Jackson
 import pyart
 import pydda
 from matplotlib import pyplot as plt
-import numpy as np
 
 
-berr_grid = pyart.io.read_grid("/home/rjackson/data/berr_Darwin_hires.nc")
-cpol_grid = pyart.io.read_grid("/home/rjackson/data/cpol_Darwin_hires.nc")
+berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
 
 sounding = pyart.io.read_arm_sonde(
-    "/home/rjackson/data/soundings/twpsondewnpnC3.b1.20060119.231600.custom.cdf")
+    pydda.tests.SOUNDING_PATH)
 
 
 # Load sounding data and insert as an intialization
 u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
-        cpol_grid, sounding, vel_field='VT')
+        cpol_grid, sounding[1], vel_field='VT')
 
 # Start the wind retrieval. This example only uses the mass continuity
 # and data weighting constraints.
@@ -39,6 +38,7 @@ pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='DT', level=6,
                                     w_vel_contours=[3, 6, 9, 12, 15],
                                     barb_spacing_x_km=5.0,
                                     barb_spacing_y_km=15.0)
+plt.show()
 
 # Plot a vertical X-Z cross section
 plt.figure(figsize=(9,9))
@@ -46,10 +46,12 @@ pydda.vis.plot_xz_xsection_barbs(Grids, background_field='DT', level=40,
                                  w_vel_contours=[3, 6, 9, 12, 15],
                                  barb_spacing_x_km=10.0,
                                  barb_spacing_z_km=2.0)
+plt.show()
 
 # Plot a vertical Y-Z cross section
 plt.figure(figsize=(9,9))
 pydda.vis.plot_yz_xsection_barbs(Grids, background_field='DT', level=40,
                                  w_vel_contours=[3, 6, 9, 12, 15],
-                                 barb_spacing_x_km=10.0,
+                                 barb_spacing_y_km=10.0,
                                  barb_spacing_z_km=2.0)
+plt.show()

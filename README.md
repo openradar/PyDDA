@@ -1,5 +1,5 @@
 # PyDDA (Pythonic Direct Data Assimilation)
-![alt text](https://github.com/rcjackson/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
+![alt text](https://github.com/openradar/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
@@ -32,11 +32,19 @@ Right now this has been tested on and depends on:
     numpy 1.13.1
     
     matplotlib 1.5.3
+    
+    cartopy 0.15.1
+    
+In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
+    pip install cfgrib
+    
+=======
 ## Links to important documentation
 
 1. [Examples](http://openradarscience.org/PyDDA/source/auto_examples/plot_examples.html)
 2. [Developer reference guide](http://openradarscience.org/PyDDA/dev_reference/index.html)
+
 
 ## Installation instructions
 Right now there is only one method to install PyDDA, which is from source. To
@@ -49,10 +57,12 @@ cd PyDDA
 python setup.py install
 ```
 
+=======
 ## Acknowledgments
 Core components of the software are adopted from the [Multidop](https://github.com/nasa/MultiDop) package by converting the C code to Python. 
 
 The development of this software is supported by the Climate Model Development and Validation (CMDV) activity which is funded by the Office of Biological and Environmental Research in the US Department of Energy Office of Science.
+
 
 ## References
 You must cite these papers if you use PyDDA:

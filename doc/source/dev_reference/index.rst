@@ -54,4 +54,14 @@ The module for creating custom initial states for the PyDDA retrieval.
     :undoc-members:
     :show-inheritance:
 
+===========================
+:mod:`constraints` Module
+===========================
+
+The module for creating custom constraints (i.e. from models, satellites) for the PyDDA retrieval.
+
+.. automodule:: pydda.constraints
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
