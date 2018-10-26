@@ -11,8 +11,6 @@ Author: Robert C. Jackson
 
 import urllib
 import pyart
-import pytest
-import os
 import pydda
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs

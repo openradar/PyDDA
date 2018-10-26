@@ -12,7 +12,6 @@ Author: Robert C. Jackson
 import pyart
 import pydda
 from matplotlib import pyplot as plt
-import numpy as np
 
 
 berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)

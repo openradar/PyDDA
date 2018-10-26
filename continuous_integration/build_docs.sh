@@ -8,7 +8,7 @@ cd doc
 make clean
 make html
 cd ..
-doctr deploy
+doctr deploy .
 
 
 

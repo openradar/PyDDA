@@ -7,16 +7,12 @@ pydda.tests (pydda.tests)
 
 .. currentmodule:: pydda.tests
 
-The module containing the core techniques for the multiple doppler 
-wind retrieval.
+This module contains links to test files for PyDDA.
 
 .. autosummary::
     :toctree: generated/
-    
-    
 
 """
 
 from .sample_files import EXAMPLE_RADAR0, EXAMPLE_RADAR1
 from .sample_files import SOUNDING_PATH, MHX_GRID, LTX_GRID
-

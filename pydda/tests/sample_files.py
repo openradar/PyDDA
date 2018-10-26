@@ -23,5 +23,3 @@ EXAMPLE_RADAR1 = os.path.join(DATA_PATH, 'example_grid_radar1.nc')
 SOUNDING_PATH = os.path.join(DATA_PATH, 'test_sounding.cdf')
 LTX_GRID = os.path.join(DATA_PATH, 'grid_ltx.nc')
 MHX_GRID = os.path.join(DATA_PATH, 'grid_mhx.nc')
-
-
