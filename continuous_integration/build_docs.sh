@@ -8,7 +8,7 @@ cd doc
 make clean
 make html
 cd ..
-doctr deploy . --key-path continuous_integration/github_key.enc
+doctr deploy . --key-path github_deploy_key.enc
 
 
 
