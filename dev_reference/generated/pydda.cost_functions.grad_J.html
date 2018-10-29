@@ -1,36 +1,27 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>pydda.cost_functions.grad_J &#8212; PyDDA 0.1.0 documentation</title>
-    
+    <title>pydda.cost_functions.grad_J &#8212; PyDDA 0.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../',
-        VERSION:     '0.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="PyDDA 0.1.0 documentation" href="../../PyDDA-doc.html" />
-    <link rel="up" title="Developer Reference Manual" href="../index.html" />
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pydda.cost_functions.calculate_radial_vel_cost_function" href="pydda.cost_functions.calculate_radial_vel_cost_function.html" />
     <link rel="prev" title="pydda.cost_functions.J_function" href="pydda.cost_functions.J_function.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -46,7 +37,7 @@
         <li class="right" >
           <a href="pydda.cost_functions.J_function.html" title="pydda.cost_functions.J_function"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../PyDDA-doc.html">PyDDA 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
       </ul>
     </div>  
@@ -60,120 +51,116 @@
 <h1>pydda.cost_functions.grad_J<a class="headerlink" href="#pydda-cost-functions-grad-j" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.cost_functions.grad_J">
-<code class="descclassname">pydda.cost_functions.</code><code class="descname">grad_J</code><span class="sig-paren">(</span><em>winds</em>, <em>vrs</em>, <em>azs</em>, <em>els</em>, <em>wts</em>, <em>u_back</em>, <em>v_back</em>, <em>Co</em>, <em>Cm</em>, <em>Cx</em>, <em>Cy</em>, <em>Cz</em>, <em>Cb</em>, <em>Cv</em>, <em>Ut</em>, <em>Vt</em>, <em>grid_shape</em>, <em>dx</em>, <em>dy</em>, <em>dz</em>, <em>z</em>, <em>rmsVr</em>, <em>weights</em>, <em>bg_weights</em>, <em>upper_bc</em>, <em>print_out=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#grad_J"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.cost_functions.grad_J" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the gradient of the cost function.</p>
+<code class="descclassname">pydda.cost_functions.</code><code class="descname">grad_J</code><span class="sig-paren">(</span><em>winds</em>, <em>vrs</em>, <em>azs</em>, <em>els</em>, <em>wts</em>, <em>u_back</em>, <em>v_back</em>, <em>u_model</em>, <em>v_model</em>, <em>w_model</em>, <em>Co</em>, <em>Cm</em>, <em>Cx</em>, <em>Cy</em>, <em>Cz</em>, <em>Cb</em>, <em>Cv</em>, <em>Cmod</em>, <em>Ut</em>, <em>Vt</em>, <em>grid_shape</em>, <em>dx</em>, <em>dy</em>, <em>dz</em>, <em>z</em>, <em>rmsVr</em>, <em>weights</em>, <em>bg_weights</em>, <em>model_weights</em>, <em>upper_bc</em>, <em>print_out=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#grad_J"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.cost_functions.grad_J" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the gradient of the cost function. This typically does not need
+to be called directly as get_dd_wind_field is a wrapper around this
+function and J_function. In order to add more terms to the cost function,
+modify this function and grad_J.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>winds: 1-D float array</strong></p>
-<blockquote>
-<div><p>The wind field, flattened to 1-D for f_min</p>
-</div></blockquote>
-<p><strong>vrs: List of float arrays</strong></p>
-<blockquote>
-<div><p>List of radial velocities from each radar</p>
-</div></blockquote>
-<p><strong>azs: List of float arrays</strong></p>
-<blockquote>
-<div><p>List of azimuths from each radar</p>
-</div></blockquote>
-<p><strong>els: List of float arrays</strong></p>
-<blockquote>
-<div><p>List of elevations from each radar</p>
-</div></blockquote>
-<p><strong>wts: List of float arrays</strong></p>
-<blockquote>
-<div><p>Float array containing fall speed from radar.</p>
-</div></blockquote>
-<p><strong>u_back: 1D float array (number of vertical levels):</strong></p>
-<blockquote>
-<div><p>Background u wind</p>
-</div></blockquote>
-<p><strong>v_back: 1D float array (number of vertical levels):</strong></p>
-<blockquote>
-<div><p>Background u wind</p>
-</div></blockquote>
-<p><strong>Co: float</strong></p>
-<blockquote>
-<div><p>Weighting coefficient for data constraint.</p>
-</div></blockquote>
-<p><strong>Cm: float</strong></p>
-<blockquote>
-<div><p>Weighting coefficient for mass continuity constraint.</p>
-</div></blockquote>
-<p><strong>Cx: float</strong></p>
-<blockquote>
-<div><p>Smoothing coefficient for x-direction</p>
-</div></blockquote>
-<p><strong>Cy: float</strong></p>
-<blockquote>
-<div><p>Smoothing coefficient for y-direction</p>
-</div></blockquote>
-<p><strong>Cz: float</strong></p>
-<blockquote>
-<div><p>Smoothing coefficient for z-direction</p>
-</div></blockquote>
-<p><strong>Cb: float</strong></p>
-<blockquote>
-<div><p>Coefficient for sounding constraint</p>
-</div></blockquote>
-<p><strong>Cv: float</strong></p>
-<blockquote>
-<div><p>Weight for cost function related to vertical vorticity equation.</p>
-</div></blockquote>
-<p><strong>Ut: float</strong></p>
-<blockquote>
-<div><p>Prescribed storm motion. This is only needed if Cv is not zero.</p>
-</div></blockquote>
-<p><strong>Vt: float</strong></p>
-<blockquote>
-<div><p>Prescribed storm motion. This is only needed if Cv is not zero.</p>
-</div></blockquote>
-<p><strong>grid_shape:</strong></p>
-<blockquote>
-<div><p>Shape of wind grid</p>
-</div></blockquote>
-<p><strong>dx:</strong></p>
-<blockquote>
-<div><p>Spacing of grid in x direction</p>
-</div></blockquote>
-<p><strong>dy:</strong></p>
-<blockquote>
-<div><p>Spacing of grid in y direction</p>
-</div></blockquote>
-<p><strong>dz:</strong></p>
-<blockquote>
-<div><p>Spacing of grid in z direction</p>
-</div></blockquote>
-<p><strong>z:</strong></p>
-<blockquote>
-<div><p>Grid vertical levels in m</p>
-</div></blockquote>
-<p><strong>rmsVr: float</strong></p>
-<blockquote>
-<div><p>The sum of squares of velocity/num_points. Use for normalization
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>winds: 1-D float array</strong></dt>
+<dd><p class="first last">The wind field, flattened to 1-D for f_min</p>
+</dd>
+<dt><strong>vrs: List of float arrays</strong></dt>
+<dd><p class="first last">List of radial velocities from each radar</p>
+</dd>
+<dt><strong>azs: List of float arrays</strong></dt>
+<dd><p class="first last">List of azimuths from each radar</p>
+</dd>
+<dt><strong>els: List of float arrays</strong></dt>
+<dd><p class="first last">List of elevations from each radar</p>
+</dd>
+<dt><strong>wts: List of float arrays</strong></dt>
+<dd><p class="first last">Float array containing fall speed from radar.</p>
+</dd>
+<dt><strong>u_back: 1D float array (number of vertical levels):</strong></dt>
+<dd><p class="first last">Background u wind</p>
+</dd>
+<dt><strong>v_back: 1D float array (number of vertical levels):</strong></dt>
+<dd><p class="first last">Background u wind</p>
+</dd>
+<dt><strong>u_model: list of 3D float arrays</strong></dt>
+<dd><p class="first last">U from each model integrated into the retrieval</p>
+</dd>
+<dt><strong>v_model: list of 3D float arrays</strong></dt>
+<dd><p class="first last">V from each model integrated into the retrieval</p>
+</dd>
+<dt><strong>w_model:</strong></dt>
+<dd><p class="first last">W from each model integrated into the retrieval</p>
+</dd>
+<dt><strong>Co: float</strong></dt>
+<dd><p class="first last">Weighting coefficient for data constraint.</p>
+</dd>
+<dt><strong>Cm: float</strong></dt>
+<dd><p class="first last">Weighting coefficient for mass continuity constraint.</p>
+</dd>
+<dt><strong>Cx: float</strong></dt>
+<dd><p class="first last">Smoothing coefficient for x-direction</p>
+</dd>
+<dt><strong>Cy: float</strong></dt>
+<dd><p class="first last">Smoothing coefficient for y-direction</p>
+</dd>
+<dt><strong>Cz: float</strong></dt>
+<dd><p class="first last">Smoothing coefficient for z-direction</p>
+</dd>
+<dt><strong>Cb: float</strong></dt>
+<dd><p class="first last">Coefficient for sounding constraint</p>
+</dd>
+<dt><strong>Cv: float</strong></dt>
+<dd><p class="first last">Weight for cost function related to vertical vorticity equation.</p>
+</dd>
+<dt><strong>Cmod: float</strong></dt>
+<dd><p class="first last">Coefficient for model constraint</p>
+</dd>
+<dt><strong>Ut: float</strong></dt>
+<dd><p class="first last">Prescribed storm motion. This is only needed if Cv is not zero.</p>
+</dd>
+<dt><strong>Vt: float</strong></dt>
+<dd><p class="first last">Prescribed storm motion. This is only needed if Cv is not zero.</p>
+</dd>
+<dt><strong>grid_shape:</strong></dt>
+<dd><p class="first last">Shape of wind grid</p>
+</dd>
+<dt><strong>dx:</strong></dt>
+<dd><p class="first last">Spacing of grid in x direction</p>
+</dd>
+<dt><strong>dy:</strong></dt>
+<dd><p class="first last">Spacing of grid in y direction</p>
+</dd>
+<dt><strong>dz:</strong></dt>
+<dd><p class="first last">Spacing of grid in z direction</p>
+</dd>
+<dt><strong>z:</strong></dt>
+<dd><p class="first last">Grid vertical levels in m</p>
+</dd>
+<dt><strong>rmsVr: float</strong></dt>
+<dd><p class="first last">The sum of squares of velocity/num_points. Use for normalization
 of data weighting coefficient</p>
-</div></blockquote>
-<p><strong>weights: n_radars x_bins x y_bins float array</strong></p>
-<blockquote>
-<div><p>Data weights for each pair of radars</p>
-</div></blockquote>
-<p><strong>bg_weights: z_bins x x_bins x y_bins float array</strong></p>
-<blockquote>
-<div><p>Data weights for sounding constraint</p>
-</div></blockquote>
-<p><strong>upper_bc: bool</strong></p>
-<blockquote>
-<div><p>True to enforce w=0 at top of domain (impermeability condition),
+</dd>
+<dt><strong>weights: n_radars by z_bins by y_bins x x_bins float array</strong></dt>
+<dd><p class="first last">Data weights for each pair of radars</p>
+</dd>
+<dt><strong>bg_weights: z_bins by y_bins x x_bins float array</strong></dt>
+<dd><p class="first last">Data weights for sounding constraint</p>
+</dd>
+<dt><strong>model_weights: n_models by z_bins by y_bins by x_bins float array</strong></dt>
+<dd><p class="first last">Data weights for each model.</p>
+</dd>
+<dt><strong>upper_bc: bool</strong></dt>
+<dd><p class="first last">True to enforce w=0 at top of domain (impermeability condition),
 False to not enforce impermeability at top of domain</p>
-</div></blockquote>
+</dd>
+</dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">grad: 1D float array</p>
-<blockquote class="last">
-<div><p>Gradient vector of cost function</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>grad: 1D float array</strong></dt>
+<dd><p class="first last">Gradient vector of cost function</p>
+</dd>
+</dl>
 </td>
 </tr>
 </tbody>
@@ -197,18 +184,20 @@ False to not enforce impermeability at top of domain</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/dev_reference/generated/pydda.cost_functions.grad_J.txt"
+      <li><a href="../../_sources/dev_reference/generated/pydda.cost_functions.grad_J.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -230,13 +219,13 @@ False to not enforce impermeability at top of domain</p>
         <li class="right" >
           <a href="pydda.cost_functions.J_function.html" title="pydda.cost_functions.J_function"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../PyDDA-doc.html">PyDDA 0.1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>
