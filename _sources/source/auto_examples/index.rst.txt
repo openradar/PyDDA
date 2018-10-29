@@ -29,6 +29,26 @@ Two different examples are given on how to retrieve winds using HRRR and radar d
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we show how to plot wind fields on a map and change the default constraint coef...">
+
+.. only:: html
+
+    .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
+
+        :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /source/auto_examples/plot_fun_with_constraints
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This is a simple example for how to retrieve and plot winds from 2 radars using PyDDA.">
 
 .. only:: html

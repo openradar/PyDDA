@@ -64,7 +64,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 76.1
+    Done! Time = 63.0
 
 
 
@@ -94,12 +94,12 @@ Author: Robert C. Jackson
     # Start the wind retrieval. This example only uses the mass continuity
     # and data weighting constraints.
     Grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], u_init,
-                                              v_init, w_init, Co=10.0, Cm=1500.0, 
+                                              v_init, w_init, Co=10.0, Cm=1500.0,
                                               Cz=0, vel_name='VT', refl_field='DT',
-                                              frz=5000.0, filt_iterations=2, 
+                                              frz=5000.0, filt_iterations=2,
                                               mask_outside_opt=True, upper_bc=1)
     # Plot a horizontal cross section
-    plt.figure(figsize=(9,9))
+    plt.figure(figsize=(9, 9))
     pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='DT', level=6,
                                         w_vel_contours=[3, 6, 9, 12, 15],
                                         barb_spacing_x_km=5.0,
@@ -107,7 +107,7 @@ Author: Robert C. Jackson
     plt.show()
 
     # Plot a vertical X-Z cross section
-    plt.figure(figsize=(9,9))
+    plt.figure(figsize=(9, 9))
     pydda.vis.plot_xz_xsection_barbs(Grids, background_field='DT', level=40,
                                      w_vel_contours=[3, 6, 9, 12, 15],
                                      barb_spacing_x_km=10.0,
@@ -115,14 +115,14 @@ Author: Robert C. Jackson
     plt.show()
 
     # Plot a vertical Y-Z cross section
-    plt.figure(figsize=(9,9))
+    plt.figure(figsize=(9, 9))
     pydda.vis.plot_yz_xsection_barbs(Grids, background_field='DT', level=40,
                                      w_vel_contours=[3, 6, 9, 12, 15],
                                      barb_spacing_y_km=10.0,
                                      barb_spacing_z_km=2.0)
     plt.show()
 
-**Total running time of the script:** ( 1 minutes  17.597 seconds)
+**Total running time of the script:** ( 1 minutes  4.236 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

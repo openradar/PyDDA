@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -48,7 +48,9 @@
 <span class="kn">import</span> <span class="nn">cartopy</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">retrieval</span>
-
+<span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="k">import</span> <span class="n">Axes</span>
+<span class="kn">from</span> <span class="nn">cartopy.mpl.geoaxes</span> <span class="k">import</span> <span class="n">GeoAxes</span>
+<span class="n">GeoAxes</span><span class="o">.</span><span class="n">_pcolormesh_patched</span> <span class="o">=</span> <span class="n">Axes</span><span class="o">.</span><span class="n">pcolormesh</span>
 
 <div class="viewcode-block" id="plot_horiz_xsection_barbs"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_barbs.html#pydda.vis.plot_horiz_xsection_barbs">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                               <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -389,7 +391,7 @@
                         <span class="n">levels</span><span class="o">=</span><span class="p">[</span><span class="n">bca_min</span><span class="p">,</span> <span class="n">bca_max</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">axes_labels_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">((</span><span class="s1">&#39;Latitiude [$\degree$]&#39;</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">((</span><span class="s1">&#39;Latitude [$\degree$]&#39;</span><span class="p">))</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">((</span><span class="s1">&#39;Longitude [$\degree$]&#39;</span><span class="p">))</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">title_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
@@ -403,8 +405,8 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_extent</span><span class="p">([</span><span class="n">grid_lon</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_lon</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
                    <span class="n">grid_lat</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_lat</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
-    <span class="n">the_ticks_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">grid_lon</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">round</span><span class="p">(</span><span class="n">grid_lon</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="mi">6</span><span class="p">)</span>
-    <span class="n">the_ticks_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">grid_lat</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">round</span><span class="p">(</span><span class="n">grid_lat</span><span class="o">.</span><span class="n">max</span><span class="p">()),</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">the_ticks_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">grid_lon</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_lon</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">the_ticks_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">grid_lat</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_lat</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">the_ticks_x</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">the_ticks_y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ax</span></div>
@@ -742,7 +744,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

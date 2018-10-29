@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Developer Reference Manual" href="../../dev_reference/index.html" />
-    <link rel="prev" title="Example on integrating radar and HRRR data" href="hurricane_florence.html" /> 
+    <link rel="prev" title="Example on geographic plotting and constraint variation" href="plot_fun_with_constraints.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -35,9 +35,9 @@
           <a href="../../dev_reference/index.html" title="Developer Reference Manual"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="hurricane_florence.html" title="Example on integrating radar and HRRR data"
+          <a href="plot_fun_with_constraints.html" title="Example on geographic plotting and constraint variation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li> 
       </ul>
     </div>  
@@ -85,7 +85,7 @@ Iterations before filter: 30
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 76.1
+Done! Time = 63.0
 </pre></div>
 </div>
 <div class="line-block">
@@ -115,7 +115,7 @@ Done! Time = 76.1
                                           <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span> <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                                           <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1"># Plot a horizontal cross section</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                                     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                     <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
@@ -123,7 +123,7 @@ Done! Time = 76.1
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Plot a vertical X-Z cross section</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_xz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
                                  <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                  <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
@@ -131,7 +131,7 @@ Done! Time = 76.1
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Plot a vertical Y-Z cross section</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_yz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
                                  <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                  <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
@@ -139,7 +139,7 @@ Done! Time = 76.1
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  17.597 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 1 minutes  4.236 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/32cbaa75ea064d7b790e2a2a3946d20e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></div>
@@ -156,8 +156,8 @@ Done! Time = 76.1
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="hurricane_florence.html"
-                        title="previous chapter">Example on integrating radar and HRRR data</a></p>
+  <p class="topless"><a href="plot_fun_with_constraints.html"
+                        title="previous chapter">Example on geographic plotting and constraint variation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../../dev_reference/index.html"
                         title="next chapter">Developer Reference Manual</a></p>
@@ -197,9 +197,9 @@ Done! Time = 76.1
           <a href="../../dev_reference/index.html" title="Developer Reference Manual"
              >next</a> |</li>
         <li class="right" >
-          <a href="hurricane_florence.html" title="Example on integrating radar and HRRR data"
+          <a href="plot_fun_with_constraints.html" title="Example on geographic plotting and constraint variation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li> 
       </ul>
     </div>
