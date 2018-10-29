@@ -416,6 +416,11 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     v = the_winds[1]
     w = the_winds[2]
     where_mask = np.sum(weights, axis=0) + np.sum(mod_weights, axis=0)
+    
+    u = np.ma.array(u)
+    w = np.ma.array(w)
+    v = np.ma.array(v)
+
     if(mask_outside_opt is True):
         u = np.ma.masked_where(where_mask < 1, u)
         v = np.ma.masked_where(where_mask < 1, v)

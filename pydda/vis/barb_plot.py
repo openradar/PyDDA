@@ -6,7 +6,9 @@ import cartopy.crs as ccrs
 import cartopy
 
 from .. import retrieval
-
+from matplotlib.axes import Axes
+from cartopy.mpl.geoaxes import GeoAxes
+GeoAxes._pcolormesh_patched = Axes.pcolormesh
 
 def plot_horiz_xsection_barbs(Grids, ax=None,
                               background_field='reflectivity', level=1,
@@ -347,7 +349,7 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                         levels=[bca_min, bca_max], color='k', zorder=1)
 
     if(axes_labels_flag is True):
-        ax.set_xlabel(('Latitiude [$\degree$]'))
+        ax.set_xlabel(('Latitude [$\degree$]'))
         ax.set_ylabel(('Longitude [$\degree$]'))
 
     if(title_flag is True):
@@ -361,8 +363,8 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
         ax.gridlines()
     ax.set_extent([grid_lon.min(), grid_lon.max(),
                    grid_lat.min(), grid_lat.max()])
-    the_ticks_x = np.linspace(round(grid_lon.min()), round(grid_lon.max()), 6)
-    the_ticks_y = np.linspace(round(grid_lat.min()), round(grid_lat.max()), 6)
+    the_ticks_x = np.round(np.linspace(grid_lon.min(), grid_lon.max(), 6), 1)
+    the_ticks_y = np.round(np.linspace(grid_lat.min(), grid_lat.max(), 6), 1)
     ax.set_xticks(the_ticks_x)
     ax.set_yticks(the_ticks_y)
     return ax
