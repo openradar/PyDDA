@@ -37,7 +37,7 @@ Installation instructions
 
 The GitHub repository for PyDDA is available at:
 
-`<https://github.com/openradar/PyDDA>`
+`<https://github.com/openradar/PyDDA>`_
 
 Before you install PyDDA, ensure that the following dependencies are installed:
 ::
