@@ -6,7 +6,9 @@ import cartopy.crs as ccrs
 import cartopy
 
 from .. import retrieval
-
+from matplotlib.axes import Axes
+from cartopy.mpl.geoaxes import GeoAxes
+GeoAxes._pcolormesh_patched = Axes.pcolormesh
 
 def plot_horiz_xsection_barbs(Grids, ax=None,
                               background_field='reflectivity', level=1,
