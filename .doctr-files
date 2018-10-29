@@ -5,6 +5,7 @@
 ./_downloads/32cbaa75ea064d7b790e2a2a3946d20e/plot_examples.py
 ./_downloads/579b42ece94769ae787cc32c00ba26a1/auto_examples_python.zip
 ./_downloads/a4d81659194c913f312eaba862266040/plot_examples.ipynb
+./_images/logo.png
 ./_images/sphx_glr_hurricane_florence_thumb.png
 ./_images/sphx_glr_plot_examples_001.png
 ./_images/sphx_glr_plot_examples_002.png
@@ -18,6 +19,7 @@
 ./_modules/pydda/vis/barb_plot.html
 ./_modules/pydda/vis/streamline_plot.html
 ./_sources/PyDDA-doc.rst.txt
+./_sources/contributors_guide/index.rst.txt
 ./_sources/dev_reference/generated/pydda.constraints.add_hrrr_constraint_to_grid.rst.txt
 ./_sources/dev_reference/generated/pydda.constraints.make_constraint_from_wrf.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.J_function.rst.txt
@@ -81,6 +83,7 @@
 ./_static/up-pressed.png
 ./_static/up.png
 ./_static/websupport.js
+./contributors_guide/index.html
 ./dev_reference/generated/pydda.constraints.add_hrrr_constraint_to_grid.html
 ./dev_reference/generated/pydda.constraints.make_constraint_from_wrf.html
 ./dev_reference/generated/pydda.cost_functions.J_function.html

@@ -1,0 +1,322 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Contributor’s Guide &#8212; PyDDA 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PyDDA Example Gallery" href="../source/auto_examples/index.html" />
+    <link rel="prev" title="Welcome to the PyDDA documentation!" href="../PyDDA-doc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../source/auto_examples/index.html" title="PyDDA Example Gallery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../PyDDA-doc.html" title="Welcome to the PyDDA documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="contributor-s-guide">
+<h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Permalink to this headline">¶</a></h1>
+<p>One pesky thing about Impostor’s Syndrome is that it tells you that you are
+not good enough to make a contribution. Let us assure you that that is very
+much false. We welcome contributions from anyone no matter what their skill
+level is. Contributions can be as easy as improving the documentation to as
+complex as adding new functionality for differing instruments and models.
+We are even open to speeding up the optimization code if you’re a mathematical
+genius.</p>
+<p>There are just some things that we ask of you. One is that your code be able
+to be distributed under the BSD 3-clause license, which is available in LICENSE
+in the main directory.</p>
+<p>One, we ask, that when on the GitHub forum or making contributions to PyDDA
+that all developers and users follow the PyDDA code of conduct.</p>
+<div class="section" id="contributor-covenant-code-of-conduct">
+<h2>Contributor Covenant Code of Conduct<a class="headerlink" href="#contributor-covenant-code-of-conduct" title="Permalink to this headline">¶</a></h2>
+<p><strong>Our Pledge</strong></p>
+<p>In the interest of fostering an open and welcoming environment, we as
+contributors and maintainers pledge to making participation in our project
+and our community a harassment-free experience for everyone, regardless of
+age, body size, disability, ethnicity, gender identity and expression,
+level of experience, nationality, personal appearance, race, religion,
+or sexual identity and orientation.
+Our Standards</p>
+<p>Examples of behavior that contributes to creating a positive environment include:</p>
+<blockquote>
+<div>Using welcoming and inclusive language
+Being respectful of differing viewpoints and experiences
+Gracefully accepting constructive criticism
+Focusing on what is best for the community
+Showing empathy towards other community members</div></blockquote>
+<p>Examples of unacceptable behavior by participants include:</p>
+<blockquote>
+<div>The use of sexualized language or imagery and unwelcome sexual attention or
+advances
+Trolling, insulting/derogatory comments, and personal or political attacks
+Public or private harassment
+Publishing others’ private information, such as a physical or electronic
+address, without explicit permission
+Other conduct which could reasonably be considered inappropriate in a
+professional setting</div></blockquote>
+<p><em>Our Responsibilities</em></p>
+<p>Project maintainers are responsible for clarifying the standards of acceptable
+behavior and are expected to take appropriate and fair corrective action in
+response to any instances of unacceptable behavior.</p>
+<p>Project maintainers have the right and responsibility to remove, edit, or
+reject comments, commits, code, wiki edits, issues, and other contributions
+that are not aligned to this Code of Conduct, or to ban temporarily or
+permanently any contributor for other behaviors that they deem inappropriate,
+threatening, offensive, or harmful.</p>
+<p><strong>Scope</strong></p>
+<p>This Code of Conduct applies both within project spaces and in public spaces
+when an individual is representing the project or its community. Examples of
+representing a project or community include using an official project e-mail
+address, posting via an official social media account, or acting as an
+appointed representative at an online or offline event. Representation of a
+project may be further defined and clarified by project maintainers.</p>
+<p><strong>Enforcement</strong></p>
+<p>Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported by contacting the project team at
+<a href="#id1"><span class="problematic" id="id2">`rjackson&#64;anl.gov&lt;mailto:rjackson&#64;anl.gov&gt;`_</span></a>. The project team will review
+and investigate all complaints, and will respond in a way that it deems
+appropriate to the circumstances. The project team is obligated to maintain
+confidentiality with regard to the reporter of an incident. Further details
+of specific enforcement policies may be posted separately.</p>
+<p>Project maintainers who do not follow or enforce the Code of Conduct in
+good faith may face temporary or permanent repercussions as determined
+by other members of the project’s leadership.</p>
+<p><strong>Attribution</strong></p>
+<p>This Code of Conduct is adapted from the Contributor Covenant, version 1.4,
+available at <a class="reference external" href="http://contributor-covenant.org/version/1/4">http://contributor-covenant.org/version/1/4</a></p>
+</div>
+<div class="section" id="code-style">
+<h2>Code Style<a class="headerlink" href="#code-style" title="Permalink to this headline">¶</a></h2>
+<p>PyDDA follows the PEP8 code standards. To make sure the code follows the PEP8
+style, there are checkers available out there such as pylint and pycodestyle.</p>
+<dl class="docutils">
+<dt>For more on PEP8 style:</dt>
+<dd><a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a></dd>
+</dl>
+<p>To install pycode style:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pycodestyle</span>
+</pre></div>
+</div>
+<p>To install pylint:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pylint</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="python-file-setup">
+<h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this headline">¶</a></h2>
+<p>In a new .py file, the top of the code should have the function, sphinx comments
+and the public and private functions within the .py file. Public fuunctions are
+listed first and then private functions and classes. Private functions should
+have an underscore in front of the name. A space is needed between the last
+function and the closing docstring quotation marks.</p>
+<p>Following the introduction code, modules are then added. To follow PEP8
+standards, modules should be added in the following order:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Standard library imports</li>
+<li>Related third party imports</li>
+<li>Local application imports</li>
+</ol>
+</div></blockquote>
+<p>Following the main function def line, but before the code within it, a docstring is
+needed to explain all arguments, retuns, references, and other information. Please
+follow the NumPy documentation style:</p>
+<p><a class="reference external" href="https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt">https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt</a></p>
+<p>For an example format of the documentation, see this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_constant_wind_field</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">wind</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;velocity&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function makes a constant wind field given a wind vector.</span>
+<span class="sd">    This function is useful for specifying the intialization arrays</span>
+<span class="sd">    for get_dd_wind_field.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ==========</span>
+<span class="sd">    Grid: Py-ART Grid object</span>
+<span class="sd">        This is the Py-ART Grid containing the coordinates for the analysis</span>
+<span class="sd">        grid.</span>
+<span class="sd">    wind: 3-tuple of floats</span>
+<span class="sd">        The 3-tuple specifying the (u,v,w) of the wind field.</span>
+<span class="sd">    vel_field: String</span>
+<span class="sd">        The name of the velocity field. None will automatically</span>
+<span class="sd">        try to detect this field.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    =======</span>
+<span class="sd">    u: 3D float array</span>
+<span class="sd">        Returns a 3D float array containing the u component of the wind field.</span>
+<span class="sd">        The shape will be the same shape as the fields in Grid.</span>
+<span class="sd">    v: 3D float array</span>
+<span class="sd">        Returns a 3D float array containing the v component of the wind field.</span>
+<span class="sd">        The shape will be the same shape as the fields in Grid.</span>
+<span class="sd">    w: 3D float array</span>
+<span class="sd">        Returns a 3D float array containing the u component of the wind field.</span>
+<span class="sd">        The shape will be the same shape as the fields in Grid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="p">(</span><span class="n">your</span> <span class="n">code</span> <span class="ow">is</span> <span class="n">here</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>When adding a new function to pyart it is important to add it to the __init__.py
+under the corresponding folder.</p>
+<p>Create a test function and use assert to test the calculated values against known
+values. For an example, see:</p>
+<p><a class="reference external" href="https://github.com/openradar/PyDDA/tests/test_retrieval.py">https://github.com/openradar/PyDDA/tests/test_retrieval.py</a></p>
+<p>Pytest will run this test whenever a pull request is made to the master branch
+of the openradar/PyDDA repository. This will then allow the maintainers to
+determine how the pull request will affect the functionality of PyDDA.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_calculate_rad_velocity_cost</span><span class="p">():</span>
+    <span class="n">Grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">make_empty_grid</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)))</span>
+
+    <span class="c1"># a zero field</span>
+    <span class="n">fdata3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">Grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;zero_field&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">fdata3</span><span class="p">,</span> <span class="s1">&#39;_FillValue&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">9999.0</span><span class="p">})</span>
+
+    <span class="n">vel_field</span> <span class="o">=</span> <span class="s1">&#39;zero_field&#39;</span>
+
+    <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">angles</span><span class="o">.</span><span class="n">add_azimuth_as_field</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">dz_name</span><span class="o">=</span><span class="s1">&#39;zero_field&#39;</span><span class="p">)</span>
+    <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">angles</span><span class="o">.</span><span class="n">add_elevation_as_field</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">dz_name</span><span class="o">=</span><span class="s1">&#39;zero_field&#39;</span><span class="p">)</span>
+    <span class="n">vrs</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])]</span>
+    <span class="n">azs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;AZ&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]]</span>
+    <span class="n">els</span> <span class="o">=</span> <span class="p">[</span><span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;EL&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]]</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+    <span class="n">rmsVr</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">wts</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))]</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))]</span>
+    <span class="n">cost</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">cost_functions</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
+        <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">cost_functions</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+        <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">cost</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">grad</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="github">
+<h2>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h2>
+<p>When you make contributions to PyDDA, we ask that you make your own fork
+of openradar/PyDDA and create your own branch from within that fork. After
+forking the repository on GitHub, create your own branch by doing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">this_branch</span>
+<span class="n">git</span> <span class="n">branch</span> <span class="n">this_branch</span>
+</pre></div>
+</div>
+<p>Make your changes, commit, and then to push to that branch do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">this_branch</span>
+</pre></div>
+</div>
+<p>After that is done, make a pull request from that branch to the master branch
+on PyDDA/master where the maintainers will review your pull request.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../PyDDA-doc.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Contributor’s Guide</a><ul>
+<li><a class="reference internal" href="#contributor-covenant-code-of-conduct">Contributor Covenant Code of Conduct</a></li>
+<li><a class="reference internal" href="#code-style">Code Style</a></li>
+<li><a class="reference internal" href="#python-file-setup">Python File Setup</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#github">GitHub</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../PyDDA-doc.html"
+                        title="previous chapter">Welcome to the PyDDA documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../source/auto_examples/index.html"
+                        title="next chapter">PyDDA Example Gallery</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/contributors_guide/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../source/auto_examples/index.html" title="PyDDA Example Gallery"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../PyDDA-doc.html" title="Welcome to the PyDDA documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../PyDDA-doc.html">PyDDA 0.2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, PyDDA Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
