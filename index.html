@@ -78,9 +78,22 @@ In order to install cfgrib, simply do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cfgrib</span>
 </pre></div>
 </div>
-<p>Right now there is only one method to install PyDDA, which is from source. To
-do this, just type in the following commands assuming you have the above
-dependencies installed.</p>
+<p>There are multiple ways to install PyDDA. The best way to install PyDDA is
+through the use of the <a class="reference external" href="http://anaconda.org">Anaconda</a> package manager. If you
+have anaconda installed simply type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pydda</span>
+</pre></div>
+</div>
+<p>This will install pydda and all of the required dependencies. You still need to
+install <a class="reference external" href="http://github.com/ecmwf/cfgrib">cfgrib</a> if you wish to read HRRR data.
+Another recommended option is to use pip to install PyDDA. Running this command
+will install PyDDA and the required dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pydda</span>
+</pre></div>
+</div>
+<p>Another way to do this which is recommended if you wish to contribute to PyDDA
+is to install PyDDA from source. To do this, just type in the following
+commands assuming you have the above dependencies installed.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rcjackson</span><span class="o">/</span><span class="n">PyDDA</span>
 <span class="n">cd</span> <span class="n">PyDDA</span>
 <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
