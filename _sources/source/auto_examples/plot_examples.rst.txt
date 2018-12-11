@@ -64,7 +64,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 79.0
+    Done! Time = 97.6
 
 
 
@@ -122,7 +122,7 @@ Author: Robert C. Jackson
                                      barb_spacing_z_km=2.0)
     plt.show()
 
-**Total running time of the script:** ( 1 minutes  20.191 seconds)
+**Total running time of the script:** ( 1 minutes  38.851 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
