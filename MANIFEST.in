@@ -1,0 +1,7 @@
+include *.rst
+recursive-include examples *.py *.txt
+recursive-include doc *
+include LICENSE
+include README.md
+include CODE_OF_CONDUCT.md
+include pytest.ini
