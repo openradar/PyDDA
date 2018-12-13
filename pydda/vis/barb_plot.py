@@ -112,8 +112,8 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
 
     the_mesh = ax.pcolormesh(grid_x[level, :, :], grid_y[level, :, :],
                              grid_bg[level, :, :], cmap=cmap)
-    barb_density_x = int((dx)*barb_spacing_x_km)
-    barb_density_y = int((dy)*barb_spacing_y_km)
+    barb_density_x = int((1/dx)*barb_spacing_x_km)
+    barb_density_y = int((1/dy)*barb_spacing_y_km)
     ax.barbs(grid_x[level, ::barb_density_y, ::barb_density_x],
              grid_y[level, ::barb_density_y, ::barb_density_x],
              u[level, ::barb_density_y, ::barb_density_x],
@@ -292,8 +292,8 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
     the_mesh = ax.pcolormesh(grid_lon[:, :], grid_lat[:, :],
                              grid_bg[level, :, :],
                              cmap=cmap, transform=transform, zorder=0)
-    barb_density_x = int((dx)*barb_spacing_x_km)
-    barb_density_y = int((dy)*barb_spacing_y_km)
+    barb_density_x = int((1/dx)*barb_spacing_x_km)
+    barb_density_y = int((1/dy)*barb_spacing_y_km)
 
     ax.barbs(grid_lon[::barb_density_y, ::barb_density_x],
              grid_lat[::barb_density_y, ::barb_density_x],
@@ -467,8 +467,8 @@ def plot_xz_xsection_barbs(Grids, ax=None,
 
     the_mesh = ax.pcolormesh(grid_x[:, level, :], grid_h[:, level, :],
                              grid_bg[:, level, :], cmap=cmap)
-    barb_density_x = int((dx)*barb_spacing_x_km)
-    barb_density_z = int((dz)*barb_spacing_z_km)
+    barb_density_x = int((1/dx)*barb_spacing_x_km)
+    barb_density_z = int((1/dz)*barb_spacing_z_km)
     ax.barbs(grid_x[::barb_density_z, level, ::barb_density_x],
              grid_h[::barb_density_z, level, ::barb_density_x],
              u[::barb_density_z, level, ::barb_density_x],
@@ -618,8 +618,8 @@ def plot_yz_xsection_barbs(Grids, ax=None,
 
     the_mesh = ax.pcolormesh(grid_y[::, ::, level], grid_h[::, ::, level],
                              grid_bg[::, ::, level], cmap=cmap)
-    barb_density_x = int((dx)*barb_spacing_y_km)
-    barb_density_z = int((dz)*barb_spacing_z_km)
+    barb_density_x = int((1/dx)*barb_spacing_y_km)
+    barb_density_z = int((1/dz)*barb_spacing_z_km)
     ax.barbs(grid_y[::barb_density_z, ::barb_density_x, level],
              grid_h[::barb_density_z, ::barb_density_x, level],
              v[::barb_density_z, ::barb_density_x, level],
