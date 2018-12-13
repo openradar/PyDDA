@@ -111,7 +111,8 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
         ax = plt.gca()
 
     the_mesh = ax.pcolormesh(grid_x[level, :, :], grid_y[level, :, :],
-                             grid_bg[level, :, :], cmap=cmap)
+                             grid_bg[level, :, :], cmap=cmap, vmin=vmin,
+                             vmax=vmax)
     barb_density_x = int((1/dx)*barb_spacing_x_km)
     barb_density_y = int((1/dy)*barb_spacing_y_km)
     ax.barbs(grid_x[level, ::barb_density_y, ::barb_density_x],
@@ -291,7 +292,8 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
 
     the_mesh = ax.pcolormesh(grid_lon[:, :], grid_lat[:, :],
                              grid_bg[level, :, :],
-                             cmap=cmap, transform=transform, zorder=0)
+                             cmap=cmap, transform=transform, zorder=0,
+                             vmin=vmin, vmax=vmax)
     barb_density_x = int((1/dx)*barb_spacing_x_km)
     barb_density_y = int((1/dy)*barb_spacing_y_km)
 
@@ -363,8 +365,12 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
         ax.gridlines()
     ax.set_extent([grid_lon.min(), grid_lon.max(),
                    grid_lat.min(), grid_lat.max()])
-    the_ticks_x = np.round(np.linspace(grid_lon.min(), grid_lon.max(), 6), 1)
-    the_ticks_y = np.round(np.linspace(grid_lat.min(), grid_lat.max(), 6), 1)
+    num_tenths = round((grid_lon.max()-grid_lon.min())*10)+1
+    the_ticks_x = np.round(
+        np.linspace(grid_lon.min(), grid_lon.max(), num_tenths), 1)
+    num_tenths = round((grid_lat.max()-grid_lat.min())*10)+1
+    the_ticks_y = np.round(
+        np.linspace(grid_lat.min(), grid_lat.max(), num_tenths), 1)
     ax.set_xticks(the_ticks_x)
     ax.set_yticks(the_ticks_y)
     return ax
@@ -466,7 +472,8 @@ def plot_xz_xsection_barbs(Grids, ax=None,
         ax = plt.gca()
 
     the_mesh = ax.pcolormesh(grid_x[:, level, :], grid_h[:, level, :],
-                             grid_bg[:, level, :], cmap=cmap)
+                             grid_bg[:, level, :], cmap=cmap, vmin=vmin,
+                             vmax=vmax)
     barb_density_x = int((1/dx)*barb_spacing_x_km)
     barb_density_z = int((1/dz)*barb_spacing_z_km)
     ax.barbs(grid_x[::barb_density_z, level, ::barb_density_x],
@@ -617,7 +624,8 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         ax = plt.gca()
 
     the_mesh = ax.pcolormesh(grid_y[::, ::, level], grid_h[::, ::, level],
-                             grid_bg[::, ::, level], cmap=cmap)
+                             grid_bg[::, ::, level], cmap=cmap, vmin=vmin,
+                             vmax=vmax)
     barb_density_x = int((1/dx)*barb_spacing_y_km)
     barb_density_z = int((1/dz)*barb_spacing_z_km)
     ax.barbs(grid_y[::barb_density_z, ::barb_density_x, level],
