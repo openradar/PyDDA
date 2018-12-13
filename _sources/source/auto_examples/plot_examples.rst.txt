@@ -51,20 +51,20 @@ Author: Robert C. Jackson
     Total points:172054.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |  16.0670|  88.5543|   0.0000|   0.0000|   0.0000|   0.0000|  13.4538
-    Norm of gradient: 0.018952669044898465
+    Norm of gradient: 0.018952669044899756
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   9.0241|  88.2328|   0.0000|   0.0000|   0.0000|   0.0000|  15.1113
-    Norm of gradient: 0.02033463109515147
+    Norm of gradient: 0.02033463109515223
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   9.0241|  88.2328|   0.0000|   0.0000|   0.0000|   0.0000|  15.1113
-    Norm of gradient: 0.02033463109515147
+    Norm of gradient: 0.02033463109515223
     Iterations before filter: 30
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 97.6
+    Done! Time = 96.2
 
 
 
@@ -122,7 +122,7 @@ Author: Robert C. Jackson
                                      barb_spacing_z_km=2.0)
     plt.show()
 
-**Total running time of the script:** ( 1 minutes  38.851 seconds)
+**Total running time of the script:** ( 1 minutes  37.570 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
