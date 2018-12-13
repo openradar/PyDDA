@@ -100,7 +100,8 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
         ax = plt.gca()
 
     the_mesh = ax.pcolormesh(grid_x[level, :, :], grid_y[level, :, :],
-                             grid_bg[level, :, :], cmap=cmap)
+                             grid_bg[level, :, :], cmap=cmap, vmin=vmin,
+                             vmax=vmax)
 
     horiz_wind_speed = np.ma.sqrt(u**2 + v**2)
     ax.streamplot(grid_x[level, :, :], grid_y[level, :, :], u[level, :, :],
@@ -271,7 +272,8 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
 
     the_mesh = ax.pcolormesh(grid_lon[:, :], grid_lat[:, :],
                              grid_bg[level, :, :],
-                             cmap=cmap, transform=transform, zorder=0)
+                             cmap=cmap, transform=transform, zorder=0,
+                             vmin=vmin, vmax=vmax)
 
     horiz_wind_speed = np.ma.sqrt(u**2 + v**2)
     ax.streamplot(grid_lon, grid_lat, u[level], v[level],
@@ -340,8 +342,12 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
 
     ax.set_extent([grid_lon.min(), grid_lon.max(),
                    grid_lat.min(), grid_lat.max()])
-    the_ticks_x = np.round(np.linspace(grid_lon.min(), grid_lon.max(), 6), 1)
-    the_ticks_y = np.round(np.linspace(grid_lat.min(), grid_lat.max(), 6), 1)
+    num_tenths = round((grid_lon.max()-grid_lon.min())*10)+1
+    the_ticks_x = np.round(
+        np.linspace(grid_lon.min(), grid_lon.max(), num_tenths), 1)
+    num_tenths = round((grid_lat.max()-grid_lat.min())*10)+1
+    the_ticks_y = np.round(
+        np.linspace(grid_lat.min(), grid_lat.max(), num_tenths), 1)
     ax.set_xticks(the_ticks_x)
     ax.set_yticks(the_ticks_y)
     return ax
@@ -435,7 +441,8 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
         ax = plt.gca()
 
     the_mesh = ax.pcolormesh(grid_x[:, level, :], grid_h[:, level, :],
-                             grid_bg[:, level, :], cmap=cmap)
+                             grid_bg[:, level, :], cmap=cmap, vmin=vmin,
+                             vmax=vmax)
     horiz_wind_speed = np.ma.sqrt(u**2 + w**2)
     ax.streamplot(grid_x[:, level, :], grid_h[:, level, :], u[:, level, :],
                   w[:, level, :], color='k')
@@ -573,7 +580,8 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
         ax = plt.gca()
 
     the_mesh = ax.pcolormesh(grid_y[:, :, level], grid_h[:, :, level],
-                             grid_bg[:, :, level], cmap=cmap)
+                             grid_bg[:, :, level], cmap=cmap, vmin=vmin,
+                             vmax=vmax)
     horiz_wind_speed = np.ma.sqrt(v**2 + w**2)
     ax.streamplot(grid_y[:, :, level], grid_h[:, :, level], v[:, :, level],
                   w[:, :, level], color='k', cmap='coolwarm')
