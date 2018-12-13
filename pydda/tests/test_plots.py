@@ -7,7 +7,7 @@ import pytest
 import matplotlib.pyplot as plt
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_barbs():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -19,7 +19,7 @@ def test_plot_horiz_xsection_barbs():
     return fig
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_barbs():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -31,7 +31,7 @@ def test_plot_horiz_xz_xsection_barbs():
     return fig
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_barbs():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -43,7 +43,7 @@ def test_plot_horiz_yz_xsection_barbs():
     return fig
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_streamlines():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -53,7 +53,7 @@ def test_plot_horiz_xsection_streamlines():
     return fig
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_streamlines():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -65,7 +65,7 @@ def test_plot_horiz_xz_xsection_streamlines():
     return fig
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_streamlines():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)] 
