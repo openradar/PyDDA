@@ -152,10 +152,31 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
 
     num_evaluations = 0
 
+    # We have to have a prescribed storm motion for vorticity constraint
     if(Ut is None or Vt is None):
         if(Cv != 0.0):
             raise ValueError(('Ut and Vt cannot be None if vertical ' +
                               'vorticity constraint is enabled!'))
+    
+    # Ensure that all Grids are on the same coordinate system
+    prev_grid = Grids[0]
+    for g in Grids:
+        if not np.allclose(
+            g.x['data'], prev_grid.x['data'], atol=10):
+            raise ValueError('Grids do not have equal x coordinates!')
+
+        if not np.allclose(
+            g.y['data'], prev_grid.y['data'], atol=10):
+            raise ValueError('Grids do not have equal y coordinates!')
+
+        if not np.allclose(
+            g.z['data'], prev_grid.z['data'], atol=10):
+            raise ValueError('Grids do not have equal z coordinates!')
+
+        if not g.origin_latitude['data'] == prev_grid.origin_latitude['data']:
+            raise ValueError(("Grids have unequal origin lat/lons!"))
+
+        prev_grid = g
 
     # Disable background constraint if none provided
     if(u_back is None or v_back is None):

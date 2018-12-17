@@ -20,7 +20,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                                     u_field='u', v_field='v', w_field='w',
                                     show_lobes=True, title_flag=True,
                                     axes_labels_flag=True, colorbar_flag=True,
-                                    bg_grid_no=0, thickness_divisor=7.0,
+                                    bg_grid_no=0, 
                                     contour_alpha=0.7):
     """
     This procedure plots a horizontal cross section of winds from wind fields
@@ -361,7 +361,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
                                  u_field='u', v_field='v', w_field='w',
                                  title_flag=True, axes_labels_flag=True,
                                  colorbar_flag=True,
-                                 bg_grid_no=0, thickness_divisor=7.0,
+                                 bg_grid_no=0, 
                                  contour_alpha=0.7):
     """
     This procedure plots a cross section of winds from wind fields
@@ -501,7 +501,7 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
                                  u_field='u', v_field='v', w_field='w',
                                  title_flag=True, axes_labels_flag=True,
                                  colorbar_flag=True,
-                                 bg_grid_no=0, thickness_divisor=7.0,
+                                 bg_grid_no=0, 
                                  contour_alpha=0.7):
     """
     This procedure plots a cross section of winds from wind fields
