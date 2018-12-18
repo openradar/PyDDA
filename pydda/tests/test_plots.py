@@ -59,8 +59,7 @@ def test_plot_horiz_xz_xsection_streamlines():
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
     fig = plt.figure(figsize=(9,5))
     pydda.vis.plot_xz_xsection_streamlines(Grids, None, 'DT', level=40,
-                                           w_vel_contours=[3, 6, 9],
-                                           thickness_divisor=5.0)
+                                           w_vel_contours=[3, 6, 9])
     plt.ylim([0,15])
     return fig
 
@@ -79,10 +78,10 @@ def test_plot_horiz_xsection_quiver():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
     fig = plt.figure(figsize=(7,7))
-    pydda.vis.plot_horiz_xsection_streamlines(Grids, None, 'DT', level=6,
-                                              w_vel_contours=[3, 6, 9],
-                                              quiver_spacing_x_km=5.0,
-                                              quiver_spacing_y_km=5.0)
+    pydda.vis.plot_horiz_xsection_quiver(Grids, None, 'DT', level=6,
+                                         w_vel_contours=[3, 6, 9],
+                                         quiver_spacing_x_km=5.0,
+                                         quiver_spacing_y_km=5.0)
     return fig
 
 
@@ -103,9 +102,9 @@ def test_plot_horiz_yz_xsection_quiver():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
     fig = plt.figure(figsize=(9,5))
-    pydda.vis.plot_yz_xsection_streamlines(Grids, None,'DT', level=40,
-                                           w_vel_contours=[1, 3, 5, 7],
-                                           quiver_spacing_y_km=5.0,
-                                           quiver_spacing_z_km=1.0)
+    pydda.vis.plot_yz_xsection_quiver(Grids, None,'DT', level=40,
+                                      w_vel_contours=[1, 3, 5, 7],
+                                      quiver_spacing_y_km=5.0,
+                                      quiver_spacing_z_km=1.0)
     return fig
 
