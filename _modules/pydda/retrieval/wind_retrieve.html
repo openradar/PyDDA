@@ -15,7 +15,6 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -194,10 +193,31 @@
 
     <span class="n">num_evaluations</span> <span class="o">=</span> <span class="mi">0</span>
 
+    <span class="c1"># We have to have a prescribed storm motion for vorticity constraint</span>
     <span class="k">if</span><span class="p">(</span><span class="n">Ut</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">Vt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span><span class="p">(</span><span class="n">Cv</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s1">&#39;Ut and Vt cannot be None if vertical &#39;</span> <span class="o">+</span>
                               <span class="s1">&#39;vorticity constraint is enabled!&#39;</span><span class="p">))</span>
+    
+    <span class="c1"># Ensure that all Grids are on the same coordinate system</span>
+    <span class="n">prev_grid</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">Grids</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">prev_grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Grids do not have equal x coordinates!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">prev_grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Grids do not have equal y coordinates!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">prev_grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Grids do not have equal z coordinates!&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">g</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">prev_grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">((</span><span class="s2">&quot;Grids have unequal origin lat/lons!&quot;</span><span class="p">))</span>
+
+        <span class="n">prev_grid</span> <span class="o">=</span> <span class="n">g</span>
 
     <span class="c1"># Disable background constraint if none provided</span>
     <span class="k">if</span><span class="p">(</span><span class="n">u_back</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v_back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -581,7 +601,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

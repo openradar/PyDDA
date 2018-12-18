@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pydda.vis.plot_horiz_xsection_barbs &#8212; PyDDA 0.2.0 documentation</title>
+    <title>pydda.vis.plot_horiz_xsection_quiver_map &#8212; PyDDA 0.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -18,8 +18,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pydda.vis.plot_xz_xsection_barbs" href="pydda.vis.plot_xz_xsection_barbs.html" />
-    <link rel="prev" title="pydda.retrieval.get_bca" href="pydda.retrieval.get_bca.html" /> 
+    <link rel="next" title="pydda.initialization.make_constant_wind_field" href="pydda.initialization.make_constant_wind_field.html" />
+    <link rel="prev" title="pydda.vis.plot_yz_xsection_quiver" href="pydda.vis.plot_yz_xsection_quiver.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -31,10 +31,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pydda.vis.plot_xz_xsection_barbs.html" title="pydda.vis.plot_xz_xsection_barbs"
+          <a href="pydda.initialization.make_constant_wind_field.html" title="pydda.initialization.make_constant_wind_field"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
+          <a href="pydda.vis.plot_yz_xsection_quiver.html" title="pydda.vis.plot_yz_xsection_quiver"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
@@ -46,13 +46,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pydda-vis-plot-horiz-xsection-barbs">
-<h1>pydda.vis.plot_horiz_xsection_barbs<a class="headerlink" href="#pydda-vis-plot-horiz-xsection-barbs" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pydda-vis-plot-horiz-xsection-quiver-map">
+<h1>pydda.vis.plot_horiz_xsection_quiver_map<a class="headerlink" href="#pydda-vis-plot-horiz-xsection-quiver-map" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pydda.vis.plot_horiz_xsection_barbs">
-<code class="descclassname">pydda.vis.</code><code class="descname">plot_horiz_xsection_barbs</code><span class="sig-paren">(</span><em>Grids</em>, <em>ax=None</em>, <em>background_field='reflectivity'</em>, <em>level=1</em>, <em>cmap='pyart_LangRainbow12'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>u_vel_contours=None</em>, <em>v_vel_contours=None</em>, <em>w_vel_contours=None</em>, <em>u_field='u'</em>, <em>v_field='v'</em>, <em>w_field='w'</em>, <em>show_lobes=True</em>, <em>title_flag=True</em>, <em>axes_labels_flag=True</em>, <em>colorbar_flag=True</em>, <em>bg_grid_no=0</em>, <em>barb_spacing_x_km=10.0</em>, <em>barb_spacing_y_km=10.0</em>, <em>contour_alpha=0.7</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/vis/barb_plot.html#plot_horiz_xsection_barbs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.vis.plot_horiz_xsection_barbs" title="Permalink to this definition">¶</a></dt>
+<dt id="pydda.vis.plot_horiz_xsection_quiver_map">
+<code class="descclassname">pydda.vis.</code><code class="descname">plot_horiz_xsection_quiver_map</code><span class="sig-paren">(</span><em>Grids</em>, <em>ax=None</em>, <em>background_field='reflectivity'</em>, <em>level=1</em>, <em>cmap='pyart_LangRainbow12'</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>u_vel_contours=None</em>, <em>v_vel_contours=None</em>, <em>w_vel_contours=None</em>, <em>u_field='u'</em>, <em>v_field='v'</em>, <em>w_field='w'</em>, <em>show_lobes=True</em>, <em>title_flag=True</em>, <em>axes_labels_flag=True</em>, <em>colorbar_flag=True</em>, <em>bg_grid_no=0</em>, <em>contour_alpha=0.7</em>, <em>coastlines=True</em>, <em>quiver_spacing_x_km=10.0</em>, <em>quiver_spacing_y_km=10.0</em>, <em>gridlines=True</em>, <em>quiverkey_len=5.0</em>, <em>quiverkey_loc='best'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/vis/quiver_plot.html#plot_horiz_xsection_quiver_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.vis.plot_horiz_xsection_quiver_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>This procedure plots a horizontal cross section of winds from wind fields
-generated by PyDDA using barbs.</p>
+generated by PyDDA using quivers. The length of the quivers varies with 
+wind speed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -61,10 +62,11 @@ generated by PyDDA using barbs.</p>
 <dt><strong>Grids: list</strong></dt>
 <dd><p class="first last">List of Py-ART Grids to visualize</p>
 </dd>
-<dt><strong>ax: matplotlib axis handle</strong></dt>
-<dd><p class="first last">The axis handle to place the plot on. Set to None to plot on the
-current axis.</p>
+<dt><strong>ax: matplotlib axis handle (with cartopy ccrs)</strong></dt>
+<dd><p class="first last">The axis handle to place the plot on. Set to None to create a new map.</p>
 </dd>
+<dt><strong>Note: the axis needs to be in a PlateCarree() projection.</strong></dt>
+<dd></dd>
 <dt><strong>background_field: str</strong></dt>
 <dd><p class="first last">The name of the background field to plot the windbarbs on.</p>
 </dd>
@@ -110,24 +112,56 @@ display such contours.</p>
 <dd><p class="first last">If True, PyDDA will generate a title for the plot.</p>
 </dd>
 <dt><strong>axes_labels_flag: bool</strong></dt>
-<dd><p class="first last">If True, PyDDA will generate axes labels for the plot</p>
+<dd><p class="first last">If True, PyDDA will generate axes labels for the plot.</p>
 </dd>
 <dt><strong>colorbar_flag: bool</strong></dt>
-<dd><p class="first last">If True, PyDDA will generate a colorbar for the plot</p>
+<dd><p class="first last">If True, PyDDA will generate a colorbar for the plot.</p>
 </dd>
 <dt><strong>bg_grid_no: int</strong></dt>
 <dd><p class="first last">Number of grid in Grids to take background field from.
 Set to -1 to use maximum value from all grids.</p>
 </dd>
-<dt><strong>barb_spacing_x_km: float</strong></dt>
-<dd><p class="first last">The spacing in km between each wind barb in the x direction.</p>
-</dd>
-<dt><strong>barb_spacing_y_km: float</strong></dt>
-<dd><p class="first last">The spacing in km between each wind barb in the y direction.</p>
-</dd>
 <dt><strong>contour_alpha: float</strong></dt>
 <dd><p class="first last">Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque</p>
 </dd>
+<dt><strong>coastlines: bool</strong></dt>
+<dd><p class="first last">Set to true to display coastlines.</p>
+</dd>
+<dt><strong>quiver_spacing_x_km: float</strong></dt>
+<dd><p class="first last">Spacing in km between quivers in x axis.</p>
+</dd>
+<dt><strong>quiver_spacing_y_km: float</strong></dt>
+<dd><p class="first last">Spacing in km between quivers in y axis.</p>
+</dd>
+<dt><strong>gridlines: bool</strong></dt>
+<dd><p class="first last">Set to true to show grid lines.</p>
+</dd>
+<dt><strong>quiverkey_len: float</strong></dt>
+<dd><p class="first last">Length to use for the quiver key in m/s.</p>
+</dd>
+<dt><strong>quiverkey_loc: str</strong></dt>
+<dd><p class="first">Location of quiverkey. One of: 
+‘best’, 
+‘top_left’
+‘top’
+‘top_right’
+‘bottom_left’
+‘bottom’
+‘bottom_right’
+‘left’
+‘right’
+‘top_left_outside’
+‘top_right_outside’,
+‘bottom_left_outside’
+‘bottom_right_outside’‘</p>
+<p class="last">‘best’ will put the quiver key in the corner with the fewest amount of</p>
+</dd>
+<dt><strong>valid data points while keeping the quiver key inside the plot.</strong></dt>
+<dd></dd>
+<dt><strong>The rest of the options will put the quiver key in that</strong></dt>
+<dd></dd>
+<dt><strong>particular part of the plot, near the edge inside the plot if not outside.</strong></dt>
+<dd></dd>
 </dl>
 </td>
 </tr>
@@ -151,15 +185,15 @@ Set to -1 to use maximum value from all grids.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.retrieval.get_bca.html"
-                        title="previous chapter">pydda.retrieval.get_bca</a></p>
+  <p class="topless"><a href="pydda.vis.plot_yz_xsection_quiver.html"
+                        title="previous chapter">pydda.vis.plot_yz_xsection_quiver</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pydda.vis.plot_xz_xsection_barbs.html"
-                        title="next chapter">pydda.vis.plot_xz_xsection_barbs</a></p>
+  <p class="topless"><a href="pydda.initialization.make_constant_wind_field.html"
+                        title="next chapter">pydda.initialization.make_constant_wind_field</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/dev_reference/generated/pydda.vis.plot_horiz_xsection_barbs.rst.txt"
+      <li><a href="../../_sources/dev_reference/generated/pydda.vis.plot_horiz_xsection_quiver_map.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -189,10 +223,10 @@ Set to -1 to use maximum value from all grids.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pydda.vis.plot_xz_xsection_barbs.html" title="pydda.vis.plot_xz_xsection_barbs"
+          <a href="pydda.initialization.make_constant_wind_field.html" title="pydda.initialization.make_constant_wind_field"
              >next</a> |</li>
         <li class="right" >
-          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
+          <a href="pydda.vis.plot_yz_xsection_quiver.html" title="pydda.vis.plot_yz_xsection_quiver"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 

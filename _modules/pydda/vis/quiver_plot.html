@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pydda.vis.streamline_plot &#8212; PyDDA 0.2.0 documentation</title>
+    <title>pydda.vis.quiver_plot &#8212; PyDDA 0.2.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
@@ -38,7 +38,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for pydda.vis.streamline_plot</h1><div class="highlight"><pre>
+  <h1>Source code for pydda.vis.quiver_plot</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
@@ -51,18 +51,22 @@
 <span class="kn">from</span> <span class="nn">cartopy.mpl.geoaxes</span> <span class="k">import</span> <span class="n">GeoAxes</span>
 <span class="n">GeoAxes</span><span class="o">.</span><span class="n">_pcolormesh_patched</span> <span class="o">=</span> <span class="n">Axes</span><span class="o">.</span><span class="n">pcolormesh</span>
 
-<div class="viewcode-block" id="plot_horiz_xsection_streamlines"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_streamlines.html#pydda.vis.plot_horiz_xsection_streamlines">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_streamlines</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                    <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
-                                    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                    <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                    <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                    <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                    <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
-                                    <span class="n">show_lobes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                    <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                    <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
-                                    <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_horiz_xsection_quiver"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_quiver.html#pydda.vis.plot_horiz_xsection_quiver">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_quiver</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
+                               <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                               <span class="n">show_lobes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                               <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                               <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                               <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                               <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+                               <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This procedure plots a horizontal cross section of winds from wind fields</span>
 <span class="sd">    generated by PyDDA using streamlines. The density of streamlines varies </span>
@@ -112,8 +116,34 @@
 <span class="sd">        If True, PyDDA will generate a colorbar for the plot</span>
 <span class="sd">    bg_grid_no: int</span>
 <span class="sd">        Number of grid in Grids to take background field from.</span>
+<span class="sd">    quiver_spacing_x_km: float</span>
+<span class="sd">        Spacing in km between quivers in x axis.</span>
+<span class="sd">    quiver_spacing_y_km: float</span>
+<span class="sd">        Spacing in km between quivers in y axis.</span>
 <span class="sd">    contour_alpha: float</span>
 <span class="sd">        Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque</span>
+<span class="sd">    quiverkey_len: float</span>
+<span class="sd">        Length to use for the quiver key in m/s.</span>
+<span class="sd">    quiverkey_loc: str</span>
+<span class="sd">        Location of quiverkey. One of: </span>
+<span class="sd">        &#39;best&#39;, </span>
+<span class="sd">        &#39;top_left&#39;</span>
+<span class="sd">        &#39;top&#39;</span>
+<span class="sd">        &#39;top_right&#39;</span>
+<span class="sd">        &#39;bottom_left&#39;</span>
+<span class="sd">        &#39;bottom&#39;</span>
+<span class="sd">        &#39;bottom_right&#39;</span>
+<span class="sd">        &#39;left&#39;</span>
+<span class="sd">        &#39;right&#39;</span>
+<span class="sd">        &#39;top_left_outside&#39;</span>
+<span class="sd">        &#39;top_right_outside&#39;,</span>
+<span class="sd">        &#39;bottom_left_outside&#39;</span>
+<span class="sd">        &#39;bottom_right_outside&#39;</span>
+
+<span class="sd">        &#39;best&#39; will put the quiver key in the corner with the fewest amount of</span>
+<span class="sd">    valid data points while keeping the quiver key inside the plot. </span>
+<span class="sd">    The rest of the options will put the quiver key in that particular part of </span>
+<span class="sd">    the plot, near the edge inside the plot if not outside.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -136,7 +166,9 @@
     <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-
+    <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span> <span class="o">=</span> <span class="n">_parse_quiverkey_string</span><span class="p">(</span>
+        <span class="n">quiverkey_loc</span><span class="p">,</span> <span class="n">grid_h</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">grid_x</span><span class="p">[</span><span class="n">level</span><span class="p">],</span>
+        <span class="n">grid_y</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">grid_bg</span><span class="p">[</span><span class="n">level</span><span class="p">])</span>
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 
@@ -145,9 +177,22 @@
                              <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
 
     <span class="n">horiz_wind_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">grid_y</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">u</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
-                  <span class="n">v</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">quiver_density_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dx</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_x_km</span><span class="p">)</span>
+    <span class="n">quiver_density_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_y_km</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">grid_y</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">u</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">v</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">quiver_font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> 
+                   <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;variant&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">}</span>
 
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiverkey</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span><span class="p">,</span>
+                 <span class="n">quiverkey_len</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">quiverkey_len</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39; m/s&#39;</span><span class="p">),</span>
+                 <span class="n">fontproperties</span><span class="o">=</span><span class="n">quiver_font</span><span class="p">)</span>
     <span class="k">if</span><span class="p">(</span><span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span>
@@ -206,23 +251,28 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span></div>
 
 
-<div class="viewcode-block" id="plot_horiz_xsection_streamlines_map"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_streamlines_map.html#pydda.vis.plot_horiz_xsection_streamlines_map">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_streamlines_map</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                        <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
-                                        <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
-                                        <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                        <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                        <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                        <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                        <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
-                                        <span class="n">show_lobes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                        <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                        <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                        <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
-                                        <span class="n">coastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gridlines</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_horiz_xsection_quiver_map"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_quiver_map.html#pydda.vis.plot_horiz_xsection_quiver_map">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_quiver_map</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+                                   <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
+                                   <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                   <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                                   <span class="n">show_lobes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+                                   <span class="n">coastlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                   <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                   <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                   <span class="n">gridlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                   <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+                                   <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This procedure plots a horizontal cross section of winds from wind fields</span>
-<span class="sd">    generated by PyDDA using streamlines. The density of streamlines varies </span>
-<span class="sd">    with horizontal wind speed.</span>
+<span class="sd">    generated by PyDDA using quivers. The length of the quivers varies with </span>
+<span class="sd">    wind speed.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -272,9 +322,35 @@
 <span class="sd">    contour_alpha: float</span>
 <span class="sd">        Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque</span>
 <span class="sd">    coastlines: bool</span>
-<span class="sd">        Set to true to display coastlines</span>
+<span class="sd">        Set to true to display coastlines.</span>
+<span class="sd">    quiver_spacing_x_km: float</span>
+<span class="sd">        Spacing in km between quivers in x axis.</span>
+<span class="sd">    quiver_spacing_y_km: float</span>
+<span class="sd">        Spacing in km between quivers in y axis.</span>
 <span class="sd">    gridlines: bool</span>
 <span class="sd">        Set to true to show grid lines.</span>
+<span class="sd">    quiverkey_len: float</span>
+<span class="sd">        Length to use for the quiver key in m/s.</span>
+<span class="sd">    quiverkey_loc: str</span>
+<span class="sd">        Location of quiverkey. One of: </span>
+<span class="sd">        &#39;best&#39;, </span>
+<span class="sd">        &#39;top_left&#39;</span>
+<span class="sd">        &#39;top&#39;</span>
+<span class="sd">        &#39;top_right&#39;</span>
+<span class="sd">        &#39;bottom_left&#39;</span>
+<span class="sd">        &#39;bottom&#39;</span>
+<span class="sd">        &#39;bottom_right&#39;</span>
+<span class="sd">        &#39;left&#39;</span>
+<span class="sd">        &#39;right&#39;</span>
+<span class="sd">        &#39;top_left_outside&#39;</span>
+<span class="sd">        &#39;top_right_outside&#39;,</span>
+<span class="sd">        &#39;bottom_left_outside&#39;</span>
+<span class="sd">        &#39;bottom_right_outside&#39;&#39;</span>
+
+<span class="sd">        &#39;best&#39; will put the quiver key in the corner with the fewest amount of</span>
+<span class="sd">    valid data points while keeping the quiver key inside the plot. </span>
+<span class="sd">    The rest of the options will put the quiver key in that</span>
+<span class="sd">    particular part of the plot, near the edge inside the plot if not outside.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -294,13 +370,16 @@
 
     <span class="k">if</span><span class="p">(</span><span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-
+  
     <span class="n">grid_h</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1e3</span>
     <span class="n">grid_x</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1e3</span>
     <span class="n">grid_y</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1e3</span>
     <span class="n">grid_lat</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span>
     <span class="n">grid_lon</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span>
 
+    <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span> <span class="o">=</span> <span class="n">_parse_quiverkey_string</span><span class="p">(</span>
+        <span class="n">quiverkey_loc</span><span class="p">,</span> <span class="n">grid_h</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">grid_x</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> 
+        <span class="n">grid_y</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">grid_bg</span><span class="p">[</span><span class="n">level</span><span class="p">])</span>
     <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -317,8 +396,21 @@
                              <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
 
     <span class="n">horiz_wind_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="n">grid_lon</span><span class="p">,</span> <span class="n">grid_lat</span><span class="p">,</span> <span class="n">u</span><span class="p">[</span><span class="n">level</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="n">level</span><span class="p">],</span>
-                  <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">quiver_density_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dx</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_x_km</span><span class="p">)</span>
+    <span class="n">quiver_density_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dy</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_y_km</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">grid_lon</span><span class="p">[::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">grid_lat</span><span class="p">[::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">u</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">v</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
+    <span class="n">quiver_font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> 
+                   <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;variant&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">}</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiverkey</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span><span class="p">,</span>
+                 <span class="n">quiverkey_len</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">quiverkey_len</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39; m/s&#39;</span><span class="p">),</span>
+                 <span class="n">fontproperties</span><span class="o">=</span><span class="n">quiver_font</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span>
@@ -394,20 +486,24 @@
     <span class="k">return</span> <span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="plot_xz_xsection_streamlines"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_xz_xsection_streamlines.html#pydda.vis.plot_xz_xsection_streamlines">[docs]</a><span class="k">def</span> <span class="nf">plot_xz_xsection_streamlines</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                 <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
-                                 <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
-                                 <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                 <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                 <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
-                                 <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_xz_xsection_quiver"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_xz_xsection_quiver.html#pydda.vis.plot_xz_xsection_quiver">[docs]</a><span class="k">def</span> <span class="nf">plot_xz_xsection_quiver</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
+                            <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                            <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                            <span class="n">quiver_spacing_z_km</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                            <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> 
+                            <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+                            <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This procedure plots a cross section of winds from wind fields</span>
-<span class="sd">    generated by PyDDA in the X-Z plane using streamlines.</span>
-<span class="sd">    The density of streamlines varies with horizontal wind speed.</span>
+<span class="sd">    generated by PyDDA in the X-Z plane using quivers.</span>
+<span class="sd">    The length of the quivers varies with wind speed.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -453,9 +549,35 @@
 <span class="sd">        If True, PyDDA will generate a colorbar for the plot</span>
 <span class="sd">    bg_grid_no: int</span>
 <span class="sd">        Number of grid in Grids to take background field from.</span>
+<span class="sd">    quiver_spacing_x_km: float</span>
+<span class="sd">        Spacing in km between quivers in x axis.</span>
+<span class="sd">    quiver_spacing_z_km: float</span>
+<span class="sd">        Spacing in km between quivers in z axis.</span>
 <span class="sd">    contour_alpha: float</span>
 <span class="sd">        Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque</span>
+<span class="sd">    quiverkey_len: float</span>
+<span class="sd">        Length to use for the quiver key in m/s.</span>
+<span class="sd">    quiverkey_loc: str</span>
+<span class="sd">        Location of quiverkey. One of: </span>
+<span class="sd">        &#39;best&#39;, </span>
+<span class="sd">        &#39;top_left&#39;</span>
+<span class="sd">        &#39;top&#39;</span>
+<span class="sd">        &#39;top_right&#39;</span>
+<span class="sd">        &#39;bottom_left&#39;</span>
+<span class="sd">        &#39;bottom&#39;</span>
+<span class="sd">        &#39;bottom_right&#39;</span>
+<span class="sd">        &#39;left&#39;</span>
+<span class="sd">        &#39;right&#39;</span>
+<span class="sd">        &#39;top_left_outside&#39;</span>
+<span class="sd">        &#39;top_right_outside&#39;,</span>
+<span class="sd">        &#39;bottom_left_outside&#39;</span>
+<span class="sd">        &#39;bottom_right_outside&#39;</span>
 
+<span class="sd">        &#39;best&#39; will put the quiver key in the corner with the fewest amount of</span>
+<span class="sd">    valid data points while keeping the quiver key inside the plot. </span>
+<span class="sd">    The rest of the options will put the quiver key in that</span>
+<span class="sd">    particular part of the plot, near the edge inside the plot if not outside.</span>
+<span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Nothing</span>
@@ -477,7 +599,10 @@
     <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-
+    <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span> <span class="o">=</span> <span class="n">_parse_quiverkey_string</span><span class="p">(</span>
+        <span class="n">quiverkey_loc</span><span class="p">,</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">grid_x</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> 
+        <span class="n">grid_y</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">grid_bg</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span>
+        <span class="n">xsection</span><span class="o">=</span><span class="s1">&#39;xz&#39;</span><span class="p">)</span>
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 
@@ -485,8 +610,21 @@
                              <span class="n">grid_bg</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
                              <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
     <span class="n">horiz_wind_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">u</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span>
-                  <span class="n">w</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">quiver_density_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dx</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_x_km</span><span class="p">)</span>
+    <span class="n">quiver_density_z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_z_km</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span> 
+                  <span class="n">grid_h</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span> 
+                  <span class="n">u</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span>
+                  <span class="n">w</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_x</span><span class="p">],</span> 
+                  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">quiver_font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> 
+                   <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;variant&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">}</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiverkey</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span><span class="p">,</span>
+                 <span class="n">quiverkey_len</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">quiverkey_len</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39; m/s&#39;</span><span class="p">),</span>
+                 <span class="n">fontproperties</span><span class="o">=</span><span class="n">quiver_font</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span>
@@ -529,25 +667,29 @@
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">((</span><span class="s1">&#39;PyDDA retreived winds @&#39;</span> <span class="o">+</span>
                           <span class="nb">str</span><span class="p">(</span><span class="o">-</span><span class="n">grid_y</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span>
                           <span class="s1">&#39; km south of origin.&#39;</span><span class="p">))</span>
-
+    
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">grid_h</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_h</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span></div>
 
 
-<div class="viewcode-block" id="plot_yz_xsection_streamlines"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_yz_xsection_streamlines.html#pydda.vis.plot_yz_xsection_streamlines">[docs]</a><span class="k">def</span> <span class="nf">plot_yz_xsection_streamlines</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                 <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
-                                 <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
-                                 <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                 <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                 <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
-                                 <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_yz_xsection_quiver"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_yz_xsection_quiver.html#pydda.vis.plot_yz_xsection_quiver">[docs]</a><span class="k">def</span> <span class="nf">plot_yz_xsection_quiver</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
+                            <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                            <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                            <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                            <span class="n">quiver_spacing_z_km</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> 
+                            <span class="n">contour_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> 
+                            <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+                            <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This procedure plots a cross section of winds from wind fields</span>
-<span class="sd">    generated by PyDDA in the Y-Z plane using streamlines.</span>
-<span class="sd">    The density of streamlines varies with horizontal wind speed.</span>
+<span class="sd">    generated by PyDDA in the Y-Z plane using quivers.</span>
+<span class="sd">    The length of the quivers varies with wind speed.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -593,8 +735,32 @@
 <span class="sd">        If True, PyDDA will generate a colorbar for the plot.</span>
 <span class="sd">    bg_grid_no: int</span>
 <span class="sd">        Number of grid in Grids to take background field from.</span>
+<span class="sd">    quiver_spacing_y_km: float</span>
+<span class="sd">        Spacing in km between quivers in y axis.</span>
+<span class="sd">    quiver_spacing_z_km: float</span>
+<span class="sd">        Spacing in km between quivers in z axis.</span>
 <span class="sd">    contour_alpha: float</span>
 <span class="sd">        Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque</span>
+<span class="sd">    quiverkey_loc: str</span>
+<span class="sd">        Location of quiverkey. One of: </span>
+<span class="sd">        &#39;best&#39;, </span>
+<span class="sd">        &#39;top_left&#39;</span>
+<span class="sd">        &#39;top&#39;</span>
+<span class="sd">        &#39;top_right&#39;</span>
+<span class="sd">        &#39;bottom_left&#39;</span>
+<span class="sd">        &#39;bottom&#39;</span>
+<span class="sd">        &#39;bottom_right&#39;</span>
+<span class="sd">        &#39;left&#39;</span>
+<span class="sd">        &#39;right&#39;</span>
+<span class="sd">        &#39;top_left_outside&#39;</span>
+<span class="sd">        &#39;top_right_outside&#39;,</span>
+<span class="sd">        &#39;bottom_left_outside&#39;</span>
+<span class="sd">        &#39;bottom_right_outside&#39;</span>
+
+<span class="sd">        &#39;best&#39; will put the quiver key in the corner with the fewest amount of</span>
+<span class="sd">    valid data points while keeping the quiver key inside the plot. </span>
+<span class="sd">    The rest of the options will put the quiver key in that</span>
+<span class="sd">    particular part of the plot, near the edge inside the plot if not outside.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -616,16 +782,34 @@
     <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span> <span class="o">=</span> <span class="n">_parse_quiverkey_string</span><span class="p">(</span>
+        <span class="n">quiverkey_loc</span><span class="p">,</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">grid_x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> 
+        <span class="n">grid_y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">grid_bg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span>
+        <span class="n">xsection</span><span class="o">=</span><span class="s1">&#39;yz&#39;</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-
+    
     <span class="n">the_mesh</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">grid_y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span>
                              <span class="n">grid_bg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
                              <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
     <span class="n">horiz_wind_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="n">grid_y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">v</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span>
-                  <span class="n">w</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+    <span class="n">quiver_density_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dx</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_y_km</span><span class="p">)</span>
+    <span class="n">quiver_density_z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="n">dz</span><span class="p">)</span><span class="o">*</span><span class="n">quiver_spacing_z_km</span><span class="p">)</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">quiver</span><span class="p">(</span><span class="n">grid_y</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="n">level</span><span class="p">],</span> 
+                  <span class="n">grid_h</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="n">level</span><span class="p">],</span>
+                  <span class="n">v</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="n">level</span><span class="p">],</span>
+                  <span class="n">w</span><span class="p">[::</span><span class="n">quiver_density_z</span><span class="p">,</span> <span class="p">::</span><span class="n">quiver_density_y</span><span class="p">,</span> <span class="n">level</span><span class="p">],</span>
+                  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+
+    <span class="n">quiver_font</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;sans-serif&#39;</span><span class="p">,</span> 
+                   <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;variant&#39;</span><span class="p">:</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="s1">&#39;bold&#39;</span><span class="p">,</span>
+                   <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;medium&#39;</span><span class="p">}</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">quiverkey</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span><span class="p">,</span>
+                 <span class="n">quiverkey_len</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">quiverkey_len</span><span class="p">)</span> <span class="o">+</span><span class="s1">&#39; m/s&#39;</span><span class="p">),</span>
+                 <span class="n">fontproperties</span><span class="o">=</span><span class="n">quiver_font</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span>
@@ -671,6 +855,171 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">grid_h</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_h</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span></div>
+
+
+<span class="k">def</span> <span class="nf">_parse_quiverkey_string</span><span class="p">(</span>
+    <span class="n">qloc</span><span class="p">,</span> <span class="n">grid_z</span><span class="p">,</span> <span class="n">grid_y</span><span class="p">,</span> <span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_bg</span><span class="p">,</span> <span class="n">xsection</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a private method for parsing the quiverkey location string.</span>
+<span class="sd">    This is only used internally by PyDDA.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;best&#39;</span><span class="p">):</span>
+        <span class="c1"># Get top left corner of grid</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">xsection</span> <span class="o">==</span> <span class="s1">&#39;xy&#39;</span><span class="p">):</span>
+            <span class="n">top_y</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">right_x</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">bottom_y</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">left_x</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_y1</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_x1</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_y2</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">6</span><span class="o">*</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_x2</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">6</span><span class="o">*</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">top_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">top_y</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">right_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">top_left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">top_y</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">left_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bot_left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">bottom_y</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">left_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bot_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">bottom_y</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">right_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">top_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">top_y</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">mid_x2</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">mid_x1</span><span class="p">))</span>
+            <span class="n">bottom_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">bottom_y</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">mid_x2</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">mid_x1</span><span class="p">))</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">top_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">bottom_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">left_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">left_x</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">mid_y2</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">mid_y1</span><span class="p">))</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">left_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">right_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">right_x</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">mid_y2</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">mid_y1</span><span class="p">))</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">right_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">xsection</span> <span class="o">==</span> <span class="s1">&#39;xz&#39;</span><span class="p">):</span>
+            <span class="n">top_z</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">right_x</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">bottom_z</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">left_x</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_z1</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_x1</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_z2</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">6</span><span class="o">*</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_x2</span> <span class="o">=</span> <span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">6</span><span class="o">*</span><span class="p">(</span><span class="n">grid_x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">top_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">top_z</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">right_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">top_left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">top_z</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">left_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bot_left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">bottom_z</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">left_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bot_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">bottom_z</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">right_x</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">top_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">top_z</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">mid_x2</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">mid_x1</span><span class="p">))</span>
+            <span class="n">bottom_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">bottom_z</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">mid_x2</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">mid_x1</span><span class="p">))</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">top_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">bottom_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">left_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">left_x</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">mid_z2</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">mid_z1</span><span class="p">))</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">left_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">right_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_x</span> <span class="o">&gt;</span> <span class="n">right_x</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">mid_z2</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">mid_z1</span><span class="p">))</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">right_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">xsection</span> <span class="o">==</span> <span class="s1">&#39;yz&#39;</span><span class="p">):</span>
+            <span class="n">top_z</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">right_y</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">bottom_z</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">left_y</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_z1</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_y1</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_z2</span> <span class="o">=</span> <span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">6</span><span class="o">*</span><span class="p">(</span><span class="n">grid_z</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_z</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">mid_y2</span> <span class="o">=</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="mi">6</span><span class="o">*</span><span class="p">(</span><span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">-</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span><span class="o">/</span><span class="mi">10</span>
+            <span class="n">top_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">top_z</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">right_y</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">top_left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">top_z</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">left_y</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bot_left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">bottom_z</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">left_y</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bot_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">bottom_z</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">right_y</span><span class="p">)]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">top_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">top_z</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">mid_y2</span><span class="p">,</span> <span class="n">grid_x</span> <span class="o">&lt;</span> <span class="n">mid_y1</span><span class="p">))</span>
+            <span class="n">bottom_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">bottom_z</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">mid_y2</span><span class="p">,</span> <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">mid_y1</span><span class="p">))</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">top_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">bottom_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">left_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_y</span> <span class="o">&lt;</span> <span class="n">left_y</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">mid_z2</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">mid_z1</span><span class="p">))</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">left_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">right_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">((</span>
+                <span class="n">grid_y</span> <span class="o">&gt;</span> <span class="n">right_y</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&gt;</span> <span class="n">mid_z2</span><span class="p">,</span> <span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">mid_z1</span><span class="p">))</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">grid_bg</span><span class="p">[</span><span class="n">right_inds</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">loc_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">top_right</span><span class="p">,</span> <span class="n">top_left</span><span class="p">,</span> <span class="n">bot_left</span><span class="p">,</span> <span class="n">bot_right</span><span class="p">,</span>
+                             <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">])</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">top_right</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.93</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">top_left</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">bot_left</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.05</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">bot_right</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.05</span> 
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">top</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.45</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.93</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">bottom</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.45</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.05</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">left</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.45</span>
+        <span class="k">elif</span><span class="p">(</span><span class="n">loc_array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="n">right</span><span class="p">):</span>
+            <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+            <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.45</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;top_left&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.93</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;top_right&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.93</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;bottom_left&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;bottom_right&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;top&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.45</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.93</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;bottom&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.45</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.45</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;right&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">0.45</span> 
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;top_left_outside&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">1.01</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;top_right_outside&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="mf">1.01</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;bottom_left_outside&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.07</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.09</span>
+    <span class="k">elif</span><span class="p">(</span><span class="n">qloc</span> <span class="o">==</span> <span class="s1">&#39;bottom_right_outside&#39;</span><span class="p">):</span>
+        <span class="n">qloc_x</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="n">qloc_y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.09</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid quiver key location!&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">qloc_x</span><span class="p">,</span> <span class="n">qloc_y</span>
 </pre></div>
 
           </div>
