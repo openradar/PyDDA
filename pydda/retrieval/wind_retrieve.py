@@ -34,11 +34,17 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     """
     This function takes in a list of Py-ART Grid objects and derives a
     wind field. Every Py-ART Grid in Grids must have the same grid
-    specification. In order for the model data constraint to be used,
+    specification. 
+
+    In order for the model data constraint to be used,
     the model data must be added as a field to at least one of the
     grids in Grids. This involves interpolating the model data to the
     Grids' coordinates. There are helper functions for this for WRF
-    and HRRR data in pydda.constraints.
+    and HRRR data in :py:func:`pydda.constraints`:
+
+    :py:func:`make_constraint_from_wrf`
+
+    :py:func:`add_hrrr_constraint_to_grid`
 
     Parameters
     ==========
@@ -86,12 +92,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     Cv: float
         Weight for cost function related to vertical vorticity equation.
     Cmod: float
-        Weight for cost function related to vertical vorticity equation.
+        Weight for cost function related to custom constraints.
     weights_obs: list of floating point arrays or None
         List of weights for each point in grid from each radar in Grids.
         Set to None to let PyDDA determine this automatically.
     weights_model: list of floating point arrays or None
-        List of weights for each point in grid from each model in
+        List of weights for each point in grid from each custom field in
         model_fields. Set to None to let PyDDA determine this automatically.
     weights_bg: list of floating point arrays or None
         List of weights for each point in grid from the sounding. Set to None
@@ -134,7 +140,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         Set this to true to enforce w = 0 at the top of the atmosphere. This is
         commonly called the impermeability condition.
     model_fields: list of strings
-        The list of fields in the first grid in Grids that contain the model
+        The list of fields in the first grid in Grids that contain the custom
         data interpolated to the Grid's grid specification. Helper functions
         to create such gridded fields for HRRR and NetCDF WRF data exist
         in ::pydda.constraints::. PyDDA will look for fields named U_(model
