@@ -58,9 +58,9 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -71,12 +71,14 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
         If True, PyDDA will generate a colorbar for the plot
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
 
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
 
     grid_bg = Grids[bg_grid_no].fields[background_field]['data']
@@ -163,6 +165,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
 
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_y.min(), grid_y.max()])
+    return ax
 
 
 def plot_horiz_xsection_streamlines_map(Grids, ax=None,
@@ -214,9 +217,9 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -376,7 +379,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
     background_field: str
-        The name of the background field to plot the windbarbs on.
+        The name of the background field to plot the streamlines on.
     level: int
         The number of the Y level to plot the cross section through.
     cmap: str or matplotlib colormap
@@ -399,9 +402,9 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -412,12 +415,14 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
         If True, PyDDA will generate a colorbar for the plot
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
 
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
 
     grid_bg = Grids[bg_grid_no].fields[background_field]['data']
@@ -491,6 +496,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
 
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
+    return ax
 
 
 def plot_yz_xsection_streamlines(Grids, ax=None,
@@ -539,9 +545,9 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -552,12 +558,14 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
         If True, PyDDA will generate a colorbar for the plot.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
 
     Returns
     -------
-    Nothing
+    ax: Matplotlib axis handle
+        The matplotlib axis handle corresponding to the plot
     """
 
     grid_bg = Grids[bg_grid_no].fields[background_field]['data']
@@ -630,3 +638,4 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
 
     ax.set_xlim([grid_y.min(), grid_y.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
+    return ax

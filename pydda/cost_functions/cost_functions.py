@@ -481,6 +481,7 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
     """
     Calculates the gradient of the smoothness cost function
     by taking the Laplacian of the Laplacian of the wind field.
+
     All arrays in the given lists must have the same dimensions and represent
     the same spatial coordinates.
 
