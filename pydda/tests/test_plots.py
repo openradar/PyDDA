@@ -5,6 +5,7 @@ import pydda
 import pyart
 import pytest
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
 
 
 @pytest.mark.mpl_image_compare(tolerance=50)
@@ -18,7 +19,6 @@ def test_plot_horiz_xsection_barbs():
                                         barb_spacing_y_km=15.0)
     return fig
 
-
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_barbs():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
@@ -29,7 +29,6 @@ def test_plot_horiz_xz_xsection_barbs():
                                      barb_spacing_x_km=10.0,
                                      barb_spacing_z_km=2.0)
     return fig
-
 
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_barbs():
@@ -42,6 +41,17 @@ def test_plot_horiz_yz_xsection_barbs():
                                      barb_spacing_z_km=2.0)
     return fig
 
+@pytest.mark.mpl_image_compare(tolerance=50)
+def test_plot_horiz_xsection_barbs_map():
+    berr_grid = pyart.io.read_grid(pydda.tests.BERR_GRID)
+    cpol_grid = pyart.io.read_grid(pydda.tests.CPOL_GRID)
+    fig = plt.figure(figsize=(9, 9))
+    ax = plt.axes(projection=ccrs.PlateCarree())
+
+    pydda.vis.plot_horiz_xsection_barbs_map(
+        [berr_grid, cpol_grid], ax=ax, bg_grid_no=-1, 
+        level=7, w_vel_contours=[3, 5, 8])
+    return fig
 
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_streamlines():
@@ -54,6 +64,18 @@ def test_plot_horiz_xsection_streamlines():
 
 
 @pytest.mark.mpl_image_compare(tolerance=50)
+def test_plot_horiz_xsection_streamlines_map():
+    berr_grid = pyart.io.read_grid(pydda.tests.BERR_GRID)
+    cpol_grid = pyart.io.read_grid(pydda.tests.CPOL_GRID)
+    fig = plt.figure(figsize=(9, 9))
+    ax = plt.axes(projection=ccrs.PlateCarree())
+
+    pydda.vis.plot_horiz_xsection_streamlines_map(
+        [berr_grid, cpol_grid], ax=ax, bg_grid_no=-1, 
+        level=7, w_vel_contours=[3, 5, 8])
+    return fig
+
+@pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_streamlines():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -62,7 +84,6 @@ def test_plot_horiz_xz_xsection_streamlines():
                                            w_vel_contours=[3, 6, 9])
     plt.ylim([0,15])
     return fig
-
 
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_streamlines():
@@ -84,6 +105,17 @@ def test_plot_horiz_xsection_quiver():
                                          quiver_spacing_y_km=5.0)
     return fig
 
+@pytest.mark.mpl_image_compare(tolerance=50)
+def test_plot_horiz_xsection_quiver_map():
+    berr_grid = pyart.io.read_grid(pydda.tests.BERR_GRID)
+    cpol_grid = pyart.io.read_grid(pydda.tests.CPOL_GRID)
+    fig = plt.figure(figsize=(9, 9))
+    ax = plt.axes(projection=ccrs.PlateCarree())
+
+    pydda.vis.plot_horiz_xsection_quiver_map(
+        [berr_grid, cpol_grid], ax=ax, bg_grid_no=-1, 
+        level=7, w_vel_contours=[3, 5, 8])
+    return fig
 
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_quiver():

@@ -341,9 +341,21 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
         grid_y[level], grid_bg[level])
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]['data'].filled(fill_value=np.nan)
-    v = Grids[0].fields[v_field]['data'].filled(fill_value=np.nan)
-    w = Grids[0].fields[w_field]['data'].filled(fill_value=np.nan)
+    
+    if(np.ma.isMaskedArray(Grids[0].fields[u_field]['data'])):
+        u = Grids[0].fields[u_field]['data'].filled(fill_value=np.nan)
+    else: 
+        u = Grids[0].fields[u_field]['data']
+
+    if(np.ma.isMaskedArray(Grids[0].fields[v_field]['data'])):
+        v = Grids[0].fields[v_field]['data'].filled(fill_value=np.nan)
+    else:
+        v = Grids[0].fields[v_field]['data']
+
+    if(np.ma.isMaskedArray(Grids[0].fields[u_field]['data'])):
+        w = Grids[0].fields[w_field]['data'].filled(fill_value=np.nan)
+    else:
+        w = Grids[0].fields[w_field]['data']
 
     transform = ccrs.PlateCarree()
     if(ax is None):
