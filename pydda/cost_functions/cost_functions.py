@@ -364,10 +364,6 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
         Float array with w component of wind field
     coeff: float
         Constant for cost function
-    dudt: float
-        Background storm motion
-    dvdt: float
-        Background storm motion
     vel_name: str
         Background velocity field name
     weights: n_radars x_bins x y_bins float array
@@ -376,8 +372,8 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     Returns
     -------
     y: 1-D float array
-         Gradient vector of observational cost function
-
+         Gradient vector of observational cost function. 
+         
     More information
     ----------------
     The gradient is calculated by taking the functional derivative of the
@@ -481,6 +477,7 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
     """
     Calculates the gradient of the smoothness cost function
     by taking the Laplacian of the Laplacian of the wind field.
+
     All arrays in the given lists must have the same dimensions and represent
     the same spatial coordinates.
 

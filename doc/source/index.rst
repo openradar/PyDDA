@@ -86,7 +86,7 @@ commands assuming you have the above dependencies installed.
 
 ::
 
- git clone https://github.com/rcjackson/PyDDA
+ git clone https://github.com/openradar/PyDDA
  cd PyDDA
  python setup.py install
 ::

@@ -34,18 +34,25 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     """
     This function takes in a list of Py-ART Grid objects and derives a
     wind field. Every Py-ART Grid in Grids must have the same grid
-    specification. In order for the model data constraint to be used,
+    specification. 
+
+    In order for the model data constraint to be used,
     the model data must be added as a field to at least one of the
     grids in Grids. This involves interpolating the model data to the
     Grids' coordinates. There are helper functions for this for WRF
-    and HRRR data in pydda.constraints.
+    and HRRR data in :py:func:`pydda.constraints`:
+
+    :py:func:`make_constraint_from_wrf`
+
+    :py:func:`add_hrrr_constraint_to_grid`
 
     Parameters
     ==========
 
     Grids: list of Py-ART Grids
         The list of Py-ART grids to take in corresponding to each radar.
-        All grids must have the same specification.
+        All grids must have the same shape, x coordinates, y coordinates
+        and z coordinates.
     u_init: 3D ndarray
         The intial guess for the zonal wind field, input as a 3D array
         with the same shape as the fields in Grids.
@@ -56,19 +63,20 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         The intial guess for the vertical wind field, input as a 3D array
         with the same shape as the fields in Grids.
     vel_name: string
-        Name of radial velocity field. None will attempt to autodetect the
-        velocity field name.
+        Name of radial velocity field. Setting to None will have PyDDA attempt
+        to automatically detect the velocity field name.
     refl_field: string
-        Name of reflectivity field. None will attempt to autodetect the
-        reflectivity field name.
+        Name of reflectivity field. Setting to None will have PyDDA attempt 
+        to automatically detect the reflectivity field name.
     u_back: 1D array
         Background zonal wind field from a sounding as a function of height.
-        This should be given in the original coordinates.
+        This should be given in the sounding's vertical coordinates.
     v_back: 1D array
         Background meridional wind field from a sounding as a function of
-        height. This should be given in the original coordinates.
+        height. This should be given in the sounding's vertical coordinates.
     z_back: 1D array
-        Heights corresponding to background wind field levels in meters.
+        Heights corresponding to background wind field levels in meters. This
+        is given in the sounding's original coordinates.
     frz: float
         Freezing level used for fall speed calculation in meters.
     Co: float
@@ -84,12 +92,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     Cv: float
         Weight for cost function related to vertical vorticity equation.
     Cmod: float
-        Weight for cost function related to vertical vorticity equation.
+        Weight for cost function related to custom constraints.
     weights_obs: list of floating point arrays or None
         List of weights for each point in grid from each radar in Grids.
         Set to None to let PyDDA determine this automatically.
     weights_model: list of floating point arrays or None
-        List of weights for each point in grid from each model in
+        List of weights for each point in grid from each custom field in
         model_fields. Set to None to let PyDDA determine this automatically.
     weights_bg: list of floating point arrays or None
         List of weights for each point in grid from the sounding. Set to None
@@ -132,7 +140,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         Set this to true to enforce w = 0 at the top of the atmosphere. This is
         commonly called the impermeability condition.
     model_fields: list of strings
-        The list of fields in the first grid in Grids that contain the model
+        The list of fields in the first grid in Grids that contain the custom
         data interpolated to the Grid's grid specification. Helper functions
         to create such gridded fields for HRRR and NetCDF WRF data exist
         in ::pydda.constraints::. PyDDA will look for fields named U_(model
@@ -366,7 +374,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                                        upper_bc,
                                                        False),
                               maxiter=10, pgtol=1e-3, bounds=bounds,
-                              fprime=grad_J, disp=1, iprint=-1)
+                              fprime=grad_J, disp=0, iprint=-1)
         if(output_cost_functions is True):
             J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
                        u_model, v_model, w_model,
@@ -419,7 +427,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                          upper_bc,
                                          False),
                 maxiter=10, pgtol=1e-3, bounds=bounds,
-                fprime=grad_J, disp=1, iprint=-1)
+                fprime=grad_J, disp=0, iprint=-1)
 
             warnflag = winds[2]['warnflag']
             winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
@@ -496,9 +504,9 @@ def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
     rad2_lat: float
         The latitude of the second radar.
     x: nD float array
-        The x coordinates of the grid
+        The Cartesian x coordinates of the grid
     y: nD float array
-        The y corrdinates of the grid
+        The Cartesian y corrdinates of the grid
     projparams: Py-ART projparams
         The projection parameters of the Grid
 

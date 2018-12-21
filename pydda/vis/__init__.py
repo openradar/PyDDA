@@ -5,7 +5,9 @@ pydda.vis (pydda.vis)
 
 .. currentmodule:: pydda.vis
 
-A visualization module for plotting generated wind fields.
+A visualization module for plotting generated wind fields. There is basic
+support for the visualization of wind fields over a given background field
+using barbs, streamlines, and quivers.
 
 .. autosummary::
     :toctree: generated/

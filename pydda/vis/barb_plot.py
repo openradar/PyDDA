@@ -60,9 +60,9 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -241,9 +241,9 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -475,9 +475,9 @@ def plot_xz_xsection_barbs(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -489,7 +489,9 @@ def plot_xz_xsection_barbs(Grids, ax=None,
     colorbar_contour_flag: bool
         If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
-        Number of grid in Grids to take background field from.
+        Number of grid in Grids to take background field from. Set to -1
+        to use the maximum value of the background grids from all of the 
+        grids.
     barb_spacing_x_km: float
         The spacing in km between each wind barb in the x direction.
     barb_spacing_z_km: float
@@ -636,9 +638,9 @@ def plot_yz_xsection_barbs(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -651,6 +653,7 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     barb_spacing_y_km: float
         The spacing in km between each wind barb in the y direction.
     barb_spacing_z_km: float
