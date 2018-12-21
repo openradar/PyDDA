@@ -20,6 +20,7 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
                                u_field='u', v_field='v', w_field='w',
                                show_lobes=True, title_flag=True,
                                axes_labels_flag=True, colorbar_flag=True,
+                               colorbar_contour_flag=False,
                                bg_grid_no=0, scale=3,
                                quiver_spacing_x_km=10.0,
                                quiver_spacing_y_km=10.0,
@@ -72,7 +73,9 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
     quiver_spacing_x_km: float
@@ -142,7 +145,7 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
                   grid_y[level, ::quiver_density_y, ::quiver_density_x],
                   u[level, ::quiver_density_y, ::quiver_density_x],
                   v[level, ::quiver_density_y, ::quiver_density_x],
-                  color='k')
+                  color='k', scale=20.0, scale_units='width')
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',
                    'variant': 'normal',
@@ -160,25 +163,31 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[level, :, :], fill_value=0)
-        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
-                        u_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha)
+        u_filled = np.ma.filled(u[level, :, :], fill_value=np.nan)
+        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                         u_filled, levels=u_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[level, :, :], fill_value=0)
-        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
-                        v_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha)
+        v_filled = np.ma.filled(v[level, :, :], fill_value=np.nan)
+        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                         v_filled, levels=u_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[level, :, :], fill_value=0)
-        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
-                        w_filled, levels=w_vel_contours, linewidths=2,
-                        alpha=contour_alpha)
+        w_filled = np.ma.filled(w[level, :, :], fill_value=np.nan)
+        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                         w_filled, levels=w_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='W [m/s]')
 
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
@@ -221,6 +230,7 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
                                    show_lobes=True, title_flag=True,
                                    axes_labels_flag=True,
                                    colorbar_flag=True,
+                                   colorbar_contour_flag=False,
                                    bg_grid_no=0, contour_alpha=0.7,
                                    coastlines=True, 
                                    quiver_spacing_x_km=10.0,
@@ -274,7 +284,9 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot.
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot.
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
         Set to -1 to use maximum value from all grids.
@@ -361,7 +373,7 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
                   grid_lat[::quiver_density_y, ::quiver_density_x],
                   u[level, ::quiver_density_y, ::quiver_density_x],
                   v[level, ::quiver_density_y, ::quiver_density_x],
-                  transform=transform)
+                  transform=transform, scale=10.0, scale_units='width')
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',
                    'variant': 'normal',
@@ -379,25 +391,64 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[level, :, :], fill_value=0)
-        cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
-                        u_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha, zorder=2)
-        ax.clabel(cs)
+        u_filled = np.ma.masked_where(u[level, :, :] < np.min(u_vel_contours), 
+                                      u[level, :, :])
+        try:
+            cs = ax.contourf(grid_lon[:, :], grid_lat[:, :],
+                             u_filled, levels=u_vel_contours, linewidths=2,
+                             alpha=contour_alpha, zorder=2, extend='both')
+            cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_over(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='U [m/s]', extend='both',
+                                   spacing='proportional')
+        except ValueError:
+            warnings.warn(("Cartopy does not support blank contour plots, " +
+                           "contour color map not drawn!"), RuntimeWarning)
+                    
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[level, :, :], fill_value=0)
-        cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
-                        v_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha, zorder=2)
-        ax.clabel(cs)
-
+        v_filled = np.ma.masked_where(v[level, :, :] < np.min(v_vel_contours), 
+                                      v[level, :, :])
+        try:
+            cs = ax.contourf(grid_lon[:, :], grid_lat[:, :],
+                             v_filled, levels=u_vel_contours, linewidths=2,
+                             alpha=contour_alpha, zorder=2, extend='both')
+            cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_over(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='V [m/s]', extend='both',
+                               spacing='proportional')
+        except ValueError:
+            warnings.warn(("Cartopy does not support blank contour plots, " +
+                           "contour color map not drawn!"), RuntimeWarning)
+                    
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[level, :, :], fill_value=0)
-        cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
-                        w_filled, levels=w_vel_contours, linewidths=2,
-                        alpha=contour_alpha, zorder=2)
-        ax.clabel(cs)
+        w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours), 
+                                      w[level, :, :])
+        try:
+            cs = ax.contourf(grid_lon[::, ::], grid_lat[::, ::],
+                             w_filled, levels=w_vel_contours, linewidths=2,
+                             alpha=contour_alpha, zorder=2, extend='both')
+            cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_over(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='W [m/s]', extend='both',
+                                   spacing='proportional',
+                                   ticks=w_vel_contours)
+        except ValueError:
+            warnings.warn(("Cartopy does not support color maps on blank " + 
+                           "contour plots, contour color map not drawn!"), 
+                            RuntimeWarning)
 
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
@@ -453,6 +504,7 @@ def plot_xz_xsection_quiver(Grids, ax=None,
                             u_field='u', v_field='v', w_field='w',
                             title_flag=True, axes_labels_flag=True,
                             colorbar_flag=True,
+                            colorbar_contour_flag=False,
                             bg_grid_no=0,
                             quiver_spacing_x_km=10.0,
                             quiver_spacing_z_km=1.0,
@@ -505,7 +557,9 @@ def plot_xz_xsection_quiver(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
     quiver_spacing_x_km: float
@@ -593,25 +647,31 @@ def plot_xz_xsection_quiver(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[:, level, :], fill_value=0)
-        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
-                        u_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha)
+        u_filled = np.ma.filled(u[:, level, :], fill_value=np.nan)
+        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
+                         u_filled, levels=u_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(w[:, level, :], fill_value=0)
-        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
-                        v_filled, levels=v_vel_contours, linewidths=2,
-                        alpha=contour_alpha)
+        v_filled = np.ma.filled(w[:, level, :], fill_value=np.nan)
+        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
+                         v_filled, levels=v_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[:, level, :], fill_value=0)
-        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
-                        w_filled, levels=w_vel_contours, linewidths=2,
-                        alpha=contour_alpha)
+        w_filled = np.ma.filled(w[:, level, :], fill_value=np.nan)
+        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
+                         w_filled, levels=w_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='W [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('X [km]'))
@@ -639,6 +699,7 @@ def plot_yz_xsection_quiver(Grids, ax=None,
                             u_field='u', v_field='v', w_field='w',
                             title_flag=True, axes_labels_flag=True,
                             colorbar_flag=True,
+                            colorbar_contour_flag=False,
                             bg_grid_no=0,
                             quiver_spacing_y_km=10.0,
                             quiver_spacing_z_km=1.0, 
@@ -691,7 +752,9 @@ def plot_yz_xsection_quiver(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot.
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot.
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
     quiver_spacing_y_km: float
@@ -778,25 +841,31 @@ def plot_yz_xsection_quiver(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[:, :, level], fill_value=0)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                         u_filled, levels=u_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        u_filled = np.ma.filled(u[:, :, level], fill_value=np.nan)
+        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                          u_filled, levels=u_vel_contours, linewidths=2,
+                          alpha=contour_alpha)
         plt.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[:, :, level], fill_value=0)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                         v_filled, levels=w_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        v_filled = np.ma.filled(v[:, :, level], fill_value=np.nan)
+        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                          v_filled, levels=w_vel_contours, linewidths=2,
+                          alpha=contour_alpha)
         plt.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[:, :, level], fill_value=0)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                         w_filled, levels=w_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        w_filled = np.ma.filled(w[:, :, level], fill_value=np.nan)
+        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                          w_filled, levels=w_vel_contours, linewidths=2,
+                          alpha=contour_alpha)
         plt.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='W [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('Y [km]'))
