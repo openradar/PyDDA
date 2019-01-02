@@ -416,7 +416,7 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
                   grid_lat[::quiver_density_y, ::quiver_density_x],
                   u[level, ::quiver_density_y, ::quiver_density_x],
                   v[level, ::quiver_density_y, ::quiver_density_x],
-                  transform=transform, scale=10.0, scale_units='width')
+                  transform=transform)
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',
                    'variant': 'normal',

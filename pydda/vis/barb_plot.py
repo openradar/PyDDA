@@ -137,7 +137,7 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
                          u_filled, levels=u_vel_contours, linewidths=2,
                          alpha=contour_alpha)
         ax.clabel(cs)
-        if(ccolorbar_contour_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):

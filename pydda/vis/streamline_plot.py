@@ -125,7 +125,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                         u_filled, levels=u_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
@@ -134,7 +134,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                         v_filled, levels=u_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
  
     if(w_vel_contours is not None):
@@ -143,7 +143,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                         w_filled, levels=w_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
 
 
@@ -520,7 +520,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
                         u_filled, levels=u_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
@@ -529,7 +529,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
                         v_filled, levels=v_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
@@ -538,7 +538,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
                         w_filled, levels=w_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
 
 
@@ -672,7 +672,7 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
                           u_filled, levels=u_vel_contours, linewidths=2,
                           alpha=contour_alpha)
         plt.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
@@ -681,7 +681,7 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
                           v_filled, levels=w_vel_contours, linewidths=2,
                           alpha=contour_alpha)
         plt.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
@@ -690,7 +690,7 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
                           w_filled, levels=w_vel_contours, linewidths=2,
                           alpha=contour_alpha)
         plt.clabel(cs)
-        if(contour_colorbar_flag is True):
+        if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
 
     if(axes_labels_flag is True):
