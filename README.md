@@ -69,11 +69,13 @@ Core components of the software are adopted from the [Multidop](https://github.c
 
 The development of this software is supported by the Climate Model Development and Validation (CMDV) activity which is funded by the Office of Biological and Environmental Research in the US Department of Energy Office of Science.
 
+=======
 ## Contributing
 
 We have a set of goals that we wish to accomplish using PyDDA, including the assimilation of data from various models in the retrieval,
 improved visualizations, use of radar data in antenna coordinates, and improved documentation. For more details on what contributions
-would be useful to acheiving these goals, see the [PyDDA Roadmap](https://github.com/openradar/ROADMAP.md).
+would be useful to acheiving these goals, see the [PyDDA Roadmap](https://github.com/openradar/PyDDA/blob/master/ROADMAP.md).
+
 =======
 
 ## References
