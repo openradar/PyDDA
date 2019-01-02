@@ -19,8 +19,9 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                                     w_vel_contours=None,
                                     u_field='u', v_field='v', w_field='w',
                                     show_lobes=True, title_flag=True,
-                                    axes_labels_flag=True, colorbar_flag=True,
-                                    bg_grid_no=0, 
+                                    axes_labels_flag=True, 
+                                    colorbar_flag=True,
+                                    colorbar_contour_flag=False, bg_grid_no=0,
                                     contour_alpha=0.7):
     """
     This procedure plots a horizontal cross section of winds from wind fields
@@ -58,25 +59,29 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
         If True, PyDDA will generate a title for the plot.
     axes_labels_flag: bool
-        If True, PyDDA will generate axes labels for the plot
+        If True, PyDDA will generate axes labels for the plot.
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
 
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
 
     grid_bg = Grids[bg_grid_no].fields[background_field]['data']
@@ -115,25 +120,32 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[level, :, :], fill_value=0)
+        u_filled = np.ma.filled(u[level, :, :], fill_value=np.nan)
         cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
                         u_filled, levels=u_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[level, :, :], fill_value=0)
+        v_filled = np.ma.filled(v[level, :, :], fill_value=np.nan)
         cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
                         v_filled, levels=u_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
-
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='V [m/s]')
+ 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[level, :, :], fill_value=0)
+        w_filled = np.ma.filled(w[level, :, :], fill_value=np.nan)
         cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
                         w_filled, levels=w_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='W [m/s]')
+
 
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
@@ -163,6 +175,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
 
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_y.min(), grid_y.max()])
+    return ax
 
 
 def plot_horiz_xsection_streamlines_map(Grids, ax=None,
@@ -176,6 +189,7 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
                                         show_lobes=True, title_flag=True,
                                         axes_labels_flag=True,
                                         colorbar_flag=True,
+                                        colorbar_contour_flag=False,
                                         bg_grid_no=0, contour_alpha=0.7,
                                         coastlines=True, gridlines=True):
     """
@@ -214,9 +228,9 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -224,7 +238,9 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot.
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot.
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
         Set to -1 to use maximum value from all grids.
@@ -287,26 +303,65 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[level, :, :], fill_value=0)
-        cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
-                        u_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha, zorder=2)
-        ax.clabel(cs)
+        u_filled = np.ma.masked_where(u[level, :, :] < np.min(u_vel_contours), 
+                                      u[level, :, :])
+        try:
+            cs = ax.contourf(grid_lon[:, :], grid_lat[:, :],
+                             u_filled, levels=u_vel_contours, linewidths=2,
+                             alpha=contour_alpha, zorder=2, extend='both')
+            cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_over(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='U [m/s]', extend='both',
+                                   spacing='proportional')
+        except ValueError:
+            warnings.warn(("Cartopy does not support blank contour plots, " +
+                           "contour color map not drawn!"), RuntimeWarning)
+                    
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[level, :, :], fill_value=0)
-        cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
-                        v_filled, levels=u_vel_contours, linewidths=2,
-                        alpha=contour_alpha, zorder=2)
-        ax.clabel(cs)
-
+        v_filled = np.ma.masked_where(v[level, :, :] < np.min(v_vel_contours), 
+                                      v[level, :, :])
+        try:
+            cs = ax.contourf(grid_lon[:, :], grid_lat[:, :],
+                             v_filled, levels=u_vel_contours, linewidths=2,
+                             alpha=contour_alpha, zorder=2, extend='both')
+            cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_over(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='V [m/s]', extend='both',
+                               spacing='proportional')
+        except ValueError:
+            warnings.warn(("Cartopy does not support blank contour plots, " +
+                           "contour color map not drawn!"), RuntimeWarning)
+                    
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[level, :, :], fill_value=0)
-        cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
-                        w_filled, levels=w_vel_contours, linewidths=2,
-                        alpha=contour_alpha, zorder=2)
-        ax.clabel(cs)
-
+        w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours), 
+                                      w[level, :, :])
+        try:
+            cs = ax.contourf(grid_lon[::, ::], grid_lat[::, ::],
+                             w_filled, levels=w_vel_contours, linewidths=2,
+                             alpha=contour_alpha, zorder=2, extend='both')
+            cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_over(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='W [m/s]', extend='both',
+                                   spacing='proportional',
+                                   ticks=w_vel_contours)
+        except ValueError:
+            warnings.warn(("Cartopy does not support color maps on blank " + 
+                           "contour plots, contour color map not drawn!"), 
+                            RuntimeWarning)
+ 
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
 
@@ -361,6 +416,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
                                  u_field='u', v_field='v', w_field='w',
                                  title_flag=True, axes_labels_flag=True,
                                  colorbar_flag=True,
+                                 colorbar_contour_flag=False, 
                                  bg_grid_no=0, 
                                  contour_alpha=0.7):
     """
@@ -376,7 +432,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
     background_field: str
-        The name of the background field to plot the windbarbs on.
+        The name of the background field to plot the streamlines on.
     level: int
         The number of the Y level to plot the cross section through.
     cmap: str or matplotlib colormap
@@ -399,9 +455,9 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -409,15 +465,19 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
 
     Returns
     -------
-    Nothing
+    ax: matplotlib axis
+        Axis handle to output axis
     """
 
     grid_bg = Grids[bg_grid_no].fields[background_field]['data']
@@ -455,25 +515,32 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[:, level, :], fill_value=0)
+        u_filled = np.ma.filled(u[:, level, :], fill_value=np.nan)
         cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
                         u_filled, levels=u_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(w[:, level, :], fill_value=0)
+        v_filled = np.ma.filled(w[:, level, :], fill_value=np.nan)
         cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
                         v_filled, levels=v_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[:, level, :], fill_value=0)
+        w_filled = np.ma.filled(w[:, level, :], fill_value=np.nan)
         cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
                         w_filled, levels=w_vel_contours, linewidths=2,
                         alpha=contour_alpha)
         ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='W [m/s]')
+
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('X [km]'))
@@ -491,6 +558,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
 
     ax.set_xlim([grid_x.min(), grid_x.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
+    return ax
 
 
 def plot_yz_xsection_streamlines(Grids, ax=None,
@@ -501,6 +569,7 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
                                  u_field='u', v_field='v', w_field='w',
                                  title_flag=True, axes_labels_flag=True,
                                  colorbar_flag=True,
+                                 colorbar_contour_flag=False,
                                  bg_grid_no=0, 
                                  contour_alpha=0.7):
     """
@@ -539,9 +608,9 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
-        Name of zonal wind (v) field in Grids.
+        Name of meridional wind (v) field in Grids.
     w_field: str
-        Name of zonal wind (w) field in Grids.
+        Name of vertical wind (w) field in Grids.
     show_lobes: bool
         If True, the dual doppler lobes from each pair of radars will be shown.
     title_flag: bool
@@ -549,15 +618,19 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
     axes_labels_flag: bool
         If True, PyDDA will generate axes labels for the plot.
     colorbar_flag: bool
-        If True, PyDDA will generate a colorbar for the plot.
+        If True, PyDDA will generate a colorbar for the plot background field.
+    colorbar_contour_flag: bool
+        If True, PyDDA will generate a colorbar for the contours.
     bg_grid_no: int
         Number of grid in Grids to take background field from.
+        Set to -1 to use maximum value from all grids.
     contour_alpha: float
         Alpha (transparency) of velocity contours. 0 = transparent, 1 = opaque
 
     Returns
     -------
-    Nothing
+    ax: Matplotlib axis handle
+        The matplotlib axis handle corresponding to the plot
     """
 
     grid_bg = Grids[bg_grid_no].fields[background_field]['data']
@@ -594,25 +667,31 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[:, :, level], fill_value=0)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                         u_filled, levels=u_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        u_filled = np.ma.filled(u[:, :, level], fill_value=np.nan)
+        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                          u_filled, levels=u_vel_contours, linewidths=2,
+                          alpha=contour_alpha)
         plt.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[:, :, level], fill_value=0)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                         v_filled, levels=w_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        v_filled = np.ma.filled(v[:, :, level], fill_value=np.nan)
+        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                          v_filled, levels=w_vel_contours, linewidths=2,
+                          alpha=contour_alpha)
         plt.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[:, :, level], fill_value=0)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                         w_filled, levels=w_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        w_filled = np.ma.filled(w[:, :, level], fill_value=np.nan)
+        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                          w_filled, levels=w_vel_contours, linewidths=2,
+                          alpha=contour_alpha)
         plt.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='W [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('Y [km]'))
@@ -630,3 +709,4 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
 
     ax.set_xlim([grid_y.min(), grid_y.max()])
     ax.set_ylim([grid_h.min(), grid_h.max()])
+    return ax

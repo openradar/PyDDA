@@ -31,7 +31,7 @@ def test_make_updraft_from_convergence_field():
     back_v = 10.0
     x_center = 0.0
     y_center = 0.0
-    u, v, w = pydda.initialization.make_test_divergence_field(
+    u, v, w = pydda.tests.make_test_divergence_field(
         Grid, wind_vel, z_ground, z_top, radius, back_u, back_v,
         x_center, y_center)
 
