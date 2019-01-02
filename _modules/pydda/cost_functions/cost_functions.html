@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -406,10 +407,6 @@
 <span class="sd">        Float array with w component of wind field</span>
 <span class="sd">    coeff: float</span>
 <span class="sd">        Constant for cost function</span>
-<span class="sd">    dudt: float</span>
-<span class="sd">        Background storm motion</span>
-<span class="sd">    dvdt: float</span>
-<span class="sd">        Background storm motion</span>
 <span class="sd">    vel_name: str</span>
 <span class="sd">        Background velocity field name</span>
 <span class="sd">    weights: n_radars x_bins x y_bins float array</span>
@@ -418,8 +415,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y: 1-D float array</span>
-<span class="sd">         Gradient vector of observational cost function</span>
-
+<span class="sd">         Gradient vector of observational cost function. </span>
+<span class="sd">         </span>
 <span class="sd">    More information</span>
 <span class="sd">    ----------------</span>
 <span class="sd">    The gradient is calculated by taking the functional derivative of the</span>
@@ -523,6 +520,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the smoothness cost function</span>
 <span class="sd">    by taking the Laplacian of the Laplacian of the wind field.</span>
+
 <span class="sd">    All arrays in the given lists must have the same dimensions and represent</span>
 <span class="sd">    the same spatial coordinates.</span>
 
@@ -1095,7 +1093,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.3.
     </div>
   </body>
 </html>

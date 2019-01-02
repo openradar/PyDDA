@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -162,63 +163,6 @@
     <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span></div>
 
 
-<div class="viewcode-block" id="make_test_divergence_field"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_test_divergence_field.html#pydda.initialization.make_test_divergence_field">[docs]</a><span class="k">def</span> <span class="nf">make_test_divergence_field</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">wind_vel</span><span class="p">,</span> <span class="n">z_ground</span><span class="p">,</span> <span class="n">z_top</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span>
-                               <span class="n">back_u</span><span class="p">,</span> <span class="n">back_v</span><span class="p">,</span> <span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function makes a test field with wind convergence at the surface</span>
-<span class="sd">    and divergence aloft.</span>
-
-<span class="sd">    This function makes a useful test for the mass continuity equation.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Grid: Py-ART Grid object</span>
-<span class="sd">        This is the Py-ART Grid containing the coordinates for the analysis</span>
-<span class="sd">        grid.</span>
-<span class="sd">    wind_vel: float</span>
-<span class="sd">        The maximum wind velocity.</span>
-<span class="sd">    z_ground: float</span>
-<span class="sd">        The bottom height where the maximum convergence occurs</span>
-<span class="sd">    z_top: float</span>
-<span class="sd">        The height where the maximum divergence occurrs</span>
-<span class="sd">    back_u: float</span>
-<span class="sd">        The u component of the wind outside of the area of convergence.</span>
-<span class="sd">    back_v: float</span>
-<span class="sd">        The v component of the wind outside of the area of convergence.</span>
-<span class="sd">    x_center: float</span>
-<span class="sd">        The X-coordinate of the center of the area of convergence in the</span>
-<span class="sd">        Grid&#39;s coordinates.</span>
-<span class="sd">    y_center: float</span>
-<span class="sd">        The Y-coordinate of the center of the area of convergence in the</span>
-<span class="sd">        Grid&#39;s coordinates.</span>
-
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    u_init, v_init, w_init: ndarrays of floats</span>
-<span class="sd">         Initial U, V, W field</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">x</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-
-    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">y_center</span><span class="p">)</span>
-    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">((</span><span class="n">z</span> <span class="o">-</span> <span class="n">z_ground</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">z_top</span> <span class="o">-</span> <span class="n">z_ground</span><span class="p">))</span>
-    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_center</span><span class="p">))</span>
-
-    <span class="n">u</span> <span class="o">=</span> <span class="n">wind_vel</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">/</span><span class="n">radius</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">wind_vel</span><span class="o">*</span><span class="p">(</span><span class="n">r</span><span class="o">/</span><span class="n">radius</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">u</span><span class="p">[</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">radius</span><span class="p">]</span> <span class="o">=</span> <span class="n">back_u</span>
-    <span class="n">v</span><span class="p">[</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">radius</span><span class="p">]</span> <span class="o">=</span> <span class="n">back_v</span>
-
-    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span></div>
-
-
 <div class="viewcode-block" id="make_background_from_wrf"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf">[docs]</a><span class="k">def</span> <span class="nf">make_background_from_wrf</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">wrf_time</span><span class="p">,</span>
                              <span class="n">radar_loc</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -247,10 +191,16 @@
 <span class="sd">    -------</span>
 <span class="sd">    u: 3D ndarray</span>
 <span class="sd">        The initialization u field.</span>
+<span class="sd">        The shape will be the same shape as the fields in Grid and will</span>
+<span class="sd">        correspond to the same x, y, and z locations as in Grid.</span>
 <span class="sd">    v: 3D ndarray</span>
 <span class="sd">        The initialization v field.</span>
+<span class="sd">        The shape will be the same shape as the fields in Grid and will</span>
+<span class="sd">        correspond to the same x, y, and z locations as in Grid.</span>
 <span class="sd">    w: 3D ndarray</span>
-<span class="sd">        The initialization w field.</span>
+<span class="sd">        The initialization w field. The shape will be the same shape </span>
+<span class="sd">        as the fields in Grid and will correspond to the same x, y, and z</span>
+<span class="sd">        locations as in Grid.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Parse names of velocity field</span>
@@ -333,6 +283,8 @@
 <span class="sd">    -------</span>
 <span class="sd">    Grid: Py-ART Grid</span>
 <span class="sd">        This returns the Py-ART grid with the HRRR u, and v fields added.</span>
+<span class="sd">        The shape will be the same shape as the fields in Grid and will</span>
+<span class="sd">        correspond to the same x, y, and z locations as in Grid.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">CFGRIB_AVAILABLE</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">):</span>
@@ -442,7 +394,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.3.
     </div>
   </body>
 </html>

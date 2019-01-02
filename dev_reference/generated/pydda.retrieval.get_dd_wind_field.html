@@ -15,7 +15,8 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -54,11 +55,14 @@
 <code class="descclassname">pydda.retrieval.</code><code class="descname">get_dd_wind_field</code><span class="sig-paren">(</span><em>Grids</em>, <em>u_init</em>, <em>v_init</em>, <em>w_init</em>, <em>vel_name=None</em>, <em>refl_field=None</em>, <em>u_back=None</em>, <em>v_back=None</em>, <em>z_back=None</em>, <em>frz=4500.0</em>, <em>Co=1.0</em>, <em>Cm=1500.0</em>, <em>Cx=0.0</em>, <em>Cy=0.0</em>, <em>Cz=0.0</em>, <em>Cb=0.0</em>, <em>Cv=0.0</em>, <em>Cmod=0.0</em>, <em>Ut=None</em>, <em>Vt=None</em>, <em>filt_iterations=2</em>, <em>mask_outside_opt=False</em>, <em>weights_obs=None</em>, <em>weights_model=None</em>, <em>weights_bg=None</em>, <em>max_iterations=200</em>, <em>mask_w_outside_opt=True</em>, <em>filter_window=9</em>, <em>filter_order=4</em>, <em>min_bca=30.0</em>, <em>max_bca=150.0</em>, <em>upper_bc=True</em>, <em>model_fields=None</em>, <em>output_cost_functions=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function takes in a list of Py-ART Grid objects and derives a
 wind field. Every Py-ART Grid in Grids must have the same grid
-specification. In order for the model data constraint to be used,
+specification.</p>
+<p>In order for the model data constraint to be used,
 the model data must be added as a field to at least one of the
 grids in Grids. This involves interpolating the model data to the
 Grids’ coordinates. There are helper functions for this for WRF
-and HRRR data in pydda.constraints.</p>
+and HRRR data in <a class="reference internal" href="../index.html#module-pydda.constraints" title="pydda.constraints"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.constraints()</span></code></a>:</p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">make_constraint_from_wrf()</span></code></p>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">add_hrrr_constraint_to_grid()</span></code></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -66,7 +70,8 @@ and HRRR data in pydda.constraints.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
 <dt><strong>Grids: list of Py-ART Grids</strong></dt>
 <dd><p class="first last">The list of Py-ART grids to take in corresponding to each radar.
-All grids must have the same specification.</p>
+All grids must have the same shape, x coordinates, y coordinates
+and z coordinates.</p>
 </dd>
 <dt><strong>u_init: 3D ndarray</strong></dt>
 <dd><p class="first last">The intial guess for the zonal wind field, input as a 3D array
@@ -81,23 +86,24 @@ with the same shape as the fields in Grids.</p>
 with the same shape as the fields in Grids.</p>
 </dd>
 <dt><strong>vel_name: string</strong></dt>
-<dd><p class="first last">Name of radial velocity field. None will attempt to autodetect the
-velocity field name.</p>
+<dd><p class="first last">Name of radial velocity field. Setting to None will have PyDDA attempt
+to automatically detect the velocity field name.</p>
 </dd>
 <dt><strong>refl_field: string</strong></dt>
-<dd><p class="first last">Name of reflectivity field. None will attempt to autodetect the
-reflectivity field name.</p>
+<dd><p class="first last">Name of reflectivity field. Setting to None will have PyDDA attempt 
+to automatically detect the reflectivity field name.</p>
 </dd>
 <dt><strong>u_back: 1D array</strong></dt>
 <dd><p class="first last">Background zonal wind field from a sounding as a function of height.
-This should be given in the original coordinates.</p>
+This should be given in the sounding’s vertical coordinates.</p>
 </dd>
 <dt><strong>v_back: 1D array</strong></dt>
 <dd><p class="first last">Background meridional wind field from a sounding as a function of
-height. This should be given in the original coordinates.</p>
+height. This should be given in the sounding’s vertical coordinates.</p>
 </dd>
 <dt><strong>z_back: 1D array</strong></dt>
-<dd><p class="first last">Heights corresponding to background wind field levels in meters.</p>
+<dd><p class="first last">Heights corresponding to background wind field levels in meters. This
+is given in the sounding’s original coordinates.</p>
 </dd>
 <dt><strong>frz: float</strong></dt>
 <dd><p class="first last">Freezing level used for fall speed calculation in meters.</p>
@@ -121,14 +127,14 @@ height. This should be given in the original coordinates.</p>
 <dd><p class="first last">Weight for cost function related to vertical vorticity equation.</p>
 </dd>
 <dt><strong>Cmod: float</strong></dt>
-<dd><p class="first last">Weight for cost function related to vertical vorticity equation.</p>
+<dd><p class="first last">Weight for cost function related to custom constraints.</p>
 </dd>
 <dt><strong>weights_obs: list of floating point arrays or None</strong></dt>
 <dd><p class="first last">List of weights for each point in grid from each radar in Grids.
 Set to None to let PyDDA determine this automatically.</p>
 </dd>
 <dt><strong>weights_model: list of floating point arrays or None</strong></dt>
-<dd><p class="first last">List of weights for each point in grid from each model in
+<dd><p class="first last">List of weights for each point in grid from each custom field in
 model_fields. Set to None to let PyDDA determine this automatically.</p>
 </dd>
 <dt><strong>weights_bg: list of floating point arrays or None</strong></dt>
@@ -184,7 +190,7 @@ typical value used in many publications.</p>
 commonly called the impermeability condition.</p>
 </dd>
 <dt><strong>model_fields: list of strings</strong></dt>
-<dd><p class="first last">The list of fields in the first grid in Grids that contain the model
+<dd><p class="first last">The list of fields in the first grid in Grids that contain the custom
 data interpolated to the Grid’s grid specification. Helper functions
 to create such gridded fields for HRRR and NetCDF WRF data exist
 in ::pydda.constraints::. PyDDA will look for fields named U_(model
@@ -269,7 +275,7 @@ are displayable by the visualization module.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.3.
     </div>
   </body>
 </html>

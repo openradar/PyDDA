@@ -32,7 +32,7 @@ u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
 
-pydda.vis.plot_horiz_xsection_streamlines_map(
+pydda.vis.plot_horiz_xsection_quiver_map(
     [berr_grid, cpol_grid], ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
 plt.show()
 
@@ -55,6 +55,6 @@ new_grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid],
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
 
-pydda.vis.plot_horiz_xsection_streamlines_map(
+pydda.vis.plot_horiz_xsection_quiver_map(
     new_grids, ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
 plt.show()
