@@ -1,5 +1,5 @@
 # PyDDA (Pythonic Direct Data Assimilation)
-![alt text](https://github.com/rcjackson/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
+![alt text](https://github.com/openradar/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
@@ -32,12 +32,20 @@ Right now this has been tested on and depends on:
     numpy 1.13.1
     
     matplotlib 1.5.3
+    
+    cartopy 0.15.1
+    
+In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
+    pip install cfgrib
+    
+=======
 ## Links to important documentation
 
 1. [Examples](http://openradarscience.org/PyDDA/source/auto_examples/plot_examples.html)
 2. [Developer reference guide](http://openradarscience.org/PyDDA/dev_reference/index.html)
 3. [Contributor's guide](https://openradarscience.org/PyDDA/contributors_guide/index.html)
+
 
 ## Installation instructions
 The best way to install PyDDA is by using pip. Soon PyDDA will be in conda-forge (see [openradar/PyDDA#18](https://github.com/openradar/PyDDA/issues/18)), allowing for installation using anaconda. 
@@ -55,6 +63,7 @@ cd PyDDA
 python setup.py install
 ```
 
+=======
 ## Acknowledgments
 Core components of the software are adopted from the [Multidop](https://github.com/nasa/MultiDop) package by converting the C code to Python. 
 
@@ -65,6 +74,7 @@ The development of this software is supported by the Climate Model Development a
 We have a set of goals that we wish to accomplish using PyDDA, including the assimilation of data from various models in the retrieval,
 improved visualizations, use of radar data in antenna coordinates, and improved documentation. For more details on what contributions
 would be useful to acheiving these goals, see the [PyDDA Roadmap](https://github.com/openradar/ROADMAP.md).
+=======
 
 ## References
 You must cite these papers if you use PyDDA:

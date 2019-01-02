@@ -1,8 +1,14 @@
 set -e
 
-cd "$TRAVIS_BUILD_DIR"
-
 echo "Building Docs"
-conda install -q sphinx pillow
+conda install -c conda-forge -q sphinx doctr
+conda install numpydoc
+pip install sphinx_gallery
+cd doc
+make clean
+make html
+cd ..
+doctr deploy .
+
 
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Mon Aug  7 09:17:40 2017
 
@@ -19,52 +17,66 @@ from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
 from matplotlib import pyplot as plt
 from copy import deepcopy
-
 from .angles import add_azimuth_as_field, add_elevation_as_field
-
-num_evaluations = 0
 
 
 def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
                       frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
-                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Ut=None, Vt=None,
-                      filt_iterations=2, mask_outside_opt=False, 
-                      max_iterations=200, mask_w_outside_opt=True, 
-                      filter_window=9, filter_order=4, min_bca=30.0, 
-                      max_bca=150.0, upper_bc=True):
+                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Cmod=0.0,
+                      Ut=None, Vt=None, filt_iterations=2,
+                      mask_outside_opt=False, weights_obs=None,
+                      weights_model=None, weights_bg=None,
+                      max_iterations=200, mask_w_outside_opt=True,
+                      filter_window=9, filter_order=4, min_bca=30.0,
+                      max_bca=150.0, upper_bc=True, model_fields=None,
+                      output_cost_functions=True):
     """
-    This function takes in a list of Py-ART Grids and derives a wind field.
+    This function takes in a list of Py-ART Grid objects and derives a
+    wind field. Every Py-ART Grid in Grids must have the same grid
+    specification. 
 
-    Every Py-ART Grid in Grids must have the same grid specification.
+    In order for the model data constraint to be used,
+    the model data must be added as a field to at least one of the
+    grids in Grids. This involves interpolating the model data to the
+    Grids' coordinates. There are helper functions for this for WRF
+    and HRRR data in :py:func:`pydda.constraints`:
+
+    :py:func:`make_constraint_from_wrf`
+
+    :py:func:`add_hrrr_constraint_to_grid`
 
     Parameters
     ==========
-    
+
     Grids: list of Py-ART Grids
         The list of Py-ART grids to take in corresponding to each radar.
-        All grids must have the same specification.
+        All grids must have the same shape, x coordinates, y coordinates
+        and z coordinates.
     u_init: 3D ndarray
-        The intial u field, input as a 3D array with the same shape as the
-        fields in Grids.
+        The intial guess for the zonal wind field, input as a 3D array
+        with the same shape as the fields in Grids.
     v_init: 3D ndarray
-        The intial c field, input as a 3D array with the same shape as the
-        fields in Grids.    
+        The intial guess for the meridional wind field, input as a 3D array
+        with the same shape as the fields in Grids.
     w_init: 3D ndarray
-        The intial w field, input as a 3D array with the same shape as the
-        fields in Grids.
+        The intial guess for the vertical wind field, input as a 3D array
+        with the same shape as the fields in Grids.
     vel_name: string
-        Name of radial velocity field. None will attempt to autodetect the 
-        velocity field name.
+        Name of radial velocity field. Setting to None will have PyDDA attempt
+        to automatically detect the velocity field name.
     refl_field: string
-        Name of reflectivity field. None will attempt to autodetect the 
-        reflectivity field name.
+        Name of reflectivity field. Setting to None will have PyDDA attempt 
+        to automatically detect the reflectivity field name.
     u_back: 1D array
-        Background zonal wind field, has same dimensions as z_back
+        Background zonal wind field from a sounding as a function of height.
+        This should be given in the sounding's vertical coordinates.
     v_back: 1D array
-        Background meridional wind field, has same dimensions as z_back
+        Background meridional wind field from a sounding as a function of
+        height. This should be given in the sounding's vertical coordinates.
     z_back: 1D array
-        Heights corresponding to background wind field levels
+        Heights corresponding to background wind field levels in meters. This
+        is given in the sounding's original coordinates.
     frz: float
         Freezing level used for fall speed calculation in meters.
     Co: float
@@ -74,17 +86,30 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     Cx: float
         Weight for cost function related to smoothness in x direction
     Cy: float
-        Weight for cost function related to smoothness in y direction    
+        Weight for cost function related to smoothness in y direction
     Cz: float
-        Weight for cost function related to smoothness in z direction    
+        Weight for cost function related to smoothness in z direction
     Cv: float
         Weight for cost function related to vertical vorticity equation.
+    Cmod: float
+        Weight for cost function related to custom constraints.
+    weights_obs: list of floating point arrays or None
+        List of weights for each point in grid from each radar in Grids.
+        Set to None to let PyDDA determine this automatically.
+    weights_model: list of floating point arrays or None
+        List of weights for each point in grid from each custom field in
+        model_fields. Set to None to let PyDDA determine this automatically.
+    weights_bg: list of floating point arrays or None
+        List of weights for each point in grid from the sounding. Set to None
+        to let PyDDA determine this automatically.
     Ut: float
-        Prescribed storm motion. This is only needed if Cv is not zero.
+        Prescribed storm motion in zonal direction.
+        This is only needed if Cv is not zero.
     Vt: float
-        Prescribed storm motion. This is only needed if Cv is not zero.  
+        Prescribed storm motion in meridional direction.
+        This is only needed if Cv is not zero.
     filt_iterations: int
-        If this is greater than 0, PyDDA will run a low pass filter on 
+        If this is greater than 0, PyDDA will run a low pass filter on
         the retrieved wind field and then do the optimization step for
         filt_iterations iterations. Set to 0 to disable the low pass filter.
     max_outside_opt: bool
@@ -92,17 +117,17 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         be masked, i.e. if less than 2 radars provide coverage for a given
         point.
     max_iterations: int
-        The maximum number of iterations to run the optimization loop for. 
+        The maximum number of iterations to run the optimization loop for.
     max_w_outside_opt: bool
         If set to true, vertical winds outside the multiple doppler lobes will
         be masked, i.e. if less than 2 radars provide coverage for a given
-        point.    
+        point.
     filter_window: int
-        Window size to use for the low pass filter. A larger window will 
-        increase the number of points factored into the polynomial fit for 
+        Window size to use for the low pass filter. A larger window will
+        increase the number of points factored into the polynomial fit for
         the filter, and hence will increase the smoothness.
     filter_order: int
-        The order of the polynomial to use for the low pass filter. Higher 
+        The order of the polynomial to use for the low pass filter. Higher
         order polynomials allow for the retention of smaller scale features
         but may also not remove enough noise.
     min_bca: float
@@ -110,27 +135,59 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         typical value used in many publications.
     max_bca: float
         Minimum beam crossing angle in degrees between two radars. 150.0 is the
-        typical value used in many publications.    
+        typical value used in many publications.
     upper_bc: bool
         Set this to true to enforce w = 0 at the top of the atmosphere. This is
         commonly called the impermeability condition.
-    
+    model_fields: list of strings
+        The list of fields in the first grid in Grids that contain the custom
+        data interpolated to the Grid's grid specification. Helper functions
+        to create such gridded fields for HRRR and NetCDF WRF data exist
+        in ::pydda.constraints::. PyDDA will look for fields named U_(model
+        field name), V_(model field name), and W_(model field name). For
+        example, if you have U_hrrr, V_hrrr, and W_hrrr, then specify ["hrrr"]
+        into model_fields.
+    output_cost_functions: bool
+        Set to True to output the value of each cost function every
+        10 iterations.
+
     Returns
     =======
     new_grid_list: list
-        A list of Py-ART grids containing the derived wind field. These fields
+        A list of Py-ART grids containing the derived wind fields. These fields
         are displayable by the visualization module.
     """
-    
+
     num_evaluations = 0
-    
-    if(Ut == None or Vt == None):
+
+    # We have to have a prescribed storm motion for vorticity constraint
+    if(Ut is None or Vt is None):
         if(Cv != 0.0):
             raise ValueError(('Ut and Vt cannot be None if vertical ' +
                               'vorticity constraint is enabled!'))
-            
+    
+    # Ensure that all Grids are on the same coordinate system
+    prev_grid = Grids[0]
+    for g in Grids:
+        if not np.allclose(
+            g.x['data'], prev_grid.x['data'], atol=10):
+            raise ValueError('Grids do not have equal x coordinates!')
+
+        if not np.allclose(
+            g.y['data'], prev_grid.y['data'], atol=10):
+            raise ValueError('Grids do not have equal y coordinates!')
+
+        if not np.allclose(
+            g.z['data'], prev_grid.z['data'], atol=10):
+            raise ValueError('Grids do not have equal z coordinates!')
+
+        if not g.origin_latitude['data'] == prev_grid.origin_latitude['data']:
+            raise ValueError(("Grids have unequal origin lat/lons!"))
+
+        prev_grid = g
+
     # Disable background constraint if none provided
-    if(u_back == None or v_back == None):
+    if(u_back is None or v_back is None):
         u_back2 = np.zeros(u_init.shape[0])
         v_back2 = np.zeros(v_init.shape[0])
         C8 = 0.0
@@ -154,81 +211,118 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
 
     # Parse names of velocity field
     if vel_name is None:
-        vel_name = pyart.config.get_field_name('corrected_velocity')    
+        vel_name = pyart.config.get_field_name('corrected_velocity')
     winds = np.stack([u_init, v_init, w_init])
     wts = []
     vrs = []
     azs = []
     els = []
-    
+
     # Set up wind fields and weights from each radar
     weights = np.zeros(
         (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+
     bg_weights = np.zeros(v_init.shape)
+    if(model_fields is not None):
+        mod_weights = np.ones(
+            (len(model_fields), u_init.shape[0], u_init.shape[1],
+             u_init.shape[2]))
+    else:
+        mod_weights = np.zeros(
+            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+
+    if(model_fields is None):
+        if(Cmod != 0.0):
+            raise ValueError(
+                 'Cmod must be zero if model fields are not specified!')
+
     bca = np.zeros(
         (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]))
     M = np.zeros(len(Grids))
     sum_Vr = np.zeros(len(Grids))
 
     for i in range(len(Grids)):
-        wts.append(cost_functions.calculate_fall_speed(Grids[i], 
+        wts.append(cost_functions.calculate_fall_speed(Grids[i],
                                                        refl_field=refl_field))
         add_azimuth_as_field(Grids[i], dz_name=refl_field)
         add_elevation_as_field(Grids[i], dz_name=refl_field)
         vrs.append(Grids[i].fields[vel_name]['data'])
         azs.append(Grids[i].fields['AZ']['data']*np.pi/180)
         els.append(Grids[i].fields['EL']['data']*np.pi/180)
-       
-    if(len(Grids) > 1):    
-        for i in range(len(Grids)):    
+
+    if(len(Grids) > 1):
+        for i in range(len(Grids)):
             for j in range(i+1, len(Grids)):
                 print(("Calculating weights for radars " + str(i) +
                        " and " + str(j)))
-                bca[i,j] = get_bca(Grids[i].radar_longitude['data'],
-                                   Grids[i].radar_latitude['data'],
-                                   Grids[j].radar_longitude['data'],
-                                   Grids[j].radar_latitude['data'],
-                                   Grids[i].point_x['data'][0],
-                                   Grids[i].point_y['data'][0],
-                                   Grids[i].get_projparams())
+                bca[i, j] = get_bca(Grids[i].radar_longitude['data'],
+                                    Grids[i].radar_latitude['data'],
+                                    Grids[j].radar_longitude['data'],
+                                    Grids[j].radar_latitude['data'],
+                                    Grids[i].point_x['data'][0],
+                                    Grids[i].point_y['data'][0],
+                                    Grids[i].get_projparams())
 
                 for k in range(vrs[i].shape[0]):
-                    cur_array = weights[i,k]
-                    cur_array[np.logical_and(
-                        vrs[i][k].mask == False,
-                        np.logical_and(
-                            bca[i,j] >= math.radians(min_bca), 
-                            bca[i,j] <= math.radians(max_bca)))] += 1
-                    weights[i,k] = cur_array
-                    cur_array = weights[j,k]
-                    cur_array[np.logical_and(
-                        vrs[j][k].mask == False,
-                        np.logical_and(
-                            bca[i,j] >= math.radians(min_bca), 
-                            bca[i,j] <= math.radians(max_bca)))] += 1
-                    weights[j,k] = cur_array
-                    cur_array = bg_weights[k]
-                    cur_array[np.logical_or(
-                        bca[i,j] >= math.radians(min_bca),
-                        bca[i,j] <= math.radians(max_bca))] = 1
-                    cur_array[vrs[i][k].mask == True] = 0
-                    bg_weights[i] = cur_array
-    else:
-        weights[0] = np.where(vrs[0].mask == False, 1, 0)
-        bg_weights[0] = np.where(vrs[0].mask == False, 0, 1)
-        
-    weights[weights > 0] = 1            
-    sum_Vr = np.sum(np.square(vrs*weights))
+                    if(weights_obs is None):
+                        cur_array = weights[i, k]
+                        cur_array[np.logical_and(
+                            ~vrs[i][k].mask,
+                            np.logical_and(
+                                bca[i, j] >= math.radians(min_bca),
+                                bca[i, j] <= math.radians(max_bca)))] += 1
+                        weights[i, k] = cur_array
+                    else:
+                        weights[i, k] = weights_obs[i][k, :, :]
 
+                    if(weights_obs is None):
+                        cur_array = weights[j, k]
+                        cur_array[np.logical_and(
+                            ~vrs[j][k].mask,
+                            np.logical_and(
+                                bca[i, j] >= math.radians(min_bca),
+                                bca[i, j] <= math.radians(max_bca)))] += 1
+                        weights[j, k] = cur_array
+                    else:
+                        weights[j, k] = weights_obs[j][k, :, :]
+
+                    if(weights_bg is None):
+                        cur_array = bg_weights[k]
+                        cur_array[np.logical_or(
+                            bca[i, j] >= math.radians(min_bca),
+                            bca[i, j] <= math.radians(max_bca))] = 1
+                        cur_array[vrs[i][k].mask] = 0
+                        bg_weights[i] = cur_array
+                    else:
+                        bg_weights[i] = weights_bg[i]
+
+        print("Calculating weights for models...")
+        coverage_grade = weights.sum(axis=0)
+        coverage_grade = coverage_grade/coverage_grade.max()
+
+        # Weigh in model input more when we have no coverage
+        # Model only weighs 1/(# of grids + 1) when there is full
+        # Coverage
+        if(model_fields is not None):
+            if(weights_model is None):
+                for i in range(len(model_fields)):
+                    mod_weights[i] = 1 - (coverage_grade/(len(Grids)+1))
+            else:
+                for i in range(len(model_fields)):
+                    mod_weights[i] = weights_model[i]
+    else:
+        weights[0] = np.where(~vrs[0].mask, 1, 0)
+        bg_weights[0] = np.where(~vrs[0].mask, 0, 1)
+
+    weights[weights > 0] = 1
+    sum_Vr = np.sum(np.square(vrs*weights))
     rmsVr = np.sum(sum_Vr)/np.sum(weights)
-    
+
     del bca
     grid_shape = u_init.shape
     # Parse names of velocity field
 
     winds = winds.flatten()
-    #ones = np.ones(winds.shape)
-
     ndims = len(winds)
 
     print(("Starting solver "))
@@ -236,12 +330,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     dy = np.diff(Grids[0].y['data'], axis=0)[0]
     dz = np.diff(Grids[0].z['data'], axis=0)[0]
     print('rmsVR = ' + str(rmsVr))
-    print('Total points:' +str(weights.sum()))
+    print('Total points:' + str(weights.sum()))
     z = Grids[0].point_z['data']
 
     the_time = time.time()
     bt = time.time()
-    
+
     # First pass - no filter
     wcurr = w_init
     wprev = 100*np.ones(w_init.shape)
@@ -250,49 +344,63 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     iterations = 0
     warnflag = 99999
     coeff_max = np.max([Co, Cb, Cm, Cx, Cy, Cz, Cb])
-    bounds = [(-x,x) for x in 100*np.ones(winds.shape)]
-    while(iterations < max_iterations and 
+    bounds = [(-x, x) for x in 100*np.ones(winds.shape)]
+
+    u_model = []
+    v_model = []
+    w_model = []
+    if(model_fields is not None):
+        for the_field in model_fields:
+            u_field = ("U_" + the_field)
+            v_field = ("V_" + the_field)
+            w_field = ("W_" + the_field)
+            u_model.append(Grids[0].fields[u_field]["data"])
+            v_model.append(Grids[0].fields[v_field]["data"])
+            w_model.append(Grids[0].fields[w_field]["data"])
+
+    while(iterations < max_iterations and
           (abs(wprevmax-wcurrmax) > 0.02)):
         wprevmax = wcurrmax
-        winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els, 
+        winds = fmin_l_bfgs_b(J_function, winds, args=(vrs, azs, els,
                                                        wts, u_back, v_back,
+                                                       u_model, v_model,
+                                                       w_model,
                                                        Co, Cm, Cx, Cy, Cz, Cb,
-                                                       Cv, Ut, Vt,
-                                                       grid_shape,  
-                                                       dx, dy, dz, z, rmsVr, 
+                                                       Cv, Cmod, Ut, Vt,
+                                                       grid_shape,
+                                                       dx, dy, dz, z, rmsVr,
                                                        weights, bg_weights,
-                                                       upper_bc),
-                                maxiter=10, pgtol=1e-3, bounds=bounds, 
-                                fprime=grad_J, disp=1, iprint=-1)
-        
-
-        # Print out cost function values after 10 iterations
-        J = J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
-                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,  
-                       dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
-                       print_out=True)
-        J = grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
-                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Ut, Vt, grid_shape,  
-                   dx, dy, dz, z, rmsVr, weights, bg_weights, upper_bc=True,
-                   print_out=True)
-        
+                                                       mod_weights,
+                                                       upper_bc,
+                                                       False),
+                              maxiter=10, pgtol=1e-3, bounds=bounds,
+                              fprime=grad_J, disp=0, iprint=-1)
+        if(output_cost_functions is True):
+            J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
+                       u_model, v_model, w_model,
+                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
+                       grid_shape, dx, dy, dz, z, rmsVr,
+                       weights, bg_weights, mod_weights,
+                       upper_bc, True)
+            grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
+                   u_model, v_model, w_model,
+                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
+                   grid_shape, dx, dy, dz, z, rmsVr,
+                   weights, bg_weights, mod_weights,
+                   upper_bc, True)
         warnflag = winds[2]['warnflag']
-        
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
-                                           grid_shape[2]))
+                                      grid_shape[2]))
         iterations = iterations+10
         print('Iterations before filter: ' + str(iterations))
-        
         wcurrmax = winds[2].max()
-        
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
-        
     if(filt_iterations > 0):
         print('Applying low pass filter to wind field...')
         winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
-                                           grid_shape[2]))
+                                   grid_shape[2]))
         winds[0] = savgol_filter(winds[0], 9, 3, axis=0)
         winds[0] = savgol_filter(winds[0], 9, 3, axis=1)
         winds[0] = savgol_filter(winds[0], 9, 3, axis=2)
@@ -301,46 +409,53 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         winds[1] = savgol_filter(winds[1], 9, 3, axis=2)
         winds[2] = savgol_filter(winds[2], 9, 3, axis=0)
         winds[2] = savgol_filter(winds[2], 9, 3, axis=1)
-        winds[2] = savgol_filter(winds[2], 9, 3, axis=2)  
-        
+        winds[2] = savgol_filter(winds[2], 9, 3, axis=2)
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
         iterations = 0
         while(iterations < filt_iterations):
             winds = fmin_l_bfgs_b(
-               J_function, winds, args=(
-                   vrs, azs, els, wts, u_back, v_back, Co, Cm, Cx, Cy, Cz, Cb,
-                   Cv, Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, weights, 
-                   bg_weights,upper_bc),
-               maxiter=10, pgtol=1e-3, bounds=bounds, 
-               fprime=grad_J, disp=1, iprint=-1)
+                J_function, winds, args=(vrs, azs, els,
+                                         wts, u_back, v_back,
+                                         u_model, v_model, w_model,
+                                         Co, Cm, Cx, Cy, Cz, Cb,
+                                         Cv, Cmod, Ut, Vt,
+                                         grid_shape,
+                                         dx, dy, dz, z, rmsVr,
+                                         weights, bg_weights,
+                                         mod_weights,
+                                         upper_bc,
+                                         False),
+                maxiter=10, pgtol=1e-3, bounds=bounds,
+                fprime=grad_J, disp=0, iprint=-1)
 
             warnflag = winds[2]['warnflag']
-        
             winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
-                                             grid_shape[2]))
+                                          grid_shape[2]))
             iterations = iterations+1
             print('Iterations after filter: ' + str(iterations))
-                
             winds = np.stack([winds[0], winds[1], winds[2]])
             winds = winds.flatten()
-            
     print("Done! Time = " + "{:2.1f}".format(time.time() - bt))
 
     # First pass - no filter
-
     the_winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
-                                       grid_shape[2]))
+                                   grid_shape[2]))
     u = the_winds[0]
     v = the_winds[1]
     w = the_winds[2]
+    where_mask = np.sum(weights, axis=0) + np.sum(mod_weights, axis=0)
+    
+    u = np.ma.array(u)
+    w = np.ma.array(w)
+    v = np.ma.array(v)
 
-    where_mask = np.sum(weights, axis=0)
-    if(mask_outside_opt==True):
+    if(mask_outside_opt is True):
         u = np.ma.masked_where(where_mask < 1, u)
         v = np.ma.masked_where(where_mask < 1, v)
         w = np.ma.masked_where(where_mask < 1, w)
-    if(mask_w_outside_opt==True):
+
+    if(mask_w_outside_opt is True):
         w = np.ma.masked_where(where_mask < 1, w)
 
     u_field = deepcopy(Grids[0].fields[vel_name])
@@ -352,196 +467,29 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     v_field = deepcopy(Grids[0].fields[vel_name])
     v_field['data'] = v
     v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity' 
+    v_field['long_name'] = 'zonal component of wind velocity'
     v_field['min_bca'] = min_bca
     v_field['max_bca'] = max_bca
     w_field = deepcopy(Grids[0].fields[vel_name])
     w_field['data'] = w
     w_field['standard_name'] = 'w_wind'
-    w_field['long_name'] = 'vertical component of wind velocity' 
+    w_field['long_name'] = 'vertical component of wind velocity'
     w_field['min_bca'] = min_bca
     w_field['max_bca'] = max_bca
 
-    
     new_grid_list = []
-    
+
     for grid in Grids:
         temp_grid = deepcopy(grid)
         temp_grid.add_field('u', u_field, replace_existing=True)
         temp_grid.add_field('v', v_field, replace_existing=True)
         temp_grid.add_field('w', w_field, replace_existing=True)
-        
         new_grid_list.append(temp_grid)
-        
+
     return new_grid_list
 
 
-""" Makes a initialization wind field that is a constant everywhere"""
-def make_constant_wind_field(Grid, wind=(0.0,0.0,0.0), vel_field=None):
-    """
-    This function makes a constant wind field given a wind vector.
-
-    This function is useful for specifying the intialization arrays
-    for get_dd_wind_field. 
-
-    Parameters
-    ==========
-
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the analysis 
-        grid.
-    wind: 3-tuple of floats
-        The 3-tuple specifying the (u,v,w) of the wind field.
-    vel_field: String
-        The name of the velocity field. None will automatically
-        try to detect this field.
-
-    Returns
-    =======
-
-    u: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    v: 3D float array 
-        Returns a 3D float array containing the v component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    w: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    """
-    # Parse names of velocity field
-    if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
-
-    u = wind[0]*np.ones(analysis_grid_shape)
-    v = wind[1]*np.ones(analysis_grid_shape)
-    w = wind[2]*np.ones(analysis_grid_shape)
-    u = np.ma.filled(u, 0)
-    v = np.ma.filled(v, 0)
-    w = np.ma.filled(w, 0)
-    return u, v, w
-
-
-def make_wind_field_from_profile(Grid, profile, vel_field=None):
-    """
-    This function makes a 3D wind field from a sounding. 
-
-    This function is useful for using sounding data as an initialization
-    for get_dd_wind_field.
-
-    Parameters
-    ==========
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the analysis 
-        grid.
-    profile: Py-ART HorizontalWindProfile
-        This is the horizontal wind profile from the sounding
-    wind: 3-tuple of floats
-        The 3-tuple specifying the (u,v,w) of the wind field.
-    vel_field: String
-        The name of the velocity field in Grid. None will automatically
-        try to detect this field.
-
-    Returns
-    =======
-
-    u: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    v: 3D float array 
-        Returns a 3D float array containing the v component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    w: 3D float array 
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-        """
-    # Parse names of velocity field
-    if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
-    u = np.ones(analysis_grid_shape)
-    v = np.ones(analysis_grid_shape)
-    w = np.zeros(analysis_grid_shape)
-    u_back = profile[1].u_wind
-    v_back = profile[1].v_wind
-    z_back = profile[1].height
-    u_interp = interp1d(
-        z_back, u_back, bounds_error=False, fill_value='extrapolate')
-    v_interp = interp1d(
-        z_back, v_back, bounds_error=False, fill_value='extrapolate')
-    u_back2 = u_interp(Grid.z['data'])
-    v_back2 = v_interp(Grid.z['data'])
-    for i in range(analysis_grid_shape[0]):
-        u[i] = u_back2[i]
-        v[i] = v_back2[i]
-    u = np.ma.filled(u, 0)
-    v = np.ma.filled(v, 0)
-    w = np.ma.filled(w, 0)
-    return u, v, w
-
-
-""" Makes a test wind field that converges at center near ground and
-    Diverges aloft at center """
-def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
-                               back_u, back_v, x_center, y_center):
-    """
-    This function makes a test field with wind convergence at the surface
-    and divergence aloft.
-
-    This function makes a useful test for the mass continuity equation.
-
-    Parameters
-    ----------
-    Grid: Py-ART Grid object
-        This is the Py-ART Grid containing the coordinates for the analysis 
-        grid.
-    wind_vel: float
-        The maximum wind velocity.
-    z_ground: float 
-        The bottom height where the maximum convergence occurs
-    z_top: float
-        The height where the maximum divergence occurrs
-    back_u: float
-        The u component of the wind outside of the area of convergence.
-    back_v: float
-        The v component of the wind outside of the area of convergence.
-    x_center: float
-        The X-coordinate of the center of the area of convergence in the 
-        Grid's coordinates.
-    y_center: float
-        The Y-coordinate of the center of the area of convergence in the 
-        Grid's coordinates.
-    
- 
-    Returns
-    -------
-    u_init, v_init, w_init: ndarrays of floats
-         Initial U, V, W field
-    """
-    
-    x = Grid.point_x['data']
-    y = Grid.point_y['data']
-    z = Grid.point_z['data']
-    
-    
-    theta = np.arctan2(x-x_center, y-y_center)
-    phi = np.pi*((z-z_ground)/(z_top-z_ground))
-    r = np.sqrt(np.square(x-x_center) + np.square(y-y_center))
-    
-    u = wind_vel*(r/radius)**2*np.cos(phi)*np.sin(theta)*np.ones(x.shape)
-    v = wind_vel*(r/radius)**2*np.cos(phi)*np.cos(theta)*np.ones(x.shape)
-    w = np.zeros(x.shape)
-    u[r > radius] = back_u
-    v[r > radius] = back_v
-    return u,v,w
-
-
-# Gets beam crossing angle over 2D grid centered over Radar 1.
-# grid_x, grid_y are cartesian coordinates from pyproj.Proj (or basemap)
-def get_bca(rad1_lon, rad1_lat,
-            rad2_lon, rad2_lat,
-            x, y, projparams):
+def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
     """
     This function gets the beam crossing angle between two lat/lon pairs.
 
@@ -550,15 +498,15 @@ def get_bca(rad1_lon, rad1_lat,
     rad1_lon: float
         The longitude of the first radar.
     rad1_lat: float
-        The latitude of the first radar. 
+        The latitude of the first radar.
     rad2_lon: float
         The longitude of the second radar.
     rad2_lat: float
-        The latitude of the second radar. 
+        The latitude of the second radar.
     x: nD float array
-        The x coordinates of the grid
+        The Cartesian x coordinates of the grid
     y: nD float array
-        The y corrdinates of the grid
+        The Cartesian y corrdinates of the grid
     projparams: Py-ART projparams
         The projection parameters of the Grid
 
@@ -568,7 +516,7 @@ def get_bca(rad1_lon, rad1_lat,
         The beam crossing angle between the two radars in radians.
 
     """
- 
+
     rad1 = pyart.core.geographic_to_cartesian(rad1_lon, rad1_lat, projparams)
     rad2 = pyart.core.geographic_to_cartesian(rad2_lon, rad2_lat, projparams)
     # Create grid with Radar 1 in center
@@ -576,12 +524,9 @@ def get_bca(rad1_lon, rad1_lat,
     x = x-rad1[0]
     y = y-rad1[1]
     rad2 = np.array(rad2) - np.array(rad1)
-    a = np.sqrt(np.multiply(x,x)+np.multiply(y,y))
-    b = np.sqrt(pow(x-rad2[0],2)+pow(y-rad2[1],2))
-    c = np.sqrt(rad2[0]*rad2[0]+rad2[1]*rad2[1])
+    a = np.sqrt(np.multiply(x, x) + np.multiply(y, y))
+    b = np.sqrt(pow(x-rad2[0], 2) + pow(y-rad2[1], 2))
+    c = np.sqrt(rad2[0]*rad2[0] + rad2[1]*rad2[1])
     theta_1 = np.arccos(x/a)
     theta_2 = np.arccos((x-rad2[1])/b)
     return np.arccos((a*a+b*b-c*c)/(2*a*b))
-
-
-

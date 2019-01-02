@@ -13,3 +13,5 @@ dependencies:
   - pytest-cov
   - cartopy
   - arm_pyart
+  - eccodes
+
