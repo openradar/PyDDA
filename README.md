@@ -55,6 +55,12 @@ If you are using PyDDA as an end user, type the following in a bash shell:
 pip install pydda
 ```
 
+Or, if you have Anaconda, you can install using:
+
+```
+conda install -c conda-forge pydda
+```
+
 Installing from source is recommended if you want to use the latest features and want to make contributions to PyDDA. In 
 order to install from source, in a bash shell or the Anaconda prompt if you are in Windows, type the following:
 ```
