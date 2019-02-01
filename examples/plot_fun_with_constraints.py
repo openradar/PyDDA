@@ -19,8 +19,8 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
 
-berr_grid = pyart.io.read_grid(pydda.tests.BERR_GRID)
-cpol_grid = pyart.io.read_grid(pydda.tests.CPOL_GRID)
+berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
 
 # Load our radar data
 sounding = pyart.io.read_arm_sonde(
