@@ -44,8 +44,8 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    LocalCluster('tcp://127.0.0.1:45981', workers=2, ncores=2)
-    <Client: scheduler='tcp://127.0.0.1:45981' processes=2 cores=2>
+    LocalCluster('tcp://127.0.0.1:37865', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:37865' processes=2 cores=2>
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -57,24 +57,24 @@ Author: Robert C. Jackson
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.5992|   8.6141|   0.0000|   0.0000|   0.0000|   0.0000|  16.9684
-    Norm of gradient: 0.004589229677191619
+    Norm of gradient: 0.004589229677184497
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.2731|   7.3230|   0.0000|   0.0000|   0.0000|   0.0000|  21.0678
-    Norm of gradient: 0.006801944015817069
+    Norm of gradient: 0.006801944015797411
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.1906|   7.3313|   0.0000|   0.0000|   0.0000|   0.0000|  21.4644
-    Norm of gradient: 0.0031846832879500867
+    Norm of gradient: 0.003184683287950105
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.1906|   7.3313|   0.0000|   0.0000|   0.0000|   0.0000|  21.4644
-    Norm of gradient: 0.0031846832879500867
+    Norm of gradient: 0.003184683287950105
     Iterations before filter: 50
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 31.4
+    Done! Time = 34.5
     Waiting for nested grid to be retrieved...
 
 
@@ -143,7 +143,7 @@ Author: Robert C. Jackson
                                          barb_spacing_z_km=2.0)
         plt.show()
 
-**Total running time of the script:** ( 2 minutes  9.259 seconds)
+**Total running time of the script:** ( 2 minutes  23.802 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
