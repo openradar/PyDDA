@@ -35,6 +35,10 @@ Right now this has been tested on and depends on:
     
     cartopy 0.15.1
     
+    dask 0.17.1
+    
+    distributed 1.21.2
+    
 In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
     pip install cfgrib
@@ -48,7 +52,7 @@ In addition, in order to use the capability to load HRRR data as a constraint, t
 
 
 ## Installation instructions
-The best way to install PyDDA is by using pip. Soon PyDDA will be in conda-forge (see [openradar/PyDDA#18](https://github.com/openradar/PyDDA/issues/18)), allowing for installation using anaconda. 
+The best way to install PyDDA is by using pip.  
 If you are using PyDDA as an end user, type the following in a bash shell:
 
 ```
