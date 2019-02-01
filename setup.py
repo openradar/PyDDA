@@ -63,7 +63,7 @@ def setup_package():
         platforms=PLATFORMS,
         include_package_data=True,
         install_requires=['matplotlib', 'cartopy>=0.16.0', 
-                          'arm_pyart',
+                          'arm_pyart', 'dask', 'distributed',
                           'scipy', 'numpy'],
         packages=find_packages(exclude=['contrib', 'docs', 
                                        'tests', 'examples']),

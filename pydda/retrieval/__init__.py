@@ -16,9 +16,11 @@ how to call these functions.
     :toctree: generated/
 
     get_dd_wind_field
+    get_dd_wind_field_nested
     get_bca
 
 """
 
 from .wind_retrieve import get_dd_wind_field
 from .wind_retrieve import get_bca
+from .nesting import get_dd_wind_field_nested

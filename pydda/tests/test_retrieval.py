@@ -10,6 +10,7 @@ import pydda
 import pyart
 import numpy as np
 
+from distributed import Client, LocalCluster
 
 def test_make_updraft_from_convergence_field():
     """ Do we have an updraft in a region of convergence and divergence? """
@@ -72,6 +73,30 @@ def test_twpice_case():
     assert u_mean > 0
     assert v_mean < 0
     assert w_max > 10
+    
+    # Now we will test the nesting. Do the same retrieval, and make sure
+    # that we get the same result within a prescribed tolerance
+    cluster = LocalCluster(n_workers=2, processes=True)
+    client = Client(cluster)
+    Grids2 = pydda.retrieval.get_dd_wind_field_nested([Grid0, Grid1], 
+                                              u_init, v_init,
+                                              w_init, client, Co=100, Cm=1500.0,
+                                              Cz=0, Cmod=0.0, vel_name='VT',
+                                              refl_field='DT', frz=5000.0,
+                                              filt_iterations=0,
+                                              mask_outside_opt=True,
+                                              upper_bc=1)
+
+    # Make sure features are correlated between both versions. No reason
+    # to expect the same answer, but features should be correlated
+    # Nesting tends to make the updrafts a bit better resolved, so expect
+    # less of an outright correlation (but still strong)
+    assert np.corrcoef(Grids2[0].fields["u"]["data"].flatten(), 
+        Grids[0].fields["u"]["data"].flatten())[0,1] > 0.9
+    assert np.corrcoef(Grids2[0].fields["v"]["data"].flatten(),
+        Grids[0].fields["v"]["data"].flatten())[0,1] > 0.9
+    assert np.corrcoef(Grids2[0].fields["w"]["data"].flatten(),
+        Grids[0].fields["w"]["data"].flatten())[0,1] > 0.7
 
 
 def test_smoothing():
