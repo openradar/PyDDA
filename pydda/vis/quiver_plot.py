@@ -161,7 +161,8 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
                   grid_y[level, ::quiver_density_y, ::quiver_density_x],
                   u[level, ::quiver_density_y, ::quiver_density_x],
                   v[level, ::quiver_density_y, ::quiver_density_x],
-                  color='k', scale=20.0, scale_units='width')
+                  color='k', scale=25.0*quiverkey_len, 
+                  scale_units='width')
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',
                    'variant': 'normal',
@@ -417,6 +418,7 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
                   u[level, ::quiver_density_y, ::quiver_density_x],
                   v[level, ::quiver_density_y, ::quiver_density_x],
                   transform=transform)
+
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',
                    'variant': 'normal',
@@ -687,7 +689,7 @@ def plot_xz_xsection_quiver(Grids, ax=None,
                   grid_h[::quiver_density_z, level, ::quiver_density_x], 
                   u[::quiver_density_z, level, ::quiver_density_x],
                   w[::quiver_density_z, level, ::quiver_density_x], 
-                  color='k')
+                  color='k', scale=25.0*quiverkey_len, scale_units='width')
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',
                    'variant': 'normal',
@@ -896,7 +898,8 @@ def plot_yz_xsection_quiver(Grids, ax=None,
                   grid_h[::quiver_density_z, ::quiver_density_y, level],
                   v[::quiver_density_z, ::quiver_density_y, level],
                   w[::quiver_density_z, ::quiver_density_y, level],
-                  color='k', cmap='coolwarm')
+                  color='k', cmap='coolwarm',
+                  scale=25.0*quiverkey_len, scale_units='width')
 
     quiver_font = {'family': 'sans-serif', 
                    'style': 'normal',

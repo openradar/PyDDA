@@ -41,7 +41,7 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 LICENSE = 'BSD'
 PLATFORMS = "Linux, Windows, OSX"
 MAJOR = 0
-MINOR = 2
+MINOR = 3
 MICRO = 0
 #SCRIPTS = glob.glob('scripts/*')
 #TEST_SUITE = 'nose.collector'
@@ -63,7 +63,7 @@ def setup_package():
         platforms=PLATFORMS,
         include_package_data=True,
         install_requires=['matplotlib', 'cartopy>=0.16.0', 
-                          'arm_pyart',
+                          'arm_pyart', 'dask', 'distributed',
                           'scipy', 'numpy'],
         packages=find_packages(exclude=['contrib', 'docs', 
                                        'tests', 'examples']),
