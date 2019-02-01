@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pydda.cost_functions.calculate_fall_speed &#8212; PyDDA 0.3.0 documentation</title>
+    <title>pydda.retrieval.get_dd_wind_field_nested &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -20,8 +20,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pydda.retrieval.get_dd_wind_field" href="pydda.retrieval.get_dd_wind_field.html" />
-    <link rel="prev" title="pydda.cost_functions.calculate_model_gradient" href="pydda.cost_functions.calculate_model_gradient.html" /> 
+    <link rel="next" title="pydda.retrieval.get_bca" href="pydda.retrieval.get_bca.html" />
+    <link rel="prev" title="pydda.retrieval.get_dd_wind_field" href="pydda.retrieval.get_dd_wind_field.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -33,10 +33,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pydda.retrieval.get_dd_wind_field.html" title="pydda.retrieval.get_dd_wind_field"
+          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pydda.cost_functions.calculate_model_gradient.html" title="pydda.cost_functions.calculate_model_gradient"
+          <a href="pydda.retrieval.get_dd_wind_field.html" title="pydda.retrieval.get_dd_wind_field"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
@@ -48,34 +48,60 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pydda-cost-functions-calculate-fall-speed">
-<h1>pydda.cost_functions.calculate_fall_speed<a class="headerlink" href="#pydda-cost-functions-calculate-fall-speed" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pydda-retrieval-get-dd-wind-field-nested">
+<h1>pydda.retrieval.get_dd_wind_field_nested<a class="headerlink" href="#pydda-retrieval-get-dd-wind-field-nested" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pydda.cost_functions.calculate_fall_speed">
-<code class="descclassname">pydda.cost_functions.</code><code class="descname">calculate_fall_speed</code><span class="sig-paren">(</span><em>grid</em>, <em>refl_field=None</em>, <em>frz=4500.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#calculate_fall_speed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.cost_functions.calculate_fall_speed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimates fall speed based on reflectivity.</p>
-<p>Uses methodology of Mike Biggerstaff and Dan Betten</p>
+<dt id="pydda.retrieval.get_dd_wind_field_nested">
+<code class="descclassname">pydda.retrieval.</code><code class="descname">get_dd_wind_field_nested</code><span class="sig-paren">(</span><em>grid_list</em>, <em>u_init</em>, <em>v_init</em>, <em>w_init</em>, <em>client</em>, <em>reduction_factor=2</em>, <em>num_splits=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/nesting.html#get_dd_wind_field_nested"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field_nested" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function performs a wind retrieval using a nested domain.
+This is useful for grids that are larger than about 500 by 500
+by 40 points, since the use of larger grids on a single machine
+will exceed memory limitations.</p>
+<p>This procedure relies on a dask distributed cluster to be set up.
+The retrieval is first performed at a resolution that is coarser
+than the analysis grid by reduction_factor. This provides the
+initial state for the nested loop.</p>
+<p>The domain is split into num_splits**2 sub-domains for the nested
+retrieval step, and each nested retrieval is mapped onto a distributed
+worker for parallel processing. If NumPy and SciPy are already set up to
+use parallel numerical analysis libraries, it is recommended that a single
+machine be dedicated to each nest rather than a single core
+for best peformance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>Grid: Py-ART Grid</strong></dt>
-<dd><p class="first last">Py-ART Grid containing reflectivity to calculate fall speed from</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>grid_list: list</strong></dt>
+<dd><p class="first last">A list of Py-ART grids for each radar to use in the retrieval.</p>
 </dd>
-<dt><strong>refl_field: str</strong></dt>
-<dd><p class="first last">String containing name of reflectivity field. None will automatically
-determine the name.</p>
+<dt><strong>u_init: 3D NumPy array</strong></dt>
+<dd><p class="first last">The initial guess of the zonal wind field. This has to be in the same
+shape as the analysis grid.</p>
 </dd>
-<dt><strong>frz: float</strong></dt>
-<dd><p class="first last">Height of freezing level in m</p>
+<dt><strong>v_init: 3D NumPy array</strong></dt>
+<dd><p class="first last">The initial guess of the meridional wind field. This has to be in the
+same shape as the analysis grid.</p>
 </dd>
-</dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>3D float array:</strong></dt>
-<dd><p class="first last">Float array of terminal velocities</p>
+<dt><strong>w_init: 3D NumPy array</strong></dt>
+<dd><p class="first last">The initial guess of the vertical wind field. This has to be in the same
+shape as the analysis grid.</p>
+</dd>
+<dt><strong>client: dask distributed Client</strong></dt>
+<dd><p class="first last">The distributed Client that is linked to a distributed cluster. The
+:cluster must be running before get_dd_wind_field_nested is called.
+The retrieval on each nest will be mapped onto each worker. Since
+the optimization loop already takes advantage of parallelism, it’s
+best to allow at least 16 cores per one worker.</p>
+</dd>
+<dt><strong>reduction_factor: int</strong></dt>
+<dd><p class="first last">How much to reduce the factor of the analysis grid by when doing the
+initial retrieval on the entire grid.</p>
+</dd>
+<dt><strong>**kwargs: dict</strong></dt>
+<dd><p class="first last">This function will take the same keyword arguments as
+get_dd_wind_field, as these arguments are passed into each call of
+get_dd_wind_field. See get_dd_wind_field for more information on the</p>
 </dd>
 </dl>
 </td>
@@ -93,15 +119,15 @@ determine the name.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.cost_functions.calculate_model_gradient.html"
-                        title="previous chapter">pydda.cost_functions.calculate_model_gradient</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="pydda.retrieval.get_dd_wind_field.html"
-                        title="next chapter">pydda.retrieval.get_dd_wind_field</a></p>
+                        title="previous chapter">pydda.retrieval.get_dd_wind_field</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pydda.retrieval.get_bca.html"
+                        title="next chapter">pydda.retrieval.get_bca</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/dev_reference/generated/pydda.cost_functions.calculate_fall_speed.rst.txt"
+      <li><a href="../../_sources/dev_reference/generated/pydda.retrieval.get_dd_wind_field_nested.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -131,10 +157,10 @@ determine the name.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pydda.retrieval.get_dd_wind_field.html" title="pydda.retrieval.get_dd_wind_field"
+          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
              >next</a> |</li>
         <li class="right" >
-          <a href="pydda.cost_functions.calculate_model_gradient.html" title="pydda.cost_functions.calculate_model_gradient"
+          <a href="pydda.retrieval.get_dd_wind_field.html" title="pydda.retrieval.get_dd_wind_field"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 

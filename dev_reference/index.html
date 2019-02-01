@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Developer Reference Manual &#8212; PyDDA 0.2.0 documentation</title>
+    <title>Developer Reference Manual &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pydda.cost_functions.J_function" href="generated/pydda.cost_functions.J_function.html" />
-    <link rel="prev" title="Example on retrieving and plotting winds" href="../source/auto_examples/plot_examples.html" /> 
+    <link rel="prev" title="Example on retrieving and plotting winds on a distributed cluster" href="../source/auto_examples/plot_examples_nested.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -36,9 +36,9 @@
           <a href="generated/pydda.cost_functions.J_function.html" title="pydda.cost_functions.J_function"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../source/auto_examples/plot_examples.html" title="Example on retrieving and plotting winds"
+          <a href="../source/auto_examples/plot_examples_nested.html" title="Example on retrieving and plotting winds on a distributed cluster"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 0.2.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 0.3.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -53,7 +53,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.2.0</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.3.0</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">Feb 01, 2019</td>
 </tr>
@@ -175,7 +175,10 @@ how to call these functions.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field" title="pydda.retrieval.get_dd_wind_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field</span></code></a>(Grids,&nbsp;u_init,&nbsp;v_init,&nbsp;w_init)</td>
 <td>This function takes in a list of Py-ART Grid objects and derives a wind field.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pydda.retrieval.get_bca.html#pydda.retrieval.get_bca" title="pydda.retrieval.get_bca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bca</span></code></a>(rad1_lon,&nbsp;rad1_lat,&nbsp;rad2_lon,&nbsp;…)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field_nested.html#pydda.retrieval.get_dd_wind_field_nested" title="pydda.retrieval.get_dd_wind_field_nested"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field_nested</span></code></a>(grid_list,&nbsp;u_init,&nbsp;…)</td>
+<td>This function performs a wind retrieval using a nested domain.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pydda.retrieval.get_bca.html#pydda.retrieval.get_bca" title="pydda.retrieval.get_bca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bca</span></code></a>(rad1_lon,&nbsp;rad1_lat,&nbsp;rad2_lon,&nbsp;…)</td>
 <td>This function gets the beam crossing angle between two lat/lon pairs.</td>
 </tr>
 </tbody>
@@ -335,8 +338,8 @@ simply add (name) into the model_fields option of
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="../source/auto_examples/plot_examples.html"
-                        title="previous chapter">Example on retrieving and plotting winds</a></p>
+  <p class="topless"><a href="../source/auto_examples/plot_examples_nested.html"
+                        title="previous chapter">Example on retrieving and plotting winds on a distributed cluster</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pydda.cost_functions.J_function.html"
                         title="next chapter">pydda.cost_functions.J_function</a></p>
@@ -376,9 +379,9 @@ simply add (name) into the model_fields option of
           <a href="generated/pydda.cost_functions.J_function.html" title="pydda.cost_functions.J_function"
              >next</a> |</li>
         <li class="right" >
-          <a href="../source/auto_examples/plot_examples.html" title="Example on retrieving and plotting winds"
+          <a href="../source/auto_examples/plot_examples_nested.html" title="Example on retrieving and plotting winds on a distributed cluster"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 0.2.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 0.3.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

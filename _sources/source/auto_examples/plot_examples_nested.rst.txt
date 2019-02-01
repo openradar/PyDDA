@@ -1,0 +1,174 @@
+.. note::
+    :class: sphx-glr-download-link-note
+
+    Click :ref:`here <sphx_glr_download_source_auto_examples_plot_examples_nested.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
+
+.. _sphx_glr_source_auto_examples_plot_examples_nested.py:
+
+
+Example on retrieving and plotting winds on a distributed cluster
+-----------------------------------------------------------------
+
+This is a simple example for how to retrieve winds using the
+nested grid features of PyDDA.
+
+Author: Robert C. Jackson
+
+
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image:: /source/auto_examples/images/sphx_glr_plot_examples_nested_001.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /source/auto_examples/images/sphx_glr_plot_examples_nested_002.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /source/auto_examples/images/sphx_glr_plot_examples_nested_003.png
+            :class: sphx-glr-multi-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    LocalCluster('tcp://127.0.0.1:45981', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:45981' processes=2 cores=2>
+    Calculating weights for radars 0 and 1
+    Calculating weights for models...
+    Starting solver 
+    rmsVR = 40.59066551116966
+    Total points:43041.0
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   1.1885|  15.2068|   0.0000|   0.0000|   0.0000|   0.0000|   6.7568
+    Norm of gradient: 0.003549656136713111
+    Iterations before filter: 10
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.5992|   8.6141|   0.0000|   0.0000|   0.0000|   0.0000|  16.9684
+    Norm of gradient: 0.004589229677191619
+    Iterations before filter: 20
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.2731|   7.3230|   0.0000|   0.0000|   0.0000|   0.0000|  21.0678
+    Norm of gradient: 0.006801944015817069
+    Iterations before filter: 30
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.1906|   7.3313|   0.0000|   0.0000|   0.0000|   0.0000|  21.4644
+    Norm of gradient: 0.0031846832879500867
+    Iterations before filter: 40
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.1906|   7.3313|   0.0000|   0.0000|   0.0000|   0.0000|  21.4644
+    Norm of gradient: 0.0031846832879500867
+    Iterations before filter: 50
+    Applying low pass filter to wind field...
+    Iterations after filter: 1
+    Iterations after filter: 2
+    Done! Time = 31.4
+    Waiting for nested grid to be retrieved...
+
+
+
+
+|
+
+
+.. code-block:: python
+
+
+    import pyart
+    import pydda
+    from matplotlib import pyplot as plt
+    from distributed import LocalCluster, Client
+
+    # Needed so that distributed doesn't run all of your code when the worker 
+    # starts!
+    if __name__ == '__main__':
+
+        berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+        cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+
+        sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
+
+        # Load sounding data and insert as an intialization
+        u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
+            cpol_grid, sounding[1], vel_field='VT')
+
+        # Start our dask distributed cluster. You can use any distributed cluster
+        # for this...a LocalCluster is used here for the sake of being able to run
+        # this example locally.
+        cluster = LocalCluster(n_workers=2)
+        print(cluster)
+        client = Client(cluster)
+        print(client)
+
+        # Start the wind retrieval. This example only uses the mass continuity
+        # and data weighting constraints.
+        Grids = pydda.retrieval.get_dd_wind_field_nested(
+            [berr_grid, cpol_grid], u_init,  v_init, w_init, client, Co=10.0,
+            Cm=1500.0, Cz=0, vel_name='VT', refl_field='DT', frz=5000.0,
+            filt_iterations=2, mask_outside_opt=True, upper_bc=1)
+
+        # Plot a horizontal cross section
+        plt.figure(figsize=(9, 9))
+        pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='DT', level=6,
+                                            w_vel_contours=[3, 6, 9, 12, 15],
+                                            barb_spacing_x_km=5.0,
+                                            barb_spacing_y_km=15.0)
+        plt.show()
+
+        # Plot a vertical X-Z cross section
+        plt.figure(figsize=(9, 9))
+        pydda.vis.plot_xz_xsection_barbs(Grids, background_field='DT', level=40,
+                                         w_vel_contours=[3, 6, 9, 12, 15],
+                                         barb_spacing_x_km=10.0,
+                                         barb_spacing_z_km=2.0)
+        plt.show()
+
+        # Plot a vertical Y-Z cross section
+        plt.figure(figsize=(9, 9))
+        pydda.vis.plot_yz_xsection_barbs(Grids, background_field='DT', level=40,
+                                         w_vel_contours=[3, 6, 9, 12, 15],
+                                         barb_spacing_y_km=10.0,
+                                         barb_spacing_z_km=2.0)
+        plt.show()
+
+**Total running time of the script:** ( 2 minutes  9.259 seconds)
+
+
+.. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: plot_examples_nested.py <plot_examples_nested.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: plot_examples_nested.ipynb <plot_examples_nested.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_
