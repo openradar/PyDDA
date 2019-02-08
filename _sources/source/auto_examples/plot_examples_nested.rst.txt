@@ -44,8 +44,8 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    LocalCluster('tcp://127.0.0.1:45698', workers=2, ncores=2)
-    <Client: scheduler='tcp://127.0.0.1:45698' processes=2 cores=2>
+    LocalCluster('tcp://127.0.0.1:39509', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:39509' processes=2 cores=2>
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -86,7 +86,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 88.4
+    Done! Time = 92.1
     Waiting for nested grid to be retrieved...
 
 
@@ -158,7 +158,7 @@ Author: Robert C. Jackson
                                          barb_spacing_z_km=2.0)
         plt.show()
 
-**Total running time of the script:** ( 4 minutes  4.107 seconds)
+**Total running time of the script:** ( 4 minutes  8.015 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:

@@ -5,11 +5,15 @@ PyDDA Example Gallery
 
 Different examples are given on how to retrieve winds using HRRR and radar data.
 
+Example grid data files for Hurricane Florence are available at:
+
+https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
+
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to retrieve winds in Hurricane Florence. In this example, we use data...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Example script with invalid Python syntax ">
 
 .. only:: html
 
