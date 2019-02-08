@@ -19,8 +19,8 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
 
-berr_grid = pyart.io.read_grid(pydda.tests.BERR_GRID)
-cpol_grid = pyart.io.read_grid(pydda.tests.CPOL_GRID)
+berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
 
 # Load our radar data
 sounding = pyart.io.read_arm_sonde(
@@ -32,14 +32,15 @@ u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
 
-pydda.vis.plot_horiz_xsection_quiver_map(
-    [berr_grid, cpol_grid], ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
+pydda.vis.plot_horiz_xsection_streamlines_map(
+    [cpol_grid, berr_grid], ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
 plt.show()
 
 # Let's see what happens when we use a zero initialization
-new_grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid],
+new_grids = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
                                     u_init, v_init, w_init,
-                                    Co=1.0, Cm=1500.0, frz=5000.0)
+                                    Co=1.0, Cm=1500.0, frz=5000.0,
+                                    mask_outside_opt=True)
 
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
@@ -49,12 +50,13 @@ pydda.vis.plot_horiz_xsection_streamlines_map(
 plt.show()
 
 # Or, let's make the radar data more important!
-new_grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid],
+new_grids = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
                                     u_init, v_init, w_init,
-                                    Co=10.0, Cm=1500.0, frz=5000.0)
+                                    Co=10.0, Cm=1500.0, frz=5000.0,
+                                    mask_outside_opt=True)
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
 
-pydda.vis.plot_horiz_xsection_quiver_map(
+pydda.vis.plot_horiz_xsection_streamlines_map(
     new_grids, ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
 plt.show()
