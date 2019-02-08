@@ -7,19 +7,25 @@
 .. _sphx_glr_source_auto_examples_hurricane_florence.py:
 
 
-Example on integrating radar and HRRR data
-------------------------------------------
+SyntaxError
+===========
 
-This is an example of how to retrieve winds in Hurricane Florence.
-In this example, we use data from 2 NEXRAD radars as well as from
-the HRRR to retrieve the winds.
-
-Author: Robert C. Jackson
+Example script with invalid Python syntax
 
 
 
 .. code-block:: python
 
+    """
+    Example on integrating radar and HRRR data
+    ------------------------------------------
+
+    This is an example of how to retrieve winds in Hurricane Florence.
+    In this example, we use data from 2 NEXRAD radars as well as from
+    the HRRR to retrieve the winds.
+
+    Author: Robert C. Jackson
+    """
 
     import urllib
     import pyart
@@ -31,8 +37,8 @@ Author: Robert C. Jackson
                 'hrrr.t06z.wrfprsf00.grib2')
     urllib.request.urlretrieve(hrrr_url, 'test.grib2')
 
-    grid_mhx = pyart.io.read_grid(pydda.tests.MHX_GRID)
-    grid_ltx = pyart.io.read_grid(pydda.tests.LTX_GRID)
+    grid_mhx = pyart.io.read_grid('mhx_grid.nc')
+    grid_ltx = pyart.io.read_grid('ltx_grid.nc)
 
     grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                              'test.grib2')

@@ -19,8 +19,8 @@ hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20180914/' +
             'hrrr.t06z.wrfprsf00.grib2')
 urllib.request.urlretrieve(hrrr_url, 'test.grib2')
 
-grid_mhx = pyart.io.read_grid(pydda.tests.MHX_GRID)
-grid_ltx = pyart.io.read_grid(pydda.tests.LTX_GRID)
+grid_mhx = pyart.io.read_grid('mhx_grid.nc')
+grid_ltx = pyart.io.read_grid('ltx_grid.nc)
 
 grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                          'test.grib2')
