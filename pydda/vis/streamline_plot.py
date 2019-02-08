@@ -278,9 +278,9 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
 
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]['data'].filled(fill_value=np.nan)
-    v = Grids[0].fields[v_field]['data'].filled(fill_value=np.nan)
-    w = Grids[0].fields[w_field]['data'].filled(fill_value=np.nan)
+    u = Grids[0].fields[u_field]['data']
+    v = Grids[0].fields[v_field]['data']
+    w = Grids[0].fields[w_field]['data']
 
     transform = ccrs.PlateCarree()
     if(ax is None):
