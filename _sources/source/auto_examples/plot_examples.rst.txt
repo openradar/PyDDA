@@ -51,32 +51,32 @@ Author: Robert C. Jackson
     Total points:92092.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |  11.0905|  64.2183|   0.0000|   0.0000|   0.0000|   0.0000|  20.4626
-    Norm of gradient: 0.009131918476163207
+    Norm of gradient: 0.009131918476153678
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   3.1353|  23.7011|   0.0000|   0.0000|   0.0000|   0.0000|  31.1746
-    Norm of gradient: 0.00573952389738326
+    Norm of gradient: 0.005739523896988587
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   1.5021|  15.7356|   0.0000|   0.0000|   0.0000|   0.0000|  33.5728
-    Norm of gradient: 0.005294325093656635
+    Norm of gradient: 0.005294325093703345
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.9711|  12.4548|   0.0000|   0.0000|   0.0000|   0.0000|  30.3963
-    Norm of gradient: 0.005933535145386104
+    Norm of gradient: 0.005933535145307758
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.6994|  11.9543|   0.0000|   0.0000|   0.0000|   0.0000|  30.5532
-    Norm of gradient: 0.004461050108270649
+    Norm of gradient: 0.0044610501082408315
     Iterations before filter: 50
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.6932|  11.9595|   0.0000|   0.0000|   0.0000|   0.0000|  30.5603
-    Norm of gradient: 0.004469894253656157
+    Norm of gradient: 0.004469894253627854
     Iterations before filter: 60
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 181.3
+    Done! Time = 194.8
 
 
 
@@ -137,7 +137,7 @@ Author: Robert C. Jackson
                                      barb_spacing_z_km=2.0)
     plt.show()
 
-**Total running time of the script:** ( 3 minutes  2.918 seconds)
+**Total running time of the script:** ( 3 minutes  16.498 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

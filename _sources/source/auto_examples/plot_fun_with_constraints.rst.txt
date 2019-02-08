@@ -55,20 +55,20 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Total points:92092.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |  10.2655|  15.1394|   0.0000|   0.0000|   0.0000|   0.0000|  20.0980
-    Norm of gradient: 0.003885590897970686
+    Norm of gradient: 0.0038855908979725058
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   2.7156|   4.3442|   0.0000|   0.0000|   0.0000|   0.0000|  20.4927
-    Norm of gradient: 0.0009764062600776366
+    Norm of gradient: 0.0009764062600858966
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   2.7156|   4.3442|   0.0000|   0.0000|   0.0000|   0.0000|  20.4927
-    Norm of gradient: 0.0009764062600776366
+    Norm of gradient: 0.0009764062600858966
     Iterations before filter: 30
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 44.7
+    Done! Time = 45.8
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -76,36 +76,36 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Total points:92092.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   7.9780|  41.2817|   0.0000|   0.0000|   0.0000|   0.0000|  17.4625
-    Norm of gradient: 0.00746157251305457
+    Norm of gradient: 0.007461572513071653
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   1.9889|  12.6084|   0.0000|   0.0000|   0.0000|   0.0000|  26.7333
-    Norm of gradient: 0.0018231999840724285
+    Norm of gradient: 0.0018231999841989228
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   1.0138|   7.0861|   0.0000|   0.0000|   0.0000|   0.0000|  30.2866
-    Norm of gradient: 0.004237366809835371
+    Norm of gradient: 0.004237366809977051
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.8031|   4.8628|   0.0000|   0.0000|   0.0000|   0.0000|  31.5739
-    Norm of gradient: 0.002007736527575989
+    Norm of gradient: 0.0020077365277524706
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.4837|   4.0882|   0.0000|   0.0000|   0.0000|   0.0000|  31.7890
-    Norm of gradient: 0.0010567027910588066
+    Norm of gradient: 0.0010567027912446736
     Iterations before filter: 50
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.3945|   3.6417|   0.0000|   0.0000|   0.0000|   0.0000|  31.8143
-    Norm of gradient: 0.0005747818034156223
+    Norm of gradient: 0.0005747818080724062
     Iterations before filter: 60
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.3945|   3.6417|   0.0000|   0.0000|   0.0000|   0.0000|  31.8143
-    Norm of gradient: 0.0005747818034156223
+    Norm of gradient: 0.0005747818080724062
     Iterations before filter: 70
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 97.8
+    Done! Time = 105.1
 
 
 
@@ -164,7 +164,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
         new_grids, ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
     plt.show()
 
-**Total running time of the script:** ( 2 minutes  27.749 seconds)
+**Total running time of the script:** ( 2 minutes  35.896 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
