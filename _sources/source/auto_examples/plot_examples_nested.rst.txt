@@ -44,37 +44,49 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    LocalCluster('tcp://127.0.0.1:37865', workers=2, ncores=2)
-    <Client: scheduler='tcp://127.0.0.1:37865' processes=2 cores=2>
+    LocalCluster('tcp://127.0.0.1:42917', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:42917' processes=2 cores=2>
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
-    rmsVR = 40.59066551116966
-    Total points:43041.0
+    rmsVR = 45.74873003282365
+    Total points:23059.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   1.1885|  15.2068|   0.0000|   0.0000|   0.0000|   0.0000|   6.7568
-    Norm of gradient: 0.003549656136713111
+    |   1.9238|  14.2005|   0.0000|   0.0000|   0.0000|   0.0000|  19.2678
+    Norm of gradient: 0.014471275539331205
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.5992|   8.6141|   0.0000|   0.0000|   0.0000|   0.0000|  16.9684
-    Norm of gradient: 0.004589229677184497
+    |   1.1217|   8.0989|   0.0000|   0.0000|   0.0000|   0.0000|  77.3722
+    Norm of gradient: 0.013615875402095409
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.2731|   7.3230|   0.0000|   0.0000|   0.0000|   0.0000|  21.0678
-    Norm of gradient: 0.006801944015797411
+    |   0.5301|   6.3961|   0.0000|   0.0000|   0.0000|   0.0000|  65.5354
+    Norm of gradient: 0.015455328123926375
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.1906|   7.3313|   0.0000|   0.0000|   0.0000|   0.0000|  21.4644
-    Norm of gradient: 0.003184683287950105
+    |   0.7379|   5.3387|   0.0000|   0.0000|   0.0000|   0.0000|  45.7571
+    Norm of gradient: 0.012377174596873822
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.1906|   7.3313|   0.0000|   0.0000|   0.0000|   0.0000|  21.4644
-    Norm of gradient: 0.003184683287950105
+    |   0.0849|   4.9865|   0.0000|   0.0000|   0.0000|   0.0000|  39.6481
+    Norm of gradient: 0.016461809562069475
     Iterations before filter: 50
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.1370|   4.8336|   0.0000|   0.0000|   0.0000|   0.0000|  38.1769
+    Norm of gradient: 0.006947830664502333
+    Iterations before filter: 60
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.0685|   4.8256|   0.0000|   0.0000|   0.0000|   0.0000|  37.8073
+    Norm of gradient: 0.008316380489520995
+    Iterations before filter: 70
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.0685|   4.8256|   0.0000|   0.0000|   0.0000|   0.0000|  37.8073
+    Norm of gradient: 0.008316380489520995
+    Iterations before filter: 80
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 34.5
+    Done! Time = 87.2
     Waiting for nested grid to be retrieved...
 
 
@@ -102,7 +114,7 @@ Author: Robert C. Jackson
 
         # Load sounding data and insert as an intialization
         u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
-            cpol_grid, sounding[1], vel_field='VT')
+            cpol_grid, sounding[1], vel_field='corrected_velocity')
 
         # Start our dask distributed cluster. You can use any distributed cluster
         # for this...a LocalCluster is used here for the sake of being able to run
@@ -116,12 +128,13 @@ Author: Robert C. Jackson
         # and data weighting constraints.
         Grids = pydda.retrieval.get_dd_wind_field_nested(
             [berr_grid, cpol_grid], u_init,  v_init, w_init, client, Co=10.0,
-            Cm=1500.0, Cz=0, vel_name='VT', refl_field='DT', frz=5000.0,
+            Cm=1500.0, Cz=0, frz=5000.0,
             filt_iterations=2, mask_outside_opt=True, upper_bc=1)
 
         # Plot a horizontal cross section
         plt.figure(figsize=(9, 9))
-        pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='DT', level=6,
+        pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='reflectivity', 
+                                            level=6,
                                             w_vel_contours=[3, 6, 9, 12, 15],
                                             barb_spacing_x_km=5.0,
                                             barb_spacing_y_km=15.0)
@@ -129,7 +142,8 @@ Author: Robert C. Jackson
 
         # Plot a vertical X-Z cross section
         plt.figure(figsize=(9, 9))
-        pydda.vis.plot_xz_xsection_barbs(Grids, background_field='DT', level=40,
+        pydda.vis.plot_xz_xsection_barbs(Grids, background_field='reflectivity', 
+                                         level=40,
                                          w_vel_contours=[3, 6, 9, 12, 15],
                                          barb_spacing_x_km=10.0,
                                          barb_spacing_z_km=2.0)
@@ -137,13 +151,14 @@ Author: Robert C. Jackson
 
         # Plot a vertical Y-Z cross section
         plt.figure(figsize=(9, 9))
-        pydda.vis.plot_yz_xsection_barbs(Grids, background_field='DT', level=40,
+        pydda.vis.plot_yz_xsection_barbs(Grids, background_field='reflectivity',
+                                         level=40,
                                          w_vel_contours=[3, 6, 9, 12, 15],
                                          barb_spacing_y_km=10.0,
                                          barb_spacing_z_km=2.0)
         plt.show()
 
-**Total running time of the script:** ( 2 minutes  23.802 seconds)
+**Total running time of the script:** ( 3 minutes  57.882 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:

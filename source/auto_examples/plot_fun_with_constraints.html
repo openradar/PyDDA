@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -89,7 +90,7 @@ Iterations before filter: 30
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 48.7
+Done! Time = 44.7
 Calculating weights for radars 0 and 1
 Calculating weights for models...
 Starting solver
@@ -126,7 +127,7 @@ Iterations before filter: 70
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 98.5
+Done! Time = 97.8
 </pre></div>
 </div>
 <div class="line-block">
@@ -138,8 +139,8 @@ Done! Time = 98.5
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 
-<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">BERR_GRID</span><span class="p">)</span>
-<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">CPOL_GRID</span><span class="p">)</span>
+<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span><span class="p">)</span>
+<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR1</span><span class="p">)</span>
 
 <span class="c1"># Load our radar data</span>
 <span class="n">sounding</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_arm_sonde</span><span class="p">(</span>
@@ -151,14 +152,15 @@ Done! Time = 98.5
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
-<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver_map</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_streamlines_map</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Let&#39;s see what happens when we use a zero initialization</span>
-<span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span>
+<span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span>
                                     <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span>
-                                    <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">)</span>
+                                    <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
+                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -168,18 +170,19 @@ Done! Time = 98.5
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Or, let&#39;s make the radar data more important!</span>
-<span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span>
+<span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span>
                                     <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span>
-                                    <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">)</span>
+                                    <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
+                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
-<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver_map</span><span class="p">(</span>
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_streamlines_map</span><span class="p">(</span>
     <span class="n">new_grids</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 2 minutes  31.029 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 2 minutes  27.749 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/a19978b4bc9b61c179cb69cc9a7a2ce4/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></div>
@@ -245,7 +248,7 @@ Done! Time = 98.5
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
     </div>
   </body>
 </html>

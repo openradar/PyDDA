@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -68,24 +69,36 @@ using PyDDA.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 0 and 1
 Calculating weights for models...
 Starting solver
-rmsVR = 40.299436641264535
-Total points:172054.0
+rmsVR = 45.924382151350464
+Total points:92092.0
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|  16.0670|  88.5543|   0.0000|   0.0000|   0.0000|   0.0000|  13.4538
-Norm of gradient: 0.018952669044898465
+|  11.0905|  64.2183|   0.0000|   0.0000|   0.0000|   0.0000|  20.4626
+Norm of gradient: 0.009131918476163207
 Iterations before filter: 10
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   9.0241|  88.2328|   0.0000|   0.0000|   0.0000|   0.0000|  15.1113
-Norm of gradient: 0.02033463109515147
+|   3.1353|  23.7011|   0.0000|   0.0000|   0.0000|   0.0000|  31.1746
+Norm of gradient: 0.00573952389738326
 Iterations before filter: 20
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   9.0241|  88.2328|   0.0000|   0.0000|   0.0000|   0.0000|  15.1113
-Norm of gradient: 0.02033463109515147
+|   1.5021|  15.7356|   0.0000|   0.0000|   0.0000|   0.0000|  33.5728
+Norm of gradient: 0.005294325093656635
 Iterations before filter: 30
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.9711|  12.4548|   0.0000|   0.0000|   0.0000|   0.0000|  30.3963
+Norm of gradient: 0.005933535145386104
+Iterations before filter: 40
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.6994|  11.9543|   0.0000|   0.0000|   0.0000|   0.0000|  30.5532
+Norm of gradient: 0.004461050108270649
+Iterations before filter: 50
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.6932|  11.9595|   0.0000|   0.0000|   0.0000|   0.0000|  30.5603
+Norm of gradient: 0.004469894253656157
+Iterations before filter: 60
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 88.7
+Done! Time = 181.3
 </pre></div>
 </div>
 <div class="line-block">
@@ -105,18 +118,19 @@ Done! Time = 88.7
 
 <span class="c1"># Load sounding data and insert as an intialization</span>
 <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
-        <span class="n">cpol_grid</span><span class="p">,</span> <span class="n">sounding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;VT&#39;</span><span class="p">)</span>
+        <span class="n">cpol_grid</span><span class="p">,</span> <span class="n">sounding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">)</span>
 
 <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
 <span class="c1"># and data weighting constraints.</span>
 <span class="n">Grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span>
                                           <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span>
-                                          <span class="n">Cz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;VT&#39;</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span>
+                                          <span class="n">Cz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                                           <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span> <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                                           <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1"># Plot a horizontal cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
-<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+                                    <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                                     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                     <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
                                     <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">15.0</span><span class="p">)</span>
@@ -124,7 +138,8 @@ Done! Time = 88.7
 
 <span class="c1"># Plot a vertical X-Z cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
-<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_xz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_xz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+                                 <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
                                  <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                  <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
                                  <span class="n">barb_spacing_z_km</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
@@ -132,14 +147,15 @@ Done! Time = 88.7
 
 <span class="c1"># Plot a vertical Y-Z cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
-<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_yz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DT&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_yz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+                                 <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
                                  <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                  <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
                                  <span class="n">barb_spacing_z_km</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 1 minutes  29.740 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 3 minutes  2.918 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/32cbaa75ea064d7b790e2a2a3946d20e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></div>
@@ -205,7 +221,7 @@ Done! Time = 88.7
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
     </div>
   </body>
 </html>
