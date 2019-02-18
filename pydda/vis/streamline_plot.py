@@ -101,6 +101,15 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
     v = Grids[0].fields[v_field]['data']
     w = Grids[0].fields[w_field]['data']
 
+    if(isinstance(u, np.ma.MaskedArray)):
+        u = u.filled(np.nan)
+
+    if(isinstance(v, np.ma.MaskedArray)):
+        v = v.filled(np.nan)
+
+    if(isinstance(w, np.ma.MaskedArray)):
+        w = w.filled(np.nan)
+
     if(ax is None):
         ax = plt.gca()
 
@@ -281,6 +290,15 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
     u = Grids[0].fields[u_field]['data']
     v = Grids[0].fields[v_field]['data']
     w = Grids[0].fields[w_field]['data']
+
+    if(isinstance(u, np.ma.MaskedArray)):
+        u = u.filled(np.nan)
+    
+    if(isinstance(v, np.ma.MaskedArray)):
+        v = v.filled(np.nan)
+
+    if(isinstance(w, np.ma.MaskedArray)):
+        w = w.filled(np.nan)
 
     transform = ccrs.PlateCarree()
     if(ax is None):
@@ -497,6 +515,15 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
     v = Grids[0].fields[v_field]['data']
     w = Grids[0].fields[w_field]['data']
 
+    if(isinstance(u, np.ma.MaskedArray)):
+        u = u.filled(np.nan)
+
+    if(isinstance(v, np.ma.MaskedArray)):
+        v = v.filled(np.nan)
+
+    if(isinstance(w, np.ma.MaskedArray)):
+        w = w.filled(np.nan)
+
     if(ax is None):
         ax = plt.gca()
 
@@ -648,6 +675,15 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
     u = Grids[0].fields[u_field]['data']
     v = Grids[0].fields[v_field]['data']
     w = Grids[0].fields[w_field]['data']
+
+    if(isinstance(u, np.ma.MaskedArray)):
+        u = u.filled(np.nan)
+
+    if(isinstance(v, np.ma.MaskedArray)):
+        v = v.filled(np.nan)
+
+    if(isinstance(w, np.ma.MaskedArray)):
+        w = w.filled(np.nan)
 
     if(ax is None):
         ax = plt.gca()
