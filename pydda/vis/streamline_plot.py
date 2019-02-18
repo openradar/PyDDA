@@ -17,6 +17,7 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
                                     u_vel_contours=None,
                                     v_vel_contours=None,
                                     w_vel_contours=None,
+                                    wind_vel_contours=None,
                                     u_field='u', v_field='v', w_field='w',
                                     show_lobes=True, title_flag=True,
                                     axes_labels_flag=True, 
@@ -56,6 +57,9 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D array
+        The contours to use for plotting contours of horizontal wind speed. 
+        Set to None to not display such contours
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -155,6 +159,18 @@ def plot_horiz_xsection_streamlines(Grids, ax=None,
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
 
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[level, :, :]**2 + v[level, :, :]**2)
+        #vel = vel.filled(fill_value=np.nan)
+        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                         vel, levels=wind_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
+        cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
+        ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='|V| [m/s]')
 
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
@@ -194,6 +210,7 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
                                         u_vel_contours=None,
                                         v_vel_contours=None,
                                         w_vel_contours=None,
+                                        wind_vel_contours=None,
                                         u_field='u', v_field='v', w_field='w',
                                         show_lobes=True, title_flag=True,
                                         axes_labels_flag=True,
@@ -234,6 +251,9 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D array
+        The contours to use for plotting contours of horizontal wind speed.
+        Set to None to not display such contours.
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -379,7 +399,27 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
             warnings.warn(("Cartopy does not support color maps on blank " + 
                            "contour plots, contour color map not drawn!"), 
                             RuntimeWarning)
- 
+
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[level, :, :]**2 + v[level, :, :]**2)
+        vel = vel.filled(fill_value=np.nan)
+        try:
+            cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                             vel, levels=wind_vel_contours, linewidths=2,
+                             alpha=contour_alpha)
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='|V\ [m/s]', extend='both',
+                                   spacing='proportional',
+                                   ticks=w_vel_contours)
+        except ValueError:
+            warnings.warn(("Cartopy does not support color maps on blank " +
+                           "contour plots, contour color map not drawn!"),
+                            RuntimeWarning)
+
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
 
@@ -431,6 +471,7 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
                                  cmap='pyart_LangRainbow12',
                                  vmin=None, vmax=None, u_vel_contours=None,
                                  v_vel_contours=None, w_vel_contours=None,
+                                 wind_vel_contours=None,
                                  u_field='u', v_field='v', w_field='w',
                                  title_flag=True, axes_labels_flag=True,
                                  colorbar_flag=True,
@@ -470,6 +511,9 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D array
+        The contours to use for plotting contours of horizontal wind speed.
+        Set to None to not display such contours.
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -568,6 +612,18 @@ def plot_xz_xsection_streamlines(Grids, ax=None,
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
 
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[:, level, :]**2 + v[:, level, :]**2)
+        vel = vel.filled(fill_value=np.nan)
+        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
+                         vel, levels=wind_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
+        cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
+        ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='|V| [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('X [km]'))
@@ -593,6 +649,7 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
                                  cmap='pyart_LangRainbow12',
                                  vmin=None, vmax=None, u_vel_contours=None,
                                  v_vel_contours=None, w_vel_contours=None,
+                                 wind_vel_contours=None,
                                  u_field='u', v_field='v', w_field='w',
                                  title_flag=True, axes_labels_flag=True,
                                  colorbar_flag=True,
@@ -632,6 +689,9 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D aray
+        The contours to use for plotting contours of horizontal wind speed.
+        Set to None to not display such contours.
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -728,6 +788,19 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
+
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[:, :, level]**2 + v[:, :, level]**2)
+        vel = vel.filled(fill_value=np.nan)
+        cs = ax.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                         vel, levels=wind_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
+        cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
+        ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='|V| [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('Y [km]'))
