@@ -60,6 +60,7 @@
                                     <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                     <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                     <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                    <span class="n">wind_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                     <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
                                     <span class="n">show_lobes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                     <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
@@ -99,6 +100,9 @@
 <span class="sd">    w_vel_contours: 1-D array</span>
 <span class="sd">        The contours to use for plotting contours of w. Set to None to not</span>
 <span class="sd">        display such contours.</span>
+<span class="sd">    wind_vel_contours: 1-D array</span>
+<span class="sd">        The contours to use for plotting contours of horizontal wind speed. </span>
+<span class="sd">        Set to None to not display such contours</span>
 <span class="sd">    u_field: str</span>
 <span class="sd">        Name of zonal wind (u) field in Grids.</span>
 <span class="sd">    v_field: str</span>
@@ -143,6 +147,15 @@
     <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
@@ -189,6 +202,18 @@
         <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;W [m/s]&#39;</span><span class="p">)</span>
 
+    <span class="k">if</span><span class="p">(</span><span class="n">wind_vel_contours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1">#vel = vel.filled(fill_value=np.nan)</span>
+        <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">grid_y</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+                         <span class="n">vel</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">wind_vel_contours</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                         <span class="n">alpha</span><span class="o">=</span><span class="n">contour_alpha</span><span class="p">)</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">set_clim</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">wind_vel_contours</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">wind_vel_contours</span><span class="p">)])</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;|V| [m/s]&#39;</span><span class="p">)</span>
 
     <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;min_bca&#39;</span><span class="p">])</span>
     <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;max_bca&#39;</span><span class="p">])</span>
@@ -228,6 +253,7 @@
                                         <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                         <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                         <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">wind_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                         <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
                                         <span class="n">show_lobes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                         <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -268,6 +294,9 @@
 <span class="sd">    w_vel_contours: 1-D array</span>
 <span class="sd">        The contours to use for plotting contours of w. Set to None to not</span>
 <span class="sd">        display such contours.</span>
+<span class="sd">    wind_vel_contours: 1-D array</span>
+<span class="sd">        The contours to use for plotting contours of horizontal wind speed.</span>
+<span class="sd">        Set to None to not display such contours.</span>
 <span class="sd">    u_field: str</span>
 <span class="sd">        Name of zonal wind (u) field in Grids.</span>
 <span class="sd">    v_field: str</span>
@@ -324,6 +353,15 @@
     <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
     <span class="n">transform</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -404,7 +442,27 @@
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">((</span><span class="s2">&quot;Cartopy does not support color maps on blank &quot;</span> <span class="o">+</span> 
                            <span class="s2">&quot;contour plots, contour color map not drawn!&quot;</span><span class="p">),</span> 
                             <span class="ne">RuntimeWarning</span><span class="p">)</span>
- 
+
+    <span class="k">if</span><span class="p">(</span><span class="n">wind_vel_contours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">vel</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">grid_y</span><span class="p">[</span><span class="n">level</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+                             <span class="n">vel</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">wind_vel_contours</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                             <span class="n">alpha</span><span class="o">=</span><span class="n">contour_alpha</span><span class="p">)</span>
+            <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;|V\ [m/s]&#39;</span><span class="p">,</span> <span class="n">extend</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span>
+                                   <span class="n">spacing</span><span class="o">=</span><span class="s1">&#39;proportional&#39;</span><span class="p">,</span>
+                                   <span class="n">ticks</span><span class="o">=</span><span class="n">w_vel_contours</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">((</span><span class="s2">&quot;Cartopy does not support color maps on blank &quot;</span> <span class="o">+</span>
+                           <span class="s2">&quot;contour plots, contour color map not drawn!&quot;</span><span class="p">),</span>
+                            <span class="ne">RuntimeWarning</span><span class="p">)</span>
+
     <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;min_bca&#39;</span><span class="p">])</span>
     <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s1">&#39;max_bca&#39;</span><span class="p">])</span>
 
@@ -456,6 +514,7 @@
                                  <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
                                  <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">wind_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
                                  <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                  <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -495,6 +554,9 @@
 <span class="sd">    w_vel_contours: 1-D array</span>
 <span class="sd">        The contours to use for plotting contours of w. Set to None to not</span>
 <span class="sd">        display such contours.</span>
+<span class="sd">    wind_vel_contours: 1-D array</span>
+<span class="sd">        The contours to use for plotting contours of horizontal wind speed.</span>
+<span class="sd">        Set to None to not display such contours.</span>
 <span class="sd">    u_field: str</span>
 <span class="sd">        Name of zonal wind (u) field in Grids.</span>
 <span class="sd">    v_field: str</span>
@@ -540,6 +602,15 @@
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 
@@ -584,6 +655,18 @@
         <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;W [m/s]&#39;</span><span class="p">)</span>
 
+    <span class="k">if</span><span class="p">(</span><span class="n">wind_vel_contours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">vel</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">grid_x</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span>
+                         <span class="n">vel</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">wind_vel_contours</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                         <span class="n">alpha</span><span class="o">=</span><span class="n">contour_alpha</span><span class="p">)</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">set_clim</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">wind_vel_contours</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">wind_vel_contours</span><span class="p">)])</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;|V| [m/s]&#39;</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">axes_labels_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">((</span><span class="s1">&#39;X [km]&#39;</span><span class="p">))</span>
@@ -609,6 +692,7 @@
                                  <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_LangRainbow12&#39;</span><span class="p">,</span>
                                  <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                 <span class="n">wind_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                  <span class="n">u_field</span><span class="o">=</span><span class="s1">&#39;u&#39;</span><span class="p">,</span> <span class="n">v_field</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">w_field</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
                                  <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">axes_labels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                  <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -648,6 +732,9 @@
 <span class="sd">    w_vel_contours: 1-D array</span>
 <span class="sd">        The contours to use for plotting contours of w. Set to None to not</span>
 <span class="sd">        display such contours.</span>
+<span class="sd">    wind_vel_contours: 1-D aray</span>
+<span class="sd">        The contours to use for plotting contours of horizontal wind speed.</span>
+<span class="sd">        Set to None to not display such contours.</span>
 <span class="sd">    u_field: str</span>
 <span class="sd">        Name of zonal wind (u) field in Grids.</span>
 <span class="sd">    v_field: str</span>
@@ -692,6 +779,15 @@
     <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)):</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
     <span class="k">if</span><span class="p">(</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
 
@@ -735,6 +831,19 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
         <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;W [m/s]&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">wind_vel_contours</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">v</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">vel</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">grid_y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span> <span class="n">grid_h</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span>
+                         <span class="n">vel</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">wind_vel_contours</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                         <span class="n">alpha</span><span class="o">=</span><span class="n">contour_alpha</span><span class="p">)</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">set_clim</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">wind_vel_contours</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">wind_vel_contours</span><span class="p">)])</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_under</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cs</span><span class="o">.</span><span class="n">cmap</span><span class="o">.</span><span class="n">set_bad</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">cs</span><span class="p">)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;|V| [m/s]&#39;</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">axes_labels_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">((</span><span class="s1">&#39;Y [km]&#39;</span><span class="p">))</span>

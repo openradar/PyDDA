@@ -68,7 +68,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 43.6
+    Done! Time = 44.6
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -105,7 +105,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 92.8
+    Done! Time = 98.9
 
 
 
@@ -164,7 +164,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
         new_grids, ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8])
     plt.show()
 
-**Total running time of the script:** ( 2 minutes  22.291 seconds)
+**Total running time of the script:** ( 2 minutes  29.225 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
