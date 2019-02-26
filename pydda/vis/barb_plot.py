@@ -18,6 +18,7 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
                               u_vel_contours=None,
                               v_vel_contours=None,
                               w_vel_contours=None,
+                              wind_vel_contours=None,
                               u_field='u', v_field='v', w_field='w',
                               show_lobes=True, title_flag=True,
                               axes_labels_flag=True, colorbar_flag=True,
@@ -57,6 +58,9 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D array
+        The contours to use for plotting contours of horizontal wind speed. 
+        Set to None to not display such contours
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -111,6 +115,15 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
     v = Grids[0].fields[v_field]['data']
     w = Grids[0].fields[w_field]['data']
 
+    if(isinstance(u, np.ma.MaskedArray)):
+        u = u.filled(np.nan)
+
+    if(isinstance(v, np.ma.MaskedArray)):
+        v = v.filled(np.nan)
+
+    if(isinstance(w, np.ma.MaskedArray)):
+        w = w.filled(np.nan)
+        
     if(ax is None):
         ax = plt.gca()
 
@@ -132,32 +145,55 @@ def plot_horiz_xsection_barbs(Grids, ax=None,
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
     if(u_vel_contours is not None):
-        u_filled = np.ma.filled(u[level, :, :], fill_value=0)
+        u_filled = np.ma.filled(u[level, :, :], fill_value=np.nan)
         cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
                          u_filled, levels=u_vel_contours, linewidths=2,
                          alpha=contour_alpha)
+        cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
-        v_filled = np.ma.filled(v[level, :, :], fill_value=0)
+        v_filled = np.ma.filled(v[level, :, :], fill_value=np.nan)
         cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
                          v_filled, levels=u_vel_contours, linewidths=2,
                          alpha=contour_alpha)
+        cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
-        w_filled = np.ma.filled(w[level, :, :], fill_value=0)
+        w_filled = np.ma.filled(w[level, :, :], fill_value=np.nan)
         cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
                          w_filled, levels=w_vel_contours, linewidths=2,
                          alpha=contour_alpha)
+        cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
 
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[level, :, :]**2 + v[level, :, :]**2)
+        #vel = vel.filled(fill_value=np.nan)
+        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                         vel, levels=wind_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
+        cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
+        ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='|V| [m/s]')
+
+        
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
     bca_max = math.radians(Grids[0].fields[u_field]['max_bca'])
 
@@ -198,6 +234,7 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                                   u_vel_contours=None,
                                   v_vel_contours=None,
                                   w_vel_contours=None,
+                                  wind_vel_contours=None,
                                   u_field='u', v_field='v', w_field='w',
                                   show_lobes=True, title_flag=True,
                                   axes_labels_flag=True, colorbar_flag=True,
@@ -238,6 +275,9 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D array
+        The contours to use for plotting contours of horizontal wind speed.
+        Set to None to not display such contours.
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -332,7 +372,6 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                              alpha=contour_alpha, zorder=2, extend='both')
             cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
             cs.cmap.set_under(color='white', alpha=0)
-            cs.cmap.set_over(color='white', alpha=0)
             cs.cmap.set_bad(color='white', alpha=0)
             ax.clabel(cs)
             if(colorbar_contour_flag is True):
@@ -352,7 +391,6 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                              alpha=contour_alpha, zorder=2, extend='both')
             cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
             cs.cmap.set_under(color='white', alpha=0)
-            cs.cmap.set_over(color='white', alpha=0)
             cs.cmap.set_bad(color='white', alpha=0)
             ax.clabel(cs)
             if(colorbar_contour_flag is True):
@@ -371,7 +409,6 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                              alpha=contour_alpha, zorder=2, extend='both')
             cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
             cs.cmap.set_under(color='white', alpha=0)
-            cs.cmap.set_over(color='white', alpha=0)
             cs.cmap.set_bad(color='white', alpha=0)
             ax.clabel(cs)
             if(colorbar_contour_flag is True):
@@ -381,6 +418,26 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
         except ValueError:
             warnings.warn(("Cartopy does not support color maps on blank " + 
                            "contour plots, contour color map not drawn!"), 
+                            RuntimeWarning)
+
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[level, :, :]**2 + v[level, :, :]**2)
+        vel = vel.filled(fill_value=np.nan)
+        try:
+            cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+                             vel, levels=wind_vel_contours, linewidths=2,
+                             alpha=contour_alpha)
+            cs.cmap.set_under(color='white', alpha=0)
+            cs.cmap.set_bad(color='white', alpha=0)
+
+            ax.clabel(cs)
+            if(colorbar_contour_flag is True):
+                ax2 = plt.colorbar(cs, ax=ax, label='|V\ [m/s]', extend='both',
+                                   spacing='proportional',
+                                   ticks=w_vel_contours)
+        except ValueError:
+            warnings.warn(("Cartopy does not support color maps on blank " +
+                           "contour plots, contour color map not drawn!"),
                             RuntimeWarning)
 
     bca_min = math.radians(Grids[0].fields[u_field]['min_bca'])
@@ -433,6 +490,7 @@ def plot_xz_xsection_barbs(Grids, ax=None,
                            cmap='pyart_LangRainbow12',
                            vmin=None, vmax=None, u_vel_contours=None,
                            v_vel_contours=None, w_vel_contours=None,
+                           wind_vel_contours=None,
                            u_field='u', v_field='v', w_field='w',
                            title_flag=True, axes_labels_flag=True,
                            colorbar_flag=True,
@@ -472,6 +530,9 @@ def plot_xz_xsection_barbs(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D array
+        The contours to use for plotting contours of horizontal wind speed.
+        Set to None to not display such contours.
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -550,6 +611,9 @@ def plot_xz_xsection_barbs(Grids, ax=None,
         cs = ax.contourf(grid_x[::, level, ::], grid_h[::, level, ::],
                          u_filled, levels=u_vel_contours, linewidths=2,
                          alpha=contour_alpha)
+        cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]', extend='min')
@@ -559,6 +623,9 @@ def plot_xz_xsection_barbs(Grids, ax=None,
         cs = ax.contourf(grid_x[::, level, ::], grid_h[::, level, ::],
                          v_filled, levels=v_vel_contours, linewidths=2,
                          alpha=contour_alpha)
+        cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]', extend='min')
@@ -568,9 +635,25 @@ def plot_xz_xsection_barbs(Grids, ax=None,
         cs = ax.contourf(grid_x[::, level, ::], grid_h[::, level, ::],
                          w_filled, levels=w_vel_contours, linewidths=2,
                          alpha=contour_alpha)
+        cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]', extend='min')
+
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[:, level, :]**2 + v[:, level, :]**2)
+        vel = vel.filled(fill_value=np.nan)
+        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
+                         vel, levels=wind_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
+        cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
+        ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='|V| [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('X [km]'))
@@ -596,6 +679,7 @@ def plot_yz_xsection_barbs(Grids, ax=None,
                            cmap='pyart_LangRainbow12',
                            vmin=None, vmax=None, u_vel_contours=None,
                            v_vel_contours=None, w_vel_contours=None,
+                           wind_vel_contours=None,
                            u_field='u', v_field='v', w_field='w',
                            title_flag=True, axes_labels_flag=True,
                            colorbar_flag=True,
@@ -635,6 +719,9 @@ def plot_yz_xsection_barbs(Grids, ax=None,
     w_vel_contours: 1-D array
         The contours to use for plotting contours of w. Set to None to not
         display such contours.
+    wind_vel_contours: 1-D aray
+        The contours to use for plotting contours of horizontal wind speed.
+        Set to None to not display such contours.
     u_field: str
         Name of zonal wind (u) field in Grids.
     v_field: str
@@ -712,6 +799,9 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
                           u_filled, levels=u_vel_contours, linewidths=2,
                           alpha=contour_alpha)
+        cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]', extend='min')
@@ -721,6 +811,9 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
                           v_filled, levels=w_vel_contours, linewidths=2,
                           alpha=contour_alpha)
+        cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]', extend='min')
@@ -730,9 +823,25 @@ def plot_yz_xsection_barbs(Grids, ax=None,
         cs = plt.contourf(grid_y[::, ::, level], grid_h[::, ::, level],
                           w_filled, levels=w_vel_contours, linewidths=2,
                           alpha=contour_alpha)
+        cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]', extend='min')
+
+    if(wind_vel_contours is not None):
+        vel = np.ma.sqrt(u[:, :, level]**2 + v[:, :, level]**2)
+        vel = vel.filled(fill_value=np.nan)
+        cs = ax.contourf(grid_y[:, :, level], grid_h[:, :, level],
+                         vel, levels=wind_vel_contours, linewidths=2,
+                         alpha=contour_alpha)
+        cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
+        cs.cmap.set_under(color='white', alpha=0)
+        cs.cmap.set_bad(color='white', alpha=0)
+        ax.clabel(cs)
+        if(colorbar_contour_flag is True):
+            plt.colorbar(cs, ax=ax, label='|V| [m/s]')
 
     if(axes_labels_flag is True):
         ax.set_xlabel(('Y [km]'))
