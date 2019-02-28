@@ -4,6 +4,7 @@ import pydda
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import sys
+import pytest
 
 @pytest.mark.skipif(sys.version_info < (3,6),
                     reason='Cfgrib requires python 3.6')
