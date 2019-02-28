@@ -6,6 +6,8 @@ import cartopy.crs as ccrs
 import sys
 import pytest
 
+from distributed import Client, LocalCluster
+
 @pytest.mark.skipif(sys.version_info < (3,6),
                     reason='Cfgrib requires python 3.6')
 def test_hurricane_florence():
@@ -25,14 +27,18 @@ def test_hurricane_florence():
 
     grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                             'test.grib2')
+
+    cluster = LocalCluster(n_workers=4)
+    client = Client(cluster)
     u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
         grid_mhx, (0.0, 0.0, 0.0))
-    out_grids = pydda.retrieval.get_dd_wind_field(
+    out_grids = pydda.retrieval.get_dd_wind_field_nested(
         [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=1.0, Cm=1500.0, 
         Cmod=1e-3, mask_outside_opt=True, vel_name='corrected_velocity',
-        model_fields=["hrrr"])
+        model_fields=["hrrr"], client=client)
 
     u = out_grids[1].fields["u"]["data"]
     assert u.max() > 30
     assert u.min() < -30
-
+    client.close()
+    cluster.close()
