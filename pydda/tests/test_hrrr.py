@@ -5,11 +5,15 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import sys
 import pytest
+import os
 
 from distributed import Client, LocalCluster
 
-@pytest.mark.skipif(sys.version_info < (3,6),
-                    reason='Cfgrib requires python 3.6')
+# This test currently does not work on Travis CI due to
+# memory limitations. I have included it as a test that I
+# will run manually.
+@pytest.mark.skip_if("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", 
+                     "Skipping this test on Travis CI.")
 def test_hurricane_florence():
     hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20180914/' +
                 'hrrr.t06z.wrfprsf00.grib2')
