@@ -19,15 +19,15 @@ hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20180914/' +
             'hrrr.t06z.wrfprsf00.grib2')
 urllib.request.urlretrieve(hrrr_url, 'test.grib2')
 
-grid_mhx = pyart.io.read_grid('mhx_grid.nc')
-grid_ltx = pyart.io.read_grid('ltx_grid.nc)
+grid_mhx = pyart.io.read_grid('grid_mhx.nc')
+grid_ltx = pyart.io.read_grid('grid_ltx.nc')
 
 grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                          'test.grib2')
 u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
     grid_mhx, (0.0, 0.0, 0.0))
 out_grids = pydda.retrieval.get_dd_wind_field(
-    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=0.0, Cm=0.0, Cmod=1e-3,
+    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=1.0, Cm=1000.0, Cmod=1e-3,
     mask_outside_opt=True, vel_name='corrected_velocity',
     model_fields=["hrrr"])
 
@@ -38,3 +38,4 @@ ax = pydda.vis.plot_horiz_xsection_barbs_map(
     barb_spacing_y_km=20.0)
 
 plt.title(out_grids[0].time['units'][13:] + ' winds at 0.5 km')
+plt.show()

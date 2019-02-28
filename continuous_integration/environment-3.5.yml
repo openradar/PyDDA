@@ -13,6 +13,7 @@ dependencies:
   - pytest-cov
   - cartopy
   - arm_pyart
+  - cfgrib
   - eccodes
   - dask
   - distributed

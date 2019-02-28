@@ -141,7 +141,7 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
         raise RuntimeError(("The cfgrib optional dependency needs to be " +
                             "installed for the HRRR integration feature."))
 
-    the_grib = cfgrib.Dataset.from_path(
+    the_grib = cfgrib.open_file(
         file_path, filter_by_keys={'typeOfLevel': 'isobaricInhPa'})
 
     # Load the HRRR data and tranform longitude coordinates
