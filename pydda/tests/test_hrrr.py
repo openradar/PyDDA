@@ -12,7 +12,7 @@ from distributed import Client, LocalCluster
 # This test currently does not work on Travis CI due to
 # memory limitations. I have included it as a test that I
 # will run manually.
-@pytest.mark.skip_if("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true", 
+@pytest.mark.skip_if("SKIP_HRRR_TEST" in os.environ and os.environ["SKIP_HRRR_TEST"] == "true", 
                      "Skipping this test on Travis CI.")
 def test_hurricane_florence():
     hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20180914/' +
