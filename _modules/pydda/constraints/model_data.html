@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -42,6 +43,7 @@
   <h1>Source code for pydda.constraints.model_data</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span> <span class="nn">gc</span>
 
 <span class="c1"># We want cfgrib to be an optional dependency to ensure Windows compatibility</span>
 <span class="k">try</span><span class="p">:</span>
@@ -183,7 +185,7 @@
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">((</span><span class="s2">&quot;The cfgrib optional dependency needs to be &quot;</span> <span class="o">+</span>
                             <span class="s2">&quot;installed for the HRRR integration feature.&quot;</span><span class="p">))</span>
 
-    <span class="n">the_grib</span> <span class="o">=</span> <span class="n">cfgrib</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span>
+    <span class="n">the_grib</span> <span class="o">=</span> <span class="n">cfgrib</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span>
         <span class="n">file_path</span><span class="p">,</span> <span class="n">filter_by_keys</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;typeOfLevel&#39;</span><span class="p">:</span> <span class="s1">&#39;isobaricInhPa&#39;</span><span class="p">})</span>
 
     <span class="c1"># Load the HRRR data and tranform longitude coordinates</span>
@@ -252,7 +254,11 @@
     <span class="n">new_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;U_hrrr&quot;</span><span class="p">,</span> <span class="n">u_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">new_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;V_hrrr&quot;</span><span class="p">,</span> <span class="n">v_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">new_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;W_hrrr&quot;</span><span class="p">,</span> <span class="n">w_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
+    
+    <span class="c1"># Free up memory</span>
+    <span class="k">del</span> <span class="n">grb_u</span><span class="p">,</span> <span class="n">grb_v</span><span class="p">,</span> <span class="n">grb_w</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span>
+    <span class="k">del</span> <span class="n">the_grib</span> 
+    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">new_grid</span></div>
 </pre></div>
 
@@ -292,7 +298,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
     </div>
   </body>
 </html>

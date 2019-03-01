@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>SyntaxError &#8212; PyDDA 0.3.0 documentation</title>
+    <title>Example on integrating radar and HRRR data &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -15,6 +15,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
     <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -51,21 +52,13 @@
 <p class="first admonition-title">Note</p>
 <p class="last">Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-hurricane-florence-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="syntaxerror">
-<span id="sphx-glr-source-auto-examples-hurricane-florence-py"></span><h1>SyntaxError<a class="headerlink" href="#syntaxerror" title="Permalink to this headline">¶</a></h1>
-<p>Example script with invalid Python syntax</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Example on integrating radar and HRRR data</span>
-<span class="sd">------------------------------------------</span>
-
-<span class="sd">This is an example of how to retrieve winds in Hurricane Florence.</span>
-<span class="sd">In this example, we use data from 2 NEXRAD radars as well as from</span>
-<span class="sd">the HRRR to retrieve the winds.</span>
-
-<span class="sd">Author: Robert C. Jackson</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">urllib</span>
+<div class="sphx-glr-example-title section" id="example-on-integrating-radar-and-hrrr-data">
+<span id="sphx-glr-source-auto-examples-hurricane-florence-py"></span><h1>Example on integrating radar and HRRR data<a class="headerlink" href="#example-on-integrating-radar-and-hrrr-data" title="Permalink to this headline">¶</a></h1>
+<p>This is an example of how to retrieve winds in Hurricane Florence.
+In this example, we use data from 2 NEXRAD radars as well as from
+the HRRR to retrieve the winds.</p>
+<p>Author: Robert C. Jackson</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">import</span> <span class="nn">pydda</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -75,15 +68,15 @@
             <span class="s1">&#39;hrrr.t06z.wrfprsf00.grib2&#39;</span><span class="p">)</span>
 <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">hrrr_url</span><span class="p">,</span> <span class="s1">&#39;test.grib2&#39;</span><span class="p">)</span>
 
-<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;mhx_grid.nc&#39;</span><span class="p">)</span>
-<span class="n">grid_ltx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;ltx_grid.nc)</span>
+<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;grid_mhx.nc&#39;</span><span class="p">)</span>
+<span class="n">grid_ltx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;grid_ltx.nc&#39;</span><span class="p">)</span>
 
 <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span>
                                                          <span class="s1">&#39;test.grib2&#39;</span><span class="p">)</span>
 <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
     <span class="n">grid_mhx</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
 <span class="n">out_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
     <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span>
     <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">])</span>
 
@@ -94,6 +87,7 @@
     <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">20.0</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">out_grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="mi">13</span><span class="p">:]</span> <span class="o">+</span> <span class="s1">&#39; winds at 0.5 km&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
@@ -162,7 +156,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
     </div>
   </body>
 </html>
