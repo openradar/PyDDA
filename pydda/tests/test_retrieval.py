@@ -101,7 +101,8 @@ def test_twpice_case():
         Grids[0].fields["v"]["data"].flatten())[0,1] > 0.9
     assert np.corrcoef(Grids2[0].fields["w"]["data"].flatten(),
         Grids[0].fields["w"]["data"].flatten())[0,1] > 0.5
-
+    cluster.close()
+    client.close()
 
 def test_smoothing():
     """ A field of random numbers from 0 to 1 should smooth out to near 0.5 """

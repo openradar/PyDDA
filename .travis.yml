@@ -13,10 +13,12 @@ matrix:
       env:
         - PYTHON_VERSION="3.5"
         - DOC_BUILD="true"
+        - SKIP_HRRR_TEST="True"
     - python: 3.6
       env:
         - PYTHON_VERSION="3.6"
         - DOC_BUILD="true"
+        - SKIP_HRRR_TEST="True"
     env:
 install: 
     - source continuous_integration/install.sh

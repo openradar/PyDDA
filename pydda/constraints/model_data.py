@@ -1,5 +1,6 @@
 import numpy as np
 import pyart
+import gc
 
 # We want cfgrib to be an optional dependency to ensure Windows compatibility
 try:
@@ -141,7 +142,7 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
         raise RuntimeError(("The cfgrib optional dependency needs to be " +
                             "installed for the HRRR integration feature."))
 
-    the_grib = cfgrib.Dataset.from_path(
+    the_grib = cfgrib.open_file(
         file_path, filter_by_keys={'typeOfLevel': 'isobaricInhPa'})
 
     # Load the HRRR data and tranform longitude coordinates
@@ -210,5 +211,9 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
     new_grid.add_field("U_hrrr", u_dict, replace_existing=True)
     new_grid.add_field("V_hrrr", v_dict, replace_existing=True)
     new_grid.add_field("W_hrrr", w_dict, replace_existing=True)
-
+    
+    # Free up memory
+    del grb_u, grb_v, grb_w, lat, lon
+    del the_grib 
+    gc.collect()
     return new_grid

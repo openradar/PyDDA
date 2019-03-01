@@ -1,5 +1,6 @@
 import numpy as np
 import pyart
+import gc
 
 # We want cfgrib to be an optional dependency to ensure Windows compatibility
 try:
@@ -248,7 +249,7 @@ def make_intialization_from_hrrr(Grid, file_path):
         raise RuntimeError(("The cfgrib optional dependency needs to be " +
                             "installed for the HRRR integration feature."))
 
-    the_grib = cfgrib.Dataset.from_path(
+    the_grib = cfgrib.open_file(
         file_path, filter_by_keys={'typeOfLevel': 'isobaricInhPa'})
 
     # Load the HRR data and tranform longitude coordinates
@@ -310,6 +311,8 @@ def make_intialization_from_hrrr(Grid, file_path):
         w_flattened, rescale=True)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
-    new_grid = deepcopy(Grid)
+    del grb_u, grb_v, grb_w, lat, lon
+    del the_grib
+    gc.collect()
 
     return u_new, v_new, w_new
