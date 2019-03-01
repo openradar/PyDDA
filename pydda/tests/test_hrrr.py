@@ -12,6 +12,7 @@ from distributed import Client, LocalCluster
 # This test currently does not work on Travis CI due to
 # memory limitations. I have included it as a test that I
 # will run manually.
+os.environ["SKIP_HRRR_TEST"] = "True"
 @pytest.mark.skip_if("SKIP_HRRR_TEST" in os.environ and os.environ["SKIP_HRRR_TEST"] == "True", 
                      "Skipping this test on Travis CI.")
 def test_hurricane_florence():
