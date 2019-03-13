@@ -44,8 +44,8 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    LocalCluster('tcp://127.0.0.1:45689', workers=2, ncores=2)
-    <Client: scheduler='tcp://127.0.0.1:45689' processes=2 cores=2>
+    LocalCluster('tcp://127.0.0.1:44258', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:44258' processes=2 cores=2>
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -53,40 +53,40 @@ Author: Robert C. Jackson
     Total points:23059.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   1.9238|  14.2005|   0.0000|   0.0000|   0.0000|   0.0000|  19.2678
-    Norm of gradient: 0.01447127553933203
+    Norm of gradient: 0.014471275539331205
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   1.1217|   8.0989|   0.0000|   0.0000|   0.0000|   0.0000|  77.3722
-    Norm of gradient: 0.013615875402096671
+    Norm of gradient: 0.013615875402095409
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.5301|   6.3961|   0.0000|   0.0000|   0.0000|   0.0000|  65.5354
-    Norm of gradient: 0.015455328123917604
+    Norm of gradient: 0.015455328123926375
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.7379|   5.3387|   0.0000|   0.0000|   0.0000|   0.0000|  45.7571
-    Norm of gradient: 0.012377174597205286
+    Norm of gradient: 0.012377174596873822
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.0849|   4.9865|   0.0000|   0.0000|   0.0000|   0.0000|  39.6481
-    Norm of gradient: 0.01646180956205565
+    Norm of gradient: 0.016461809562069475
     Iterations before filter: 50
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.1370|   4.8336|   0.0000|   0.0000|   0.0000|   0.0000|  38.1769
-    Norm of gradient: 0.006947830664510869
+    Norm of gradient: 0.006947830664502333
     Iterations before filter: 60
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.0685|   4.8256|   0.0000|   0.0000|   0.0000|   0.0000|  37.8073
-    Norm of gradient: 0.00831638048958802
+    Norm of gradient: 0.008316380489520995
     Iterations before filter: 70
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
     |   0.0685|   4.8256|   0.0000|   0.0000|   0.0000|   0.0000|  37.8073
-    Norm of gradient: 0.00831638048958802
+    Norm of gradient: 0.008316380489520995
     Iterations before filter: 80
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 85.9
+    Done! Time = 92.9
     Waiting for nested grid to be retrieved...
 
 
@@ -158,7 +158,7 @@ Author: Robert C. Jackson
                                          barb_spacing_z_km=2.0)
         plt.show()
 
-**Total running time of the script:** ( 3 minutes  47.244 seconds)
+**Total running time of the script:** ( 4 minutes  10.838 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
