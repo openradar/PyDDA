@@ -5,4 +5,4 @@ include LICENSE
 include README.md
 include CODE_OF_CONDUCT.md
 include pytest.ini
-recursive-include pydda *.nc
+recursive-include pydda *.nc *.cdf
