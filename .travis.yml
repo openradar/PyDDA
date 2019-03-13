@@ -15,6 +15,11 @@ matrix:
       env:
         - PYTHON_VERSION="3.6"
         - DOC_BUILD="true"
+    - python: 3.7
+        sudo: yes
+        dist: xenial
+        - PYTHON_VERSION="3.7"
+        - DOC_BUILD="true"
     env:
 install: 
     - source continuous_integration/install.sh
