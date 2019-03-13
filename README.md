@@ -8,11 +8,11 @@ This software is designed to retrieve wind kinematics (u,v,w) in precipitation s
  background fields (eg reanalysis) can be added. 
 
 This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely
- Pythonic package for easier integration with Py-ART and Python. This new package uses a faster minimization technique,
-  L-BFGS-B, which provides a factor of 2 to 5 speedup versus using the predecessor code, 
-   [NASA-Multidop](https://github.com/nasa/MultiDop), as well as a more elegant syntax as well as support for an 
-   arbitrary number of radars. The code is also threadsafe and has been tested using HPC tools such as Dask on large 
-   (100+ core) clusers. 
+ Pythonic package for easier integration with Py-ART and Python. This allows for easy installation using pip and anaconda.
+ This new package also uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus 
+ using the predecessor code, [NASA-Multidop](https://github.com/nasa/MultiDop), as well as a more elegant syntax 
+ as well as support for an arbitrary number of radars. The code is also threadsafe and has been tested using 
+ HPC tools such as Dask on large (100+ core) clusers. 
 
 
 The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. 
@@ -35,6 +35,10 @@ Right now this has been tested on and depends on:
     
     cartopy 0.15.1
     
+    dask 0.17.1
+    
+    distributed 1.21.2
+    
 In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
     pip install cfgrib
@@ -44,15 +48,27 @@ In addition, in order to use the capability to load HRRR data as a constraint, t
 
 1. [Examples](http://openradarscience.org/PyDDA/source/auto_examples/plot_examples.html)
 2. [Developer reference guide](http://openradarscience.org/PyDDA/dev_reference/index.html)
+3. [Contributor's guide](https://openradarscience.org/PyDDA/contributors_guide/index.html)
 
 
 ## Installation instructions
-Right now there is only one method to install PyDDA, which is from source. To
-do this, just type in the following commands assuming you have the above 
-dependencies installed.
+The best way to install PyDDA is by using pip.  
+If you are using PyDDA as an end user, type the following in a bash shell:
 
 ```
-git clone https://github.com/rcjackson/PyDDA
+pip install pydda
+```
+
+Or, if you have Anaconda, you can install using:
+
+```
+conda install -c conda-forge pydda
+```
+
+Installing from source is recommended if you want to use the latest features and want to make contributions to PyDDA. In 
+order to install from source, in a bash shell or the Anaconda prompt if you are in Windows, type the following:
+```
+git clone https://github.com/openradar/PyDDA
 cd PyDDA
 python setup.py install
 ```
@@ -63,6 +79,14 @@ Core components of the software are adopted from the [Multidop](https://github.c
 
 The development of this software is supported by the Climate Model Development and Validation (CMDV) activity which is funded by the Office of Biological and Environmental Research in the US Department of Energy Office of Science.
 
+=======
+## Contributing
+
+We have a set of goals that we wish to accomplish using PyDDA, including the assimilation of data from various models in the retrieval,
+improved visualizations, use of radar data in antenna coordinates, and improved documentation. For more details on what contributions
+would be useful to acheiving these goals, see the [PyDDA Roadmap](https://github.com/openradar/PyDDA/blob/master/ROADMAP.md).
+
+=======
 
 ## References
 You must cite these papers if you use PyDDA:
