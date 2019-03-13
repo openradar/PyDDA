@@ -12,8 +12,9 @@ dependencies:
   - pytest-mpl
   - pytest-cov
   - cartopy
-  - arm_pyart
   - cfgrib
   - eccodes
   - dask
   - distributed
+  - pip:
+     - arm_pyart
