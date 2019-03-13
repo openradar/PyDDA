@@ -4,8 +4,6 @@ env:
     global:
         # Doctr deploy key for openradar/PyDDA
         - secure: "OD1qmZgzaOvrPVxgpSwAQQlikEZriUFlobFayjwqQoHtSTYnWf1+1F3ENGgEd1Niwz6R9xRqNVwKQ4onBQgNKlEBnqc3Z8bk79aRQdxDM8ZgTPgFwKUsL2rgaNk3CWWL05RNeDnRoj/b2TtUa9gK5AhCviH0RPFFmnks0olRp84cMaWHiQq3Kd0L1M92oc+ZyT5PFgkEsiBDE/Rivp5g1M/Z2lu4jHgAWQFjvFHjFVXYbmKqdHkADJZ/N2vYh1yXSlh9Zyskq05doi+rP+cGFv6Z3ou9he0TgN9lCW4+mBbU3WnXRLqHNRtbkhZYSz48jHPAVNupoj+f52Nz7LuyKSnCrPG1On20MqV9UMe1gzVXfswxkP94G025YuZ9lZNy5b4irDzGcUux8ko3eM/zZQNBq1CYJheij4NpawBEKA275c2PLGC1hxooUobHnMt8wgyW0rmuI9cBktQuLXfR3Cko39ns4+uX6BI+fi+T8t5gRPY3hz9tN/dH63kEmUimqh8JlokZAskrhb66exiKY375CezwSkCCrxvuSUoIy2hNi84ObU+DAS0QYnNbLtoRMEscnSAkWMKKGXRkR43v8qkwDXTJWm4i1z1F7/cT3VfelHvAnRWsWn+SeTU9aQB0az3ps7XolMc62e+ABfy4uWj0N94UmDdZEI6BGIG5+Q8="
-
-
    
 matrix:
     include:
