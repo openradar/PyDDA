@@ -16,8 +16,7 @@ from scipy.interpolate import NearestNDInterpolator
 from copy import deepcopy
 
 
-def make_initialization_from_era_interim(Grid, file_name=None, dest_era_file=None,
-                                        vel_field=None):
+def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None):
     """
     This function will read ERA Interim in NetCDF format and add it
     to the Py-ART grid specified by Grid. PyDDA will automatically download
@@ -37,17 +36,10 @@ def make_initialization_from_era_interim(Grid, file_name=None, dest_era_file=Non
     Grid: Py-ART Grid
         The input Py-ART Grid to modify.
     file_name: str or None
-        The netCDF file containing the ERA Interim data. Setting to None will
-        invoke the API in order to attempt to download the data. If the web
+        The netCDF file containing the ERA Interim data. If the web
         API is experiencing delays, it is better to use it to download the
         file and then refer to it here. If this file does not exist
         PyDDA will use the API to create the file.
-    dest_era_file: str or None
-        If this is not None, then the ERA file that is saved using the
-        automatic download feature will be saved
-        to this file for future reading. This is useful in case the
-        web API is experiencing delays. This is not used if file_name
-        is specified.
     vel_field: str or None
         The name of the velocity field in the Py-ART grid. Set to None to
         have Py-DDA attempt to automatically detect it.
@@ -84,7 +76,10 @@ def make_initialization_from_era_interim(Grid, file_name=None, dest_era_file=Non
                              hour_rounded_to_nearest_3,
                              grid_time.minute, grid_time.second)
 
-    if file_name is None or not os.path.isfile(file_name):
+    if not os.path.isfile(file_name):
+        raise FileNotFoundError(file_name + " not found!")
+
+    if file_name is None:
         print("Download ERA Interim data...")
         # ERA interim data is in pressure coordinates
         # Retrieve u, v, w, and geopotential

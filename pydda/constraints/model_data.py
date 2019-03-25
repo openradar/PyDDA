@@ -25,8 +25,73 @@ from scipy.interpolate import griddata, NearestNDInterpolator
 from copy import deepcopy
 
 
-def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
-                                     vel_field=None):
+def download_needed_era_data(Grid, start_date, end_date, file_name):
+    """
+    This function will download the ERA interim data in the region
+    specified by the input Py-ART Grid within the interval specified by
+    start_date and end_date. This is useful for the batch processing of
+    files since the ECMWF API is limited to 20 queued requests at a time.
+    This is also useful if you want to store ERA interim data for future
+    use without having to download it again.
+
+    You need to have the ECMWF API and an ECMWF account set up in order to
+    use this feature. Go to this website for instructions on installing the
+    API and setting up your account:
+
+    https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
+
+    Parameters
+    ----------
+    Grid: Py-ART Grid
+        The input Py-ART Grid to modify.
+    start_date: datetime
+        The start date of the file to download.
+    end_date: datetime
+        The end date of the file to download.
+    file_name:
+        The name of the destination file.
+    """
+
+    if ECMWF_AVAILABLE is False and file_name is None:
+        raise (ModuleNotFoundError,
+               ("The ECMWF API is not installed. Go to" +
+                "https://confluence.ecmwf.int/display/WEBAPI" +
+                "/Access+ECMWF+Public+Datasets" +
+                " in order to use the auto download feature."))
+
+    print("Download ERA Interim data...")
+    # ERA interim data is in pressure coordinates
+    # Retrieve u, v, w, and geopotential
+    # Geopotential is needed to convert into height coordinates
+
+    retrieve_dict = {}
+    retrieve_dict['stream'] = "oper"
+    retrieve_dict['levtype'] = "pl"
+    retrieve_dict['param'] = "131.128/132.128/135.128/129.128"
+    retrieve_dict['dataset'] = "interim"
+    retrieve_dict['levelist'] = ("1/2/3/5/7/10/20/30/50/70/100/125/150/" +
+                                 "175/200/225/250/300/350/400/450/500/" +
+                                 "550/600/650/700/750/775/800/825/850/" +
+                                 "875/900/925/950/975/1000")
+    retrieve_dict['step'] = "0"
+    retrieve_dict['time'] = "00/06/12/18"
+    retrieve_dict['date'] = (start_date.strftime("%Y-%m-%d") + '/' +
+                             end_date.strftime("%Y-%m-%d"))
+    retrieve_dict['class'] = "ei"
+    retrieve_dict['grid'] = "0.75/0.75"
+    N = "%4.1f" % Grid.point_latitude["data"].max()
+    S = "%4.1f" % Grid.point_latitude["data"].min()
+    E = "%4.1f" % Grid.point_longitude["data"].max()
+    W = "%4.1f" % Grid.point_longitude["data"].min()
+
+    retrieve_dict['area'] = N + "/" + W + "/" + S + "/" + E
+    retrieve_dict['format'] = "netcdf"
+    retrieve_dict['target'] = file_name
+    server = ECMWFDataServer()
+    server.retrieve(retrieve_dict)
+
+
+def make_constraint_from_era_interim(Grid, file_name=None, vel_field=None):
     """
     This function will read ERA Interim in NetCDF format and add it 
     to the Py-ART grid specified by Grid. PyDDA will automatically download
@@ -80,9 +145,9 @@ def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
 
     grid_time = datetime.strptime(Grid.time["units"],
                                   "seconds since %Y-%m-%dT%H:%M:%SZ")
-    hour_rounded_to_nearest_3 = int(3 * round(float(grid_time.hour)/3))
+    hour_rounded_to_nearest_6 = int(6 * round(float(grid_time.hour)/6))
 
-    if hour_rounded_to_nearest_3 == 24:
+    if hour_rounded_to_nearest_6 == 24:
         grid_time = grid_time + timedelta(days=1)
         grid_time = datetime(grid_time.year, grid_time.month,
                              grid_time.day, 0, grid_time.minute,
@@ -90,10 +155,14 @@ def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
     else:
         grid_time = datetime(grid_time.year, grid_time.month,
                              grid_time.day,
-                             hour_rounded_to_nearest_3,
+                             hour_rounded_to_nearest_6,
                              grid_time.minute, grid_time.second)
 
-    if file_name is None or not os.path.isfile(file_name):
+    if file_name is not None:
+        if not os.path.isfile(file_name):
+            raise FileNotFoundError(file_name + " not found!")
+
+    if file_name is None:
         print("Download ERA Interim data...")
         # ERA interim data is in pressure coordinates
         # Retrieve u, v, w, and geopotential
@@ -108,7 +177,8 @@ def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
                                      "175/200/225/250/300/350/400/450/500/" +
                                      "550/600/650/700/750/775/800/825/850/" +
                                      "875/900/925/950/975/1000")
-        retrieve_dict['step'] = "%d" % grid_time.hour
+        retrieve_dict['step'] = "0"
+        retrieve_dict['time'] = "%02d" % hour_rounded_to_nearest_6
         retrieve_dict['date'] = grid_time.strftime("%Y-%m-%d")
         retrieve_dict['class'] = "ei"
         retrieve_dict['grid'] = "0.75/0.75"
@@ -119,17 +189,19 @@ def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
 
         retrieve_dict['area'] = N + "/" + W + "/" + S + "/" + E
         retrieve_dict['format'] = "netcdf"
-        if dest_era_file is not None:
-            retrieve_dict['target'] = dest_era_file
-            file_name = dest_era_file
-        else:
-            tfile = tempfile.NamedTemporaryFile()
-            retrieve_dict['target'] = tfile.name
-            file_name = tfile.name
+        tfile = tempfile.NamedTemporaryFile()
+        retrieve_dict['target'] = tfile.name
+        file_name = tfile.name
         server = ECMWFDataServer()
         server.retrieve(retrieve_dict)
+        time_step = 0
 
-    ERA_grid = Dataset(file_name)
+    ERA_grid = Dataset(file_name, mode='r')
+    base_time = datetime.strptime(ERA_grid.variables["time"].units,
+                                  "hours since %Y-%m-%d %H:%M:%S.%f")
+    time_seconds = ERA_grid.variables["time"][:]
+    our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
+    time_step = np.argmin(np.abs(base_time - grid_time))
 
     analysis_grid_shape = Grid.fields[vel_field]['data'].shape
 
@@ -142,9 +214,9 @@ def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
     radar_grid_lat = Grid.point_latitude['data']
     radar_grid_lon = Grid.point_longitude['data']
     radar_grid_alt = Grid.point_z['data']
-    u_flattened = u_ERA[0].flatten()
-    v_flattened = v_ERA[0].flatten()
-    w_flattened = w_ERA[0].flatten()
+    u_flattened = u_ERA[time_step].flatten()
+    v_flattened = v_ERA[time_step].flatten()
+    w_flattened = w_ERA[time_step].flatten()
 
     the_shape = u_ERA.shape
     lon_mgrid, lat_mgrid = np.meshgrid(lon_ERA, lat_ERA)
@@ -153,7 +225,7 @@ def make_constraint_from_era_interim(Grid, file_name=None, dest_era_file=None,
     lat_mgrid = np.tile(lat_mgrid, (the_shape[1], 1, 1))
     lon_flattened = lon_mgrid.flatten()
     lat_flattened = lat_mgrid.flatten()
-    height_flattened = height_ERA.flatten()
+    height_flattened = height_ERA[time_step].flatten()
 
     u_interp = NearestNDInterpolator(
         (height_flattened, lat_flattened, lon_flattened),
