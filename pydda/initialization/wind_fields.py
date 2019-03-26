@@ -1,6 +1,7 @@
 import numpy as np
 import pyart
 import gc
+import os
 
 # We want cfgrib to be an optional dependency to ensure Windows compatibility
 try:
@@ -9,8 +10,16 @@ try:
 except:
     CFGRIB_AVAILABLE = False
 
+# We really only need the API to download the data, make ECMWF API an
+# optional dependency since not everyone will have a login from the start.
+try:
+    from ecmwfapi import ECMWFDataServer
+    ECMWF_AVAILABLE = True
+except:
+    ECMWF_AVAILABLE = False
+
 from netCDF4 import Dataset
-from datetime import datetime
+from datetime import datetime, timedelta
 from scipy.interpolate import RegularGridInterpolator, interp1d, griddata
 from scipy.interpolate import NearestNDInterpolator
 from copy import deepcopy
@@ -115,7 +124,12 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None):
         server = ECMWFDataServer()
         server.retrieve(retrieve_dict)
 
-    ERA_grid = Dataset(file_name)
+    ERA_grid = Dataset(file_name, mode='r')
+    base_time = datetime.strptime(ERA_grid.variables["time"].units,
+                                  "hours since %Y-%m-%d %H:%M:%S.%f")
+    time_seconds = ERA_grid.variables["time"][:]
+    our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
+    time_step = np.argmin(np.abs(base_time - grid_time))
 
     analysis_grid_shape = Grid.fields[vel_field]['data'].shape
 
@@ -128,9 +142,9 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None):
     radar_grid_lat = Grid.point_latitude['data']
     radar_grid_lon = Grid.point_longitude['data']
     radar_grid_alt = Grid.point_z['data']
-    u_flattened = u_ERA[0].flatten()
-    v_flattened = v_ERA[0].flatten()
-    w_flattened = w_ERA[0].flatten()
+    u_flattened = u_ERA[time_step].flatten()
+    v_flattened = v_ERA[time_step].flatten()
+    w_flattened = w_ERA[time_step].flatten()
 
     the_shape = u_ERA.shape
     lon_mgrid, lat_mgrid = np.meshgrid(lon_ERA, lat_ERA)
@@ -139,7 +153,8 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None):
     lat_mgrid = np.tile(lat_mgrid, (the_shape[1], 1, 1))
     lon_flattened = lon_mgrid.flatten()
     lat_flattened = lat_mgrid.flatten()
-    height_flattened = height_ERA.flatten()
+    height_flattened = height_ERA[time_step].flatten()
+    height_flattened -= Grid.radar_altitude["data"]
 
     u_interp = NearestNDInterpolator(
         (height_flattened, lat_flattened, lon_flattened),

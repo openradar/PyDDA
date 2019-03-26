@@ -145,7 +145,7 @@ def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client,
     worker for parallel processing. If NumPy and SciPy are already set up to
     use parallel numerical analysis libraries, it is recommended that a single
     machine be dedicated to each nest rather than a single core
-    for best peformance.
+    for best performance.
 
     Parameters
     ==========
@@ -169,6 +169,8 @@ def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client,
     reduction_factor: int
        How much to reduce the factor of the analysis grid by when doing the
        initial retrieval on the entire grid.
+    num_splits: int
+       The number of splits to make through each axis when doing the nesting.
 
     **kwargs: dict
         This function will take the same keyword arguments as

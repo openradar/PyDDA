@@ -75,7 +75,7 @@ def download_needed_era_data(Grid, start_date, end_date, file_name):
                                  "875/900/925/950/975/1000")
     retrieve_dict['step'] = "0"
     retrieve_dict['time'] = "00/06/12/18"
-    retrieve_dict['date'] = (start_date.strftime("%Y-%m-%d") + '/' +
+    retrieve_dict['date'] = (start_date.strftime("%Y-%m-%d") + '/to/' +
                              end_date.strftime("%Y-%m-%d"))
     retrieve_dict['class'] = "ei"
     retrieve_dict['grid'] = "0.75/0.75"
@@ -226,6 +226,7 @@ def make_constraint_from_era_interim(Grid, file_name=None, vel_field=None):
     lon_flattened = lon_mgrid.flatten()
     lat_flattened = lat_mgrid.flatten()
     height_flattened = height_ERA[time_step].flatten()
+    height_flattened -= Grid.radar_altitude["data"]
 
     u_interp = NearestNDInterpolator(
         (height_flattened, lat_flattened, lon_flattened),
