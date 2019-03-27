@@ -16,7 +16,6 @@ the HRRR to retrieve the winds.
 
 Author: Robert C. Jackson
 
-
 .. code-block:: default
 
 
