@@ -89,7 +89,7 @@ Iterations before filter: 30
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 49.2
+Done! Time = 46.6
 Calculating weights for radars 0 and 1
 Calculating weights for models...
 Starting solver
@@ -126,16 +126,16 @@ Iterations before filter: 70
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 108.6
+Done! Time = 108.0
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydda</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydda</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="kn">as</span> <span class="nn">ccrs</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 
 <span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span><span class="p">)</span>
@@ -159,7 +159,7 @@ Done! Time = 108.6
 <span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span>
                                     <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span>
                                     <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
-                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -172,7 +172,7 @@ Done! Time = 108.6
 <span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span>
                                     <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span>
                                     <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
-                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
@@ -181,7 +181,7 @@ Done! Time = 108.6
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 2 minutes  43.082 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  40.661 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/a19978b4bc9b61c179cb69cc9a7a2ce4/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></div>

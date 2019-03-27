@@ -1,0 +1,6 @@
+pydda.initialization.make\_initialization\_from\_era\_interim
+=============================================================
+
+.. currentmodule:: pydda.initialization
+
+.. autofunction:: make_initialization_from_era_interim

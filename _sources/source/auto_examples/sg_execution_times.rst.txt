@@ -1,0 +1,13 @@
+
+:orphan:
+
+.. _sphx_glr_source_auto_examples_sg_execution_times:
+
+Computation times
+=================
+**10:09.600** total execution time for **source_auto_examples** files:
+
+- **04:06.653**: :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)
+- **03:22.286**: :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)
+- **02:40.661**: :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``)
+- **00:00.000**: :ref:`sphx_glr_source_auto_examples_hurricane_florence.py` (``hurricane_florence.py``)

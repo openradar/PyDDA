@@ -51,6 +51,7 @@
 ./_sources/dev_reference/generated/pydda.cost_functions.grad_J.rst.txt
 ./_sources/dev_reference/generated/pydda.initialization.make_background_from_wrf.rst.txt
 ./_sources/dev_reference/generated/pydda.initialization.make_constant_wind_field.rst.txt
+./_sources/dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.rst.txt
 ./_sources/dev_reference/generated/pydda.initialization.make_wind_field_from_profile.rst.txt
 ./_sources/dev_reference/generated/pydda.retrieval.get_bca.rst.txt
 ./_sources/dev_reference/generated/pydda.retrieval.get_dd_wind_field.rst.txt
@@ -75,6 +76,7 @@
 ./_sources/source/auto_examples/plot_examples.rst.txt
 ./_sources/source/auto_examples/plot_examples_nested.rst.txt
 ./_sources/source/auto_examples/plot_fun_with_constraints.rst.txt
+./_sources/source/auto_examples/sg_execution_times.rst.txt
 ./_static/ajax-loader.gif
 ./_static/basic.css
 ./_static/broken_example.png
@@ -123,6 +125,7 @@
 ./dev_reference/generated/pydda.cost_functions.grad_J.html
 ./dev_reference/generated/pydda.initialization.make_background_from_wrf.html
 ./dev_reference/generated/pydda.initialization.make_constant_wind_field.html
+./dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.html
 ./dev_reference/generated/pydda.initialization.make_wind_field_from_profile.html
 ./dev_reference/generated/pydda.retrieval.get_bca.html
 ./dev_reference/generated/pydda.retrieval.get_dd_wind_field.html
@@ -152,3 +155,4 @@
 ./source/auto_examples/plot_examples.html
 ./source/auto_examples/plot_examples_nested.html
 ./source/auto_examples/plot_fun_with_constraints.html
+./source/auto_examples/sg_execution_times.html

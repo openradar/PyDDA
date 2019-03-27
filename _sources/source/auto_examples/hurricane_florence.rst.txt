@@ -17,8 +17,7 @@ the HRRR to retrieve the winds.
 Author: Robert C. Jackson
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     import urllib
@@ -52,7 +51,10 @@ Author: Robert C. Jackson
     plt.title(out_grids[0].time['units'][13:] + ' winds at 0.5 km')
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.000 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_hurricane_florence.py:

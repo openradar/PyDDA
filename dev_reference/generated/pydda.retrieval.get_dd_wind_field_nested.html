@@ -65,7 +65,7 @@ retrieval step, and each nested retrieval is mapped onto a distributed
 worker for parallel processing. If NumPy and SciPy are already set up to
 use parallel numerical analysis libraries, it is recommended that a single
 machine be dedicated to each nest rather than a single core
-for best peformance.</p>
+for best performance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -96,6 +96,9 @@ best to allow at least 16 cores per one worker.</p>
 <dt><strong>reduction_factor: int</strong></dt>
 <dd><p class="first last">How much to reduce the factor of the analysis grid by when doing the
 initial retrieval on the entire grid.</p>
+</dd>
+<dt><strong>num_splits: int</strong></dt>
+<dd><p class="first last">The number of splits to make through each axis when doing the nesting.</p>
 </dd>
 <dt><strong>**kwargs: dict</strong></dt>
 <dd><p class="first last">This function will take the same keyword arguments as

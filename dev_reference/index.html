@@ -54,7 +54,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">0.3.0</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">Mar 13, 2019</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">Mar 27, 2019</td>
 </tr>
 </tbody>
 </table>
@@ -244,10 +244,10 @@ using barbs, streamlines, and quivers.</p>
 <span class="target" id="module-pydda.initialization"></span><div class="section" id="pydda-initialization-pydda-initialization">
 <h3>pydda.initialization (pydda.initialization)<a class="headerlink" href="#pydda-initialization-pydda-initialization" title="Permalink to this headline">¶</a></h3>
 <p>The module containing the core techniques for the multiple doppler 
-wind retrieval. All of these technqiues take in data from
+wind retrieval. All of these techniques take in data from
 a desired format and will return a 3-tuple of numpy arrays that
 are in the same shape as the input Py-ART Grid object used
-for analysis. If you wish to add another intitalization here,
+for analysis. If you wish to add another initialization here,
 add a procedure that takes in a Py-Art Grid that is used for
 the grid specification (shape, x, y, z) and the dataset of your
 choice. Your output from the function should then be a 3-tuple
@@ -266,6 +266,9 @@ of numpy arrays with the same shape as the fields in Grid.</p>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf" title="pydda.initialization.make_background_from_wrf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_background_from_wrf</span></code></a>(Grid,&nbsp;file_path,&nbsp;…)</td>
 <td>This function makes an initalization field based off of the u and w from a WRF run.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim" title="pydda.initialization.make_initialization_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_initialization_from_era_interim</span></code></a>(Grid[,&nbsp;…])</td>
+<td>This function will read ERA Interim in NetCDF format and add it to the Py-ART grid specified by Grid.</td>
 </tr>
 </tbody>
 </table>

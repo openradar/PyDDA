@@ -187,7 +187,7 @@
 <span class="sd">    worker for parallel processing. If NumPy and SciPy are already set up to</span>
 <span class="sd">    use parallel numerical analysis libraries, it is recommended that a single</span>
 <span class="sd">    machine be dedicated to each nest rather than a single core</span>
-<span class="sd">    for best peformance.</span>
+<span class="sd">    for best performance.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ==========</span>
@@ -211,6 +211,8 @@
 <span class="sd">    reduction_factor: int</span>
 <span class="sd">       How much to reduce the factor of the analysis grid by when doing the</span>
 <span class="sd">       initial retrieval on the entire grid.</span>
+<span class="sd">    num_splits: int</span>
+<span class="sd">       The number of splits to make through each axis when doing the nesting.</span>
 
 <span class="sd">    **kwargs: dict</span>
 <span class="sd">        This function will take the same keyword arguments as</span>

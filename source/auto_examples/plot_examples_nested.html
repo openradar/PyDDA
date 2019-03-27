@@ -65,8 +65,8 @@ nested grid features of PyDDA.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LocalCluster(&#39;tcp://127.0.0.1:34961&#39;, workers=2, ncores=2)
-&lt;Client: scheduler=&#39;tcp://127.0.0.1:34961&#39; processes=2 cores=2&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LocalCluster(&#39;tcp://127.0.0.1:35483&#39;, workers=2, ncores=2)
+&lt;Client: scheduler=&#39;tcp://127.0.0.1:35483&#39; processes=2 cores=2&gt;
 Calculating weights for radars 0 and 1
 Calculating weights for models...
 Starting solver
@@ -107,17 +107,17 @@ Iterations before filter: 80
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 99.2
+Done! Time = 89.4
 Waiting for nested grid to be retrieved...
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">import</span> <span class="nn">pydda</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span><span class="p">,</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="k">import</span> <span class="n">LocalCluster</span><span class="p">,</span> <span class="n">Client</span>
 
 <span class="c1"># Needed so that distributed doesn&#39;t run all of your code when the worker</span>
 <span class="c1"># starts!</span>
@@ -136,16 +136,16 @@ Waiting for nested grid to be retrieved...
     <span class="c1"># for this...a LocalCluster is used here for the sake of being able to run</span>
     <span class="c1"># this example locally.</span>
     <span class="n">cluster</span> <span class="o">=</span> <span class="n">LocalCluster</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
 
     <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
     <span class="c1"># and data weighting constraints.</span>
     <span class="n">Grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field_nested</span><span class="p">(</span>
         <span class="p">[</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span>  <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
         <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
-        <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mask_outside_opt</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Plot a horizontal cross section</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
@@ -175,7 +175,7 @@ Waiting for nested grid to be retrieved...
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 4 minutes  18.582 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  6.653 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-nested-py">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" download="" href="../../_downloads/c5898e138715ffe2a6e16ff07993c283/plot_examples_nested.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples_nested.py</span></code></a></div>

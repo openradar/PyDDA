@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pydda.constraints.make_constraint_from_wrf &#8212; PyDDA 0.3.0 documentation</title>
+    <title>pydda.initialization.make_initialization_from_era_interim &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -19,8 +19,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pydda.constraints.add_hrrr_constraint_to_grid" href="pydda.constraints.add_hrrr_constraint_to_grid.html" />
-    <link rel="prev" title="pydda.initialization.make_initialization_from_era_interim" href="pydda.initialization.make_initialization_from_era_interim.html" /> 
+    <link rel="next" title="pydda.constraints.make_constraint_from_wrf" href="pydda.constraints.make_constraint_from_wrf.html" />
+    <link rel="prev" title="pydda.initialization.make_background_from_wrf" href="pydda.initialization.make_background_from_wrf.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -32,10 +32,10 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pydda.constraints.add_hrrr_constraint_to_grid.html" title="pydda.constraints.add_hrrr_constraint_to_grid"
+          <a href="pydda.constraints.make_constraint_from_wrf.html" title="pydda.constraints.make_constraint_from_wrf"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pydda.initialization.make_initialization_from_era_interim.html" title="pydda.initialization.make_initialization_from_era_interim"
+          <a href="pydda.initialization.make_background_from_wrf.html" title="pydda.initialization.make_background_from_wrf"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
@@ -47,45 +47,46 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pydda-constraints-make-constraint-from-wrf">
-<h1>pydda.constraints.make_constraint_from_wrf<a class="headerlink" href="#pydda-constraints-make-constraint-from-wrf" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pydda-initialization-make-initialization-from-era-interim">
+<h1>pydda.initialization.make_initialization_from_era_interim<a class="headerlink" href="#pydda-initialization-make-initialization-from-era-interim" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pydda.constraints.make_constraint_from_wrf">
-<code class="descclassname">pydda.constraints.</code><code class="descname">make_constraint_from_wrf</code><span class="sig-paren">(</span><em>Grid</em>, <em>file_path</em>, <em>wrf_time</em>, <em>radar_loc</em>, <em>vel_field=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/constraints/model_data.html#make_constraint_from_wrf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.constraints.make_constraint_from_wrf" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function makes an initalization field based off of the u and w
-from a WRF run in netCDF format.
-Only u and v are used from the WRF netCDF file.</p>
+<dt id="pydda.initialization.make_initialization_from_era_interim">
+<code class="descclassname">pydda.initialization.</code><code class="descname">make_initialization_from_era_interim</code><span class="sig-paren">(</span><em>Grid</em>, <em>file_name=None</em>, <em>vel_field=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/initialization/wind_fields.html#make_initialization_from_era_interim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.initialization.make_initialization_from_era_interim" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will read ERA Interim in NetCDF format and add it
+to the Py-ART grid specified by Grid. PyDDA will automatically download
+the ERA Interim data that you need for the scan. It will chose the domain
+that is enclosed by the analysis grid and the time period that is closest
+to the scan. It will then do a Nearest Neighbor interpolation of the
+ERA-Interim u and v winds to the analysis grid.</p>
+<p>You need to have the ECMWF API and an ECMWF account set up in order to
+use this feature. Go to this website for instructions on installing the
+API and setting up your account:</p>
+<p><a class="reference external" href="https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets">https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>Grid: Py-ART Grid object</strong></dt>
-<dd><p class="first last">This is the Py-ART Grid containing the coordinates for the
-analysis grid.</p>
+<dt><strong>Grid: Py-ART Grid</strong></dt>
+<dd><p class="first last">The input Py-ART Grid to modify.</p>
 </dd>
-<dt><strong>file_path: str</strong></dt>
-<dd><p class="first last">This is the path to the WRF grid</p>
+<dt><strong>file_name: str or None</strong></dt>
+<dd><p class="first last">The netCDF file containing the ERA Interim data. If the web
+API is experiencing delays, it is better to use it to download the
+file and then refer to it here. If this file does not exist
+PyDDA will use the API to create the file.</p>
 </dd>
-<dt><strong>wrf_time: datetime</strong></dt>
-<dd><p class="first last">The timestep to derive the intialization field from.</p>
-</dd>
-<dt><strong>radar_loc: tuple</strong></dt>
-<dd><p class="first last">The (X, Y) location of the radar in the WRF grid. The output
-coordinate system will be centered around this location
-and given the same grid specification that is specified
-in Grid.</p>
-</dd>
-<dt><strong>vel_field: str, or None</strong></dt>
-<dd><p class="first last">This string contains the name of the velocity field in the
-Grid. None will try to automatically detect this value.</p>
+<dt><strong>vel_field: str or None</strong></dt>
+<dd><p class="first last">The name of the velocity field in the Py-ART grid. Set to None to
+have Py-DDA attempt to automatically detect it.</p>
 </dd>
 </dl>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>Grid: Py-ART Grid object</strong></dt>
-<dd><p class="first last">This Py-ART Grid will contain the model u, v, and w.</p>
+<dt><strong>new_Grid: Py-ART Grid</strong></dt>
+<dd><p class="first last">The Py-ART Grid with the ERA Interim data added into the “u_erainterim”,
+“v_erainterim”, and “w_erainterim” fields.</p>
 </dd>
 </dl>
 </td>
@@ -103,15 +104,15 @@ Grid. None will try to automatically detect this value.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.initialization.make_initialization_from_era_interim.html"
-                        title="previous chapter">pydda.initialization.make_initialization_from_era_interim</a></p>
+  <p class="topless"><a href="pydda.initialization.make_background_from_wrf.html"
+                        title="previous chapter">pydda.initialization.make_background_from_wrf</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pydda.constraints.add_hrrr_constraint_to_grid.html"
-                        title="next chapter">pydda.constraints.add_hrrr_constraint_to_grid</a></p>
+  <p class="topless"><a href="pydda.constraints.make_constraint_from_wrf.html"
+                        title="next chapter">pydda.constraints.make_constraint_from_wrf</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/dev_reference/generated/pydda.constraints.make_constraint_from_wrf.rst.txt"
+      <li><a href="../../_sources/dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -141,10 +142,10 @@ Grid. None will try to automatically detect this value.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pydda.constraints.add_hrrr_constraint_to_grid.html" title="pydda.constraints.add_hrrr_constraint_to_grid"
+          <a href="pydda.constraints.make_constraint_from_wrf.html" title="pydda.constraints.make_constraint_from_wrf"
              >next</a> |</li>
         <li class="right" >
-          <a href="pydda.initialization.make_initialization_from_era_interim.html" title="pydda.initialization.make_initialization_from_era_interim"
+          <a href="pydda.initialization.make_background_from_wrf.html" title="pydda.initialization.make_background_from_wrf"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 
