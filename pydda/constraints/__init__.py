@@ -25,3 +25,5 @@ simply add (name) into the model_fields option of
 
 from .model_data import make_constraint_from_wrf
 from .model_data import add_hrrr_constraint_to_grid
+from .model_data import make_constraint_from_era_interim
+from .model_data import download_needed_era_data

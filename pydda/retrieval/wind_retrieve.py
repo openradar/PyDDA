@@ -165,6 +165,10 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         if(Cv != 0.0):
             raise ValueError(('Ut and Vt cannot be None if vertical ' +
                               'vorticity constraint is enabled!'))
+
+    if not isinstance(Grids, list):
+        raise ValueError('Grids has to be a list!')
+
     
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
@@ -312,7 +316,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                     mod_weights[i] = weights_model[i]
     else:
         weights[0] = np.where(~vrs[0].mask, 1, 0)
-        bg_weights[0] = np.where(~vrs[0].mask, 0, 1)
+        bg_weights = np.where(~vrs[0].mask, 0, 1)
 
     weights[weights > 0] = 1
     sum_Vr = np.sum(np.square(vrs*weights))
