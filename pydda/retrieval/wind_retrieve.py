@@ -320,7 +320,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
 
     weights[weights > 0] = 1
     sum_Vr = np.sum(np.square(vrs*weights))
-    rmsVr = np.sum(sum_Vr)/np.sum(weights)
+    rmsVr = np.sqrt(np.sum(sum_Vr)/np.sum(weights))
 
     del bca
     grid_shape = u_init.shape
