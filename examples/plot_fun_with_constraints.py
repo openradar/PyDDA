@@ -40,7 +40,7 @@ plt.show()
 new_grids = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
                                     u_init, v_init, w_init,
                                     Co=1.0, Cm=1500.0, frz=5000.0,
-                                    mask_outside_opt=True)
+                                    mask_outside_opt=False)
 
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
@@ -52,8 +52,8 @@ plt.show()
 # Or, let's make the radar data more important!
 new_grids = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
                                     u_init, v_init, w_init,
-                                    Co=10.0, Cm=1500.0, frz=5000.0,
-                                    mask_outside_opt=True)
+                                    Co=1.0, Cm=1500.0, frz=5000.0,
+                                    mask_outside_opt=False)
 fig = plt.figure(figsize=(7, 7))
 ax = plt.axes(projection=ccrs.PlateCarree())
 
