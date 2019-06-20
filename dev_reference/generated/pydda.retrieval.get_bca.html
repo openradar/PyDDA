@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pydda.retrieval.get_bca &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -52,46 +50,34 @@
 <h1>pydda.retrieval.get_bca<a class="headerlink" href="#pydda-retrieval-get-bca" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.retrieval.get_bca">
-<code class="descclassname">pydda.retrieval.</code><code class="descname">get_bca</code><span class="sig-paren">(</span><em>rad1_lon</em>, <em>rad1_lat</em>, <em>rad2_lon</em>, <em>rad2_lat</em>, <em>x</em>, <em>y</em>, <em>projparams</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_bca"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.get_bca" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.retrieval.</code><code class="sig-name descname">get_bca</code><span class="sig-paren">(</span><em class="sig-param">rad1_lon</em>, <em class="sig-param">rad1_lat</em>, <em class="sig-param">rad2_lon</em>, <em class="sig-param">rad2_lat</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">projparams</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_bca"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.get_bca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function gets the beam crossing angle between two lat/lon pairs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>rad1_lon: float</strong></dt>
-<dd><p class="first last">The longitude of the first radar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>rad1_lon: float</strong></dt><dd><p>The longitude of the first radar.</p>
 </dd>
-<dt><strong>rad1_lat: float</strong></dt>
-<dd><p class="first last">The latitude of the first radar.</p>
+<dt><strong>rad1_lat: float</strong></dt><dd><p>The latitude of the first radar.</p>
 </dd>
-<dt><strong>rad2_lon: float</strong></dt>
-<dd><p class="first last">The longitude of the second radar.</p>
+<dt><strong>rad2_lon: float</strong></dt><dd><p>The longitude of the second radar.</p>
 </dd>
-<dt><strong>rad2_lat: float</strong></dt>
-<dd><p class="first last">The latitude of the second radar.</p>
+<dt><strong>rad2_lat: float</strong></dt><dd><p>The latitude of the second radar.</p>
 </dd>
-<dt><strong>x: nD float array</strong></dt>
-<dd><p class="first last">The Cartesian x coordinates of the grid</p>
+<dt><strong>x: nD float array</strong></dt><dd><p>The Cartesian x coordinates of the grid</p>
 </dd>
-<dt><strong>y: nD float array</strong></dt>
-<dd><p class="first last">The Cartesian y corrdinates of the grid</p>
+<dt><strong>y: nD float array</strong></dt><dd><p>The Cartesian y corrdinates of the grid</p>
 </dd>
-<dt><strong>projparams: Py-ART projparams</strong></dt>
-<dd><p class="first last">The projection parameters of the Grid</p>
+<dt><strong>projparams: Py-ART projparams</strong></dt><dd><p>The projection parameters of the Grid</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>bca: nD float array</strong></dt>
-<dd><p class="first last">The beam crossing angle between the two radars in radians.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>bca: nD float array</dt><dd><p>The beam crossing angle between the two radars in radians.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -116,13 +102,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -152,7 +136,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

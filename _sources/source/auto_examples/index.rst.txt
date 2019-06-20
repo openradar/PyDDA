@@ -37,6 +37,46 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
+
+.. only:: html
+
+    .. figure:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
+
+        :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /source/auto_examples/sydney_tornado
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to combine data from 3 radars and HRRR in the vicinity of the SGP ...">
+
+.. only:: html
+
+    .. figure:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
+
+        :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /source/auto_examples/oklahoma_example
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="In this example we show how to plot wind fields on a map and change the default constraint coef...">
 
 .. only:: html

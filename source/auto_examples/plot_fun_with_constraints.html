@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Example on geographic plotting and constraint variation &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -21,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Example on retrieving and plotting winds" href="plot_examples.html" />
-    <link rel="prev" title="Example on integrating radar and HRRR data" href="hurricane_florence.html" /> 
+    <link rel="prev" title="Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma" href="oklahoma_example.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -36,7 +34,7 @@
           <a href="plot_examples.html" title="Example on retrieving and plotting winds"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="hurricane_florence.html" title="Example on integrating radar and HRRR data"
+          <a href="oklahoma_example.html" title="Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li> 
@@ -49,8 +47,8 @@
           <div class="body" role="main">
             
   <div class="sphx-glr-download-link-note admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="example-on-geographic-plotting-and-constraint-variation">
 <span id="sphx-glr-source-auto-examples-plot-fun-with-constraints-py"></span><h1>Example on geographic plotting and constraint variation<a class="headerlink" href="#example-on-geographic-plotting-and-constraint-variation" title="Permalink to this headline">¶</a></h1>
@@ -62,72 +60,88 @@ the sounding was used as the initial state, but for the latter
 two examples we use a zero initial state which provides for more
 questionable winds at the edges of the Dual Doppler Lobes.</p>
 <ul class="sphx-glr-horizontal">
-<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_001.png" class="sphx-glr-multi-img first" src="../../_images/sphx_glr_plot_fun_with_constraints_001.png" />
+<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_001.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_001.png" />
 </li>
-<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_002.png" class="sphx-glr-multi-img first" src="../../_images/sphx_glr_plot_fun_with_constraints_002.png" />
+<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_002.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_002.png" />
 </li>
-<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_003.png" class="sphx-glr-multi-img first" src="../../_images/sphx_glr_plot_fun_with_constraints_003.png" />
+<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_003.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_003.png" />
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 0 and 1
 Calculating weights for models...
 Starting solver
-rmsVR = 45.92438215135045
+rmsVR = 6.776753068494561
 Total points:92092.0
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|  10.2655|  15.1394|   0.0000|   0.0000|   0.0000|   0.0000|  20.0980
-Norm of gradient: 0.003885590897968961
+|  17.4621| 117.0106|   0.0000|   0.0000|   0.0000|   0.0000|  11.8748
+Norm of gradient: 0.03349348061301913
 Iterations before filter: 10
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   2.7156|   4.3442|   0.0000|   0.0000|   0.0000|   0.0000|  20.4927
-Norm of gradient: 0.0009764062600756487
+|   3.3575|  44.2463|   0.0000|   0.0000|   0.0000|   0.0000|  18.9282
+Norm of gradient: 0.03588228276176865
 Iterations before filter: 20
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   2.7156|   4.3442|   0.0000|   0.0000|   0.0000|   0.0000|  20.4927
-Norm of gradient: 0.0009764062600756487
-Iterations before filter: 30
-Applying low pass filter to wind field...
-Iterations after filter: 1
-Iterations after filter: 2
-Done! Time = 59.0
-Calculating weights for radars 0 and 1
-Calculating weights for models...
-Starting solver
-rmsVR = 45.92438215135045
-Total points:92092.0
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   7.9780|  41.2817|   0.0000|   0.0000|   0.0000|   0.0000|  17.4625
-Norm of gradient: 0.007461572513064858
-Iterations before filter: 10
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   1.9889|  12.6084|   0.0000|   0.0000|   0.0000|   0.0000|  26.7333
-Norm of gradient: 0.0018231999841681525
-Iterations before filter: 20
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   1.0138|   7.0861|   0.0000|   0.0000|   0.0000|   0.0000|  30.2866
-Norm of gradient: 0.0042373668099357255
+|   1.6812|  26.5519|   0.0000|   0.0000|   0.0000|   0.0000|  20.4316
+Norm of gradient: 0.01949543388468692
 Iterations before filter: 30
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.8031|   4.8628|   0.0000|   0.0000|   0.0000|   0.0000|  31.5739
-Norm of gradient: 0.002007736527729706
+|   0.9545|  18.2288|   0.0000|   0.0000|   0.0000|   0.0000|  23.1132
+Norm of gradient: 0.011626804623717037
 Iterations before filter: 40
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.4837|   4.0882|   0.0000|   0.0000|   0.0000|   0.0000|  31.7890
-Norm of gradient: 0.0010567027912520986
+|   0.5441|  14.1966|   0.0000|   0.0000|   0.0000|   0.0000|  25.9112
+Norm of gradient: 0.004176457573828959
 Iterations before filter: 50
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.3945|   3.6417|   0.0000|   0.0000|   0.0000|   0.0000|  31.8143
-Norm of gradient: 0.000574781806764932
+|   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
+Norm of gradient: 0.0009014047516688181
 Iterations before filter: 60
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.3945|   3.6417|   0.0000|   0.0000|   0.0000|   0.0000|  31.8143
-Norm of gradient: 0.000574781806764932
+|   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
+Norm of gradient: 0.0009014047516688181
 Iterations before filter: 70
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 129.3
+Done! Time = 119.7
+Calculating weights for radars 0 and 1
+Calculating weights for models...
+Starting solver
+rmsVR = 6.776753068494561
+Total points:92092.0
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|  17.4621| 117.0106|   0.0000|   0.0000|   0.0000|   0.0000|  11.8748
+Norm of gradient: 0.03349348061301913
+Iterations before filter: 10
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   3.3575|  44.2463|   0.0000|   0.0000|   0.0000|   0.0000|  18.9282
+Norm of gradient: 0.03588228276176865
+Iterations before filter: 20
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   1.6812|  26.5519|   0.0000|   0.0000|   0.0000|   0.0000|  20.4316
+Norm of gradient: 0.01949543388468692
+Iterations before filter: 30
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.9545|  18.2288|   0.0000|   0.0000|   0.0000|   0.0000|  23.1132
+Norm of gradient: 0.011626804623717037
+Iterations before filter: 40
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.5441|  14.1966|   0.0000|   0.0000|   0.0000|   0.0000|  25.9112
+Norm of gradient: 0.004176457573828959
+Iterations before filter: 50
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
+Norm of gradient: 0.0009014047516688181
+Iterations before filter: 60
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
+Norm of gradient: 0.0009014047516688181
+Iterations before filter: 70
+Applying low pass filter to wind field...
+Iterations after filter: 1
+Iterations after filter: 2
+Done! Time = 119.4
 </pre></div>
 </div>
 <div class="line-block">
@@ -160,7 +174,7 @@ Done! Time = 129.3
 <span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span>
                                     <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span>
                                     <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
-                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -172,8 +186,8 @@ Done! Time = 129.3
 <span class="c1"># Or, let&#39;s make the radar data more important!</span>
 <span class="n">new_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">cpol_grid</span><span class="p">,</span> <span class="n">berr_grid</span><span class="p">],</span>
                                     <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span>
-                                    <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
-                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                    <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
+                                    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
@@ -182,12 +196,14 @@ Done! Time = 129.3
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  15.684 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  7.305 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" download="" href="../../_downloads/a19978b4bc9b61c179cb69cc9a7a2ce4/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></div>
+<p><a class="reference download internal" download="" href="../../_downloads/a19978b4bc9b61c179cb69cc9a7a2ce4/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></p>
+</div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" download="" href="../../_downloads/7ef72a369cf28c193b4f4826ca75cc9a/plot_fun_with_constraints.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fun_with_constraints.ipynb</span></code></a></div>
+<p><a class="reference download internal" download="" href="../../_downloads/7ef72a369cf28c193b4f4826ca75cc9a/plot_fun_with_constraints.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fun_with_constraints.ipynb</span></code></a></p>
+</div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -199,8 +215,8 @@ Done! Time = 129.3
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="hurricane_florence.html"
-                        title="previous chapter">Example on integrating radar and HRRR data</a></p>
+  <p class="topless"><a href="oklahoma_example.html"
+                        title="previous chapter">Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="plot_examples.html"
                         title="next chapter">Example on retrieving and plotting winds</a></p>
@@ -212,13 +228,11 @@ Done! Time = 129.3
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -240,7 +254,7 @@ Done! Time = 129.3
           <a href="plot_examples.html" title="Example on retrieving and plotting winds"
              >next</a> |</li>
         <li class="right" >
-          <a href="hurricane_florence.html" title="Example on integrating radar and HRRR data"
+          <a href="oklahoma_example.html" title="Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.3.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li> 
@@ -248,7 +262,7 @@ Done! Time = 129.3
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

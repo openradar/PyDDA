@@ -41,49 +41,65 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    LocalCluster('tcp://127.0.0.1:43735', workers=2, ncores=2)
-    <Client: scheduler='tcp://127.0.0.1:43735' processes=2 cores=2>
+    LocalCluster('tcp://127.0.0.1:45855', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:45855' processes=2 cores=2>
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
-    rmsVR = 45.74873003282365
+    rmsVR = 6.763780749907824
     Total points:23059.0
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   1.9238|  14.2005|   0.0000|   0.0000|   0.0000|   0.0000|  19.2678
-    Norm of gradient: 0.014471275539330404
+    |   7.3255|  31.7513|   0.0000|   0.0000|   0.0000|   0.0000|  11.4154
+    Norm of gradient: 0.0650530360051775
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   1.1217|   8.0989|   0.0000|   0.0000|   0.0000|   0.0000|  77.3722
-    Norm of gradient: 0.013615875402095787
+    |   0.7352|  14.2164|   0.0000|   0.0000|   0.0000|   0.0000|  25.2106
+    Norm of gradient: 0.024580790779265987
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.5301|   6.3961|   0.0000|   0.0000|   0.0000|   0.0000|  65.5354
-    Norm of gradient: 0.01545532812392393
+    |   0.6733|   9.3867|   0.0000|   0.0000|   0.0000|   0.0000|  48.6620
+    Norm of gradient: 0.026013982166250275
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.7379|   5.3387|   0.0000|   0.0000|   0.0000|   0.0000|  45.7571
-    Norm of gradient: 0.012377174596866198
+    |   0.2137|   7.3447|   0.0000|   0.0000|   0.0000|   0.0000|  56.3472
+    Norm of gradient: 0.02548859675514071
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.0849|   4.9865|   0.0000|   0.0000|   0.0000|   0.0000|  39.6481
-    Norm of gradient: 0.01646180956206523
+    |   0.0640|   6.2785|   0.0000|   0.0000|   0.0000|   0.0000|  55.0991
+    Norm of gradient: 0.007875486945673972
     Iterations before filter: 50
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.1370|   4.8336|   0.0000|   0.0000|   0.0000|   0.0000|  38.1769
-    Norm of gradient: 0.006947830664505916
+    |   0.0618|   5.6034|   0.0000|   0.0000|   0.0000|   0.0000|  47.7570
+    Norm of gradient: 0.007646483245098699
     Iterations before filter: 60
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.0685|   4.8256|   0.0000|   0.0000|   0.0000|   0.0000|  37.8073
-    Norm of gradient: 0.008316380489560146
+    |   0.0476|   5.0452|   0.0000|   0.0000|   0.0000|   0.0000|  46.2112
+    Norm of gradient: 0.015678441265664804
     Iterations before filter: 70
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.0685|   4.8256|   0.0000|   0.0000|   0.0000|   0.0000|  37.8073
-    Norm of gradient: 0.008316380489560146
+    |   0.0446|   4.7581|   0.0000|   0.0000|   0.0000|   0.0000|  41.1122
+    Norm of gradient: 0.013913955624800934
     Iterations before filter: 80
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.0601|   4.4503|   0.0000|   0.0000|   0.0000|   0.0000|  38.1186
+    Norm of gradient: 0.024220033810314595
+    Iterations before filter: 90
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.1290|   4.2479|   0.0000|   0.0000|   0.0000|   0.0000|  35.5431
+    Norm of gradient: 0.04007884802140612
+    Iterations before filter: 100
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.0396|   4.2146|   0.0000|   0.0000|   0.0000|   0.0000|  35.0184
+    Norm of gradient: 0.013595536310328973
+    Iterations before filter: 110
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    |   0.0167|   4.2138|   0.0000|   0.0000|   0.0000|   0.0000|  35.0012
+    Norm of gradient: 0.006098645497136905
+    Iterations before filter: 120
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 123.2
+    Done! Time = 124.6
     Waiting for nested grid to be retrieved...
 
 
@@ -124,7 +140,7 @@ Author: Robert C. Jackson
         # Start the wind retrieval. This example only uses the mass continuity
         # and data weighting constraints.
         Grids = pydda.retrieval.get_dd_wind_field_nested(
-            [berr_grid, cpol_grid], u_init,  v_init, w_init, client, Co=10.0,
+            [berr_grid, cpol_grid], u_init,  v_init, w_init, client, Co=1.0,
             Cm=1500.0, Cz=0, frz=5000.0,
             filt_iterations=2, mask_outside_opt=True, upper_bc=1)
 
@@ -158,7 +174,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 5 minutes  48.325 seconds)
+   **Total running time of the script:** ( 6 minutes  31.258 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:

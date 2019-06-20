@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pydda.initialization.make_wind_field_from_profile &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -52,50 +50,39 @@
 <h1>pydda.initialization.make_wind_field_from_profile<a class="headerlink" href="#pydda-initialization-make-wind-field-from-profile" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.initialization.make_wind_field_from_profile">
-<code class="descclassname">pydda.initialization.</code><code class="descname">make_wind_field_from_profile</code><span class="sig-paren">(</span><em>Grid</em>, <em>profile</em>, <em>vel_field=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/initialization/wind_fields.html#make_wind_field_from_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.initialization.make_wind_field_from_profile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.initialization.</code><code class="sig-name descname">make_wind_field_from_profile</code><span class="sig-paren">(</span><em class="sig-param">Grid</em>, <em class="sig-param">profile</em>, <em class="sig-param">vel_field=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/initialization/wind_fields.html#make_wind_field_from_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.initialization.make_wind_field_from_profile" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function makes a 3D wind field from a sounding.</p>
 <p>This function is useful for using sounding data as an initialization
 for get_dd_wind_field.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>Grid: Py-ART Grid object</strong></dt>
-<dd><p class="first last">This is the Py-ART Grid containing the coordinates for the analysis
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Grid: Py-ART Grid object</strong></dt><dd><p>This is the Py-ART Grid containing the coordinates for the analysis
 grid.</p>
 </dd>
-<dt><strong>profile: PyART HorizontalWindProfile</strong></dt>
-<dd><p class="first last">This is the HorizontalWindProfile of the sounding</p>
+<dt><strong>profile: PyART HorizontalWindProfile</strong></dt><dd><p>This is the HorizontalWindProfile of the sounding</p>
 </dd>
-<dt><strong>wind: 3-tuple of floats</strong></dt>
-<dd><p class="first last">The 3-tuple specifying the (u,v,w) of the wind field.</p>
+<dt><strong>wind: 3-tuple of floats</strong></dt><dd><p>The 3-tuple specifying the (u,v,w) of the wind field.</p>
 </dd>
-<dt><strong>vel_field: String</strong></dt>
-<dd><p class="first last">The name of the velocity field in Grid. None will automatically
+<dt><strong>vel_field: String</strong></dt><dd><p>The name of the velocity field in Grid. None will automatically
 try to detect this field.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>u: 3D float array</strong></dt>
-<dd><p class="first last">Returns a 3D float array containing the u component of the wind field.
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>u: 3D float array</dt><dd><p>Returns a 3D float array containing the u component of the wind field.
 The shape will be the same shape as the fields in Grid.</p>
 </dd>
-<dt><strong>v: 3D float array</strong></dt>
-<dd><p class="first last">Returns a 3D float array containing the v component of the wind field.
+<dt>v: 3D float array</dt><dd><p>Returns a 3D float array containing the v component of the wind field.
 The shape will be the same shape as the fields in Grid.</p>
 </dd>
-<dt><strong>w: 3D float array</strong></dt>
-<dd><p class="first last">Returns a 3D float array containing the u component of the wind field.
+<dt>w: 3D float array</dt><dd><p>Returns a 3D float array containing the u component of the wind field.
 The shape will be the same shape as the fields in Grid.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -120,13 +107,11 @@ The shape will be the same shape as the fields in Grid.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -156,7 +141,7 @@ The shape will be the same shape as the fields in Grid.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

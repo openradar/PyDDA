@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pydda.constraints.add_hrrr_constraint_to_grid &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -48,34 +46,26 @@
 <h1>pydda.constraints.add_hrrr_constraint_to_grid<a class="headerlink" href="#pydda-constraints-add-hrrr-constraint-to-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.constraints.add_hrrr_constraint_to_grid">
-<code class="descclassname">pydda.constraints.</code><code class="descname">add_hrrr_constraint_to_grid</code><span class="sig-paren">(</span><em>Grid</em>, <em>file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/constraints/model_data.html#add_hrrr_constraint_to_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.constraints.add_hrrr_constraint_to_grid" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.constraints.</code><code class="sig-name descname">add_hrrr_constraint_to_grid</code><span class="sig-paren">(</span><em class="sig-param">Grid</em>, <em class="sig-param">file_path</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/constraints/model_data.html#add_hrrr_constraint_to_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.constraints.add_hrrr_constraint_to_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will read an HRRR GRIB2 file and create the constraining
 u, v, and w fields for the model constraint</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>Grid: Py-ART Grid</strong></dt>
-<dd><p class="first last">The Py-ART Grid to use as the grid specification. The HRRR values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Grid: Py-ART Grid</strong></dt><dd><p>The Py-ART Grid to use as the grid specification. The HRRR values</p>
 </dd>
-<dt><strong>will be interpolated to the Grid’s specficiation and added as a field.</strong></dt>
-<dd></dd>
-<dt><strong>file_path: string</strong></dt>
-<dd><p class="first last">The path to the GRIB2 file to load.</p>
+<dt><strong>will be interpolated to the Grid’s specficiation and added as a field.</strong></dt><dd></dd>
+<dt><strong>file_path: string</strong></dt><dd><p>The path to the GRIB2 file to load.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>Grid: Py-ART Grid</strong></dt>
-<dd><p class="first last">This returns the Py-ART grid with the HRRR u, and v fields added.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Grid: Py-ART Grid</dt><dd><p>This returns the Py-ART grid with the HRRR u, and v fields added.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -97,13 +87,11 @@ u, v, and w fields for the model constraint</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -130,7 +118,7 @@ u, v, and w fields for the model constraint</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

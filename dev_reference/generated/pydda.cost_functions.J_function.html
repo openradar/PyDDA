@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pydda.cost_functions.J_function &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -52,139 +50,103 @@
 <h1>pydda.cost_functions.J_function<a class="headerlink" href="#pydda-cost-functions-j-function" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.cost_functions.J_function">
-<code class="descclassname">pydda.cost_functions.</code><code class="descname">J_function</code><span class="sig-paren">(</span><em>winds</em>, <em>vrs</em>, <em>azs</em>, <em>els</em>, <em>wts</em>, <em>u_back</em>, <em>v_back</em>, <em>u_model</em>, <em>v_model</em>, <em>w_model</em>, <em>Co</em>, <em>Cm</em>, <em>Cx</em>, <em>Cy</em>, <em>Cz</em>, <em>Cb</em>, <em>Cv</em>, <em>Cmod</em>, <em>Ut</em>, <em>Vt</em>, <em>grid_shape</em>, <em>dx</em>, <em>dy</em>, <em>dz</em>, <em>z</em>, <em>rmsVr</em>, <em>weights</em>, <em>bg_weights</em>, <em>model_weights</em>, <em>upper_bc</em>, <em>print_out=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#J_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.cost_functions.J_function" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.cost_functions.</code><code class="sig-name descname">J_function</code><span class="sig-paren">(</span><em class="sig-param">winds</em>, <em class="sig-param">vrs</em>, <em class="sig-param">azs</em>, <em class="sig-param">els</em>, <em class="sig-param">wts</em>, <em class="sig-param">u_back</em>, <em class="sig-param">v_back</em>, <em class="sig-param">u_model</em>, <em class="sig-param">v_model</em>, <em class="sig-param">w_model</em>, <em class="sig-param">Co</em>, <em class="sig-param">Cm</em>, <em class="sig-param">Cx</em>, <em class="sig-param">Cy</em>, <em class="sig-param">Cz</em>, <em class="sig-param">Cb</em>, <em class="sig-param">Cv</em>, <em class="sig-param">Cmod</em>, <em class="sig-param">Ut</em>, <em class="sig-param">Vt</em>, <em class="sig-param">grid_shape</em>, <em class="sig-param">dx</em>, <em class="sig-param">dy</em>, <em class="sig-param">dz</em>, <em class="sig-param">z</em>, <em class="sig-param">rmsVr</em>, <em class="sig-param">weights</em>, <em class="sig-param">bg_weights</em>, <em class="sig-param">model_weights</em>, <em class="sig-param">upper_bc</em>, <em class="sig-param">print_out=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#J_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.cost_functions.J_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the total cost function. This typically does not need to be
 called directly as get_dd_wind_field is a wrapper around this function and
 grad_J. In order to add more terms to the cost function, modify this
 function and grad_J.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>winds: 1-D float array</strong></dt>
-<dd><p class="first last">The wind field, flattened to 1-D for f_min. The total size of the
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>winds: 1-D float array</strong></dt><dd><p>The wind field, flattened to 1-D for f_min. The total size of the
 array will be a 1D array of 3*nx*ny*nz elements.</p>
 </dd>
-<dt><strong>vrs: List of 3D float arrays</strong></dt>
-<dd><p class="first last">List of radial velocities from each radar. All arrays in list
+<dt><strong>vrs: List of 3D float arrays</strong></dt><dd><p>List of radial velocities from each radar. All arrays in list
 must have the same dimensions.</p>
 </dd>
-<dt><strong>azs: List of 3D float arrays</strong></dt>
-<dd><p class="first last">List of azimuths from each radar. All arrays in list
+<dt><strong>azs: List of 3D float arrays</strong></dt><dd><p>List of azimuths from each radar. All arrays in list
 must have the same dimensions.</p>
 </dd>
-<dt><strong>els: List of 3D float arrays</strong></dt>
-<dd><p class="first last">List of elevations from each radar. All arrays in list
+<dt><strong>els: List of 3D float arrays</strong></dt><dd><p>List of elevations from each radar. All arrays in list
 must have the same dimensions.</p>
 </dd>
-<dt><strong>wts: List of 3D float arrays</strong></dt>
-<dd><p class="first last">Float array containing fall speeds from radar. All arrays in list
+<dt><strong>wts: List of 3D float arrays</strong></dt><dd><p>Float array containing fall speeds from radar. All arrays in list
 must have the same dimensions.</p>
 </dd>
-<dt><strong>u_back: 1D float array (number of vertical levels):</strong></dt>
-<dd><p class="first last">Background u wind. This takes in a 1D float array of length nz,
+<dt><strong>u_back: 1D float array (number of vertical levels):</strong></dt><dd><p>Background u wind. This takes in a 1D float array of length nz,
 with each element corresponding to the u component of the wind
 at a given vertical level from the sounding.</p>
 </dd>
-<dt><strong>v_back: 1D float array (number of vertical levels):</strong></dt>
-<dd><p class="first last">Background v wind. This takes in a 1D float array of length nz,
+<dt><strong>v_back: 1D float array (number of vertical levels):</strong></dt><dd><p>Background v wind. This takes in a 1D float array of length nz,
 with each element corresponding to the v component of the wind
 at a given vertical level from the sounding.</p>
 </dd>
-<dt><strong>u_model: list of 3D float arrays</strong></dt>
-<dd><p class="first last">U from each model integrated into the retrieval. The U from
+<dt><strong>u_model: list of 3D float arrays</strong></dt><dd><p>U from each model integrated into the retrieval. The U from
 each model is given as a list of array of the same dimensions,
 with the U from the model interpolated on to the radar analysis grid.</p>
 </dd>
-<dt><strong>v_model: list of 3D float arrays</strong></dt>
-<dd><p class="first last">V from each model integrated into the retrieval. The V from each model
+<dt><strong>v_model: list of 3D float arrays</strong></dt><dd><p>V from each model integrated into the retrieval. The V from each model
 is given as a list of array of the same dimensions, with the V from
 the model interpolated on to the radar analysis grid.</p>
 </dd>
-<dt><strong>w_model:</strong></dt>
-<dd><p class="first last">W from each model integrated into the retrieval. The W from each model
+<dt><strong>w_model:</strong></dt><dd><p>W from each model integrated into the retrieval. The W from each model
 is given as a list of array of the same dimensions, with the W from
 the model interpolated on to the radar analysis grid.</p>
 </dd>
-<dt><strong>Co: float</strong></dt>
-<dd><p class="first last">Weighting coefficient for data constraint.</p>
+<dt><strong>Co: float</strong></dt><dd><p>Weighting coefficient for data constraint.</p>
 </dd>
-<dt><strong>Cm: float</strong></dt>
-<dd><p class="first last">Weighting coefficient for mass continuity constraint.</p>
+<dt><strong>Cm: float</strong></dt><dd><p>Weighting coefficient for mass continuity constraint.</p>
 </dd>
-<dt><strong>Cx: float</strong></dt>
-<dd><p class="first last">Smoothing coefficient for x-direction</p>
+<dt><strong>Cx: float</strong></dt><dd><p>Smoothing coefficient for x-direction</p>
 </dd>
-<dt><strong>Cy: float</strong></dt>
-<dd><p class="first last">Smoothing coefficient for y-direction</p>
+<dt><strong>Cy: float</strong></dt><dd><p>Smoothing coefficient for y-direction</p>
 </dd>
-<dt><strong>Cz: float</strong></dt>
-<dd><p class="first last">Smoothing coefficient for z-direction</p>
+<dt><strong>Cz: float</strong></dt><dd><p>Smoothing coefficient for z-direction</p>
 </dd>
-<dt><strong>Cb: float</strong></dt>
-<dd><p class="first last">Coefficient for sounding constraint</p>
+<dt><strong>Cb: float</strong></dt><dd><p>Coefficient for sounding constraint</p>
 </dd>
-<dt><strong>Cv: float</strong></dt>
-<dd><p class="first last">Weight for cost function related to vertical vorticity equation.</p>
+<dt><strong>Cv: float</strong></dt><dd><p>Weight for cost function related to vertical vorticity equation.</p>
 </dd>
-<dt><strong>Cmod: float</strong></dt>
-<dd><p class="first last">Coefficient for model constraint</p>
+<dt><strong>Cmod: float</strong></dt><dd><p>Coefficient for model constraint</p>
 </dd>
-<dt><strong>Ut: float</strong></dt>
-<dd><p class="first last">Prescribed storm motion. This is only needed if Cv is not zero.</p>
+<dt><strong>Ut: float</strong></dt><dd><p>Prescribed storm motion. This is only needed if Cv is not zero.</p>
 </dd>
-<dt><strong>Vt: float</strong></dt>
-<dd><p class="first last">Prescribed storm motion. This is only needed if Cv is not zero.</p>
+<dt><strong>Vt: float</strong></dt><dd><p>Prescribed storm motion. This is only needed if Cv is not zero.</p>
 </dd>
-<dt><strong>grid_shape:</strong></dt>
-<dd><p class="first last">Shape of wind grid</p>
+<dt><strong>grid_shape:</strong></dt><dd><p>Shape of wind grid</p>
 </dd>
-<dt><strong>dx:</strong></dt>
-<dd><p class="first last">Spacing of grid in x direction</p>
+<dt><strong>dx:</strong></dt><dd><p>Spacing of grid in x direction</p>
 </dd>
-<dt><strong>dy:</strong></dt>
-<dd><p class="first last">Spacing of grid in y direction</p>
+<dt><strong>dy:</strong></dt><dd><p>Spacing of grid in y direction</p>
 </dd>
-<dt><strong>dz:</strong></dt>
-<dd><p class="first last">Spacing of grid in z direction</p>
+<dt><strong>dz:</strong></dt><dd><p>Spacing of grid in z direction</p>
 </dd>
-<dt><strong>z:</strong></dt>
-<dd><p class="first last">Grid vertical levels in m</p>
+<dt><strong>z:</strong></dt><dd><p>Grid vertical levels in m</p>
 </dd>
-<dt><strong>rmsVr: float</strong></dt>
-<dd><p class="first last">The sum of squares of velocity/num_points. Use for normalization
+<dt><strong>rmsVr: float</strong></dt><dd><p>The sum of squares of velocity/num_points. Use for normalization
 of data weighting coefficient</p>
 </dd>
-<dt><strong>weights: n_radars by z_bins by y_bins by x_bins float array</strong></dt>
-<dd><p class="first last">Data weights for each pair of radars. This is usually automatically
+<dt><strong>weights: n_radars by z_bins by y_bins by x_bins float array</strong></dt><dd><p>Data weights for each pair of radars. This is usually automatically
 determined by get_dd_wind_field.</p>
 </dd>
-<dt><strong>bg_weights: z_bins by y_bins by x_bins float array</strong></dt>
-<dd><p class="first last">Data weights for sounding constraint.</p>
+<dt><strong>bg_weights: z_bins by y_bins by x_bins float array</strong></dt><dd><p>Data weights for sounding constraint.</p>
 </dd>
-<dt><strong>model_weights: n_models by z_bins by y_bins by x_bins float array</strong></dt>
-<dd><p class="first last">Data weights for each model.</p>
+<dt><strong>model_weights: n_models by z_bins by y_bins by x_bins float array</strong></dt><dd><p>Data weights for each model.</p>
 </dd>
-<dt><strong>upper_bc: bool</strong></dt>
-<dd><p class="first last">True to enforce w=0 at top of domain (impermeability condition),
+<dt><strong>upper_bc: bool</strong></dt><dd><p>True to enforce w=0 at top of domain (impermeability condition),
 False to not enforce impermeability at top of domain</p>
 </dd>
-<dt><strong>print_out: bool</strong></dt>
-<dd><p class="first last">Set to True to print out the value of the cost function.</p>
+<dt><strong>print_out: bool</strong></dt><dd><p>Set to True to print out the value of the cost function.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>J: float</strong></dt>
-<dd><p class="first last">The value of the cost function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>J: float</dt><dd><p>The value of the cost function</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -209,13 +171,11 @@ False to not enforce impermeability at top of domain</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -245,7 +205,7 @@ False to not enforce impermeability at top of domain</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>

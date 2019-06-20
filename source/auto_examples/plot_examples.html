@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Example on retrieving and plotting winds &#8212; PyDDA 0.3.0 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -49,8 +47,8 @@
           <div class="body" role="main">
             
   <div class="sphx-glr-download-link-note admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-examples-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-examples-py"><span class="std std-ref">here</span></a> to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="example-on-retrieving-and-plotting-winds">
 <span id="sphx-glr-source-auto-examples-plot-examples-py"></span><h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Permalink to this headline">¶</a></h1>
@@ -58,47 +56,75 @@
 using PyDDA.</p>
 <p>Author: Robert C. Jackson</p>
 <ul class="sphx-glr-horizontal">
-<li><img alt="../../_images/sphx_glr_plot_examples_001.png" class="sphx-glr-multi-img first" src="../../_images/sphx_glr_plot_examples_001.png" />
+<li><img alt="../../_images/sphx_glr_plot_examples_001.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_examples_001.png" />
 </li>
-<li><img alt="../../_images/sphx_glr_plot_examples_002.png" class="sphx-glr-multi-img first" src="../../_images/sphx_glr_plot_examples_002.png" />
+<li><img alt="../../_images/sphx_glr_plot_examples_002.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_examples_002.png" />
 </li>
-<li><img alt="../../_images/sphx_glr_plot_examples_003.png" class="sphx-glr-multi-img first" src="../../_images/sphx_glr_plot_examples_003.png" />
+<li><img alt="../../_images/sphx_glr_plot_examples_003.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_examples_003.png" />
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 0 and 1
 Calculating weights for models...
 Starting solver
-rmsVR = 45.924382151350464
+rmsVR = 6.776753068494562
 Total points:92092.0
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|  11.0905|  64.2183|   0.0000|   0.0000|   0.0000|   0.0000|  20.4626
-Norm of gradient: 0.009131918476149475
+|  22.8056| 179.8659|   0.0000|   0.0000|   0.0000|   0.0000|  14.2882
+Norm of gradient: 0.060347431274420944
 Iterations before filter: 10
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   3.1353|  23.7011|   0.0000|   0.0000|   0.0000|   0.0000|  31.1746
-Norm of gradient: 0.005739523896887974
+|   3.8713|  66.1170|   0.0000|   0.0000|   0.0000|   0.0000|  23.7745
+Norm of gradient: 0.02372694747570922
 Iterations before filter: 20
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   1.5021|  15.7356|   0.0000|   0.0000|   0.0000|   0.0000|  33.5728
-Norm of gradient: 0.0052943250937139965
+|   4.0472|  37.8079|   0.0000|   0.0000|   0.0000|   0.0000|  24.6297
+Norm of gradient: 0.02779702290042135
 Iterations before filter: 30
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.9711|  12.4548|   0.0000|   0.0000|   0.0000|   0.0000|  30.3963
-Norm of gradient: 0.005933535145282827
+|   0.8673|  28.6315|   0.0000|   0.0000|   0.0000|   0.0000|  26.5968
+Norm of gradient: 0.006835527283244816
 Iterations before filter: 40
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.6994|  11.9543|   0.0000|   0.0000|   0.0000|   0.0000|  30.5532
-Norm of gradient: 0.004461050108202958
+|   1.6686|  20.8826|   0.0000|   0.0000|   0.0000|   0.0000|  28.4437
+Norm of gradient: 0.023224596559256867
 Iterations before filter: 50
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
-|   0.6932|  11.9595|   0.0000|   0.0000|   0.0000|   0.0000|  30.5603
-Norm of gradient: 0.004469894253591256
+|   0.5065|  18.2438|   0.0000|   0.0000|   0.0000|   0.0000|  28.6566
+Norm of gradient: 0.006565409425024461
 Iterations before filter: 60
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.5679|  15.6097|   0.0000|   0.0000|   0.0000|   0.0000|  29.2501
+Norm of gradient: 0.006177474586057
+Iterations before filter: 70
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.3157|  14.5197|   0.0000|   0.0000|   0.0000|   0.0000|  30.2715
+Norm of gradient: 0.0035443644107431118
+Iterations before filter: 80
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.2528|  13.5275|   0.0000|   0.0000|   0.0000|   0.0000|  30.3527
+Norm of gradient: 0.002892126199622085
+Iterations before filter: 90
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.2858|  13.0896|   0.0000|   0.0000|   0.0000|   0.0000|  30.6199
+Norm of gradient: 0.0033178819236652727
+Iterations before filter: 100
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.2688|  13.0232|   0.0000|   0.0000|   0.0000|   0.0000|  30.6529
+Norm of gradient: 0.003424754964509097
+Iterations before filter: 110
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.2203|  13.0222|   0.0000|   0.0000|   0.0000|   0.0000|  30.6752
+Norm of gradient: 0.003483670630141192
+Iterations before filter: 120
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w
+|   0.2194|  13.0228|   0.0000|   0.0000|   0.0000|   0.0000|  30.6785
+Norm of gradient: 0.0034925009878411786
+Iterations before filter: 130
 Applying low pass filter to wind field...
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 254.9
+Done! Time = 512.5
 </pre></div>
 </div>
 <div class="line-block">
@@ -123,7 +149,7 @@ Done! Time = 254.9
 <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
 <span class="c1"># and data weighting constraints.</span>
 <span class="n">Grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span>
-                                          <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span>
+                                          <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span>
                                           <span class="n">Cz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                                           <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span> <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                                           <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -155,12 +181,14 @@ Done! Time = 254.9
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  17.269 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 8 minutes  34.845 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" download="" href="../../_downloads/32cbaa75ea064d7b790e2a2a3946d20e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></div>
+<p><a class="reference download internal" download="" href="../../_downloads/32cbaa75ea064d7b790e2a2a3946d20e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
+</div>
 <div class="sphx-glr-download docutils container">
-<a class="reference download internal" download="" href="../../_downloads/a4d81659194c913f312eaba862266040/plot_examples.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_examples.ipynb</span></code></a></div>
+<p><a class="reference download internal" download="" href="../../_downloads/a4d81659194c913f312eaba862266040/plot_examples.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_examples.ipynb</span></code></a></p>
+</div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
@@ -185,13 +213,11 @@ Done! Time = 254.9
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -221,7 +247,7 @@ Done! Time = 254.9
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>
