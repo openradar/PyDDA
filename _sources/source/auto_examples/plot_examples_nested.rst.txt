@@ -43,8 +43,8 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    LocalCluster('tcp://127.0.0.1:33218', workers=2, ncores=2)
-    <Client: scheduler='tcp://127.0.0.1:33218' processes=2 cores=2>
+    LocalCluster('tcp://127.0.0.1:37190', workers=2, ncores=2)
+    <Client: scheduler='tcp://127.0.0.1:37190' processes=2 cores=2>
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -101,7 +101,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 133.7
+    Done! Time = 126.9
     Waiting for nested grid to be retrieved...
 
 
@@ -176,7 +176,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 7 minutes  1.328 seconds)
+   **Total running time of the script:** ( 6 minutes  40.273 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
