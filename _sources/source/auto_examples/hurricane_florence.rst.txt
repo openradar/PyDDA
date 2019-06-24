@@ -21,7 +21,6 @@ https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 Author: Robert C. Jackson
 
-
 .. code-block:: default
 
 
