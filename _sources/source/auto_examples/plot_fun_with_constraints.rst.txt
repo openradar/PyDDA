@@ -20,6 +20,8 @@ two examples we use a zero initial state which provides for more
 questionable winds at the edges of the Dual Doppler Lobes.
 
 
+
+
 .. rst-class:: sphx-glr-horizontal
 
 
@@ -81,7 +83,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 122.8
+    Done! Time = 125.7
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
@@ -118,7 +120,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 122.0
+    Done! Time = 127.6
 
 
 
@@ -180,7 +182,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  13.184 seconds)
+   **Total running time of the script:** ( 4 minutes  22.431 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:

@@ -16,6 +16,8 @@ using PyDDA.
 Author: Robert C. Jackson
 
 
+
+
 .. rst-class:: sphx-glr-horizontal
 
 
@@ -101,7 +103,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 527.9
+    Done! Time = 554.8
 
 
 
@@ -165,7 +167,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 8 minutes  50.289 seconds)
+   **Total running time of the script:** ( 9 minutes  17.376 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
