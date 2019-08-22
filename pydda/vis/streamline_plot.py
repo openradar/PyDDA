@@ -1,9 +1,11 @@
 import math
-import matplotlib.pyplot as plt
-import pyart
-import numpy as np
+import warnings
+
 import cartopy.crs as ccrs
 import cartopy
+import matplotlib.pyplot as plt
+import numpy as np
+import pyart
 
 from .. import retrieval
 from matplotlib.axes import Axes
