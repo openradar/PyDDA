@@ -20,6 +20,8 @@ two examples we use a zero initial state which provides for more
 questionable winds at the edges of the Dual Doppler Lobes.
 
 
+
+
 .. rst-class:: sphx-glr-horizontal
 
 
@@ -45,7 +47,31 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
  .. code-block:: none
 
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
+    cannot be safely cast to variable data type
+      data = self.ncvar[:]
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
+    cannot be safely cast to variable data type
+      data = self.ncvar[:]
+    /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
+      w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
+      elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
     Calculating weights for models...
     Starting solver 
     rmsVR = 6.776753068494561
@@ -81,8 +107,26 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 126.3
+    Done! Time = 123.8
+    /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
+      w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
+      elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
     Calculating weights for models...
     Starting solver 
     rmsVR = 6.776753068494561
@@ -118,7 +162,22 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 126.6
+    Done! Time = 123.4
+    /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
+      w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+
 
 
 
@@ -180,7 +239,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  21.788 seconds)
+   **Total running time of the script:** ( 4 minutes  16.114 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
@@ -208,4 +267,4 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
  .. rst-class:: sphx-glr-signature
 
-    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_
