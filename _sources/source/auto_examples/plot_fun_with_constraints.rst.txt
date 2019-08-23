@@ -57,66 +57,11 @@ questionable winds at the edges of the Dual Doppler Lobes.
       w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
       result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
       result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
-      theta_2 = np.arccos((x-rad2[1])/b)
-    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
-    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
-      elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
-    Calculating weights for radars 0 and 1
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
-      theta_2 = np.arccos((x-rad2[1])/b)
-    Calculating weights for models...
-    Starting solver 
-    rmsVR = 6.776753068494561
-    Total points:92092.0
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |  17.4621| 117.0106|   0.0000|   0.0000|   0.0000|   0.0000|  11.8748
-    Norm of gradient: 0.03349348061301913
-    Iterations before filter: 10
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   3.3575|  44.2463|   0.0000|   0.0000|   0.0000|   0.0000|  18.9282
-    Norm of gradient: 0.03588228276176865
-    Iterations before filter: 20
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   1.6812|  26.5519|   0.0000|   0.0000|   0.0000|   0.0000|  20.4316
-    Norm of gradient: 0.01949543388468692
-    Iterations before filter: 30
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.9545|  18.2288|   0.0000|   0.0000|   0.0000|   0.0000|  23.1132
-    Norm of gradient: 0.011626804623717037
-    Iterations before filter: 40
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.5441|  14.1966|   0.0000|   0.0000|   0.0000|   0.0000|  25.9112
-    Norm of gradient: 0.004176457573828959
-    Iterations before filter: 50
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
-    Norm of gradient: 0.0009014047516688181
-    Iterations before filter: 60
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
-    |   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
-    Norm of gradient: 0.0009014047516688181
-    Iterations before filter: 70
-    Applying low pass filter to wind field...
-    Iterations after filter: 1
-    Iterations after filter: 2
-    Done! Time = 131.6
-    /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
-      w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
-    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
-      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
-      theta_2 = np.arccos((x-rad2[1])/b)
-    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
       result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
@@ -125,53 +70,108 @@ questionable winds at the edges of the Dual Doppler Lobes.
     /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
     Calculating weights for models...
     Starting solver 
     rmsVR = 6.776753068494561
     Total points:92092.0
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |  17.4621| 117.0106|   0.0000|   0.0000|   0.0000|   0.0000|  11.8748
     Norm of gradient: 0.03349348061301913
     Iterations before filter: 10
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |   3.3575|  44.2463|   0.0000|   0.0000|   0.0000|   0.0000|  18.9282
     Norm of gradient: 0.03588228276176865
     Iterations before filter: 20
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |   1.6812|  26.5519|   0.0000|   0.0000|   0.0000|   0.0000|  20.4316
     Norm of gradient: 0.01949543388468692
     Iterations before filter: 30
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |   0.9545|  18.2288|   0.0000|   0.0000|   0.0000|   0.0000|  23.1132
     Norm of gradient: 0.011626804623717037
     Iterations before filter: 40
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |   0.5441|  14.1966|   0.0000|   0.0000|   0.0000|   0.0000|  25.9112
     Norm of gradient: 0.004176457573828959
     Iterations before filter: 50
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
     Norm of gradient: 0.0009014047516688181
     Iterations before filter: 60
-    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel | Max w  
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
     |   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
     Norm of gradient: 0.0009014047516688181
     Iterations before filter: 70
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 131.3
+    Done! Time = 126.8
     /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
       w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
       result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
       result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:535: RuntimeWarning: invalid value encountered in arccos
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    <string>:6: DeprecationWarning: object of type <class 'numpy.float64'> cannot be safely interpreted as an integer.
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
+      elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
+    Calculating weights for radars 0 and 1
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    Calculating weights for models...
+    Starting solver 
+    rmsVR = 6.776753068494561
+    Total points:92092.0
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |  17.4621| 117.0106|   0.0000|   0.0000|   0.0000|   0.0000|  11.8748
+    Norm of gradient: 0.03349348061301913
+    Iterations before filter: 10
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |   3.3575|  44.2463|   0.0000|   0.0000|   0.0000|   0.0000|  18.9282
+    Norm of gradient: 0.03588228276176865
+    Iterations before filter: 20
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |   1.6812|  26.5519|   0.0000|   0.0000|   0.0000|   0.0000|  20.4316
+    Norm of gradient: 0.01949543388468692
+    Iterations before filter: 30
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |   0.9545|  18.2288|   0.0000|   0.0000|   0.0000|   0.0000|  23.1132
+    Norm of gradient: 0.011626804623717037
+    Iterations before filter: 40
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |   0.5441|  14.1966|   0.0000|   0.0000|   0.0000|   0.0000|  25.9112
+    Norm of gradient: 0.004176457573828959
+    Iterations before filter: 50
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
+    Norm of gradient: 0.0009014047516688181
+    Iterations before filter: 60
+    | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w  
+    |   0.3880|  11.8996|   0.0000|   0.0000|   0.0000|   0.0000|  27.1279
+    Norm of gradient: 0.0009014047516688181
+    Iterations before filter: 70
+    Applying low pass filter to wind field...
+    Iterations after filter: 1
+    Iterations after filter: 2
+    Done! Time = 126.3
+    /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
+      w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours),
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
+      theta_2 = np.arccos((x-rad2[1])/b)
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
+      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: 'color'
       result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
@@ -239,7 +239,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  32.439 seconds)
+   **Total running time of the script:** ( 4 minutes  22.211 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
