@@ -315,7 +315,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                 for i in range(len(model_fields)):
                     mod_weights[i] = weights_model[i]
     else:
-        if obs_weights is None:
+        if weights_obs is None:
             weights[0] = np.where(~vrs[0].mask, 1, 0)
         else:
             weights[0] = weights_obs[0]
