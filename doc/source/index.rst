@@ -30,6 +30,7 @@ of parallelism we recommend:
 ::
 
 While PyDDA will work on less than this, you may run into performance issues.
+In addition, we do not support Python versions less than 3.6. If you have an older version installed, PyDDA may work just fine but we will not provide support for any issues unless you are using at least Python 3.6.
 
 =========================
 Installation instructions

@@ -114,7 +114,9 @@ def test_plot_horiz_xsection_quiver():
                                          level=6,
                                          w_vel_contours=[3, 6, 9],
                                          quiver_spacing_x_km=5.0,
-                                         quiver_spacing_y_km=5.0)
+                                         quiver_spacing_y_km=5.0,
+                                         quiver_width=0.005,
+                                         quiverkey_len=10.0)
     return fig
 
 
@@ -127,7 +129,8 @@ def test_plot_horiz_xsection_quiver_map():
 
     pydda.vis.plot_horiz_xsection_quiver_map(
         [cpol_grid, berr_grid], ax=ax, bg_grid_no=-1, 
-        level=7, w_vel_contours=[3, 5, 8])
+        level=7, w_vel_contours=[3, 5, 8], quiver_width=0.005,
+        quiverkey_len=10.0)
     return fig
 
 
@@ -139,7 +142,9 @@ def test_plot_horiz_xz_xsection_quiver():
     pydda.vis.plot_xz_xsection_quiver(Grids, None, 'reflectivity', level=40,
                                       w_vel_contours=[3, 6, 9],
                                       quiver_spacing_x_km=5.0,
-                                      quiver_spacing_z_km=1.0)
+                                      quiver_spacing_z_km=1.0,
+                                      quiver_width=0.005,
+                                      quiverkey_len=10.0)
     plt.ylim([0,15])
     return fig
 
@@ -152,6 +157,8 @@ def test_plot_horiz_yz_xsection_quiver():
     pydda.vis.plot_yz_xsection_quiver(Grids, None, 'reflectivity', level=40,
                                       w_vel_contours=[1, 3, 5, 7],
                                       quiver_spacing_y_km=5.0,
-                                      quiver_spacing_z_km=1.0)
+                                      quiver_spacing_z_km=1.0,
+                                      quiver_width=0.005,
+                                      quiverkey_len=10.0)
     return fig
 

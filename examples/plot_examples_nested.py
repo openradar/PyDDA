@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # Start the wind retrieval. This example only uses the mass continuity
     # and data weighting constraints.
     Grids = pydda.retrieval.get_dd_wind_field_nested(
-        [berr_grid, cpol_grid], u_init,  v_init, w_init, client, Co=10.0,
+        [berr_grid, cpol_grid], u_init,  v_init, w_init, client, Co=1.0,
         Cm=1500.0, Cz=0, frz=5000.0,
         filt_iterations=2, mask_outside_opt=True, upper_bc=1)
 
