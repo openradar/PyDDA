@@ -7,11 +7,6 @@ env:
    
 matrix:
     include:
-    - python: 3.5
-      env:
-        - PYTHON_VERSION="3.5"
-        - DOC_BUILD="true"
-        - SKIP_HRRR_TEST="True"
     - python: 3.6
       env:
         - PYTHON_VERSION="3.6"
