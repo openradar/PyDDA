@@ -315,10 +315,19 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                 for i in range(len(model_fields)):
                     mod_weights[i] = weights_model[i]
     else:
-        weights[0] = np.where(~vrs[0].mask, 1, 0)
-        bg_weights = np.where(~vrs[0].mask, 0, 1)
+        if weights_obs is None:
+            weights[0] = np.where(~vrs[0].mask, 1, 0)
+        else:
+            weights[0] = weights_obs[0]
+
+        if weights_bg is None:
+            bg_weights = np.where(~vrs[0].mask, 0, 1)
+        else:
+            bg_weights = weights_bg
+
 
     weights[weights > 0] = 1
+    bg_weights[bg_weights > 0] = 1
     sum_Vr = np.nansum(np.square(vrs*weights))
     rmsVr = np.sqrt(np.nansum(sum_Vr)/np.nansum(weights))
 
