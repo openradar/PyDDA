@@ -141,7 +141,7 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
         Jmod = 0
 
     if(print_out is True):
-        print(('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel ' +
+        print(('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  ' +
                '| Max w  '))
         print(('|' + "{:9.4f}".format(Jvel) + '|' +
                "{:9.4f}".format(Jmass) + '|' +
