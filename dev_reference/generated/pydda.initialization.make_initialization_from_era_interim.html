@@ -50,7 +50,7 @@
 <h1>pydda.initialization.make_initialization_from_era_interim<a class="headerlink" href="#pydda-initialization-make-initialization-from-era-interim" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.initialization.make_initialization_from_era_interim">
-<code class="sig-prename descclassname">pydda.initialization.</code><code class="sig-name descname">make_initialization_from_era_interim</code><span class="sig-paren">(</span><em class="sig-param">Grid</em>, <em class="sig-param">file_name=None</em>, <em class="sig-param">vel_field=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/initialization/wind_fields.html#make_initialization_from_era_interim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.initialization.make_initialization_from_era_interim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.initialization.</code><code class="sig-name descname">make_initialization_from_era_interim</code><span class="sig-paren">(</span><em class="sig-param">Grid</em>, <em class="sig-param">file_name=None</em>, <em class="sig-param">vel_field=None</em>, <em class="sig-param">dest_era_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/initialization/wind_fields.html#make_initialization_from_era_interim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.initialization.make_initialization_from_era_interim" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function will read ERA Interim in NetCDF format and add it
 to the Py-ART grid specified by Grid. PyDDA will automatically download
 the ERA Interim data that you need for the scan. It will chose the domain
@@ -74,11 +74,11 @@ PyDDA will use the API to create the file.</p>
 <dt><strong>vel_field: str or None</strong></dt><dd><p>The name of the velocity field in the Py-ART grid. Set to None to
 have Py-DDA attempt to automatically detect it.</p>
 </dd>
-</dl>
+<dt><strong>dest_era_file:</strong></dt><dd><p>If this is not None, PyDDA will save the interpolated grid into this file.</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>new_Grid: Py-ART Grid</dt><dd><p>The Py-ART Grid with the ERA Interim data added into the “u_erainterim”,
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>new_Grid: Py-ART Grid</strong></dt><dd><p>The Py-ART Grid with the ERA Interim data added into the “u_erainterim”,
 “v_erainterim”, and “w_erainterim” fields.</p>
 </dd>
 </dl>

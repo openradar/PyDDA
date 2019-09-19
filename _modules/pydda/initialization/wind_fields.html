@@ -66,7 +66,8 @@
 <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 
 
-<div class="viewcode-block" id="make_initialization_from_era_interim"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim">[docs]</a><span class="k">def</span> <span class="nf">make_initialization_from_era_interim</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="make_initialization_from_era_interim"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim">[docs]</a><span class="k">def</span> <span class="nf">make_initialization_from_era_interim</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                         <span class="n">dest_era_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function will read ERA Interim in NetCDF format and add it</span>
 <span class="sd">    to the Py-ART grid specified by Grid. PyDDA will automatically download</span>
@@ -93,7 +94,8 @@
 <span class="sd">    vel_field: str or None</span>
 <span class="sd">        The name of the velocity field in the Py-ART grid. Set to None to</span>
 <span class="sd">        have Py-DDA attempt to automatically detect it.</span>
-
+<span class="sd">    dest_era_file:</span>
+<span class="sd">        If this is not None, PyDDA will save the interpolated grid into this file.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_Grid: Py-ART Grid</span>
