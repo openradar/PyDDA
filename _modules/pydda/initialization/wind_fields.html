@@ -43,6 +43,7 @@
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">import</span> <span class="nn">gc</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 
 <span class="c1"># We want cfgrib to be an optional dependency to ensure Windows compatibility</span>
 <span class="k">try</span><span class="p">:</span>
@@ -64,6 +65,7 @@
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">RegularGridInterpolator</span><span class="p">,</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">griddata</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">NearestNDInterpolator</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+
 
 
 <div class="viewcode-block" id="make_initialization_from_era_interim"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim">[docs]</a><span class="k">def</span> <span class="nf">make_initialization_from_era_interim</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
