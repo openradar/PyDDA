@@ -85,8 +85,9 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None):
                              hour_rounded_to_nearest_3,
                              grid_time.minute, grid_time.second)
 
-    if not os.path.isfile(file_name):
-        raise FileNotFoundError(file_name + " not found!")
+    if file_name is not None:
+        if not os.path.isfile(file_name):
+            raise FileNotFoundError(file_name + " not found!")
 
     if file_name is None:
         print("Download ERA Interim data...")
