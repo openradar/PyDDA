@@ -17,6 +17,7 @@ Author: Robert C. Jackson
 
 
 
+
 .. rst-class:: sphx-glr-horizontal
 
 
@@ -42,14 +43,14 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    /home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    LocalCluster('tcp://127.0.0.1:36665', workers=2, threads=2, memory=7.84 GB)
-    <Client: 'tcp://127.0.0.1:36665' processes=2 threads=2, memory=7.84 GB>
+    LocalCluster('tcp://127.0.0.1:36141', workers=2, threads=2, memory=7.84 GB)
+    <Client: 'tcp://127.0.0.1:36141' processes=2 threads=2, memory=7.84 GB>
     /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
@@ -110,7 +111,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 114.9
+    Done! Time = 134.9
     Waiting for nested grid to be retrieved...
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
       alpha=contour_alpha)
@@ -200,7 +201,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 6 minutes  13.786 seconds)
+   **Total running time of the script:** ( 7 minutes  11.195 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
