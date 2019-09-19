@@ -25,7 +25,7 @@ from scipy.interpolate import NearestNDInterpolator
 from copy import deepcopy
 
 
-def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None
+def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
                                          dest_era_file=None):
     """
     This function will read ERA Interim in NetCDF format and add it
@@ -53,7 +53,8 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None
     vel_field: str or None
         The name of the velocity field in the Py-ART grid. Set to None to
         have Py-DDA attempt to automatically detect it.
-
+    dest_era_file:
+        If this is not None, PyDDA will save the interpolated grid into this file.
     Returns
     -------
     new_Grid: Py-ART Grid
