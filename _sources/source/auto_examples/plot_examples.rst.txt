@@ -17,7 +17,6 @@ Author: Robert C. Jackson
 
 
 
-
 .. rst-class:: sphx-glr-horizontal
 
 
@@ -43,10 +42,10 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -113,7 +112,7 @@ Author: Robert C. Jackson
     Applying low pass filter to wind field...
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 471.1
+    Done! Time = 523.3
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
       alpha=contour_alpha)
     /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
@@ -192,7 +191,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 7 minutes  53.490 seconds)
+   **Total running time of the script:** ( 8 minutes  45.628 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
