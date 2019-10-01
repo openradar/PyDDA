@@ -5,11 +5,11 @@
 
 Computation times
 =================
-**18:56.878** total execution time for **source_auto_examples** files:
+**20:30.182** total execution time for **source_auto_examples** files:
 
-- **08:21.201**: :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)
-- **06:32.734**: :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)
-- **04:02.942**: :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``)
+- **09:07.452**: :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)
+- **06:52.250**: :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)
+- **04:30.481**: :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``)
 - **00:00.000**: :ref:`sphx_glr_source_auto_examples_hurricane_florence.py` (``hurricane_florence.py``)
 - **00:00.000**: :ref:`sphx_glr_source_auto_examples_oklahoma_example.py` (``oklahoma_example.py``)
 - **00:00.000**: :ref:`sphx_glr_source_auto_examples_sydney_tornado.py` (``sydney_tornado.py``)
