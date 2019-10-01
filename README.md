@@ -1,6 +1,10 @@
 # PyDDA (Pythonic Direct Data Assimilation)
 ![alt text](https://github.com/openradar/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
+![https://anaconda.org/conda-forge/pydda](https://anaconda.org/conda-forge/pydda/badges/version.svg)
+![https://anaconda.org/conda-forge/pydda/files](https://anaconda.org/conda-forge/pydda/badges/downloads.svg)
+![https://travis-ci.org/openradar/PyDDA](https://img.shields.io/travis/openradar/PyDDA.svg)  
+
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
 This software is designed to retrieve wind kinematics (u,v,w) in precipitation storm systems from
