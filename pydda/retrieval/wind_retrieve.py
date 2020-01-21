@@ -345,6 +345,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     print('rmsVR = ' + str(rmsVr))
     print('Total points:' + str(weights.sum()))
     z = Grids[0].point_z['data']
+    x = Grids[0].point_x['data']
+    y = Grids[0].point_y['data']
 
     the_time = time.time()
     bt = time.time()
@@ -381,7 +383,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                                        Co, Cm, Cx, Cy, Cz, Cb,
                                                        Cv, Cmod, Ut, Vt,
                                                        grid_shape,
-                                                       dx, dy, dz, z, rmsVr,
+                                                       dx, dy, dz, x, y, z, rmsVr,
                                                        weights, bg_weights,
                                                        mod_weights,
                                                        upper_bc,
@@ -392,13 +394,13 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
             J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
                        u_model, v_model, w_model,
                        Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
-                       grid_shape, dx, dy, dz, z, rmsVr,
+                       grid_shape, dx, dy, dz, x, y, z, rmsVr,
                        weights, bg_weights, mod_weights,
                        upper_bc, True)
             grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
                    u_model, v_model, w_model,
                    Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
-                   grid_shape, dx, dy, dz, z, rmsVr,
+                   grid_shape, dx, dy, dz, x, y, z, rmsVr,
                    weights, bg_weights, mod_weights,
                    upper_bc, True)
         warnflag = winds[2]['warnflag']

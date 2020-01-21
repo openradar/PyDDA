@@ -5,7 +5,7 @@ import scipy.ndimage.filters
 
 def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
                v_model, w_model, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod,
-               Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr, weights,
+               Ut, Vt, grid_shape, dx, dy, dz, x, y, z, rmsVr, weights,
                bg_weights, model_weights, upper_bc,
                print_out=False):
     """
@@ -79,6 +79,10 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
         Spacing of grid in y direction
     dz:
         Spacing of grid in z direction
+    x:
+        E-W grid levels in m
+    y:
+        N-S grid levels in m
     z:
         Grid vertical levels in m
     rmsVr: float
@@ -156,7 +160,7 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
 
 def grad_J(winds, vrs, azs, els, wts, u_back, v_back, u_model,
            v_model, w_model, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod,
-           Ut, Vt, grid_shape, dx, dy, dz, z, rmsVr,
+           Ut, Vt, grid_shape, dx, dy, dz, x, y, z, rmsVr,
            weights, bg_weights, model_weights, upper_bc,
            print_out=False):
     """
@@ -215,6 +219,10 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, u_model,
         Spacing of grid in y direction
     dz:
         Spacing of grid in z direction
+    x:
+        E-W grid levels in m
+    y:
+        N-S grid levels in m
     z:
         Grid vertical levels in m
     rmsVr: float
@@ -522,6 +530,100 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
     return y.flatten()
 
 
+def calculate_point_cost(u, v, w, x, y, z, point_list, Cp=1e-3, roi=500.0):
+    """
+    Calculates the cost function related to point observations. This
+    uses weights that are determined by the radius of influence. The
+    weights are proportional to :math:`\frac{1}{r^2}`, where :math:`r`
+    is the distance from the point observation. The weight will be zero
+    outside of the radius of influence.
+
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v:
+        Float array with v component of wind field
+    w:
+        Float array with w component of wind field
+    x:  Float array
+        X coordinates of grid centers
+    y:  Float array
+        Y coordinates of grid centers
+    z:  Float array
+        Z coordinated of grid centers
+    point_list: list of dicts
+        List of point constraints. Each member is a dict with keys of "u", "v",
+        to correspond to each component of the wind field and "x", "y", "z"
+        to correspond to the location of the point observation.
+    Cp: float
+        The weighting coefficient of the point cost function.
+    roi: float
+        Radius of influence of observations
+
+    Returns
+    -------
+    J: float
+        The cost function related to the difference between wind field and points.
+
+    """
+    J = 0.0
+    for the_point in point_list:
+        dists = ((x - the_point["x"])**2 + (y - the_point["y"])**2 + (z - the_point["z"])**2) / (roi * roi)
+        weights = np.where(dists <= 1, 1 - dists, 0.)
+        J += np.sum(weights * ((u - the_point["u"])**2 + (v - the_point["v"])**2))
+
+    return J * Cp
+
+
+def calculate_point_gradient(u, v, w, x, y, z, point_list, Cp=1e-3, roi=500.0):
+    """
+    Calculates the gradient of the cost function related to point observations. This
+    uses weights that are determined by the radius of influence. The
+    weights are proportional to :math:`\frac{1}{r^2}`, where :math:`r`
+    is the distance from the point observation. The weight will be zero
+    outside of the radius of influence.
+
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v:
+        Float array with v component of wind field
+    w:
+        Float array with w component of wind field
+    x:  Float array
+        X coordinates of grid centers
+    y:  Float array
+        Y coordinates of grid centers
+    z:  Float array
+        Z coordinated of grid centers
+    point_list: list of dicts
+        List of point constraints. Each member is a dict with keys of "u", "v",
+        to correspond to each component of the wind field and "x", "y", "z"
+        to correspond to the location of the point observation.
+    Cp: float
+        The weighting coefficient of the point cost function.
+    roi: float
+        Radius of influence of observations
+
+    Returns
+    -------
+    gradJ: float array
+        The gradient of the cost function related to the difference between wind field and points.
+
+    """
+
+    gradJ = np.zeros_like(u)
+    for the_point in point_list:
+        dists = ((x - the_point["x"]) ** 2 + (y - the_point["y"]) ** 2 + (z - the_point["z"]) ** 2) / (roi * roi)
+        weights = np.where(dists <= 1, 1 - dists, 0.)
+        gradJ += 2 * weights * ((u - the_point["u"]) + (v - the_point["v"]))
+
+    gradJ = gradJ.flatten()
+    return gradJ * Cp
+
+
 def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     """
     Calculates the mass continuity cost function by taking the divergence
@@ -826,7 +928,7 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
                                           coeff=1e-5):
     """
     Calculates the gradient of the cost function due to deviance from vertical
-    vorticity equation. This is done by taking the functional deriviative of
+    vorticity equation. This is done by taking the functional derivative of
     the vertical vorticity cost function.
 
     Parameters
@@ -993,7 +1095,7 @@ def calculate_model_gradient(u, v, w, weights, u_model,
     v_model: list of 3D float arrays
         Meridional wind field from model
     w_model: list of 3D float arrays
-        Vetical wind field from model
+        Vertical wind field from model
     coeff: float
         Weight of background constraint to total cost function
 
