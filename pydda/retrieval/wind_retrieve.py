@@ -20,17 +20,17 @@ from copy import deepcopy
 from .angles import add_azimuth_as_field, add_elevation_as_field
 
 
-def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
+def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
                       frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
-                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Cmod=0.0,
+                      Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Cmod=0.0, Cpoint=0.0,
                       Ut=None, Vt=None, filt_iterations=2,
                       mask_outside_opt=False, weights_obs=None,
                       weights_model=None, weights_bg=None,
                       max_iterations=200, mask_w_outside_opt=True,
                       filter_window=9, filter_order=4, min_bca=30.0,
                       max_bca=150.0, upper_bc=True, model_fields=None,
-                      output_cost_functions=True):
+                      output_cost_functions=True, roi=1000.0):
     """
     This function takes in a list of Py-ART Grid objects and derives a
     wind field. Every Py-ART Grid in Grids must have the same grid
@@ -62,6 +62,9 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     w_init: 3D ndarray
         The intial guess for the vertical wind field, input as a 3D array
         with the same shape as the fields in Grids.
+    points: None or list of dicts
+        Point observations as returned by :func:`pydda.constraints.get_iem_obs`. Set
+        to None to disable.
     vel_name: string
         Name of radial velocity field. Setting to None will have PyDDA attempt
         to automatically detect the velocity field name.
@@ -93,6 +96,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         Weight for cost function related to vertical vorticity equation.
     Cmod: float
         Weight for cost function related to custom constraints.
+    Cpoint: float
+        Weight for cost function related to point observations.
     weights_obs: list of floating point arrays or None
         List of weights for each point in grid from each radar in Grids.
         Set to None to let PyDDA determine this automatically.
@@ -150,6 +155,9 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     output_cost_functions: bool
         Set to True to output the value of each cost function every
         10 iterations.
+    roi: float
+        Radius of influence for the point observations. The point observation will
+        not hold any weight outside this radius.
 
     Returns
     =======
@@ -381,28 +389,29 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                                        u_model, v_model,
                                                        w_model,
                                                        Co, Cm, Cx, Cy, Cz, Cb,
-                                                       Cv, Cmod, Ut, Vt,
+                                                       Cv, Cmod, Cpoint, Ut, Vt,
                                                        grid_shape,
                                                        dx, dy, dz, x, y, z, rmsVr,
                                                        weights, bg_weights,
                                                        mod_weights,
-                                                       upper_bc,
+                                                       upper_bc, points,
+                                                       roi,
                                                        False),
                               maxiter=10, pgtol=1e-3, bounds=bounds,
                               fprime=grad_J, disp=0, iprint=-1)
         if(output_cost_functions is True):
             J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
                        u_model, v_model, w_model,
-                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
+                       Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, Ut, Vt,
                        grid_shape, dx, dy, dz, x, y, z, rmsVr,
                        weights, bg_weights, mod_weights,
-                       upper_bc, True)
+                       upper_bc, points, roi, True)
             grad_J(winds[0], vrs, azs, els, wts, u_back, v_back,
                    u_model, v_model, w_model,
-                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt,
+                   Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, Ut, Vt,
                    grid_shape, dx, dy, dz, x, y, z, rmsVr,
                    weights, bg_weights, mod_weights,
-                   upper_bc, True)
+                   upper_bc, points, roi, True)
         warnflag = winds[2]['warnflag']
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
                                       grid_shape[2]))
@@ -431,16 +440,18 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         while(iterations < filt_iterations):
             winds = fmin_l_bfgs_b(
                 J_function, winds, args=(vrs, azs, els,
-                                         wts, u_back, v_back,
-                                         u_model, v_model, w_model,
-                                         Co, Cm, Cx, Cy, Cz, Cb,
-                                         Cv, Cmod, Ut, Vt,
-                                         grid_shape,
-                                         dx, dy, dz, z, rmsVr,
-                                         weights, bg_weights,
-                                         mod_weights,
-                                         upper_bc,
-                                         False),
+                                                       wts, u_back, v_back,
+                                                       u_model, v_model,
+                                                       w_model,
+                                                       Co, Cm, Cx, Cy, Cz, Cb,
+                                                       Cv, Cmod, Cpoint, Ut, Vt,
+                                                       grid_shape,
+                                                       dx, dy, dz, x, y, z, rmsVr,
+                                                       weights, bg_weights,
+                                                       mod_weights,
+                                                       upper_bc, points,
+                                                       roi,
+                                                       False),
                 maxiter=10, pgtol=1e-3, bounds=bounds,
                 fprime=grad_J, disp=0, iprint=-1)
 
