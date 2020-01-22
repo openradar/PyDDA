@@ -142,7 +142,7 @@ Author: Robert C. Jackson
     Norm of gradient: 0.06736427542901784
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 424.1
+    Done! Time = 386.8
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
       alpha=contour_alpha)
     /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
@@ -222,7 +222,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 7 minutes  6.061 seconds)
+   **Total running time of the script:** ( 6 minutes  28.692 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

@@ -49,8 +49,8 @@ Author: Robert C. Jackson
     /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    LocalCluster('tcp://127.0.0.1:34741', workers=2, threads=2, memory=8.36 GB)
-    <Client: 'tcp://127.0.0.1:34741' processes=2 threads=2, memory=8.36 GB>
+    LocalCluster('tcp://127.0.0.1:33677', workers=2, threads=2, memory=8.36 GB)
+    <Client: 'tcp://127.0.0.1:33677' processes=2 threads=2, memory=8.36 GB>
     /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
@@ -155,7 +155,7 @@ Author: Robert C. Jackson
     Norm of gradient: 0.010982740652982041
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 167.7
+    Done! Time = 153.0
     Waiting for nested grid to be retrieved...
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
       alpha=contour_alpha)
@@ -246,7 +246,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 6 minutes  50.850 seconds)
+   **Total running time of the script:** ( 6 minutes  11.639 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
