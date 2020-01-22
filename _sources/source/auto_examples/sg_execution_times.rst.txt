@@ -5,11 +5,18 @@
 
 Computation times
 =================
-**20:30.182** total execution time for **source_auto_examples** files:
+**17:13.048** total execution time for **source_auto_examples** files:
 
-- **09:07.452**: :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)
-- **06:52.250**: :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)
-- **04:30.481**: :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``)
-- **00:00.000**: :ref:`sphx_glr_source_auto_examples_hurricane_florence.py` (``hurricane_florence.py``)
-- **00:00.000**: :ref:`sphx_glr_source_auto_examples_oklahoma_example.py` (``oklahoma_example.py``)
-- **00:00.000**: :ref:`sphx_glr_source_auto_examples_sydney_tornado.py` (``sydney_tornado.py``)
++------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)                         | 06:31.123 | 0.0 MB |
++------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)           | 06:16.040 | 0.0 MB |
++------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``) | 04:25.885 | 0.0 MB |
++------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_source_auto_examples_hurricane_florence.py` (``hurricane_florence.py``)               | 00:00.000 | 0.0 MB |
++------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_source_auto_examples_oklahoma_example.py` (``oklahoma_example.py``)                   | 00:00.000 | 0.0 MB |
++------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_source_auto_examples_sydney_tornado.py` (``sydney_tornado.py``)                       | 00:00.000 | 0.0 MB |
++------------------------------------------------------------------------------------------------------+-----------+--------+

@@ -55,18 +55,18 @@
 <span class="c1"># We really only need the API to download the data, make ECMWF API an</span>
 <span class="c1"># optional dependency since not everyone will have a login from the start.</span>
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">ecmwfapi</span> <span class="k">import</span> <span class="n">ECMWFDataServer</span>
+    <span class="kn">from</span> <span class="nn">ecmwfapi</span> <span class="kn">import</span> <span class="n">ECMWFDataServer</span>
     <span class="n">ECMWF_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">ECMWF_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">griddata</span><span class="p">,</span> <span class="n">NearestNDInterpolator</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">griddata</span><span class="p">,</span> <span class="n">NearestNDInterpolator</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 
-<span class="k">def</span> <span class="nf">download_needed_era_data</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
+<div class="viewcode-block" id="download_needed_era_data"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data">[docs]</a><span class="k">def</span> <span class="nf">download_needed_era_data</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function will download the ERA interim data in the region</span>
 <span class="sd">    specified by the input Py-ART Grid within the interval specified by</span>
@@ -129,10 +129,10 @@
     <span class="n">retrieve_dict</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;netcdf&quot;</span>
     <span class="n">retrieve_dict</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_name</span>
     <span class="n">server</span> <span class="o">=</span> <span class="n">ECMWFDataServer</span><span class="p">()</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">retrieve_dict</span><span class="p">)</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">retrieve_dict</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">make_constraint_from_era_interim</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="make_constraint_from_era_interim"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.make_constraint_from_era_interim.html#pydda.constraints.make_constraint_from_era_interim">[docs]</a><span class="k">def</span> <span class="nf">make_constraint_from_era_interim</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function will read ERA Interim in NetCDF format and add it </span>
 <span class="sd">    to the Py-ART grid specified by Grid. PyDDA will automatically download</span>
@@ -299,7 +299,7 @@
     <span class="k">if</span> <span class="s1">&#39;tfile&#39;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
         <span class="n">tfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">new_grid</span>
+    <span class="k">return</span> <span class="n">new_grid</span></div>
 
 
 <div class="viewcode-block" id="make_constraint_from_wrf"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.make_constraint_from_wrf.html#pydda.constraints.make_constraint_from_wrf">[docs]</a><span class="k">def</span> <span class="nf">make_constraint_from_wrf</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">wrf_time</span><span class="p">,</span>
@@ -540,7 +540,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

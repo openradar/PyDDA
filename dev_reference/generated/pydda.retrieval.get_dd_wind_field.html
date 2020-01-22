@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pydda.retrieval.get_dd_wind_field_nested" href="pydda.retrieval.get_dd_wind_field_nested.html" />
-    <link rel="prev" title="pydda.cost_functions.calculate_fall_speed" href="pydda.cost_functions.calculate_fall_speed.html" /> 
+    <link rel="prev" title="pydda.cost_functions.calculate_point_gradient" href="pydda.cost_functions.calculate_point_gradient.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -34,7 +34,7 @@
           <a href="pydda.retrieval.get_dd_wind_field_nested.html" title="pydda.retrieval.get_dd_wind_field_nested"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pydda.cost_functions.calculate_fall_speed.html" title="pydda.cost_functions.calculate_fall_speed"
+          <a href="pydda.cost_functions.calculate_point_gradient.html" title="pydda.cost_functions.calculate_point_gradient"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
@@ -50,7 +50,7 @@
 <h1>pydda.retrieval.get_dd_wind_field<a class="headerlink" href="#pydda-retrieval-get-dd-wind-field" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pydda.retrieval.get_dd_wind_field">
-<code class="sig-prename descclassname">pydda.retrieval.</code><code class="sig-name descname">get_dd_wind_field</code><span class="sig-paren">(</span><em class="sig-param">Grids</em>, <em class="sig-param">u_init</em>, <em class="sig-param">v_init</em>, <em class="sig-param">w_init</em>, <em class="sig-param">vel_name=None</em>, <em class="sig-param">refl_field=None</em>, <em class="sig-param">u_back=None</em>, <em class="sig-param">v_back=None</em>, <em class="sig-param">z_back=None</em>, <em class="sig-param">frz=4500.0</em>, <em class="sig-param">Co=1.0</em>, <em class="sig-param">Cm=1500.0</em>, <em class="sig-param">Cx=0.0</em>, <em class="sig-param">Cy=0.0</em>, <em class="sig-param">Cz=0.0</em>, <em class="sig-param">Cb=0.0</em>, <em class="sig-param">Cv=0.0</em>, <em class="sig-param">Cmod=0.0</em>, <em class="sig-param">Ut=None</em>, <em class="sig-param">Vt=None</em>, <em class="sig-param">filt_iterations=2</em>, <em class="sig-param">mask_outside_opt=False</em>, <em class="sig-param">weights_obs=None</em>, <em class="sig-param">weights_model=None</em>, <em class="sig-param">weights_bg=None</em>, <em class="sig-param">max_iterations=200</em>, <em class="sig-param">mask_w_outside_opt=True</em>, <em class="sig-param">filter_window=9</em>, <em class="sig-param">filter_order=4</em>, <em class="sig-param">min_bca=30.0</em>, <em class="sig-param">max_bca=150.0</em>, <em class="sig-param">upper_bc=True</em>, <em class="sig-param">model_fields=None</em>, <em class="sig-param">output_cost_functions=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.retrieval.</code><code class="sig-name descname">get_dd_wind_field</code><span class="sig-paren">(</span><em class="sig-param">Grids</em>, <em class="sig-param">u_init</em>, <em class="sig-param">v_init</em>, <em class="sig-param">w_init</em>, <em class="sig-param">points=None</em>, <em class="sig-param">vel_name=None</em>, <em class="sig-param">refl_field=None</em>, <em class="sig-param">u_back=None</em>, <em class="sig-param">v_back=None</em>, <em class="sig-param">z_back=None</em>, <em class="sig-param">frz=4500.0</em>, <em class="sig-param">Co=1.0</em>, <em class="sig-param">Cm=1500.0</em>, <em class="sig-param">Cx=0.0</em>, <em class="sig-param">Cy=0.0</em>, <em class="sig-param">Cz=0.0</em>, <em class="sig-param">Cb=0.0</em>, <em class="sig-param">Cv=0.0</em>, <em class="sig-param">Cmod=0.0</em>, <em class="sig-param">Cpoint=0.0</em>, <em class="sig-param">Ut=None</em>, <em class="sig-param">Vt=None</em>, <em class="sig-param">filt_iterations=2</em>, <em class="sig-param">mask_outside_opt=False</em>, <em class="sig-param">weights_obs=None</em>, <em class="sig-param">weights_model=None</em>, <em class="sig-param">weights_bg=None</em>, <em class="sig-param">max_iterations=200</em>, <em class="sig-param">mask_w_outside_opt=True</em>, <em class="sig-param">filter_window=9</em>, <em class="sig-param">filter_order=3</em>, <em class="sig-param">min_bca=30.0</em>, <em class="sig-param">max_bca=150.0</em>, <em class="sig-param">upper_bc=True</em>, <em class="sig-param">model_fields=None</em>, <em class="sig-param">output_cost_functions=True</em>, <em class="sig-param">roi=1000.0</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function takes in a list of Py-ART Grid objects and derives a
 wind field. Every Py-ART Grid in Grids must have the same grid
 specification.</p>
@@ -76,6 +76,9 @@ with the same shape as the fields in Grids.</p>
 </dd>
 <dt><strong>w_init: 3D ndarray</strong></dt><dd><p>The intial guess for the vertical wind field, input as a 3D array
 with the same shape as the fields in Grids.</p>
+</dd>
+<dt><strong>points: None or list of dicts</strong></dt><dd><p>Point observations as returned by <a class="reference internal" href="pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.constraints.get_iem_obs()</span></code></a>. Set
+to None to disable.</p>
 </dd>
 <dt><strong>vel_name: string</strong></dt><dd><p>Name of radial velocity field. Setting to None will have PyDDA attempt
 to automatically detect the velocity field name.</p>
@@ -108,6 +111,8 @@ is given in the sounding’s original coordinates.</p>
 </dd>
 <dt><strong>Cmod: float</strong></dt><dd><p>Weight for cost function related to custom constraints.</p>
 </dd>
+<dt><strong>Cpoint: float</strong></dt><dd><p>Weight for cost function related to point observations.</p>
+</dd>
 <dt><strong>weights_obs: list of floating point arrays or None</strong></dt><dd><p>List of weights for each point in grid from each radar in Grids.
 Set to None to let PyDDA determine this automatically.</p>
 </dd>
@@ -127,13 +132,13 @@ This is only needed if Cv is not zero.</p>
 the retrieved wind field and then do the optimization step for
 filt_iterations iterations. Set to 0 to disable the low pass filter.</p>
 </dd>
-<dt><strong>max_outside_opt: bool</strong></dt><dd><p>If set to true, wind values outside the multiple doppler lobes will
+<dt><strong>mask_outside_opt: bool</strong></dt><dd><p>If set to true, wind values outside the multiple doppler lobes will
 be masked, i.e. if less than 2 radars provide coverage for a given
 point.</p>
 </dd>
 <dt><strong>max_iterations: int</strong></dt><dd><p>The maximum number of iterations to run the optimization loop for.</p>
 </dd>
-<dt><strong>max_w_outside_opt: bool</strong></dt><dd><p>If set to true, vertical winds outside the multiple doppler lobes will
+<dt><strong>mask_w_outside_opt: bool</strong></dt><dd><p>If set to true, vertical winds outside the multiple doppler lobes will
 be masked, i.e. if less than 2 radars provide coverage for a given
 point.</p>
 </dd>
@@ -165,6 +170,9 @@ into model_fields.</p>
 <dt><strong>output_cost_functions: bool</strong></dt><dd><p>Set to True to output the value of each cost function every
 10 iterations.</p>
 </dd>
+<dt><strong>roi: float</strong></dt><dd><p>Radius of influence for the point observations. The point observation will
+not hold any weight outside this radius.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -186,8 +194,8 @@ are displayable by the visualization module.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.cost_functions.calculate_fall_speed.html"
-                        title="previous chapter">pydda.cost_functions.calculate_fall_speed</a></p>
+  <p class="topless"><a href="pydda.cost_functions.calculate_point_gradient.html"
+                        title="previous chapter">pydda.cost_functions.calculate_point_gradient</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pydda.retrieval.get_dd_wind_field_nested.html"
                         title="next chapter">pydda.retrieval.get_dd_wind_field_nested</a></p>
@@ -225,7 +233,7 @@ are displayable by the visualization module.</p>
           <a href="pydda.retrieval.get_dd_wind_field_nested.html" title="pydda.retrieval.get_dd_wind_field_nested"
              >next</a> |</li>
         <li class="right" >
-          <a href="pydda.cost_functions.calculate_fall_speed.html" title="pydda.cost_functions.calculate_fall_speed"
+          <a href="pydda.cost_functions.calculate_point_gradient.html" title="pydda.cost_functions.calculate_point_gradient"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.4.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 
@@ -233,7 +241,7 @@ are displayable by the visualization module.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

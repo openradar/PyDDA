@@ -44,99 +44,22 @@
 <span class="kn">import</span> <span class="nn">scipy.ndimage.filters</span>
 
 
-<div class="viewcode-block" id="J_function"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function">[docs]</a><span class="k">def</span> <span class="nf">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span>
-               <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="p">,</span>
-               <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span>
-               <span class="n">bg_weights</span><span class="p">,</span> <span class="n">model_weights</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span>
-               <span class="n">print_out</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="J_function"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function">[docs]</a><span class="k">def</span> <span class="nf">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the total cost function. This typically does not need to be</span>
 <span class="sd">    called directly as get_dd_wind_field is a wrapper around this function and</span>
-<span class="sd">    grad_J. In order to add more terms to the cost function, modify this</span>
-<span class="sd">    function and grad_J.</span>
+<span class="sd">    :py:func:`pydda.cost_functions.grad_J`.</span>
+<span class="sd">    In order to add more terms to the cost function, modify this</span>
+<span class="sd">    function and :py:func:`pydda.cost_functions.grad_J`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    winds: 1-D float array</span>
 <span class="sd">        The wind field, flattened to 1-D for f_min. The total size of the</span>
 <span class="sd">        array will be a 1D array of 3*nx*ny*nz elements.</span>
-<span class="sd">    vrs: List of 3D float arrays</span>
-<span class="sd">        List of radial velocities from each radar. All arrays in list</span>
-<span class="sd">        must have the same dimensions.</span>
-<span class="sd">    azs: List of 3D float arrays</span>
-<span class="sd">        List of azimuths from each radar. All arrays in list</span>
-<span class="sd">        must have the same dimensions.</span>
-<span class="sd">    els: List of 3D float arrays</span>
-<span class="sd">        List of elevations from each radar. All arrays in list</span>
-<span class="sd">        must have the same dimensions.</span>
-<span class="sd">    wts: List of 3D float arrays</span>
-<span class="sd">        Float array containing fall speeds from radar. All arrays in list</span>
-<span class="sd">        must have the same dimensions.</span>
-<span class="sd">    u_back: 1D float array (number of vertical levels):</span>
-<span class="sd">        Background u wind. This takes in a 1D float array of length nz,</span>
-<span class="sd">        with each element corresponding to the u component of the wind</span>
-<span class="sd">        at a given vertical level from the sounding.</span>
-<span class="sd">    v_back: 1D float array (number of vertical levels):</span>
-<span class="sd">        Background v wind. This takes in a 1D float array of length nz,</span>
-<span class="sd">        with each element corresponding to the v component of the wind</span>
-<span class="sd">        at a given vertical level from the sounding.</span>
-<span class="sd">    u_model: list of 3D float arrays</span>
-<span class="sd">        U from each model integrated into the retrieval. The U from</span>
-<span class="sd">        each model is given as a list of array of the same dimensions,</span>
-<span class="sd">        with the U from the model interpolated on to the radar analysis grid.</span>
-<span class="sd">    v_model: list of 3D float arrays</span>
-<span class="sd">        V from each model integrated into the retrieval. The V from each model</span>
-<span class="sd">        is given as a list of array of the same dimensions, with the V from</span>
-<span class="sd">        the model interpolated on to the radar analysis grid.</span>
-<span class="sd">    w_model:</span>
-<span class="sd">        W from each model integrated into the retrieval. The W from each model</span>
-<span class="sd">        is given as a list of array of the same dimensions, with the W from</span>
-<span class="sd">        the model interpolated on to the radar analysis grid.</span>
-<span class="sd">    Co: float</span>
-<span class="sd">        Weighting coefficient for data constraint.</span>
-<span class="sd">    Cm: float</span>
-<span class="sd">        Weighting coefficient for mass continuity constraint.</span>
-<span class="sd">    Cx: float</span>
-<span class="sd">        Smoothing coefficient for x-direction</span>
-<span class="sd">    Cy: float</span>
-<span class="sd">        Smoothing coefficient for y-direction</span>
-<span class="sd">    Cz: float</span>
-<span class="sd">        Smoothing coefficient for z-direction</span>
-<span class="sd">    Cb: float</span>
-<span class="sd">        Coefficient for sounding constraint</span>
-<span class="sd">    Cv: float</span>
-<span class="sd">        Weight for cost function related to vertical vorticity equation.</span>
-<span class="sd">    Cmod: float</span>
-<span class="sd">        Coefficient for model constraint</span>
-<span class="sd">    Ut: float</span>
-<span class="sd">        Prescribed storm motion. This is only needed if Cv is not zero.</span>
-<span class="sd">    Vt: float</span>
-<span class="sd">        Prescribed storm motion. This is only needed if Cv is not zero.</span>
-<span class="sd">    grid_shape:</span>
-<span class="sd">        Shape of wind grid</span>
-<span class="sd">    dx:</span>
-<span class="sd">        Spacing of grid in x direction</span>
-<span class="sd">    dy:</span>
-<span class="sd">        Spacing of grid in y direction</span>
-<span class="sd">    dz:</span>
-<span class="sd">        Spacing of grid in z direction</span>
-<span class="sd">    z:</span>
-<span class="sd">        Grid vertical levels in m</span>
-<span class="sd">    rmsVr: float</span>
-<span class="sd">        The sum of squares of velocity/num_points. Use for normalization</span>
-<span class="sd">        of data weighting coefficient</span>
-<span class="sd">    weights: n_radars by z_bins by y_bins by x_bins float array</span>
-<span class="sd">        Data weights for each pair of radars. This is usually automatically</span>
-<span class="sd">        determined by get_dd_wind_field.</span>
-<span class="sd">    bg_weights: z_bins by y_bins by x_bins float array</span>
-<span class="sd">        Data weights for sounding constraint.</span>
-<span class="sd">    model_weights: n_models by z_bins by y_bins by x_bins float array</span>
-<span class="sd">        Data weights for each model.</span>
-<span class="sd">    upper_bc: bool</span>
-<span class="sd">        True to enforce w=0 at top of domain (impermeability condition),</span>
-<span class="sd">        False to not enforce impermeability at top of domain</span>
-<span class="sd">    print_out: bool</span>
-<span class="sd">        Set to True to print out the value of the cost function.</span>
+<span class="sd">    parameters: DDParameters</span>
+<span class="sd">        The parameters for the cost function evaluation as specified by the</span>
+<span class="sd">        :py:func:`pydda.retrieval.DDParameters` class.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -144,132 +67,90 @@
 <span class="sd">        The value of the cost function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                       <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                       <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
 
     <span class="n">Jvel</span> <span class="o">=</span> <span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
-         <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="o">=</span><span class="n">rmsVr</span><span class="p">,</span>
-         <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Co</span><span class="p">)</span>
+         <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+         <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">Jmass</span> <span class="o">=</span> <span class="n">calculate_mass_continuity</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Cm</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">Jsmooth</span> <span class="o">=</span> <span class="n">calculate_smoothness_cost</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+            <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Jsmooth</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">Jbackground</span> <span class="o">=</span> <span class="n">calculate_background_cost</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bg_weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Jbackground</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">Jvorticity</span> <span class="o">=</span> <span class="n">calculate_vertical_vorticity_cost</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Cv</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Jvorticity</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">Jmod</span> <span class="o">=</span> <span class="n">calculate_model_cost</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">model_weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span>
-            <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Cmod</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">Jmod</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">print_out</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  &#39;</span> <span class="o">+</span>
-               <span class="s1">&#39;| Max w  &#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">Jpoint</span> <span class="o">=</span> <span class="n">calculate_point_cost</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Jpoint</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |&#39;</span> <span class="o">+</span>
+               <span class="s1">&#39; Max w  &#39;</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jvel</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jmass</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jsmooth</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jbackground</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jvorticity</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jmod</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-               <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">max</span><span class="p">())))</span>
+               <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Jpoint</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
+               <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]))))</span>
 
-    <span class="k">return</span> <span class="n">Jvel</span> <span class="o">+</span> <span class="n">Jmass</span> <span class="o">+</span> <span class="n">Jsmooth</span> <span class="o">+</span> <span class="n">Jbackground</span> <span class="o">+</span> <span class="n">Jvorticity</span> <span class="o">+</span> <span class="n">Jmod</span></div>
+    <span class="k">return</span> <span class="n">Jvel</span> <span class="o">+</span> <span class="n">Jmass</span> <span class="o">+</span> <span class="n">Jsmooth</span> <span class="o">+</span> <span class="n">Jbackground</span> <span class="o">+</span> <span class="n">Jvorticity</span> <span class="o">+</span> <span class="n">Jmod</span> <span class="o">+</span> <span class="n">Jpoint</span></div>
 
 
-<div class="viewcode-block" id="grad_J"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J">[docs]</a><span class="k">def</span> <span class="nf">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span>
-           <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="p">,</span>
-           <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span>
-           <span class="n">weights</span><span class="p">,</span> <span class="n">bg_weights</span><span class="p">,</span> <span class="n">model_weights</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span>
-           <span class="n">print_out</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="grad_J"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J">[docs]</a><span class="k">def</span> <span class="nf">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the cost function. This typically does not need</span>
 <span class="sd">    to be called directly as get_dd_wind_field is a wrapper around this</span>
-<span class="sd">    function and J_function. In order to add more terms to the cost function,</span>
-<span class="sd">    modify this function and grad_J.</span>
+<span class="sd">    function and :py:func:`pydda.cost_functions.J_function`.</span>
+<span class="sd">    In order to add more terms to the cost function,</span>
+<span class="sd">    modify this function and :py:func:`pydda.cost_functions.grad_J`.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    winds: 1-D float array</span>
 <span class="sd">        The wind field, flattened to 1-D for f_min</span>
-<span class="sd">    vrs: List of float arrays</span>
-<span class="sd">        List of radial velocities from each radar</span>
-<span class="sd">    azs: List of float arrays</span>
-<span class="sd">        List of azimuths from each radar</span>
-<span class="sd">    els: List of float arrays</span>
-<span class="sd">        List of elevations from each radar</span>
-<span class="sd">    wts: List of float arrays</span>
-<span class="sd">        Float array containing fall speed from radar.</span>
-<span class="sd">    u_back: 1D float array (number of vertical levels):</span>
-<span class="sd">        Background u wind</span>
-<span class="sd">    v_back: 1D float array (number of vertical levels):</span>
-<span class="sd">        Background u wind</span>
-<span class="sd">    u_model: list of 3D float arrays</span>
-<span class="sd">        U from each model integrated into the retrieval</span>
-<span class="sd">    v_model: list of 3D float arrays</span>
-<span class="sd">        V from each model integrated into the retrieval</span>
-<span class="sd">    w_model:</span>
-<span class="sd">        W from each model integrated into the retrieval</span>
-<span class="sd">    Co: float</span>
-<span class="sd">        Weighting coefficient for data constraint.</span>
-<span class="sd">    Cm: float</span>
-<span class="sd">        Weighting coefficient for mass continuity constraint.</span>
-<span class="sd">    Cx: float</span>
-<span class="sd">        Smoothing coefficient for x-direction</span>
-<span class="sd">    Cy: float</span>
-<span class="sd">        Smoothing coefficient for y-direction</span>
-<span class="sd">    Cz: float</span>
-<span class="sd">        Smoothing coefficient for z-direction</span>
-<span class="sd">    Cb: float</span>
-<span class="sd">        Coefficient for sounding constraint</span>
-<span class="sd">    Cv: float</span>
-<span class="sd">        Weight for cost function related to vertical vorticity equation.</span>
-<span class="sd">    Cmod: float</span>
-<span class="sd">        Coefficient for model constraint</span>
-<span class="sd">    Ut: float</span>
-<span class="sd">        Prescribed storm motion. This is only needed if Cv is not zero.</span>
-<span class="sd">    Vt: float</span>
-<span class="sd">        Prescribed storm motion. This is only needed if Cv is not zero.</span>
-<span class="sd">    grid_shape:</span>
-<span class="sd">        Shape of wind grid</span>
-<span class="sd">    dx:</span>
-<span class="sd">        Spacing of grid in x direction</span>
-<span class="sd">    dy:</span>
-<span class="sd">        Spacing of grid in y direction</span>
-<span class="sd">    dz:</span>
-<span class="sd">        Spacing of grid in z direction</span>
-<span class="sd">    z:</span>
-<span class="sd">        Grid vertical levels in m</span>
-<span class="sd">    rmsVr: float</span>
-<span class="sd">        The sum of squares of velocity/num_points. Use for normalization</span>
-<span class="sd">        of data weighting coefficient</span>
-<span class="sd">    weights: n_radars by z_bins by y_bins x x_bins float array</span>
-<span class="sd">        Data weights for each pair of radars</span>
-<span class="sd">    bg_weights: z_bins by y_bins x x_bins float array</span>
-<span class="sd">        Data weights for sounding constraint</span>
-<span class="sd">    model_weights: n_models by z_bins by y_bins by x_bins float array</span>
-<span class="sd">        Data weights for each model.</span>
-<span class="sd">    upper_bc: bool</span>
-<span class="sd">        True to enforce w=0 at top of domain (impermeability condition),</span>
-<span class="sd">        False to not enforce impermeability at top of domain</span>
+<span class="sd">    parameters: DDParameters</span>
+<span class="sd">        The parameters for the cost function evaluation as specified by the</span>
+<span class="sd">        :py:func:`pydda.retrieve.DDParameters` class.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -277,36 +158,48 @@
 <span class="sd">        Gradient vector of cost function</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                       <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                       <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
     <span class="n">grad</span> <span class="o">=</span> <span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-        <span class="n">vrs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">wts</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span>
-        <span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Co</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">upper_bc</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">grad</span> <span class="o">+=</span> <span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Cm</span><span class="p">,</span>
-            <span class="n">upper_bc</span><span class="o">=</span><span class="n">upper_bc</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">grad</span> <span class="o">+=</span> <span class="n">calculate_smoothness_gradient</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Cx</span><span class="o">=</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">Cz</span><span class="p">,</span>
-            <span class="n">upper_bc</span><span class="o">=</span><span class="n">upper_bc</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+            <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">grad</span> <span class="o">+=</span> <span class="n">calculate_background_gradient</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bg_weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span>
-            <span class="n">upper_bc</span><span class="o">=</span><span class="n">upper_bc</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">grad</span> <span class="o">+=</span> <span class="n">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Cv</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
         <span class="n">grad</span> <span class="o">+=</span> <span class="n">calculate_model_gradient</span><span class="p">(</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">model_weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span>
-            <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">Cmod</span><span class="p">)</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">print_out</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">grad</span> <span class="o">+=</span> <span class="n">calculate_point_gradient</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">)</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Norm of gradient: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)))</span>
 
     <span class="k">return</span> <span class="n">grad</span></div>
@@ -561,6 +454,105 @@
         <span class="n">grad_w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">grad_u</span><span class="o">*</span><span class="n">Cx</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">grad_v</span><span class="o">*</span><span class="n">Cy</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">grad_w</span><span class="o">*</span><span class="n">Cz</span><span class="o">*</span><span class="mi">2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="calculate_point_cost"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost">[docs]</a><span class="k">def</span> <span class="nf">calculate_point_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the cost function related to point observations. A mean square error cost</span>
+<span class="sd">    function term is applied to points that are within the sphere of influence</span>
+<span class="sd">    whose radius is determined by *roi*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u: Float array</span>
+<span class="sd">        Float array with u component of wind field</span>
+<span class="sd">    v: Float array</span>
+<span class="sd">        Float array with v component of wind field</span>
+<span class="sd">    x:  Float array</span>
+<span class="sd">        X coordinates of grid centers</span>
+<span class="sd">    y:  Float array</span>
+<span class="sd">        Y coordinates of grid centers</span>
+<span class="sd">    z:  Float array</span>
+<span class="sd">        Z coordinated of grid centers</span>
+<span class="sd">    point_list: list of dicts</span>
+<span class="sd">        List of point constraints.</span>
+<span class="sd">        Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;, to correspond</span>
+<span class="sd">        to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;</span>
+<span class="sd">        to correspond to the location of the point observation.</span>
+
+<span class="sd">        In addition, &quot;site_id&quot; gives the METAR code (or name) to the station.</span>
+<span class="sd">    Cp: float</span>
+<span class="sd">        The weighting coefficient of the point cost function.</span>
+<span class="sd">    roi: float</span>
+<span class="sd">        Radius of influence of observations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    J: float</span>
+<span class="sd">        The cost function related to the difference between wind field and points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">the_point</span> <span class="ow">in</span> <span class="n">point_list</span><span class="p">:</span>
+        <span class="c1"># Instead of worrying about whole domain, just find points in radius of influence</span>
+        <span class="c1"># Since we know that the weight will be zero outside the sphere of influence anyways</span>
+        <span class="n">the_box</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">roi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">roi</span><span class="p">,</span>
+                                            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">roi</span><span class="p">)))</span>
+        <span class="n">J</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">u</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">J</span> <span class="o">*</span> <span class="n">Cp</span></div>
+
+
+<div class="viewcode-block" id="calculate_point_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_point_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the gradient of the cost function related to point observations.</span>
+<span class="sd">    A mean square error cost function term is applied to points that are within the sphere of influence</span>
+<span class="sd">    whose radius is determined by *roi*.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u: Float array</span>
+<span class="sd">        Float array with u component of wind field</span>
+<span class="sd">    v: Float array</span>
+<span class="sd">        Float array with v component of wind field</span>
+<span class="sd">    x: Float array</span>
+<span class="sd">        X coordinates of grid centers</span>
+<span class="sd">    y: Float array</span>
+<span class="sd">        Y coordinates of grid centers</span>
+<span class="sd">    z: Float array</span>
+<span class="sd">        Z coordinated of grid centers</span>
+<span class="sd">    point_list: list of dicts</span>
+<span class="sd">        List of point constraints. Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;,</span>
+<span class="sd">        to correspond to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;</span>
+<span class="sd">        to correspond to the location of the point observation.</span>
+
+<span class="sd">        In addition, &quot;site_id&quot; gives the METAR code (or name) to the station.</span>
+<span class="sd">    Cp: float</span>
+<span class="sd">        The weighting coefficient of the point cost function.</span>
+<span class="sd">    roi: float</span>
+<span class="sd">        Radius of influence of observations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gradJ: float array</span>
+<span class="sd">        The gradient of the cost function related to the difference between wind field and points.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gradJ_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">gradJ_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">gradJ_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">the_point</span> <span class="ow">in</span> <span class="n">point_list</span><span class="p">:</span>
+        <span class="n">the_box</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">roi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">roi</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">roi</span><span class="p">)))</span>
+        <span class="n">gradJ_u</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">])</span>
+        <span class="n">gradJ_v</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">])</span>
+
+    <span class="n">gradJ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">gradJ_u</span><span class="p">,</span> <span class="n">gradJ_v</span><span class="p">,</span> <span class="n">gradJ_w</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">gradJ</span> <span class="o">*</span> <span class="n">Cp</span></div>
 
 
 <div class="viewcode-block" id="calculate_mass_continuity"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity.html#pydda.cost_functions.calculate_mass_continuity">[docs]</a><span class="k">def</span> <span class="nf">calculate_mass_continuity</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
@@ -867,7 +859,7 @@
                                           <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the cost function due to deviance from vertical</span>
-<span class="sd">    vorticity equation. This is done by taking the functional deriviative of</span>
+<span class="sd">    vorticity equation. This is done by taking the functional derivative of</span>
 <span class="sd">    the vertical vorticity cost function.</span>
 
 <span class="sd">    Parameters</span>
@@ -1034,7 +1026,7 @@
 <span class="sd">    v_model: list of 3D float arrays</span>
 <span class="sd">        Meridional wind field from model</span>
 <span class="sd">    w_model: list of 3D float arrays</span>
-<span class="sd">        Vetical wind field from model</span>
+<span class="sd">        Vertical wind field from model</span>
 <span class="sd">    coeff: float</span>
 <span class="sd">        Weight of background constraint to total cost function</span>
 
@@ -1089,7 +1081,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

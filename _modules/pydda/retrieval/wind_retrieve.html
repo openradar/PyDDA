@@ -51,27 +51,155 @@
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="k">import</span> <span class="n">cost_functions</span>
-<span class="kn">from</span> <span class="nn">..cost_functions</span> <span class="k">import</span> <span class="n">J_function</span><span class="p">,</span> <span class="n">grad_J</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">fmin_l_bfgs_b</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span>
-<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">savgol_filter</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">.angles</span> <span class="k">import</span> <span class="n">add_azimuth_as_field</span><span class="p">,</span> <span class="n">add_elevation_as_field</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">cost_functions</span>
+<span class="kn">from</span> <span class="nn">..cost_functions</span> <span class="kn">import</span> <span class="n">J_function</span><span class="p">,</span> <span class="n">grad_J</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">fmin_l_bfgs_b</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">savgol_filter</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">.angles</span> <span class="kn">import</span> <span class="n">add_azimuth_as_field</span><span class="p">,</span> <span class="n">add_elevation_as_field</span>
 
 
-<div class="viewcode-block" id="get_dd_wind_field"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field">[docs]</a><span class="k">def</span> <span class="nf">get_dd_wind_field</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="DDParameters"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.retrieval.DDParameters.html#pydda.retrieval.DDParameters">[docs]</a><span class="k">class</span> <span class="nc">DDParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a helper class for inserting more arguments into the :func:`pydda.cost_functions.J_function` and</span>
+<span class="sd">    :func:`pydda.cost_functions.grad_J` function. Since these cost functions take numerous parameters, this class</span>
+<span class="sd">    will store the needed parameters as one positional argument for easier readability of the code.</span>
+
+<span class="sd">    In addition, class members can be added here so that those contributing more constraints to the variational</span>
+<span class="sd">    framework can add any parameters they may need.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vrs: List of float arrays</span>
+<span class="sd">        List of radial velocities from each radar</span>
+<span class="sd">    azs: List of float arrays</span>
+<span class="sd">        List of azimuths from each radar</span>
+<span class="sd">    els: List of float arrays</span>
+<span class="sd">        List of elevations from each radar</span>
+<span class="sd">    wts: List of float arrays</span>
+<span class="sd">        Float array containing fall speed from radar.</span>
+<span class="sd">    u_back: 1D float array (number of vertical levels)</span>
+<span class="sd">        Background u wind</span>
+<span class="sd">    v_back: 1D float array (number of vertical levels)</span>
+<span class="sd">        Background u wind</span>
+<span class="sd">    u_model: list of 3D float arrays</span>
+<span class="sd">        U from each model integrated into the retrieval</span>
+<span class="sd">    v_model: list of 3D float arrays</span>
+<span class="sd">        V from each model integrated into the retrieval</span>
+<span class="sd">    w_model:</span>
+<span class="sd">        W from each model integrated into the retrieval</span>
+<span class="sd">    Co: float</span>
+<span class="sd">        Weighting coefficient for data constraint.</span>
+<span class="sd">    Cm: float</span>
+<span class="sd">        Weighting coefficient for mass continuity constraint.</span>
+<span class="sd">    Cx: float</span>
+<span class="sd">        Smoothing coefficient for x-direction</span>
+<span class="sd">    Cy: float</span>
+<span class="sd">        Smoothing coefficient for y-direction</span>
+<span class="sd">    Cz: float</span>
+<span class="sd">        Smoothing coefficient for z-direction</span>
+<span class="sd">    Cb: float</span>
+<span class="sd">        Coefficient for sounding constraint</span>
+<span class="sd">    Cv: float</span>
+<span class="sd">        Weight for cost function related to vertical vorticity equation.</span>
+<span class="sd">    Cmod: float</span>
+<span class="sd">        Coefficient for model constraint</span>
+<span class="sd">    Cpoint: float</span>
+<span class="sd">        Coefficient for point constraint</span>
+<span class="sd">    Ut: float</span>
+<span class="sd">        Prescribed storm motion. This is only needed if Cv is not zero.</span>
+<span class="sd">    Vt: float</span>
+<span class="sd">        Prescribed storm motion. This is only needed if Cv is not zero.</span>
+<span class="sd">    grid_shape:</span>
+<span class="sd">        Shape of wind grid</span>
+<span class="sd">    dx:</span>
+<span class="sd">        Spacing of grid in x direction</span>
+<span class="sd">    dy:</span>
+<span class="sd">        Spacing of grid in y direction</span>
+<span class="sd">    dz:</span>
+<span class="sd">        Spacing of grid in z direction</span>
+<span class="sd">    x:</span>
+<span class="sd">        E-W grid levels in m</span>
+<span class="sd">    y:</span>
+<span class="sd">        N-S grid levels in m</span>
+<span class="sd">    z:</span>
+<span class="sd">        Grid vertical levels in m</span>
+<span class="sd">    rmsVr: float</span>
+<span class="sd">        The sum of squares of velocity/num_points. Use for normalization</span>
+<span class="sd">        of data weighting coefficient</span>
+<span class="sd">    weights: n_radars by z_bins by y_bins x x_bins float array</span>
+<span class="sd">        Data weights for each pair of radars</span>
+<span class="sd">    bg_weights: z_bins by y_bins x x_bins float array</span>
+<span class="sd">        Data weights for sounding constraint</span>
+<span class="sd">    model_weights: n_models by z_bins by y_bins by x_bins float array</span>
+<span class="sd">        Data weights for each model.</span>
+<span class="sd">    point_list: list or None</span>
+<span class="sd">        point_list: list of dicts</span>
+<span class="sd">        List of point constraints. Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;,</span>
+<span class="sd">        to correspond to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;</span>
+<span class="sd">        to correspond to the location of the point observation in the Grid&#39;s</span>
+<span class="sd">        Cartesian coordinates.</span>
+<span class="sd">    roi: float</span>
+<span class="sd">        The radius of influence of each point observation in m.</span>
+<span class="sd">    upper_bc: bool</span>
+<span class="sd">        True to enforce w=0 at top of domain (impermeability condition),</span>
+<span class="sd">        False to not enforce impermeability at top of domain</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DDParameters.__init__"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.retrieval.DDParameters.html#pydda.retrieval.DDParameters.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmsVr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_back</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_back</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vrs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">azs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">els</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_weights</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_model</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v_model</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_model</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Co</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cm</span> <span class="o">=</span> <span class="mf">1500.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cx</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cy</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cz</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cb</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cv</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ut</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Vt</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roi</span> <span class="o">=</span> <span class="mf">1000.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frz</span> <span class="o">=</span> <span class="mf">4500.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_list</span> <span class="o">=</span> <span class="p">[]</span></div></div>
+
+
+<div class="viewcode-block" id="get_dd_wind_field"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field">[docs]</a><span class="k">def</span> <span class="nf">get_dd_wind_field</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u_back</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v_back</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_back</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">frz</span><span class="o">=</span><span class="mf">4500.0</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                      <span class="n">Cy</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cv</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                      <span class="n">Cy</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cv</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cpoint</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                       <span class="n">Ut</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Vt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                       <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">weights_obs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">weights_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">weights_bg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">max_iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">mask_w_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                      <span class="n">filter_window</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">min_bca</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+                      <span class="n">filter_window</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_bca</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
                       <span class="n">max_bca</span><span class="o">=</span><span class="mf">150.0</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">model_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">output_cost_functions</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                      <span class="n">output_cost_functions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function takes in a list of Py-ART Grid objects and derives a</span>
 <span class="sd">    wind field. Every Py-ART Grid in Grids must have the same grid</span>
@@ -103,6 +231,9 @@
 <span class="sd">    w_init: 3D ndarray</span>
 <span class="sd">        The intial guess for the vertical wind field, input as a 3D array</span>
 <span class="sd">        with the same shape as the fields in Grids.</span>
+<span class="sd">    points: None or list of dicts</span>
+<span class="sd">        Point observations as returned by :func:`pydda.constraints.get_iem_obs`. Set</span>
+<span class="sd">        to None to disable.</span>
 <span class="sd">    vel_name: string</span>
 <span class="sd">        Name of radial velocity field. Setting to None will have PyDDA attempt</span>
 <span class="sd">        to automatically detect the velocity field name.</span>
@@ -134,6 +265,8 @@
 <span class="sd">        Weight for cost function related to vertical vorticity equation.</span>
 <span class="sd">    Cmod: float</span>
 <span class="sd">        Weight for cost function related to custom constraints.</span>
+<span class="sd">    Cpoint: float</span>
+<span class="sd">        Weight for cost function related to point observations.</span>
 <span class="sd">    weights_obs: list of floating point arrays or None</span>
 <span class="sd">        List of weights for each point in grid from each radar in Grids.</span>
 <span class="sd">        Set to None to let PyDDA determine this automatically.</span>
@@ -153,13 +286,13 @@
 <span class="sd">        If this is greater than 0, PyDDA will run a low pass filter on</span>
 <span class="sd">        the retrieved wind field and then do the optimization step for</span>
 <span class="sd">        filt_iterations iterations. Set to 0 to disable the low pass filter.</span>
-<span class="sd">    max_outside_opt: bool</span>
+<span class="sd">    mask_outside_opt: bool</span>
 <span class="sd">        If set to true, wind values outside the multiple doppler lobes will</span>
 <span class="sd">        be masked, i.e. if less than 2 radars provide coverage for a given</span>
 <span class="sd">        point.</span>
 <span class="sd">    max_iterations: int</span>
 <span class="sd">        The maximum number of iterations to run the optimization loop for.</span>
-<span class="sd">    max_w_outside_opt: bool</span>
+<span class="sd">    mask_w_outside_opt: bool</span>
 <span class="sd">        If set to true, vertical winds outside the multiple doppler lobes will</span>
 <span class="sd">        be masked, i.e. if less than 2 radars provide coverage for a given</span>
 <span class="sd">        point.</span>
@@ -191,6 +324,9 @@
 <span class="sd">    output_cost_functions: bool</span>
 <span class="sd">        Set to True to output the value of each cost function every</span>
 <span class="sd">        10 iterations.</span>
+<span class="sd">    roi: float</span>
+<span class="sd">        Radius of influence for the point observations. The point observation will</span>
+<span class="sd">        not hold any weight outside this radius.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    =======</span>
@@ -198,8 +334,6 @@
 <span class="sd">        A list of Py-ART grids containing the derived wind fields. These fields</span>
 <span class="sd">        are displayable by the visualization module.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">num_evaluations</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># We have to have a prescribed storm motion for vorticity constraint</span>
     <span class="k">if</span><span class="p">(</span><span class="n">Ut</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">Vt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -210,6 +344,9 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Grids has to be a list!&#39;</span><span class="p">)</span>
 
+    <span class="n">parameters</span> <span class="o">=</span> <span class="n">DDParameters</span><span class="p">()</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span> <span class="o">=</span> <span class="n">Ut</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span> <span class="o">=</span> <span class="n">Vt</span>
     
     <span class="c1"># Ensure that all Grids are on the same coordinate system</span>
     <span class="n">prev_grid</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -233,20 +370,19 @@
 
     <span class="c1"># Disable background constraint if none provided</span>
     <span class="k">if</span><span class="p">(</span><span class="n">u_back</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">v_back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">u_back2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">v_back2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">v_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">C8</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">v_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Interpolate sounding to radar grid</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Interpolating sounding to radar grid&#39;</span><span class="p">)</span>
         <span class="n">u_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">z_back</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">v_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">z_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">u_back2</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="n">v_back2</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Interpolated U field:&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">u_back2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;u_back&quot;</span><span class="p">])</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Interpolated V field:&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">v_back2</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;v_back&quot;</span><span class="p">])</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Grid levels:&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
 
@@ -258,22 +394,19 @@
     <span class="k">if</span> <span class="n">vel_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vel_name</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">)</span>
     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">])</span>
-    <span class="n">wts</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">vrs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">azs</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">els</span> <span class="o">=</span> <span class="p">[]</span>
+
 
     <span class="c1"># Set up wind fields and weights from each radar</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
         <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">),</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
 
-    <span class="n">bg_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">v_init</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">v_init</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">if</span><span class="p">(</span><span class="n">model_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="n">mod_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
             <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model_fields</span><span class="p">),</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
              <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">mod_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
             <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
 
     <span class="k">if</span><span class="p">(</span><span class="n">model_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -283,17 +416,16 @@
 
     <span class="n">bca</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
         <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">),</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">))</span>
     <span class="n">sum_Vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">))</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
-        <span class="n">wts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost_functions</span><span class="o">.</span><span class="n">calculate_fall_speed</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-                                                       <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">))</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost_functions</span><span class="o">.</span><span class="n">calculate_fall_speed</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                                       <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="n">frz</span><span class="p">))</span>
         <span class="n">add_azimuth_as_field</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dz_name</span><span class="o">=</span><span class="n">refl_field</span><span class="p">)</span>
         <span class="n">add_elevation_as_field</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dz_name</span><span class="o">=</span><span class="n">refl_field</span><span class="p">)</span>
-        <span class="n">vrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="n">azs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;AZ&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
-        <span class="n">els</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;EL&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;AZ&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;EL&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)</span>
 
     <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
@@ -308,41 +440,41 @@
                                     <span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                                     <span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">())</span>
 
-                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
                     <span class="k">if</span><span class="p">(</span><span class="n">weights_obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-                        <span class="n">cur_array</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+                        <span class="n">cur_array</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
                         <span class="n">cur_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-                            <span class="o">~</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+                            <span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
                             <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                                 <span class="n">bca</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">min_bca</span><span class="p">),</span>
                                 <span class="n">bca</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">max_bca</span><span class="p">)))]</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_array</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_array</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
                     <span class="k">if</span><span class="p">(</span><span class="n">weights_obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-                        <span class="n">cur_array</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
+                        <span class="n">cur_array</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span>
                         <span class="n">cur_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
-                            <span class="o">~</span><span class="n">vrs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+                            <span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
                             <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
                                 <span class="n">bca</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">min_bca</span><span class="p">),</span>
                                 <span class="n">bca</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">max_bca</span><span class="p">)))]</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="n">weights</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_array</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_array</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">weights</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
                     <span class="k">if</span><span class="p">(</span><span class="n">weights_bg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-                        <span class="n">cur_array</span> <span class="o">=</span> <span class="n">bg_weights</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                        <span class="n">cur_array</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
                         <span class="n">cur_array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span>
                             <span class="n">bca</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">min_bca</span><span class="p">),</span>
                             <span class="n">bca</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">max_bca</span><span class="p">))]</span> <span class="o">=</span> <span class="mi">1</span>
-                        <span class="n">cur_array</span><span class="p">[</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-                        <span class="n">bg_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_array</span>
+                        <span class="n">cur_array</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cur_array</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">bg_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_bg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_bg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating weights for models...&quot;</span><span class="p">)</span>
-        <span class="n">coverage_grade</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">coverage_grade</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">coverage_grade</span> <span class="o">=</span> <span class="n">coverage_grade</span><span class="o">/</span><span class="n">coverage_grade</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
         <span class="c1"># Weigh in model input more when we have no coverage</span>
@@ -351,165 +483,142 @@
         <span class="k">if</span><span class="p">(</span><span class="n">model_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">if</span><span class="p">(</span><span class="n">weights_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model_fields</span><span class="p">)):</span>
-                    <span class="n">mod_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">coverage_grade</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">coverage_grade</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model_fields</span><span class="p">)):</span>
-                    <span class="n">mod_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_model</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">weights_obs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">vrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">weights_bg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">bg_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">vrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">bg_weights</span> <span class="o">=</span> <span class="n">weights_bg</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">=</span> <span class="n">weights_bg</span>
 
 
-    <span class="n">weights</span><span class="p">[</span><span class="n">weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">bg_weights</span><span class="p">[</span><span class="n">bg_weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">sum_Vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">vrs</span><span class="o">*</span><span class="n">weights</span><span class="p">))</span>
-    <span class="n">rmsVr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sum_Vr</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">sum_Vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sum_Vr</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
 
     <span class="k">del</span> <span class="n">bca</span>
-    <span class="n">grid_shape</span> <span class="o">=</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span> <span class="o">=</span> <span class="n">u_init</span><span class="o">.</span><span class="n">shape</span>
     <span class="c1"># Parse names of velocity field</span>
 
     <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">ndims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">winds</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;Starting solver &quot;</span><span class="p">))</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmsVR = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rmsVr</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total points:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()))</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-
-    <span class="n">the_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting solver &quot;</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmsVR = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total points: </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">bt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
     <span class="c1"># First pass - no filter</span>
-    <span class="n">wcurr</span> <span class="o">=</span> <span class="n">w_init</span>
-    <span class="n">wprev</span> <span class="o">=</span> <span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">w_init</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">wprevmax</span> <span class="o">=</span> <span class="mi">99</span>
     <span class="n">wcurrmax</span> <span class="o">=</span> <span class="n">w_init</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
     <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">warnflag</span> <span class="o">=</span> <span class="mi">99999</span>
-    <span class="n">coeff_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">Co</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">])</span>
     <span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="mi">100</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">winds</span><span class="o">.</span><span class="n">shape</span><span class="p">)]</span>
 
-    <span class="n">u_model</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">v_model</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">w_model</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span><span class="p">(</span><span class="n">model_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">the_field</span> <span class="ow">in</span> <span class="n">model_fields</span><span class="p">:</span>
             <span class="n">u_field</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;U_&quot;</span> <span class="o">+</span> <span class="n">the_field</span><span class="p">)</span>
             <span class="n">v_field</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;V_&quot;</span> <span class="o">+</span> <span class="n">the_field</span><span class="p">)</span>
             <span class="n">w_field</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;W_&quot;</span> <span class="o">+</span> <span class="n">the_field</span><span class="p">)</span>
-            <span class="n">u_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-            <span class="n">v_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-            <span class="n">w_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Co</span> <span class="o">=</span> <span class="n">Co</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">=</span> <span class="n">Cm</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">=</span> <span class="n">Cx</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">=</span> <span class="n">Cy</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">=</span> <span class="n">Cz</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">=</span> <span class="n">Cb</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">=</span> <span class="n">Cv</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">=</span> <span class="n">Cmod</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">=</span> <span class="n">Cpoint</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">roi</span> <span class="o">=</span> <span class="n">roi</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">=</span> <span class="n">upper_bc</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span> <span class="o">=</span> <span class="n">points</span>
 
     <span class="k">while</span><span class="p">(</span><span class="n">iterations</span> <span class="o">&lt;</span> <span class="n">max_iterations</span> <span class="ow">and</span>
           <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">wprevmax</span><span class="o">-</span><span class="n">wcurrmax</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.02</span><span class="p">)):</span>
         <span class="n">wprevmax</span> <span class="o">=</span> <span class="n">wcurrmax</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span><span class="n">J_function</span><span class="p">,</span> <span class="n">winds</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span>
-                                                       <span class="n">wts</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span>
-                                                       <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span>
-                                                       <span class="n">w_model</span><span class="p">,</span>
-                                                       <span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span>
-                                                       <span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span>
-                                                       <span class="n">grid_shape</span><span class="p">,</span>
-                                                       <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span>
-                                                       <span class="n">weights</span><span class="p">,</span> <span class="n">bg_weights</span><span class="p">,</span>
-                                                       <span class="n">mod_weights</span><span class="p">,</span>
-                                                       <span class="n">upper_bc</span><span class="p">,</span>
-                                                       <span class="kc">False</span><span class="p">),</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span><span class="n">J_function</span><span class="p">,</span> <span class="n">winds</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
                               <span class="n">maxiter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
                               <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iprint</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">output_cost_functions</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
-            <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span>
-                       <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span>
-                       <span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span>
-                       <span class="n">grid_shape</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span>
-                       <span class="n">weights</span><span class="p">,</span> <span class="n">bg_weights</span><span class="p">,</span> <span class="n">mod_weights</span><span class="p">,</span>
-                       <span class="n">upper_bc</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-            <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span>
-                   <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span>
-                   <span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span> <span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span>
-                   <span class="n">grid_shape</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span>
-                   <span class="n">weights</span><span class="p">,</span> <span class="n">bg_weights</span><span class="p">,</span> <span class="n">mod_weights</span><span class="p">,</span>
-                   <span class="n">upper_bc</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">warnflag</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;warnflag&#39;</span><span class="p">]</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                      <span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">output_cost_functions</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="p">)</span>
+            <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="p">)</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
         <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span><span class="o">+</span><span class="mi">10</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iterations before filter: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span>
         <span class="n">wcurrmax</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">filt_iterations</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">filt_iterations</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Applying low pass filter to wind field...&#39;</span><span class="p">)</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                   <span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
         <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span><span class="p">(</span><span class="n">iterations</span> <span class="o">&lt;</span> <span class="n">filt_iterations</span><span class="p">):</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
-                <span class="n">J_function</span><span class="p">,</span> <span class="n">winds</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span>
-                                         <span class="n">wts</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span>
-                                         <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span>
-                                         <span class="n">Co</span><span class="p">,</span> <span class="n">Cm</span><span class="p">,</span> <span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="p">,</span> <span class="n">Cb</span><span class="p">,</span>
-                                         <span class="n">Cv</span><span class="p">,</span> <span class="n">Cmod</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span>
-                                         <span class="n">grid_shape</span><span class="p">,</span>
-                                         <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span>
-                                         <span class="n">weights</span><span class="p">,</span> <span class="n">bg_weights</span><span class="p">,</span>
-                                         <span class="n">mod_weights</span><span class="p">,</span>
-                                         <span class="n">upper_bc</span><span class="p">,</span>
-                                         <span class="kc">False</span><span class="p">),</span>
+                <span class="n">J_function</span><span class="p">,</span> <span class="n">winds</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
                 <span class="n">maxiter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">pgtol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
                 <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span> <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">iprint</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-
-            <span class="n">warnflag</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;warnflag&#39;</span><span class="p">]</span>
-            <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                          <span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
             <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span><span class="o">+</span><span class="mi">1</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Iterations after filter: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done! Time = &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:2.1f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">bt</span><span class="p">))</span>
 
     <span class="c1"># First pass - no filter</span>
-    <span class="n">the_winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                   <span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="n">the_winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="n">winds</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">the_winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">the_winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">the_winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">where_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mod_weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">where_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">mask_outside_opt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">mask_outside_opt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">where_mask</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">where_mask</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">where_mask</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">mask_w_outside_opt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">mask_w_outside_opt</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">where_mask</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
 
     <span class="n">u_field</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_name</span><span class="p">])</span>
@@ -620,7 +729,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

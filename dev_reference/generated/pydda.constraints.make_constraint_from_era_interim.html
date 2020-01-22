@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pydda.constraints.make_constraint_from_era_interim &#8212; PyDDA 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pydda.constraints.download_needed_era_data" href="pydda.constraints.download_needed_era_data.html" />
+    <link rel="prev" title="pydda.constraints.add_hrrr_constraint_to_grid" href="pydda.constraints.add_hrrr_constraint_to_grid.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pydda.constraints.download_needed_era_data.html" title="pydda.constraints.download_needed_era_data"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pydda.constraints.add_hrrr_constraint_to_grid.html" title="pydda.constraints.add_hrrr_constraint_to_grid"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.4.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pydda-constraints-make-constraint-from-era-interim">
+<h1>pydda.constraints.make_constraint_from_era_interim<a class="headerlink" href="#pydda-constraints-make-constraint-from-era-interim" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pydda.constraints.make_constraint_from_era_interim">
+<code class="sig-prename descclassname">pydda.constraints.</code><code class="sig-name descname">make_constraint_from_era_interim</code><span class="sig-paren">(</span><em class="sig-param">Grid</em>, <em class="sig-param">file_name=None</em>, <em class="sig-param">vel_field=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/constraints/model_data.html#make_constraint_from_era_interim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.constraints.make_constraint_from_era_interim" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will read ERA Interim in NetCDF format and add it 
+to the Py-ART grid specified by Grid. PyDDA will automatically download
+the ERA Interim data that you need for the scan. It will chose the domain
+that is enclosed by the analysis grid and the time period that is closest
+to the scan. It will then do a Nearest Neighbor interpolation of the 
+ERA-Interim u and v winds to the analysis grid.</p>
+<p>You need to have the ECMWF API and an ECMWF account set up in order to
+use this feature. Go to this website for instructions on installing the
+API and setting up your account:</p>
+<p><a class="reference external" href="https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets">https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Grid: Py-ART Grid</strong></dt><dd><p>The input Py-ART Grid to modify.</p>
+</dd>
+<dt><strong>file_name: str or None</strong></dt><dd><p>The netCDF file containing the ERA Interim data. Setting to None will
+invoke the API in order to attempt to download the data. If the web
+API is experiencing delays, it is better to use it to download the
+file and then refer to it here. If this file does not exist
+PyDDA will use the API to create the file.</p>
+</dd>
+<dt><strong>dest_era_file: str or None</strong></dt><dd><p>If this is not None, then the ERA file that is saved using the
+automatic download feature will be saved
+to this file for future reading. This is useful in case the 
+web API is experiencing delays. This is not used if file_name
+is specified.</p>
+</dd>
+<dt><strong>vel_field: str or None</strong></dt><dd><p>The name of the velocity field in the Py-ART grid. Set to None to
+have Py-DDA attempt to automatically detect it.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>new_Grid: Py-ART Grid</dt><dd><p>The Py-ART Grid with the ERA Interim data added into the “u_erainterim”,
+“v_erainterim”, and “w_erainterim” fields.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pydda.constraints.add_hrrr_constraint_to_grid.html"
+                        title="previous chapter">pydda.constraints.add_hrrr_constraint_to_grid</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pydda.constraints.download_needed_era_data.html"
+                        title="next chapter">pydda.constraints.download_needed_era_data</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev_reference/generated/pydda.constraints.make_constraint_from_era_interim.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pydda.constraints.download_needed_era_data.html" title="pydda.constraints.download_needed_era_data"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pydda.constraints.add_hrrr_constraint_to_grid.html" title="pydda.constraints.add_hrrr_constraint_to_grid"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.4.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, PyDDA Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

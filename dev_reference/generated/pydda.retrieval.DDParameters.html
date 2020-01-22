@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>pydda.retrieval.DDParameters &#8212; PyDDA 0.4.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="pydda.vis.plot_horiz_xsection_barbs" href="pydda.vis.plot_horiz_xsection_barbs.html" />
+    <link rel="prev" title="pydda.retrieval.get_bca" href="pydda.retrieval.get_bca.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pydda.vis.plot_horiz_xsection_barbs.html" title="pydda.vis.plot_horiz_xsection_barbs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.4.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pydda-retrieval-ddparameters">
+<h1>pydda.retrieval.DDParameters<a class="headerlink" href="#pydda-retrieval-ddparameters" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pydda.retrieval.DDParameters">
+<em class="property">class </em><code class="sig-prename descclassname">pydda.retrieval.</code><code class="sig-name descname">DDParameters</code><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#DDParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.DDParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a helper class for inserting more arguments into the <a class="reference internal" href="pydda.cost_functions.J_function.html#pydda.cost_functions.J_function" title="pydda.cost_functions.J_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.J_function()</span></code></a> and
+<a class="reference internal" href="pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.grad_J()</span></code></a> function. Since these cost functions take numerous parameters, this class
+will store the needed parameters as one positional argument for easier readability of the code.</p>
+<p>In addition, class members can be added here so that those contributing more constraints to the variational
+framework can add any parameters they may need.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>vrs: List of float arrays</strong></dt><dd><p>List of radial velocities from each radar</p>
+</dd>
+<dt><strong>azs: List of float arrays</strong></dt><dd><p>List of azimuths from each radar</p>
+</dd>
+<dt><strong>els: List of float arrays</strong></dt><dd><p>List of elevations from each radar</p>
+</dd>
+<dt><strong>wts: List of float arrays</strong></dt><dd><p>Float array containing fall speed from radar.</p>
+</dd>
+<dt><strong>u_back: 1D float array (number of vertical levels)</strong></dt><dd><p>Background u wind</p>
+</dd>
+<dt><strong>v_back: 1D float array (number of vertical levels)</strong></dt><dd><p>Background u wind</p>
+</dd>
+<dt><strong>u_model: list of 3D float arrays</strong></dt><dd><p>U from each model integrated into the retrieval</p>
+</dd>
+<dt><strong>v_model: list of 3D float arrays</strong></dt><dd><p>V from each model integrated into the retrieval</p>
+</dd>
+<dt><strong>w_model:</strong></dt><dd><p>W from each model integrated into the retrieval</p>
+</dd>
+<dt><strong>Co: float</strong></dt><dd><p>Weighting coefficient for data constraint.</p>
+</dd>
+<dt><strong>Cm: float</strong></dt><dd><p>Weighting coefficient for mass continuity constraint.</p>
+</dd>
+<dt><strong>Cx: float</strong></dt><dd><p>Smoothing coefficient for x-direction</p>
+</dd>
+<dt><strong>Cy: float</strong></dt><dd><p>Smoothing coefficient for y-direction</p>
+</dd>
+<dt><strong>Cz: float</strong></dt><dd><p>Smoothing coefficient for z-direction</p>
+</dd>
+<dt><strong>Cb: float</strong></dt><dd><p>Coefficient for sounding constraint</p>
+</dd>
+<dt><strong>Cv: float</strong></dt><dd><p>Weight for cost function related to vertical vorticity equation.</p>
+</dd>
+<dt><strong>Cmod: float</strong></dt><dd><p>Coefficient for model constraint</p>
+</dd>
+<dt><strong>Cpoint: float</strong></dt><dd><p>Coefficient for point constraint</p>
+</dd>
+<dt><strong>Ut: float</strong></dt><dd><p>Prescribed storm motion. This is only needed if Cv is not zero.</p>
+</dd>
+<dt><strong>Vt: float</strong></dt><dd><p>Prescribed storm motion. This is only needed if Cv is not zero.</p>
+</dd>
+<dt><strong>grid_shape:</strong></dt><dd><p>Shape of wind grid</p>
+</dd>
+<dt><strong>dx:</strong></dt><dd><p>Spacing of grid in x direction</p>
+</dd>
+<dt><strong>dy:</strong></dt><dd><p>Spacing of grid in y direction</p>
+</dd>
+<dt><strong>dz:</strong></dt><dd><p>Spacing of grid in z direction</p>
+</dd>
+<dt><strong>x:</strong></dt><dd><p>E-W grid levels in m</p>
+</dd>
+<dt><strong>y:</strong></dt><dd><p>N-S grid levels in m</p>
+</dd>
+<dt><strong>z:</strong></dt><dd><p>Grid vertical levels in m</p>
+</dd>
+<dt><strong>rmsVr: float</strong></dt><dd><p>The sum of squares of velocity/num_points. Use for normalization
+of data weighting coefficient</p>
+</dd>
+<dt><strong>weights: n_radars by z_bins by y_bins x x_bins float array</strong></dt><dd><p>Data weights for each pair of radars</p>
+</dd>
+<dt><strong>bg_weights: z_bins by y_bins x x_bins float array</strong></dt><dd><p>Data weights for sounding constraint</p>
+</dd>
+<dt><strong>model_weights: n_models by z_bins by y_bins by x_bins float array</strong></dt><dd><p>Data weights for each model.</p>
+</dd>
+<dt><strong>point_list: list or None</strong></dt><dd><p>point_list: list of dicts
+List of point constraints. Each member is a dict with keys of “u”, “v”,
+to correspond to each component of the wind field and “x”, “y”, “z”
+to correspond to the location of the point observation in the Grid’s
+Cartesian coordinates.</p>
+</dd>
+<dt><strong>roi: float</strong></dt><dd><p>The radius of influence of each point observation in m.</p>
+</dd>
+<dt><strong>upper_bc: bool</strong></dt><dd><p>True to enforce w=0 at top of domain (impermeability condition),
+False to not enforce impermeability at top of domain</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pydda.retrieval.DDParameters.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#DDParameters.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.retrieval.DDParameters.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pydda.retrieval.DDParameters.__init__" title="pydda.retrieval.DDParameters.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pydda.retrieval.get_bca.html"
+                        title="previous chapter">pydda.retrieval.get_bca</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pydda.vis.plot_horiz_xsection_barbs.html"
+                        title="next chapter">pydda.vis.plot_horiz_xsection_barbs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev_reference/generated/pydda.retrieval.DDParameters.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pydda.vis.plot_horiz_xsection_barbs.html" title="pydda.vis.plot_horiz_xsection_barbs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.4.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, PyDDA Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

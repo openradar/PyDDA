@@ -33,6 +33,7 @@
 ./_images/sydney_tornado.png
 ./_modules/index.html
 ./_modules/pydda/constraints/model_data.html
+./_modules/pydda/constraints/station_data.html
 ./_modules/pydda/cost_functions/cost_functions.html
 ./_modules/pydda/initialization/wind_fields.html
 ./_modules/pydda/retrieval/nesting.html
@@ -42,6 +43,9 @@
 ./_modules/pydda/vis/streamline_plot.html
 ./_sources/contributors_guide/index.rst.txt
 ./_sources/dev_reference/generated/pydda.constraints.add_hrrr_constraint_to_grid.rst.txt
+./_sources/dev_reference/generated/pydda.constraints.download_needed_era_data.rst.txt
+./_sources/dev_reference/generated/pydda.constraints.get_iem_obs.rst.txt
+./_sources/dev_reference/generated/pydda.constraints.make_constraint_from_era_interim.rst.txt
 ./_sources/dev_reference/generated/pydda.constraints.make_constraint_from_wrf.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.J_function.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_background_cost.rst.txt
@@ -52,6 +56,8 @@
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_model_cost.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_model_gradient.rst.txt
+./_sources/dev_reference/generated/pydda.cost_functions.calculate_point_cost.rst.txt
+./_sources/dev_reference/generated/pydda.cost_functions.calculate_point_gradient.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_radial_vel_cost_function.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_smoothness_cost.rst.txt
 ./_sources/dev_reference/generated/pydda.cost_functions.calculate_smoothness_gradient.rst.txt
@@ -62,6 +68,7 @@
 ./_sources/dev_reference/generated/pydda.initialization.make_constant_wind_field.rst.txt
 ./_sources/dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.rst.txt
 ./_sources/dev_reference/generated/pydda.initialization.make_wind_field_from_profile.rst.txt
+./_sources/dev_reference/generated/pydda.retrieval.DDParameters.rst.txt
 ./_sources/dev_reference/generated/pydda.retrieval.get_bca.rst.txt
 ./_sources/dev_reference/generated/pydda.retrieval.get_dd_wind_field.rst.txt
 ./_sources/dev_reference/generated/pydda.retrieval.get_dd_wind_field_nested.rst.txt
@@ -109,6 +116,9 @@
 ./_static/underscore.js
 ./contributors_guide/index.html
 ./dev_reference/generated/pydda.constraints.add_hrrr_constraint_to_grid.html
+./dev_reference/generated/pydda.constraints.download_needed_era_data.html
+./dev_reference/generated/pydda.constraints.get_iem_obs.html
+./dev_reference/generated/pydda.constraints.make_constraint_from_era_interim.html
 ./dev_reference/generated/pydda.constraints.make_constraint_from_wrf.html
 ./dev_reference/generated/pydda.cost_functions.J_function.html
 ./dev_reference/generated/pydda.cost_functions.calculate_background_cost.html
@@ -119,6 +129,8 @@
 ./dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.html
 ./dev_reference/generated/pydda.cost_functions.calculate_model_cost.html
 ./dev_reference/generated/pydda.cost_functions.calculate_model_gradient.html
+./dev_reference/generated/pydda.cost_functions.calculate_point_cost.html
+./dev_reference/generated/pydda.cost_functions.calculate_point_gradient.html
 ./dev_reference/generated/pydda.cost_functions.calculate_radial_vel_cost_function.html
 ./dev_reference/generated/pydda.cost_functions.calculate_smoothness_cost.html
 ./dev_reference/generated/pydda.cost_functions.calculate_smoothness_gradient.html
@@ -129,6 +141,7 @@
 ./dev_reference/generated/pydda.initialization.make_constant_wind_field.html
 ./dev_reference/generated/pydda.initialization.make_initialization_from_era_interim.html
 ./dev_reference/generated/pydda.initialization.make_wind_field_from_profile.html
+./dev_reference/generated/pydda.retrieval.DDParameters.html
 ./dev_reference/generated/pydda.retrieval.get_bca.html
 ./dev_reference/generated/pydda.retrieval.get_dd_wind_field.html
 ./dev_reference/generated/pydda.retrieval.get_dd_wind_field_nested.html

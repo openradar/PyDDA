@@ -52,7 +52,7 @@
 <dd class="field-odd"><p>0.4.0</p>
 </dd>
 <dt class="field-even">Date</dt>
-<dd class="field-even"><p>Oct 01, 2019</p>
+<dd class="field-even"><p>Jan 22, 2020</p>
 </dd>
 </dl>
 <p>This is the developer reference guide for PyDDA which covers most of the
@@ -102,10 +102,10 @@ procedures in Python, they then need to be added to
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function" title="pydda.cost_functions.J_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">J_function</span></code></a>(winds, vrs, azs, els, wts, …[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function" title="pydda.cost_functions.J_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">J_function</span></code></a>(winds, parameters)</p></td>
 <td><p>Calculates the total cost function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad_J</span></code></a>(winds, vrs, azs, els, wts, u_back, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad_J</span></code></a>(winds, parameters)</p></td>
 <td><p>Calculates the gradient of the cost function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function" title="pydda.cost_functions.calculate_radial_vel_cost_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_radial_vel_cost_function</span></code></a>(vrs, azs, …)</p></td>
@@ -147,6 +147,12 @@ procedures in Python, they then need to be added to
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_fall_speed.html#pydda.cost_functions.calculate_fall_speed" title="pydda.cost_functions.calculate_fall_speed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_fall_speed</span></code></a>(grid[, refl_field, frz])</p></td>
 <td><p>Estimates fall speed based on reflectivity.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost" title="pydda.cost_functions.calculate_point_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_point_cost</span></code></a>(u, v, x, y, z, point_list)</p></td>
+<td><p>Calculates the cost function related to point observations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient" title="pydda.cost_functions.calculate_point_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_point_gradient</span></code></a>(u, v, x, y, z, …)</p></td>
+<td><p>Calculates the gradient of the cost function related to point observations.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -176,6 +182,9 @@ how to call these functions.</p>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_bca.html#pydda.retrieval.get_bca" title="pydda.retrieval.get_bca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bca</span></code></a>(rad1_lon, rad1_lat, rad2_lon, …)</p></td>
 <td><p>This function gets the beam crossing angle between two lat/lon pairs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.retrieval.DDParameters.html#pydda.retrieval.DDParameters" title="pydda.retrieval.DDParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DDParameters</span></code></a>()</p></td>
+<td><p>This is a helper class for inserting more arguments into the <a class="reference internal" href="generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function" title="pydda.cost_functions.J_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.J_function()</span></code></a> and <a class="reference internal" href="generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.grad_J()</span></code></a> function.</p></td>
 </tr>
 </tbody>
 </table>
@@ -297,6 +306,15 @@ simply add (name) into the model_fields option of
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.add_hrrr_constraint_to_grid.html#pydda.constraints.add_hrrr_constraint_to_grid" title="pydda.constraints.add_hrrr_constraint_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_hrrr_constraint_to_grid</span></code></a>(Grid, file_path)</p></td>
 <td><p>This function will read an HRRR GRIB2 file and create the constraining u, v, and w fields for the model constraint</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.make_constraint_from_era_interim.html#pydda.constraints.make_constraint_from_era_interim" title="pydda.constraints.make_constraint_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_constraint_from_era_interim</span></code></a>(Grid[, …])</p></td>
+<td><p>This function will read ERA Interim in NetCDF format and add it  to the Py-ART grid specified by Grid.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data" title="pydda.constraints.download_needed_era_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_needed_era_data</span></code></a>(Grid, start_date, …)</p></td>
+<td><p>This function will download the ERA interim data in the region specified by the input Py-ART Grid within the interval specified by start_date and end_date.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_iem_obs</span></code></a>(Grid[, window])</p></td>
+<td><p>Returns all of the station observations from the Iowa Mesonet for a given Grid in the format needed for PyDDA.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -383,7 +401,7 @@ simply add (name) into the model_fields option of
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>

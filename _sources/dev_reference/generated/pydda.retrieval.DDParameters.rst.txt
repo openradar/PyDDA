@@ -1,0 +1,22 @@
+pydda.retrieval.DDParameters
+============================
+
+.. currentmodule:: pydda.retrieval
+
+.. autoclass:: DDParameters
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DDParameters.__init__
+   
+   
+
+   
+   
+   

@@ -21,9 +21,9 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-    .. figure:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
+ .. figure:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
 
-        :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
+     :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
 
 .. raw:: html
 
@@ -41,9 +41,9 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-    .. figure:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
+ .. figure:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
 
-        :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
+     :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
 
 .. raw:: html
 
@@ -61,9 +61,9 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-    .. figure:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
+ .. figure:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
 
-        :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
+     :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
 
 .. raw:: html
 
@@ -81,9 +81,9 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-    .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
+ .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
 
-        :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
+     :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
 
 .. raw:: html
 
@@ -101,9 +101,9 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-    .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
+ .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
 
-        :ref:`sphx_glr_source_auto_examples_plot_examples.py`
+     :ref:`sphx_glr_source_auto_examples_plot_examples.py`
 
 .. raw:: html
 
@@ -121,9 +121,9 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-    .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_nested_thumb.png
+ .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_nested_thumb.png
 
-        :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py`
+     :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py`
 
 .. raw:: html
 
@@ -136,7 +136,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
    /source/auto_examples/plot_examples_nested
 .. raw:: html
 
-    <div style='clear:both'></div>
+    <div class="sphx-glr-clear"></div>
 
 
 

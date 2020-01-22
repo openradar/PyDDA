@@ -64,83 +64,127 @@ nested grid features of PyDDA.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
+/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-LocalCluster(&#39;tcp://127.0.0.1:33523&#39;, workers=2, threads=2, memory=7.84 GB)
-&lt;Client: &#39;tcp://127.0.0.1:33523&#39; processes=2 threads=2, memory=7.84 GB&gt;
+LocalCluster(&#39;tcp://127.0.0.1:42551&#39;, workers=2, threads=2, memory=8.36 GB)
+&lt;Client: &#39;tcp://127.0.0.1:42551&#39; processes=2 threads=2, memory=8.36 GB&gt;
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
 Calculating weights for radars 0 and 1
-/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
+/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
 Calculating weights for models...
 Starting solver
 rmsVR = 6.763780749907824
-Total points:23059.0
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   7.3255|  31.7513|   0.0000|   0.0000|   0.0000|   0.0000|  11.4154
-Norm of gradient: 0.0650530360051775
+Total points: 23059
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   7.3871|  31.7975|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4149
+Norm of gradient: 0.06526775209383787
 Iterations before filter: 10
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.7352|  14.2164|   0.0000|   0.0000|   0.0000|   0.0000|  25.2106
-Norm of gradient: 0.024580790779265987
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.7160|  14.2379|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.1676
+Norm of gradient: 0.02265697004217886
 Iterations before filter: 20
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.6733|   9.3867|   0.0000|   0.0000|   0.0000|   0.0000|  48.6620
-Norm of gradient: 0.026013982166250275
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.5321|   9.8464|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  47.6630
+Norm of gradient: 0.019575025193434663
 Iterations before filter: 30
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.2137|   7.3447|   0.0000|   0.0000|   0.0000|   0.0000|  56.3472
-Norm of gradient: 0.02548859675514071
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.1613|   7.4489|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  54.7406
+Norm of gradient: 0.024242219964476883
 Iterations before filter: 40
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0640|   6.2785|   0.0000|   0.0000|   0.0000|   0.0000|  55.0991
-Norm of gradient: 0.007875486945673972
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0950|   6.6185|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  55.4003
+Norm of gradient: 0.006852171864176368
 Iterations before filter: 50
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0618|   5.6034|   0.0000|   0.0000|   0.0000|   0.0000|  47.7570
-Norm of gradient: 0.007646483245098699
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0558|   5.5634|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  48.4985
+Norm of gradient: 0.007062978137463077
 Iterations before filter: 60
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0476|   5.0452|   0.0000|   0.0000|   0.0000|   0.0000|  46.2112
-Norm of gradient: 0.015678441265664804
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0635|   5.1455|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  47.1794
+Norm of gradient: 0.007387509027592068
 Iterations before filter: 70
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0446|   4.7581|   0.0000|   0.0000|   0.0000|   0.0000|  41.1122
-Norm of gradient: 0.013913955624800934
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0743|   4.7404|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  41.4687
+Norm of gradient: 0.012528253242849547
 Iterations before filter: 80
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0601|   4.4503|   0.0000|   0.0000|   0.0000|   0.0000|  38.1186
-Norm of gradient: 0.024220033810314595
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0963|   4.4825|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  38.0718
+Norm of gradient: 0.007383193398671715
 Iterations before filter: 90
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.1290|   4.2479|   0.0000|   0.0000|   0.0000|   0.0000|  35.5431
-Norm of gradient: 0.04007884802140612
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0248|   4.2487|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.5239
+Norm of gradient: 0.006394569705216787
 Iterations before filter: 100
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0396|   4.2146|   0.0000|   0.0000|   0.0000|   0.0000|  35.0184
-Norm of gradient: 0.013595536310328973
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0282|   4.2277|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.1107
+Norm of gradient: 0.006355652215034012
 Iterations before filter: 110
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Max w
-|   0.0167|   4.2138|   0.0000|   0.0000|   0.0000|   0.0000|  35.0012
-Norm of gradient: 0.006098645497136905
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0161|   4.2245|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.0654
+Norm of gradient: 0.006053121782450106
 Iterations before filter: 120
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0212|   4.1906|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8727
+Norm of gradient: 0.011452692197261277
+Iterations before filter: 130
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.0146|   4.1923|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8769
+Norm of gradient: 0.0030136655377298416
+Iterations before filter: 140
 Applying low pass filter to wind field...
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|3746.0950|   2.8641|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5970
+Norm of gradient: 0.9986098135883579
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|3378.9225|   2.9509|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5978
+Norm of gradient: 0.9547921376697976
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+| 221.0979|  23.0871|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6217
+Norm of gradient: 0.23792226573646327
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+| 114.3039|  24.1503|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8287
+Norm of gradient: 0.15061385195506036
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|  21.2646|  23.0345|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6886
+Norm of gradient: 0.06481576114733045
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|  24.7439|  19.7879|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7359
+Norm of gradient: 0.14028422918245806
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|  10.5934|  21.2488|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7121
+Norm of gradient: 0.045492656832583224
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   6.0063|  19.7451|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7295
+Norm of gradient: 0.031839759006447206
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   1.9115|  16.4765|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7880
+Norm of gradient: 0.017344264462585513
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   1.3409|  14.3912|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8497
+Norm of gradient: 0.02718263611566865
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   1.4336|  12.4225|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9390
+Norm of gradient: 0.015722180644086547
+| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
+|   0.8802|  11.7888|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9765
+Norm of gradient: 0.010982740652982041
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 129.7
+Done! Time = 153.8
 Waiting for nested grid to be retrieved...
 /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
   alpha=contour_alpha)
-/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
+/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
 /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   levels=[bca_min, bca_max], color=&#39;k&#39;)
-/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:544: RuntimeWarning: invalid value encountered in arccos
+/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
 /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   levels=[bca_min, bca_max], color=&#39;k&#39;)
@@ -155,8 +199,8 @@ Waiting for nested grid to be retrieved...
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">import</span> <span class="nn">pydda</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">distributed</span> <span class="k">import</span> <span class="n">LocalCluster</span><span class="p">,</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">distributed</span> <span class="kn">import</span> <span class="n">LocalCluster</span><span class="p">,</span> <span class="n">Client</span>
 
 <span class="c1"># Needed so that distributed doesn&#39;t run all of your code when the worker</span>
 <span class="c1"># starts!</span>
@@ -214,7 +258,7 @@ Waiting for nested grid to be retrieved...
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  52.250 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  16.040 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-nested-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/c981e23ed8c36f3d885bbd718e34cd53/plot_examples_nested.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples_nested.py</span></code></a></p>
@@ -280,7 +324,7 @@ Waiting for nested grid to be retrieved...
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
     </div>
   </body>
 </html>
