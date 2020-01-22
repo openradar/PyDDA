@@ -20,6 +20,9 @@ simply add (name) into the model_fields option of
 
      make_constraint_from_wrf
      add_hrrr_constraint_to_grid
+     make_constraint_from_era_interim
+     download_needed_era_data
+     get_iem_obs
 
 """
 

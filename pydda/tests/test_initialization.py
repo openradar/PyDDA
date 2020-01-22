@@ -52,3 +52,12 @@ def test_make_wind_field_from_profile():
     assert np.all(np.round(u) == 1)
     assert np.all(np.round(v) == 1)
     assert np.all(w == 0.0)
+
+
+def test_get_iem_data():
+    Grid = pyart.testing.make_empty_grid(
+        (20, 20, 20), ((0, 100000.), (-100000., 100000.), (-100000., 100000.)))
+    station_obs = pydda.constraints.get_iem_obs(Grid)
+    names = [x['site_id'] for x in station_obs]
+    assert names == ['P28', 'WLD', 'WDG', 'SWO', 'END']
+

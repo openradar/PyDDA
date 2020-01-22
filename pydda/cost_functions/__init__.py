@@ -72,6 +72,8 @@ procedures in Python, they then need to be added to
     calculate_model_cost
     calculate_model_gradient
     calculate_fall_speed
+    calculate_point_cost
+    calculate_point_gradient
 """
 
 
@@ -88,4 +90,5 @@ from .cost_functions import calculate_vertical_vorticity_cost
 from .cost_functions import calculate_vertical_vorticity_gradient
 from .cost_functions import calculate_model_cost
 from .cost_functions import calculate_model_gradient
+from .cost_functions import calculate_point_cost, calculate_point_gradient
 from .cost_functions import J_function, grad_J

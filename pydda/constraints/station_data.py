@@ -30,13 +30,20 @@ def get_iem_obs(Grid, window=60.):
     -------
     station_data: list of dicts
         A list of dictionaries containing the following entries as keys:
-           lat - Latitude of the site (float)
-           lon - Longitude of the site (float)
-           u - u wind at the site (float)
-           v - v wind at the site (float)
-           w - w wind at the site (assumed to be 0) (float)
-           name - Station ID (string)
-           x, y, z - The (x, y, z) coordinates of the site in the Grid.
+
+        *lat* - Latitude of the site (float)
+
+        *lon* - Longitude of the site (float)
+
+        *u* - u wind at the site (float)
+
+        *v* - v wind at the site (float)
+
+        *w* - w wind at the site (assumed to be 0) (float)
+
+        *site_id* - Station ID (string)
+
+        *x*, *y*, *z* - The (x, y, z) coordinates of the site in the Grid. (floats)
     """
 
     # First query the database for all of the JSON info for every station

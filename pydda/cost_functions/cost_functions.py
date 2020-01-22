@@ -3,113 +3,22 @@ import pyart
 import scipy.ndimage.filters
 
 
-def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
-               v_model, w_model, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint,
-               Ut, Vt, grid_shape, dx, dy, dz, x, y, z, rmsVr, weights,
-               bg_weights, model_weights, upper_bc, point_list, roi,
-               print_out=False):
+def J_function(winds, parameters):
     """
     Calculates the total cost function. This typically does not need to be
     called directly as get_dd_wind_field is a wrapper around this function and
-    grad_J. In order to add more terms to the cost function, modify this
-    function and grad_J.
+    :py:func:`pydda.cost_functions.grad_J`.
+    In order to add more terms to the cost function, modify this
+    function and :py:func:`pydda.cost_functions.grad_J`.
 
     Parameters
     ----------
     winds: 1-D float array
         The wind field, flattened to 1-D for f_min. The total size of the
         array will be a 1D array of 3*nx*ny*nz elements.
-    vrs: List of 3D float arrays
-        List of radial velocities from each radar. All arrays in list
-        must have the same dimensions.
-    azs: List of 3D float arrays
-        List of azimuths from each radar. All arrays in list
-        must have the same dimensions.
-    els: List of 3D float arrays
-        List of elevations from each radar. All arrays in list
-        must have the same dimensions.
-    wts: List of 3D float arrays
-        Float array containing fall speeds from radar. All arrays in list
-        must have the same dimensions.
-    u_back: 1D float array (number of vertical levels):
-        Background u wind. This takes in a 1D float array of length nz,
-        with each element corresponding to the u component of the wind
-        at a given vertical level from the sounding.
-    v_back: 1D float array (number of vertical levels):
-        Background v wind. This takes in a 1D float array of length nz,
-        with each element corresponding to the v component of the wind
-        at a given vertical level from the sounding.
-    u_model: list of 3D float arrays
-        U from each model integrated into the retrieval. The U from
-        each model is given as a list of array of the same dimensions,
-        with the U from the model interpolated on to the radar analysis grid.
-    v_model: list of 3D float arrays
-        V from each model integrated into the retrieval. The V from each model
-        is given as a list of array of the same dimensions, with the V from
-        the model interpolated on to the radar analysis grid.
-    w_model:
-        W from each model integrated into the retrieval. The W from each model
-        is given as a list of array of the same dimensions, with the W from
-        the model interpolated on to the radar analysis grid.
-    Co: float
-        Weighting coefficient for data constraint.
-    Cm: float
-        Weighting coefficient for mass continuity constraint.
-    Cx: float
-        Smoothing coefficient for x-direction
-    Cy: float
-        Smoothing coefficient for y-direction
-    Cz: float
-        Smoothing coefficient for z-direction
-    Cb: float
-        Coefficient for sounding constraint
-    Cv: float
-        Weight for cost function related to vertical vorticity equation.
-    Cmod: float
-        Coefficient for model constraint
-    Cpoint: float
-        Coefficient for point constraint
-    Ut: float
-        Prescribed storm motion. This is only needed if Cv is not zero.
-    Vt: float
-        Prescribed storm motion. This is only needed if Cv is not zero.
-    grid_shape:
-        Shape of wind grid
-    dx:
-        Spacing of grid in x direction
-    dy:
-        Spacing of grid in y direction
-    dz:
-        Spacing of grid in z direction
-    x:
-        E-W grid levels in m
-    y:
-        N-S grid levels in m
-    z:
-        Grid vertical levels in m
-    rmsVr: float
-        The sum of squares of velocity/num_points. Use for normalization
-        of data weighting coefficient
-    weights: n_radars by z_bins by y_bins by x_bins float array
-        Data weights for each pair of radars. This is usually automatically
-        determined by get_dd_wind_field.
-    bg_weights: z_bins by y_bins by x_bins float array
-        Data weights for sounding constraint.
-    model_weights: n_models by z_bins by y_bins by x_bins float array
-        Data weights for each model.
-    upper_bc: bool
-        True to enforce w=0 at top of domain (impermeability condition),
-        False to not enforce impermeability at top of domain
-    point_list: list or None
-        point_list: list of dicts
-        List of point constraints. Each member is a dict with keys of "u", "v",
-        to correspond to each component of the wind field and "x", "y", "z"
-        to correspond to the location of the point observation in the Grid's
-        Cartesian coordinates.
-    roi: float
-        The radius of influence of each point observation in m.
-    print_out: bool
-        Set to True to print out the value of the cost function.
+    parameters: DDParameters
+        The parameters for the cost function evaluation as specified by the
+        :py:func:`pydda.retrieval.DDParameters` class.
 
     Returns
     -------
@@ -117,50 +26,61 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
         The value of the cost function
     """
     winds = np.reshape(winds,
-                       (3, grid_shape[0], grid_shape[1], grid_shape[2]))
+                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
+                        parameters.grid_shape[2]))
 
     Jvel = calculate_radial_vel_cost_function(
-         vrs, azs, els, winds[0], winds[1], winds[2], wts, rmsVr=rmsVr,
-         weights=weights, coeff=Co)
+         parameters.vrs, parameters.azs, parameters.els,
+         winds[0], winds[1], winds[2], parameters.wts, rmsVr=parameters.rmsVr,
+         weights=parameters.weights, coeff=parameters.Co)
 
-    if(Cm > 0):
+    if(parameters.Cm > 0):
         Jmass = calculate_mass_continuity(
-            winds[0], winds[1], winds[2], z, dx, dy, dz, coeff=Cm)
+            winds[0], winds[1], winds[2], parameters.z,
+            parameters.dx, parameters.dy, parameters.dz,
+            coeff=parameters.Cm)
     else:
         Jmass = 0
 
-    if(Cx > 0 or Cy > 0 or Cz > 0):
+    if(parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
         Jsmooth = calculate_smoothness_cost(
-            winds[0], winds[1], winds[2], Cx=Cx, Cy=Cy, Cz=Cz)
+            winds[0], winds[1], winds[2], Cx=parameters.Cx,
+            Cy=parameters.Cy, Cz=parameters.Cz)
     else:
         Jsmooth = 0
 
-    if(Cb > 0):
+    if(parameters.Cb > 0):
         Jbackground = calculate_background_cost(
-            winds[0], winds[1], winds[2], bg_weights, u_back, v_back, Cb)
+            winds[0], winds[1], winds[2], parameters.bg_weights,
+            parameters.u_back, parameters.v_back, parameters.Cb)
     else:
         Jbackground = 0
 
-    if(Cv > 0):
+    if(parameters.Cv > 0):
         Jvorticity = calculate_vertical_vorticity_cost(
-            winds[0], winds[1], winds[2], dx, dy, dz, Ut, Vt, coeff=Cv)
+            winds[0], winds[1], winds[2], parameters.dx,
+            parameters.dy, parameters.dz, parameters.Ut,
+            parameters.Vt, coeff=parameters.Cv)
     else:
         Jvorticity = 0
 
-    if(Cmod > 0):
+    if(parameters.Cmod > 0):
         Jmod = calculate_model_cost(
-            winds[0], winds[1], winds[2], model_weights, u_model, v_model,
-            w_model, coeff=Cmod)
+            winds[0], winds[1], winds[2],
+            parameters.model_weights, parameters.u_model,
+            parameters.v_model,
+            parameters.w_model, coeff=parameters.Cmod)
     else:
         Jmod = 0
 
-    if Cpoint > 0:
+    if parameters.Cpoint > 0:
         Jpoint = calculate_point_cost(
-            winds[0], winds[1], x, y, z, point_list, Cp=Cpoint, roi=roi)
+            winds[0], winds[1], parameters.x, parameters.y, parameters.z,
+            parameters.point_list, Cp=parameters.Cpoint, roi=parameters.roi)
     else:
         Jpoint = 0
 
-    if(print_out is True):
+    if(parameters.print_out is True):
         print(('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |' +
                ' Max w  '))
         print(('|' + "{:9.4f}".format(Jvel) + '|' +
@@ -175,95 +95,21 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
     return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod + Jpoint
 
 
-def grad_J(winds, vrs, azs, els, wts, u_back, v_back, u_model,
-           v_model, w_model, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint,
-           Ut, Vt, grid_shape, dx, dy, dz, x, y, z, rmsVr,
-           weights, bg_weights, model_weights, upper_bc, point_list, roi,
-           print_out=False):
+def grad_J(winds, parameters):
     """
     Calculates the gradient of the cost function. This typically does not need
     to be called directly as get_dd_wind_field is a wrapper around this
-    function and J_function. In order to add more terms to the cost function,
-    modify this function and grad_J.
+    function and :py:func:`pydda.cost_functions.J_function`.
+    In order to add more terms to the cost function,
+    modify this function and :py:func:`pydda.cost_functions.grad_J`.
 
     Parameters
     ----------
     winds: 1-D float array
         The wind field, flattened to 1-D for f_min
-    vrs: List of float arrays
-        List of radial velocities from each radar
-    azs: List of float arrays
-        List of azimuths from each radar
-    els: List of float arrays
-        List of elevations from each radar
-    wts: List of float arrays
-        Float array containing fall speed from radar.
-    u_back: 1D float array (number of vertical levels):
-        Background u wind
-    v_back: 1D float array (number of vertical levels):
-        Background u wind
-    u_model: list of 3D float arrays
-        U from each model integrated into the retrieval
-    v_model: list of 3D float arrays
-        V from each model integrated into the retrieval
-    w_model:
-        W from each model integrated into the retrieval
-    Co: float
-        Weighting coefficient for data constraint.
-    Cm: float
-        Weighting coefficient for mass continuity constraint.
-    Cx: float
-        Smoothing coefficient for x-direction
-    Cy: float
-        Smoothing coefficient for y-direction
-    Cz: float
-        Smoothing coefficient for z-direction
-    Cb: float
-        Coefficient for sounding constraint
-    Cv: float
-        Weight for cost function related to vertical vorticity equation.
-    Cmod: float
-        Coefficient for model constraint
-    Cpoint: float
-        Coefficient for point constraint
-    Ut: float
-        Prescribed storm motion. This is only needed if Cv is not zero.
-    Vt: float
-        Prescribed storm motion. This is only needed if Cv is not zero.
-    grid_shape:
-        Shape of wind grid
-    dx:
-        Spacing of grid in x direction
-    dy:
-        Spacing of grid in y direction
-    dz:
-        Spacing of grid in z direction
-    x:
-        E-W grid levels in m
-    y:
-        N-S grid levels in m
-    z:
-        Grid vertical levels in m
-    rmsVr: float
-        The sum of squares of velocity/num_points. Use for normalization
-        of data weighting coefficient
-    weights: n_radars by z_bins by y_bins x x_bins float array
-        Data weights for each pair of radars
-    bg_weights: z_bins by y_bins x x_bins float array
-        Data weights for sounding constraint
-    model_weights: n_models by z_bins by y_bins by x_bins float array
-        Data weights for each model.
-    point_list: list or None
-        point_list: list of dicts
-        List of point constraints. Each member is a dict with keys of "u", "v",
-        to correspond to each component of the wind field and "x", "y", "z"
-        to correspond to the location of the point observation in the Grid's
-        Cartesian coordinates.
-    roi: float
-        The radius of influence of each point observation in m.
-    upper_bc: bool
-        True to enforce w=0 at top of domain (impermeability condition),
-        False to not enforce impermeability at top of domain
+    parameters: DDParameters
+        The parameters for the cost function evaluation as specified by the
+        :py:func:`pydda.retrieve.DDParameters` class.
 
     Returns
     -------
@@ -271,40 +117,48 @@ def grad_J(winds, vrs, azs, els, wts, u_back, v_back, u_model,
         Gradient vector of cost function
     """
     winds = np.reshape(winds,
-                       (3, grid_shape[0], grid_shape[1], grid_shape[2]))
+                       (3, parameters.grid_shape[0],
+                        parameters.grid_shape[1], parameters.grid_shape[2]))
     grad = calculate_grad_radial_vel(
-        vrs, els, azs, winds[0], winds[1], winds[2], wts, weights,
-        rmsVr, coeff=Co, upper_bc=upper_bc)
+        parameters.vrs, parameters.els, parameters.azs,
+        winds[0], winds[1], winds[2], parameters.wts, parameters.weights,
+        parameters.rmsVr, coeff=parameters.Co, upper_bc=parameters.upper_bc)
 
-    if(Cm > 0):
+    if(parameters.Cm > 0):
         grad += calculate_mass_continuity_gradient(
-            winds[0], winds[1], winds[2], z, dx, dy, dz, coeff=Cm,
-            upper_bc=upper_bc)
+            winds[0], winds[1], winds[2], parameters.z,
+            parameters.dx, parameters.dy, parameters.dz,
+            coeff=parameters.Cm, upper_bc=parameters.upper_bc)
 
-    if(Cx > 0 or Cy > 0 or Cz > 0):
+    if(parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
         grad += calculate_smoothness_gradient(
-            winds[0], winds[1], winds[2], Cx=Cx, Cy=Cy, Cz=Cz,
-            upper_bc=upper_bc)
+            winds[0], winds[1], winds[2], Cx=parameters.Cx,
+            Cy=parameters.Cy, Cz=parameters.Cz, upper_bc=parameters.upper_bc)
 
-    if(Cb > 0):
+    if(parameters.Cb > 0):
         grad += calculate_background_gradient(
-            winds[0], winds[1], winds[2], bg_weights, u_back, v_back, Cb,
-            upper_bc=upper_bc)
+            winds[0], winds[1], winds[2], parameters.bg_weights,
+            parameters.u_back, parameters.v_back, parameters.Cb,
+            upper_bc=parameters.upper_bc)
 
-    if(Cv > 0):
+    if(parameters.Cv > 0):
         grad += calculate_vertical_vorticity_gradient(
-            winds[0], winds[1], winds[2], dx, dy, dz, Ut, Vt, coeff=Cv)
+            winds[0], winds[1], winds[2], parameters.dx,
+            parameters.dy, parameters.dz, parameters.Ut,
+            parameters.Vt, coeff=parameters.Cv)
 
-    if(Cmod > 0):
+    if(parameters.Cmod > 0):
         grad += calculate_model_gradient(
-            winds[0], winds[1], winds[2], model_weights, u_model, v_model,
-            w_model, coeff=Cmod)
+            winds[0], winds[1], winds[2],
+            parameters.model_weights, parameters.u_model, parameters.v_model,
+            parameters.w_model, coeff=parameters.Cmod)
 
-    if Cpoint > 0:
+    if parameters.Cpoint > 0:
         grad += calculate_point_gradient(
-            winds[0], winds[1],  x, y, z, point_list, Cp=Cpoint, roi=roi)
+            winds[0], winds[1], parameters.x, parameters.y, parameters.z,
+            parameters.point_list, Cp=parameters.Cpoint, roi=parameters.roi)
 
-    if(print_out is True):
+    if(parameters.print_out is True):
         print('Norm of gradient: ' + str(np.linalg.norm(grad, np.inf)))
 
     return grad
@@ -563,11 +417,9 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
 
 def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
-    Calculates the cost function related to point observations. This
-    uses weights that are determined by the radius of influence. The
-    weights are proportional to :math:`\frac{1}{r^2}`, where :math:`r`
-    is the distance from the point observation. The weight will be zero
-    outside of the radius of influence.
+    Calculates the cost function related to point observations. A mean square error cost
+    function term is applied to points that are within the sphere of influence
+    whose radius is determined by *roi*.
 
     Parameters
     ----------
@@ -582,9 +434,12 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     z:  Float array
         Z coordinated of grid centers
     point_list: list of dicts
-        List of point constraints. Each member is a dict with keys of "u", "v",
-        to correspond to each component of the wind field and "x", "y", "z"
+        List of point constraints.
+        Each member is a dict with keys of "u", "v", to correspond
+        to each component of the wind field and "x", "y", "z"
         to correspond to the location of the point observation.
+
+        In addition, "site_id" gives the METAR code (or name) to the station.
     Cp: float
         The weighting coefficient of the point cost function.
     roi: float
@@ -603,9 +458,6 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         the_box = np.where(np.logical_and.reduce(
             (np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi,
                                             np.abs(z - the_point["z"]) < roi)))
-
-        dists = np.sqrt(
-            (x[the_box] - the_point["x"])**2 + (y[the_box] - the_point["y"])**2 + (z[the_box] - the_point["z"])**2)
         J += np.sum(((u[the_box] - the_point["u"])**2 + (v[the_box] - the_point["v"])**2))
 
     return J * Cp
@@ -613,29 +465,28 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
 
 def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
-    Calculates the gradient of the cost function related to point observations. This
-    uses weights that are determined by the radius of influence. The
-    weights are proportional to :math:`\frac{1}{r^2}`, where :math:`r`
-    is the distance from the point observation. The weight will be zero
-    outside of the radius of influence.
+    Calculates the gradient of the cost function related to point observations.
+    A mean square error cost function term is applied to points that are within the sphere of influence
+    whose radius is determined by *roi*.
 
     Parameters
     ----------
     u: Float array
         Float array with u component of wind field
-    v:
+    v: Float array
         Float array with v component of wind field
-    x:  Float array
+    x: Float array
         X coordinates of grid centers
-    y:  Float array
+    y: Float array
         Y coordinates of grid centers
-    z:  Float array
+    z: Float array
         Z coordinated of grid centers
     point_list: list of dicts
         List of point constraints. Each member is a dict with keys of "u", "v",
         to correspond to each component of the wind field and "x", "y", "z"
-        to correspond to the location of the point observation. In addition, "id" gives
-        the METAR code (or name) to the station.
+        to correspond to the location of the point observation.
+
+        In addition, "site_id" gives the METAR code (or name) to the station.
     Cp: float
         The weighting coefficient of the point cost function.
     roi: float
@@ -656,10 +507,6 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         the_box = np.where(np.logical_and.reduce(
             (np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi,
              np.abs(z - the_point["z"]) < roi)))
-
-        dists = np.sqrt(
-            (x[the_box] - the_point["x"]) ** 2 + (y[the_box] - the_point["y"]) ** 2 + (
-                        z[the_box] - the_point["z"]) ** 2)
         gradJ_u[the_box] += 2 * (u[the_box] - the_point["u"])
         gradJ_v[the_box] += 2 * (v[the_box] - the_point["v"])
 
