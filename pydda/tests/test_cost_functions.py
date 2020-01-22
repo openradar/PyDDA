@@ -158,6 +158,44 @@ def test_vert_vorticity():
     assert cost > 0
 
 
+def test_point_cost():
+    u = 1 * np.ones((10, 10, 10))
+    v = 1 * np.ones((10, 10, 10))
+    w = 0 * np.ones((10, 10, 10))
+
+    x = np.linspace(-10, 10, 10)
+    y = np.linspace(-10, 10, 10)
+    z = np.linspace(-10, 10, 10)
+    x, y, z = np.meshgrid(x, y, z)
+
+    my_point1 = {'x': 0, 'y': 0, 'z': 0, 'u': 2., 'v': 2., 'w': 0.}
+    cost = pydda.cost_functions.calculate_point_cost(u, v, x, y, z, [my_point1], roi=2.0)
+    grad = pydda.cost_functions.calculate_point_gradient(u, v, x, y, z, [my_point1], roi=2.0)
+
+    assert cost > 0
+    assert np.all(grad <= 0)
+
+    my_point1 = {'x': 0, 'y': 0, 'z': 0, 'u': -2., 'v': -2., 'w': 0.}
+    my_point2 = {'x': 3, 'y': 3, 'z': 0, 'u': 2., 'v': 2., 'w': 0.}
+
+    cost = pydda.cost_functions.calculate_point_cost(u, v, x, y, z, [my_point1], roi=2.0)
+    grad = pydda.cost_functions.calculate_point_gradient(u, v, x, y, z, [my_point1], roi=2.0)
+    assert cost > 0
+    assert np.all(grad >= 0)
+
+    cost = pydda.cost_functions.calculate_point_cost(u, v, x, y, z, [my_point1, my_point2], roi=2.0)
+    grad = pydda.cost_functions.calculate_point_gradient(u, v, x, y, z, [my_point1, my_point2], roi=2.0)
+    assert cost > 0
+    assert ~np.all(grad >= 0)
+
+    my_point1 = {'x': 0, 'y': 0, 'z': 0, 'u': 1., 'v': 1., 'w': 0.}
+    my_point2 = {'x': 3, 'y': 3, 'z': 0, 'u': 1., 'v': 1., 'w': 0.}
+    cost = pydda.cost_functions.calculate_point_cost(u, v, x, y, z, [my_point1, my_point2], roi=2.0)
+    grad = pydda.cost_functions.calculate_point_gradient(u, v, x, y, z, [my_point1, my_point2], roi=2.0)
+    assert cost == 0
+    assert np.all(grad == 0)
+
+
 def test_model_cost():
     u = 10*np.ones((10, 10, 10))
     v = 10*np.ones((10, 10, 10))
