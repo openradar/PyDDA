@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script async="async" type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -68,10 +68,10 @@ questionable winds at the edges of the Dual Doppler Lobes.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
+/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
 /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
@@ -86,8 +86,6 @@ cannot be safely cast to variable data type
   theta_2 = np.arccos((x-rad2[1])/b)
 /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-&lt;__array_function__ internals&gt;:5: DeprecationWarning: object of type &lt;class &#39;numpy.float64&#39;&gt; cannot be safely interpreted as an integer.
-&lt;__array_function__ internals&gt;:5: DeprecationWarning: object of type &lt;class &#39;numpy.float64&#39;&gt; cannot be safely interpreted as an integer.
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
 Calculating weights for radars 0 and 1
@@ -172,7 +170,7 @@ Norm of gradient: 0.07539028471910918
 Norm of gradient: 0.047784363384539105
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 138.3
+Done! Time = 129.9
 /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
   w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
 /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
@@ -185,8 +183,6 @@ Done! Time = 138.3
   theta_2 = np.arccos((x-rad2[1])/b)
 /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-&lt;__array_function__ internals&gt;:5: DeprecationWarning: object of type &lt;class &#39;numpy.float64&#39;&gt; cannot be safely interpreted as an integer.
-&lt;__array_function__ internals&gt;:5: DeprecationWarning: object of type &lt;class &#39;numpy.float64&#39;&gt; cannot be safely interpreted as an integer.
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
 Calculating weights for radars 0 and 1
@@ -271,7 +267,7 @@ Norm of gradient: 0.07539028471910918
 Norm of gradient: 0.047784363384539105
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 138.8
+Done! Time = 129.5
 /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
   w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
 /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
@@ -284,8 +280,6 @@ Done! Time = 138.8
   theta_2 = np.arccos((x-rad2[1])/b)
 /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-&lt;__array_function__ internals&gt;:5: DeprecationWarning: object of type &lt;class &#39;numpy.float64&#39;&gt; cannot be safely interpreted as an integer.
-&lt;__array_function__ internals&gt;:5: DeprecationWarning: object of type &lt;class &#39;numpy.float64&#39;&gt; cannot be safely interpreted as an integer.
 </pre></div>
 </div>
 <div class="line-block">
@@ -340,7 +334,7 @@ Done! Time = 138.8
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  44.420 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  26.347 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/564db4ff92b5949f5865201b6023e7a2/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></p>
@@ -380,7 +374,7 @@ Done! Time = 138.8
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -406,7 +400,7 @@ Done! Time = 138.8
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.
     </div>
   </body>
 </html>

@@ -42,14 +42,14 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_min not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:384: UserWarning: WARNING: valid_max not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    LocalCluster('tcp://127.0.0.1:34739', workers=2, threads=2, memory=8.36 GB)
-    <Client: 'tcp://127.0.0.1:34739' processes=2 threads=2, memory=8.36 GB>
+    LocalCluster('tcp://127.0.0.1:36855', workers=2, threads=2, memory=8.36 GB)
+    <Client: 'tcp://127.0.0.1:36855' processes=2 threads=2, memory=8.36 GB>
     /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
@@ -61,100 +61,100 @@ Author: Robert C. Jackson
     Total points: 23059
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
     |   7.3871|  31.7975|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4149
-    Norm of gradient: 0.06526775209383787
+    Norm of gradient: 0.06526775193484
     Iterations before filter: 10
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
     |   0.7160|  14.2379|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.1676
-    Norm of gradient: 0.02265697004217886
+    Norm of gradient: 0.02265697102208204
     Iterations before filter: 20
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
     |   0.5321|   9.8464|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  47.6630
-    Norm of gradient: 0.019575025193434663
+    Norm of gradient: 0.01957500764369168
     Iterations before filter: 30
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
     |   0.1613|   7.4489|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  54.7406
-    Norm of gradient: 0.024242219964476883
+    Norm of gradient: 0.024242000587389026
     Iterations before filter: 40
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
     |   0.0950|   6.6185|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  55.4003
-    Norm of gradient: 0.006852171864176368
+    Norm of gradient: 0.0068521874744692755
     Iterations before filter: 50
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0558|   5.5634|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  48.4985
-    Norm of gradient: 0.007062978137463077
+    |   0.0558|   5.5634|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  48.4983
+    Norm of gradient: 0.007062959266493413
     Iterations before filter: 60
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0635|   5.1455|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  47.1794
-    Norm of gradient: 0.007387509027592068
+    |   0.0635|   5.1454|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  47.1799
+    Norm of gradient: 0.007419253810169175
     Iterations before filter: 70
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0743|   4.7404|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  41.4687
-    Norm of gradient: 0.012528253242849547
+    |   0.0746|   4.7402|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  41.4696
+    Norm of gradient: 0.012534260883067003
     Iterations before filter: 80
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0963|   4.4825|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  38.0718
-    Norm of gradient: 0.007383193398671715
+    |   0.0964|   4.4821|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  38.0721
+    Norm of gradient: 0.007350687268544406
     Iterations before filter: 90
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0248|   4.2487|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.5239
-    Norm of gradient: 0.006394569705216787
+    |   0.0248|   4.2486|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.5254
+    Norm of gradient: 0.006395235357479983
     Iterations before filter: 100
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0282|   4.2277|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.1107
-    Norm of gradient: 0.006355652215034012
+    |   0.0282|   4.2278|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.1108
+    Norm of gradient: 0.006356258090219102
     Iterations before filter: 110
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0161|   4.2245|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.0654
-    Norm of gradient: 0.006053121782450106
+    |   0.0161|   4.2244|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.0654
+    Norm of gradient: 0.006053843826810857
     Iterations before filter: 120
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0212|   4.1906|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8727
-    Norm of gradient: 0.011452692197261277
+    |   0.0183|   4.1849|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8640
+    Norm of gradient: 0.00951823577051165
     Iterations before filter: 130
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.0146|   4.1923|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8769
-    Norm of gradient: 0.0030136655377298416
+    |   0.0147|   4.1860|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8698
+    Norm of gradient: 0.0030066675235468085
     Iterations before filter: 140
     Applying low pass filter to wind field...
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |3746.0950|   2.8641|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5970
-    Norm of gradient: 0.9986098135883579
+    |3746.2717|   2.8694|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8208
+    Norm of gradient: 0.9986207335310648
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |3378.9225|   2.9509|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5978
-    Norm of gradient: 0.9547921376697976
+    |3379.0721|   2.9561|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8215
+    Norm of gradient: 0.9548025630244079
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    | 221.0979|  23.0871|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6217
-    Norm of gradient: 0.23792226573646327
+    | 221.0709|  23.0887|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8429
+    Norm of gradient: 0.23796137320248373
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    | 114.3039|  24.1503|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8287
-    Norm of gradient: 0.15061385195506036
+    | 114.2906|  24.1507|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8556
+    Norm of gradient: 0.15064214158931472
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |  21.2646|  23.0345|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6886
-    Norm of gradient: 0.06481576114733045
+    |  21.2628|  23.0321|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9031
+    Norm of gradient: 0.06479715576763959
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |  24.7439|  19.7879|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7359
-    Norm of gradient: 0.14028422918245806
+    |  24.7412|  19.7842|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9457
+    Norm of gradient: 0.14020815313072585
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |  10.5934|  21.2488|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7121
-    Norm of gradient: 0.045492656832583224
+    |  10.5937|  21.2457|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9243
+    Norm of gradient: 0.0454760529987847
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   6.0063|  19.7451|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7295
-    Norm of gradient: 0.031839759006447206
+    |   6.0061|  19.7417|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9400
+    Norm of gradient: 0.03184569414439643
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   1.9115|  16.4765|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.7880
-    Norm of gradient: 0.017344264462585513
+    |   1.9111|  16.4722|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9928
+    Norm of gradient: 0.017344753103091463
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   1.3409|  14.3912|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.8497
-    Norm of gradient: 0.02718263611566865
+    |   1.3407|  14.3866|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.0486
+    Norm of gradient: 0.02717483431658997
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   1.4336|  12.4225|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9390
-    Norm of gradient: 0.015722180644086547
+    |   1.4333|  12.4176|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.1294
+    Norm of gradient: 0.015722001451362006
     | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-    |   0.8802|  11.7888|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.9765
-    Norm of gradient: 0.010982740652982041
+    |   0.8801|  11.7838|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.1634
+    Norm of gradient: 0.010953422655369631
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 166.6
+    Done! Time = 152.8
     Waiting for nested grid to be retrieved...
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:173: UserWarning: linewidths is ignored by contourf
       cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
@@ -245,7 +245,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 6 minutes  47.283 seconds)
+   **Total running time of the script:** ( 6 minutes  22.499 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples_nested.py:
