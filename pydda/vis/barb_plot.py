@@ -474,10 +474,10 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
         ax.gridlines()
     ax.set_extent([grid_lon.min(), grid_lon.max(),
                    grid_lat.min(), grid_lat.max()])
-    num_tenths = round((grid_lon.max()-grid_lon.min())*10)+1
+    num_tenths = int(round((grid_lon.max()-grid_lon.min())*10)+1)
     the_ticks_x = np.round(
         np.linspace(grid_lon.min(), grid_lon.max(), num_tenths), 1)
-    num_tenths = round((grid_lat.max()-grid_lat.min())*10)+1
+    num_tenths = int(round((grid_lat.max()-grid_lat.min())*10)+1)
     the_ticks_y = np.round(
         np.linspace(grid_lat.min(), grid_lat.max(), num_tenths), 1)
     ax.set_xticks(the_ticks_x)
