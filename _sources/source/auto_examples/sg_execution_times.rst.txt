@@ -5,14 +5,14 @@
 
 Computation times
 =================
-**17:50.679** total execution time for **source_auto_examples** files:
+**18:27.022** total execution time for **source_auto_examples** files:
 
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)                         | 06:53.408 | 0.0 MB |
+| :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)                         | 07:03.424 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)           | 06:24.976 | 0.0 MB |
+| :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py` (``plot_examples_nested.py``)           | 06:41.548 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``) | 04:32.295 | 0.0 MB |
+| :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``) | 04:42.050 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr_source_auto_examples_hurricane_florence.py` (``hurricane_florence.py``)               | 00:00.000 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
