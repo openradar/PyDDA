@@ -64,10 +64,10 @@ using PyDDA.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
+/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -163,21 +163,21 @@ Norm of gradient: 0.01991033928197688
 Norm of gradient: 0.06736427648606146
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 396.9
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:173: UserWarning: linewidths is ignored by contourf
-  cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+Done! Time = 411.5
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
+  alpha=contour_alpha)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:212: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  ax.contour(
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+  levels=[bca_min, bca_max], color=&#39;k&#39;)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:212: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  ax.contour(
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:635: UserWarning: linewidths is ignored by contourf
-  cs = ax.contourf(grid_x[::, level, ::], grid_h[::, level, ::],
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:823: UserWarning: linewidths is ignored by contourf
-  cs = plt.contourf(grid_y[::, ::, level], grid_h[::, ::, level],
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+  levels=[bca_min, bca_max], color=&#39;k&#39;)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:637: UserWarning: linewidths is ignored by contourf
+  alpha=contour_alpha)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:825: UserWarning: linewidths is ignored by contourf
+  alpha=contour_alpha)
 </pre></div>
 </div>
 <div class="line-block">
@@ -234,7 +234,7 @@ Done! Time = 396.9
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  38.713 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  53.408 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
