@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Example on retrieving and plotting winds on a distributed cluster &#8212; PyDDA 0.5.0 documentation</title>
+    <title>Example on retrieving and plotting winds on a distributed cluster &#8212; PyDDA 0.5.1 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="plot_examples.html" title="Example on retrieving and plotting winds"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li> 
       </ul>
     </div>  
@@ -70,8 +70,8 @@ cannot be safely cast to variable data type
 /home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-LocalCluster(&#39;tcp://127.0.0.1:44843&#39;, workers=2, threads=2, memory=8.36 GB)
-&lt;Client: &#39;tcp://127.0.0.1:44843&#39; processes=2 threads=2, memory=8.36 GB&gt;
+LocalCluster(&#39;tcp://127.0.0.1:41377&#39;, workers=2, threads=2, memory=8.36 GB)
+&lt;Client: &#39;tcp://127.0.0.1:41377&#39; processes=2 threads=2, memory=8.36 GB&gt;
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
 Calculating weights for radars 0 and 1
@@ -176,7 +176,7 @@ Norm of gradient: 0.015722001451362006
 Norm of gradient: 0.010953422655369631
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 160.3
+Done! Time = 173.1
 Waiting for nested grid to be retrieved...
 /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
   alpha=contour_alpha)
@@ -258,7 +258,7 @@ Waiting for nested grid to be retrieved...
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 6 minutes  41.548 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  22.551 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-nested-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/c981e23ed8c36f3d885bbd718e34cd53/plot_examples_nested.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples_nested.py</span></code></a></p>
@@ -318,13 +318,13 @@ Waiting for nested grid to be retrieved...
         <li class="right" >
           <a href="plot_examples.html" title="Example on retrieving and plotting winds"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.2.
     </div>
   </body>
 </html>
