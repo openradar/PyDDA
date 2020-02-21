@@ -7,7 +7,6 @@
 .. _sphx_glr_source_auto_examples_oklahoma_example.py:
 
 
-
 Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma
 --------------------------------------------------------------
 
@@ -18,7 +17,6 @@ Grided netCDF files are downloadable from:
 https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. image:: ../../arm_figure.png
-
 
 
 .. code-block:: default
