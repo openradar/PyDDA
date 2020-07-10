@@ -4,6 +4,7 @@
 ![https://anaconda.org/conda-forge/pydda](https://anaconda.org/conda-forge/pydda/badges/version.svg)
 ![https://anaconda.org/conda-forge/pydda/files](https://anaconda.org/conda-forge/pydda/badges/downloads.svg)
 ![https://travis-ci.org/openradar/PyDDA](https://img.shields.io/travis/openradar/PyDDA.svg)  
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg)](https://doi.org/10.5281/zenodo.3939148)
 
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
