@@ -6,7 +6,7 @@
 [<img src="https://img.shields.io/travis/openradar/PyDDA.svg">](https://travis-ci.org/openradar/PyDDA) 
 [<img src="https://img.shields.io/badge/docs-here-green">](https://openradarscience.org/PyDDA)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg)](https://doi.org/10.5281/zenodo.3939148)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg)](https://doi.org/10.5281/zenodo.3942686)
 
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
