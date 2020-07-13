@@ -2,6 +2,7 @@ arm_pyart
 numpy
 scipy
 cartopy
+wheels
 pandas
 dask
 six

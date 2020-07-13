@@ -21,9 +21,9 @@ import urllib
 
 hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20181004/' +
             'hrrr.t10z.wrfprsf00.grib2')
-grid0 = pyart.io.read_grid('grid0.20171004.095021.nc')
-grid1 = pyart.io.read_grid('grid1.20171004.095021.nc')
-grid2 = pyart.io.read_grid('grid2.20171004.095021.nc')
+grid0 = pyart.io.read_grid(u'grid0.20171004.095021.nc')
+grid1 = pyart.io.read_grid(u'grid1.20171004.095021.nc')
+grid2 = pyart.io.read_grid(u'grid2.20171004.095021.nc')
 
 urllib.request.urlretrieve(hrrr_url, 'test.grib2')
 grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid0,
