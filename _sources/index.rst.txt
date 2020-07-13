@@ -12,7 +12,10 @@ Welcome to the PyDDA documentation!
     :height: 200px
     :alt: alternate text
 
-This is the main page for the documentation of PyDDA. Below are links that 
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg
+   :target: https://doi.org/10.5281/zenodo.3939148
+
+This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as 
 description of each of PyDDA's subroutines.
 
@@ -43,7 +46,7 @@ The GitHub repository for PyDDA is available at:
 Before you install PyDDA, ensure that the following dependencies are installed:
 ::
 
-    Python 3.5+
+    Python 3.6+
     Py-ART 1.9.0+
     scipy 1.0.1+
     numpy 1.13.1+
@@ -51,10 +54,10 @@ Before you install PyDDA, ensure that the following dependencies are installed:
     cartopy 0.16.0+
 ::
 
-In order to use the HRRR data constraint, cfgrib needs to be installed. `cfgrib 
-<http://github.com/ecmwf/cfgrib>`_ currently only works on Mac OS and Linux, so 
-this is an optional dependency of PyDDA so that Windows users can still use PyDDA. 
-In order to install cfgrib, simply do: 
+In order to use the HRRR data constraint, cfgrib needs to be installed. `cfgrib
+<http://github.com/ecmwf/cfgrib>`_ currently only works on Mac OS and Linux, so
+this is an optional dependency of PyDDA so that Windows users can still use PyDDA.
+In order to install cfgrib, simply do:
 
 .. _cfgrib: https://github.com/ecmwf/cfgrib
 
@@ -63,7 +66,7 @@ In order to install cfgrib, simply do:
  pip install cfgrib
 ::
 
-There are multiple ways to install PyDDA. The best way to install PyDDA is 
+There are multiple ways to install PyDDA. The recommended way to install PyDDA is
 through the use of the `Anaconda <http://anaconda.org>`_ package manager. If you
 have anaconda installed simply type:
 ::
@@ -71,9 +74,9 @@ have anaconda installed simply type:
     conda install -c conda-forge pydda
 ::
 
-This will install pydda and all of the required dependencies. You still need to
+This will install PyDDA and all of the required dependencies. You still need to
 install `cfgrib <http://github.com/ecmwf/cfgrib>`_ if you wish to read HRRR data.
-Another recommended option is to use pip to install PyDDA. Running this command 
+If you do not have anaconda, you can still install PyDDA using pip. Running this command
 will install PyDDA and the required dependencies:
 ::
 
@@ -81,9 +84,8 @@ will install PyDDA and the required dependencies:
 ::
 
 
-Another way to do this which is recommended if you wish to contribute to PyDDA
-is to install PyDDA from source. To do this, just type in the following 
-commands assuming you have the above dependencies installed. 
+If you wish to contribute to PyDDA, you should install PyDDA from source. To do this,
+just type in the following commands assuming you have the above dependencies installed.
 
 ::
 

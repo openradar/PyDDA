@@ -22,6 +22,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
  .. figure:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
+     :alt: Example on integrating radar and HRRR data
 
      :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
 
@@ -42,6 +43,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
  .. figure:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
+     :alt: Example of a wind retrieval in a tornado over Sydney
 
      :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
 
@@ -62,6 +64,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
  .. figure:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
+     :alt: Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma
 
      :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
 
@@ -82,6 +85,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
  .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
+     :alt: Example on geographic plotting and constraint variation
 
      :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
 
@@ -102,6 +106,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
  .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
+     :alt: Example on retrieving and plotting winds
 
      :ref:`sphx_glr_source_auto_examples_plot_examples.py`
 
@@ -122,6 +127,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
  .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_nested_thumb.png
+     :alt: Example on retrieving and plotting winds on a distributed cluster
 
      :ref:`sphx_glr_source_auto_examples_plot_examples_nested.py`
 
@@ -146,13 +152,13 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
     :class: sphx-glr-footer-gallery
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
     :download:`Download all examples in Python source code: auto_examples_python.zip <//home/travis/build/openradar/PyDDA/doc/source/source/auto_examples/auto_examples_python.zip>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
     :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/travis/build/openradar/PyDDA/doc/source/source/auto_examples/auto_examples_jupyter.zip>`
 

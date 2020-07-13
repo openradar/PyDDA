@@ -1,13 +1,16 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 0.5.1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 0.5.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -32,7 +35,8 @@
         <li class="right" >
           <a href="contributors_guide/index.html" title="Contributor’s Guide"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.5.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to the PyDDA documentation!</a></li> 
       </ul>
     </div>  
 
@@ -44,6 +48,7 @@
   <div class="section" id="welcome-to-the-pydda-documentation">
 <h1>Welcome to the PyDDA documentation!<a class="headerlink" href="#welcome-to-the-pydda-documentation" title="Permalink to this headline">¶</a></h1>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="alternate text" class="align-center" src="_images/logo.png" style="width: 400px; height: 200px;" /></a>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3939148"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg" /></a>
 <p>This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as
 description of each of PyDDA’s subroutines.</p>
@@ -65,7 +70,7 @@ In addition, we do not support Python versions less than 3.6. If you have an old
 <p>The GitHub repository for PyDDA is available at:</p>
 <p><a class="reference external" href="https://github.com/openradar/PyDDA">https://github.com/openradar/PyDDA</a></p>
 <p>Before you install PyDDA, ensure that the following dependencies are installed:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Python</span> <span class="mf">3.5</span><span class="o">+</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Python</span> <span class="mf">3.6</span><span class="o">+</span>
 <span class="n">Py</span><span class="o">-</span><span class="n">ART</span> <span class="mf">1.9</span><span class="o">.</span><span class="mi">0</span><span class="o">+</span>
 <span class="n">scipy</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span><span class="o">+</span>
 <span class="n">numpy</span> <span class="mf">1.13</span><span class="o">.</span><span class="mi">1</span><span class="o">+</span>
@@ -79,22 +84,21 @@ In order to install cfgrib, simply do:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cfgrib</span>
 </pre></div>
 </div>
-<p>There are multiple ways to install PyDDA. The best way to install PyDDA is
+<p>There are multiple ways to install PyDDA. The recommended way to install PyDDA is
 through the use of the <a class="reference external" href="http://anaconda.org">Anaconda</a> package manager. If you
 have anaconda installed simply type:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pydda</span>
 </pre></div>
 </div>
-<p>This will install pydda and all of the required dependencies. You still need to
+<p>This will install PyDDA and all of the required dependencies. You still need to
 install <a class="reference external" href="http://github.com/ecmwf/cfgrib">cfgrib</a> if you wish to read HRRR data.
-Another recommended option is to use pip to install PyDDA. Running this command
+If you do not have anaconda, you can still install PyDDA using pip. Running this command
 will install PyDDA and the required dependencies:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pydda</span>
 </pre></div>
 </div>
-<p>Another way to do this which is recommended if you wish to contribute to PyDDA
-is to install PyDDA from source. To do this, just type in the following
-commands assuming you have the above dependencies installed.</p>
+<p>If you wish to contribute to PyDDA, you should install PyDDA from source. To do this,
+just type in the following commands assuming you have the above dependencies installed.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">openradar</span><span class="o">/</span><span class="n">PyDDA</span>
 <span class="n">cd</span> <span class="n">PyDDA</span>
 <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
@@ -151,6 +155,7 @@ commands assuming you have the above dependencies installed.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -202,12 +207,13 @@ commands assuming you have the above dependencies installed.</p>
         <li class="right" >
           <a href="contributors_guide/index.html" title="Contributor’s Guide"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.5.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to the PyDDA documentation!</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
     </div>
   </body>
 </html>

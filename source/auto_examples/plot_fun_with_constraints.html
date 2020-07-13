@@ -1,13 +1,16 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Example on geographic plotting and constraint variation &#8212; PyDDA 0.5.1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example on geographic plotting and constraint variation &#8212; PyDDA 0.5.2 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
     
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -36,8 +39,9 @@
         <li class="right" >
           <a href="oklahoma_example.html" title="Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Example on geographic plotting and constraint variation</a></li> 
       </ul>
     </div>  
 
@@ -48,7 +52,7 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="example-on-geographic-plotting-and-constraint-variation">
 <span id="sphx-glr-source-auto-examples-plot-fun-with-constraints-py"></span><h1>Example on geographic plotting and constraint variation<a class="headerlink" href="#example-on-geographic-plotting-and-constraint-variation" title="Permalink to this headline">¶</a></h1>
@@ -60,31 +64,31 @@ the sounding was used as the initial state, but for the latter
 two examples we use a zero initial state which provides for more
 questionable winds at the edges of the Dual Doppler Lobes.</p>
 <ul class="sphx-glr-horizontal">
-<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_001.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_001.png" />
+<li><img alt="PyDDA retreived winds &#64;4.54 km" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_001.png" />
 </li>
-<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_002.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_002.png" />
+<li><img alt="PyDDA retreived winds &#64;4.54 km" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_002.png" />
 </li>
-<li><img alt="../../_images/sphx_glr_plot_fun_with_constraints_003.png" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_003.png" />
+<li><img alt="PyDDA retreived winds &#64;4.54 km" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_fun_with_constraints_003.png" />
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
 /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
   w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1508: UserWarning: linewidths is ignored by contourf
   result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
@@ -170,18 +174,18 @@ Norm of gradient: 0.07539028471910918
 Norm of gradient: 0.047784363384539105
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 155.1
+Done! Time = 149.6
 /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
   w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1508: UserWarning: linewidths is ignored by contourf
   result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
@@ -267,18 +271,18 @@ Norm of gradient: 0.07539028471910918
 Norm of gradient: 0.047784363384539105
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 145.7
+Done! Time = 150.7
 /home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
   w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1400: UserWarning: linewidths is ignored by contourf
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1508: UserWarning: linewidths is ignored by contourf
   result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/cartopy/mpl/geoaxes.py:1366: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 </pre></div>
 </div>
@@ -334,12 +338,12 @@ Done! Time = 145.7
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  8.768 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  7.577 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py">
-<div class="sphx-glr-download docutils container">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/564db4ff92b5949f5865201b6023e7a2/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download docutils container">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/69088b28623951c8bc5bf24f02f5316d/plot_fun_with_constraints.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_fun_with_constraints.ipynb</span></code></a></p>
 </div>
 </div>
@@ -347,6 +351,7 @@ Done! Time = 145.7
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -394,13 +399,14 @@ Done! Time = 145.7
         <li class="right" >
           <a href="oklahoma_example.html" title="Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Example on geographic plotting and constraint variation</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
     </div>
   </body>
 </html>

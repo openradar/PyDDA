@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_source_auto_examples_hurricane_florence.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_source_auto_examples_hurricane_florence.py:
+        Click :ref:`here <sphx_glr_download_source_auto_examples_hurricane_florence.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_source_auto_examples_hurricane_florence.py:
 
 
 Example on integrating radar and HRRR data
@@ -36,8 +38,8 @@ Author: Robert C. Jackson
                 'hrrr.t06z.wrfprsf00.grib2')
     urllib.request.urlretrieve(hrrr_url, 'test.grib2')
 
-    grid_mhx = pyart.io.read_grid('grid_mhx.nc')
-    grid_ltx = pyart.io.read_grid('grid_ltx.nc')
+    grid_mhx = pyart.io.read_grid(u'grid_mhx.nc')
+    grid_ltx = pyart.io.read_grid(u'grid_ltx.nc')
 
     grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                              'test.grib2')
@@ -74,13 +76,13 @@ Author: Robert C. Jackson
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: hurricane_florence.py <hurricane_florence.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: hurricane_florence.ipynb <hurricane_florence.ipynb>`
 

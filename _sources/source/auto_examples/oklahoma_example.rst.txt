@@ -1,10 +1,13 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_source_auto_examples_oklahoma_example.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_source_auto_examples_oklahoma_example.py:
+        Click :ref:`here <sphx_glr_download_source_auto_examples_oklahoma_example.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_source_auto_examples_oklahoma_example.py:
+
 
 
 Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma
@@ -19,6 +22,7 @@ https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. image:: ../../arm_figure.png
 
 
+
 .. code-block:: default
 
 
@@ -30,9 +34,9 @@ https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
     hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20181004/' +
                 'hrrr.t10z.wrfprsf00.grib2')
-    grid0 = pyart.io.read_grid('grid0.20171004.095021.nc')
-    grid1 = pyart.io.read_grid('grid1.20171004.095021.nc')
-    grid2 = pyart.io.read_grid('grid2.20171004.095021.nc')
+    grid0 = pyart.io.read_grid(u'grid0.20171004.095021.nc')
+    grid1 = pyart.io.read_grid(u'grid1.20171004.095021.nc')
+    grid2 = pyart.io.read_grid(u'grid2.20171004.095021.nc')
 
     urllib.request.urlretrieve(hrrr_url, 'test.grib2')
     grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid0,
@@ -72,13 +76,13 @@ https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: oklahoma_example.py <oklahoma_example.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: oklahoma_example.ipynb <oklahoma_example.ipynb>`
 

@@ -1,13 +1,16 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma &#8212; PyDDA 0.5.1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma &#8212; PyDDA 0.5.2 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
     
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -36,8 +39,9 @@
         <li class="right" >
           <a href="sydney_tornado.html" title="Example of a wind retrieval in a tornado over Sydney"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma</a></li> 
       </ul>
     </div>  
 
@@ -48,7 +52,7 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-oklahoma-example-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-oklahoma-example-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="example-of-a-wind-retrieval-from-kvnx-and-2-xsaprs-in-oklahoma">
 <span id="sphx-glr-source-auto-examples-oklahoma-example-py"></span><h1>Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma<a class="headerlink" href="#example-of-a-wind-retrieval-from-kvnx-and-2-xsaprs-in-oklahoma" title="Permalink to this headline">¶</a></h1>
@@ -65,9 +69,9 @@ the vicinity of the SGP site in North Central Oklahoma.</p>
 
 <span class="n">hrrr_url</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;https://pando-rgw01.chpc.utah.edu/hrrr/prs/20181004/&#39;</span> <span class="o">+</span>
             <span class="s1">&#39;hrrr.t10z.wrfprsf00.grib2&#39;</span><span class="p">)</span>
-<span class="n">grid0</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;grid0.20171004.095021.nc&#39;</span><span class="p">)</span>
-<span class="n">grid1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;grid1.20171004.095021.nc&#39;</span><span class="p">)</span>
-<span class="n">grid2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="s1">&#39;grid2.20171004.095021.nc&#39;</span><span class="p">)</span>
+<span class="n">grid0</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;grid0.20171004.095021.nc&#39;</span><span class="p">)</span>
+<span class="n">grid1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;grid1.20171004.095021.nc&#39;</span><span class="p">)</span>
+<span class="n">grid2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;grid2.20171004.095021.nc&#39;</span><span class="p">)</span>
 
 <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">hrrr_url</span><span class="p">,</span> <span class="s1">&#39;test.grib2&#39;</span><span class="p">)</span>
 <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid0</span><span class="p">,</span>
@@ -94,10 +98,10 @@ the vicinity of the SGP site in North Central Oklahoma.</p>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-oklahoma-example-py">
-<div class="sphx-glr-download docutils container">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f48e51e4e30de5781454889793cb986e/oklahoma_example.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">oklahoma_example.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download docutils container">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/80e2761836df567748dbf2800737624a/oklahoma_example.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">oklahoma_example.ipynb</span></code></a></p>
 </div>
 </div>
@@ -105,6 +109,7 @@ the vicinity of the SGP site in North Central Oklahoma.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -152,13 +157,14 @@ the vicinity of the SGP site in North Central Oklahoma.</p>
         <li class="right" >
           <a href="sydney_tornado.html" title="Example of a wind retrieval in a tornado over Sydney"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
     </div>
   </body>
 </html>

@@ -1,13 +1,16 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pydda.vis.plot_xz_xsection_quiver &#8212; PyDDA 0.5.1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pydda.vis.plot_xz_xsection_quiver &#8212; PyDDA 0.5.2 documentation</title>
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
     
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -36,8 +39,9 @@
         <li class="right" >
           <a href="pydda.vis.plot_horiz_xsection_quiver.html" title="pydda.vis.plot_horiz_xsection_quiver"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pydda.vis.plot_xz_xsection_quiver</a></li> 
       </ul>
     </div>  
 
@@ -48,9 +52,9 @@
             
   <div class="section" id="pydda-vis-plot-xz-xsection-quiver">
 <h1>pydda.vis.plot_xz_xsection_quiver<a class="headerlink" href="#pydda-vis-plot-xz-xsection-quiver" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pydda.vis.plot_xz_xsection_quiver">
-<code class="sig-prename descclassname">pydda.vis.</code><code class="sig-name descname">plot_xz_xsection_quiver</code><span class="sig-paren">(</span><em class="sig-param">Grids</em>, <em class="sig-param">ax=None</em>, <em class="sig-param">background_field='reflectivity'</em>, <em class="sig-param">level=1</em>, <em class="sig-param">cmap='pyart_LangRainbow12'</em>, <em class="sig-param">vmin=None</em>, <em class="sig-param">vmax=None</em>, <em class="sig-param">u_vel_contours=None</em>, <em class="sig-param">v_vel_contours=None</em>, <em class="sig-param">w_vel_contours=None</em>, <em class="sig-param">wind_vel_contours=None</em>, <em class="sig-param">u_field='u'</em>, <em class="sig-param">v_field='v'</em>, <em class="sig-param">w_field='w'</em>, <em class="sig-param">title_flag=True</em>, <em class="sig-param">axes_labels_flag=True</em>, <em class="sig-param">colorbar_flag=True</em>, <em class="sig-param">colorbar_contour_flag=False</em>, <em class="sig-param">bg_grid_no=0</em>, <em class="sig-param">quiver_spacing_x_km=10.0</em>, <em class="sig-param">quiver_spacing_z_km=1.0</em>, <em class="sig-param">contour_alpha=0.7</em>, <em class="sig-param">quiverkey_len=5.0</em>, <em class="sig-param">quiverkey_loc='best'</em>, <em class="sig-param">quiver_width=0.01</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/vis/quiver_plot.html#plot_xz_xsection_quiver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.vis.plot_xz_xsection_quiver" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pydda.vis.</code><code class="sig-name descname">plot_xz_xsection_quiver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Grids</span></em>, <em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">background_field</span><span class="o">=</span><span class="default_value">'reflectivity'</span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">'pyart_LangRainbow12'</span></em>, <em class="sig-param"><span class="n">vmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">u_vel_contours</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_vel_contours</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">w_vel_contours</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wind_vel_contours</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">u_field</span><span class="o">=</span><span class="default_value">'u'</span></em>, <em class="sig-param"><span class="n">v_field</span><span class="o">=</span><span class="default_value">'v'</span></em>, <em class="sig-param"><span class="n">w_field</span><span class="o">=</span><span class="default_value">'w'</span></em>, <em class="sig-param"><span class="n">title_flag</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">axes_labels_flag</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">colorbar_flag</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">colorbar_contour_flag</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">bg_grid_no</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">quiver_spacing_z_km</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">contour_alpha</span><span class="o">=</span><span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">quiverkey_len</span><span class="o">=</span><span class="default_value">5.0</span></em>, <em class="sig-param"><span class="n">quiverkey_loc</span><span class="o">=</span><span class="default_value">'best'</span></em>, <em class="sig-param"><span class="n">quiver_width</span><span class="o">=</span><span class="default_value">0.01</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/vis/quiver_plot.html#plot_xz_xsection_quiver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pydda.vis.plot_xz_xsection_quiver" title="Permalink to this definition">¶</a></dt>
 <dd><p>This procedure plots a cross section of winds from wind fields
 generated by PyDDA in the X-Z plane using quivers.
 The length of the quivers varies with wind speed.</p>
@@ -149,6 +153,7 @@ width.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -196,13 +201,14 @@ width.</p>
         <li class="right" >
           <a href="pydda.vis.plot_horiz_xsection_quiver.html" title="pydda.vis.plot_horiz_xsection_quiver"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pydda.vis.plot_xz_xsection_quiver</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
     </div>
   </body>
 </html>

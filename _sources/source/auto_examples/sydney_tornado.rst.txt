@@ -1,10 +1,13 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_source_auto_examples_sydney_tornado.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_source_auto_examples_sydney_tornado.py:
+        Click :ref:`here <sphx_glr_download_source_auto_examples_sydney_tornado.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_source_auto_examples_sydney_tornado.py:
+
 
 
 Example of a wind retrieval in a tornado over Sydney
@@ -16,6 +19,7 @@ Grided netCDF files are downloadable from:
 https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. image:: ../../sydney_tornado.png
+
 
 
 .. code-block:: default
@@ -67,13 +71,13 @@ https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: sydney_tornado.py <sydney_tornado.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: sydney_tornado.ipynb <sydney_tornado.ipynb>`
 
