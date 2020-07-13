@@ -30,7 +30,7 @@ Angles.py is from Multidop and was written by Timothy Lang of NASA.
 
 Right now this has been tested on and depends on:
 
-    Python 3.5+
+    Python 3.6+
 
     Py-ART 1.9.0
     
