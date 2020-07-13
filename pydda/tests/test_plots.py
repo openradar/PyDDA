@@ -57,7 +57,7 @@ def test_plot_horiz_xsection_barbs_map():
     return fig
 
 
-@pytest.mark.mpl_image_compare(tolerance=50)
+@pytest.mark.mpl_image_compare(tolerance=60)
 def test_plot_horiz_xsection_streamlines():
     Grids = [pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
              pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)]
@@ -69,7 +69,7 @@ def test_plot_horiz_xsection_streamlines():
 
 
 
-@pytest.mark.mpl_image_compare(tolerance=50)
+@pytest.mark.mpl_image_compare(tolerance=60)
 def test_plot_horiz_xsection_streamlines_map():
     berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
     cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
