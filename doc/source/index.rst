@@ -12,8 +12,8 @@ Welcome to the PyDDA documentation!
     :height: 200px
     :alt: alternate text
 
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg
-   :target: https://doi.org/10.5281/zenodo.3939148
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg
+   :target: https://doi.org/10.5281/zenodo.3942686
 
 This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as 
