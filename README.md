@@ -1,10 +1,11 @@
 # PyDDA (Pythonic Direct Data Assimilation)
 ![alt text](https://github.com/openradar/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
-![https://anaconda.org/conda-forge/pydda](https://anaconda.org/conda-forge/pydda/badges/version.svg)
-![https://anaconda.org/conda-forge/pydda/files](https://anaconda.org/conda-forge/pydda/badges/downloads.svg)
-![https://travis-ci.org/openradar/PyDDA](https://img.shields.io/travis/openradar/PyDDA.svg)  
-![https://openradarscience.org/PyDDA](https://img.shields.io/badge/docs-here-green)
+[<img src="https://anaconda.org/conda-forge/pydda/badges/version.svg">](https://anaconda.org/conda-forge/pydda)
+[<img src="https://anaconda.org/conda-forge/pydda/badges/downloads.svg">](https://anaconda.org/conda-forge/pydda/files)
+[<img src="https://img.shields.io/travis/openradar/PyDDA.svg">](https://travis-ci.org/openradar/PyDDA) 
+[<img src="https://img.shields.io/badge/docs-here-green">](https://openradarscience.org/PyDDA)
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3939148.svg)](https://doi.org/10.5281/zenodo.3939148)
 
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
