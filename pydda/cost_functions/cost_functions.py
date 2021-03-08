@@ -805,7 +805,6 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     """
     dvdz = np.gradient(v, dz, axis=0)
     dudz = np.gradient(u, dz, axis=0)
-    dwdz = np.gradient(w, dx, axis=2)
     dvdx = np.gradient(v, dx, axis=2)
     dwdy = np.gradient(w, dy, axis=1)
     dwdx = np.gradient(w, dx, axis=2)
@@ -870,11 +869,9 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
 
     # First derivatives
     dvdz = np.gradient(v, dz, axis=0)
-    dudz = np.gradient(u, dz, axis=0)
     dwdy = np.gradient(w, dy, axis=1)
     dudx = np.gradient(u, dx, axis=2)
-    dvdy = np.gradient(v, dy, axis=2)
-    dwdx = np.gradient(w, dx, axis=2)
+    dvdy = np.gradient(v, dy, axis=1)
     dvdx = np.gradient(v, dx, axis=2)
     dwdx = np.gradient(w, dx, axis=2)
     dudz = np.gradient(u, dz, axis=0)
