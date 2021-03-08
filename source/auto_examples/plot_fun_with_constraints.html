@@ -4,20 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Example on geographic plotting and constraint variation &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
     
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script async="async" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -52,7 +51,8 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="example-on-geographic-plotting-and-constraint-variation">
 <span id="sphx-glr-source-auto-examples-plot-fun-with-constraints-py"></span><h1>Example on geographic plotting and constraint variation<a class="headerlink" href="#example-on-geographic-plotting-and-constraint-variation" title="Permalink to this headline">¶</a></h1>
@@ -72,23 +72,29 @@ questionable winds at the edges of the Dual Doppler Lobes.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
-  w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1508: UserWarning: linewidths is ignored by contourf
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1562: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
+  result = self._pcolormesh_patched(*args, **kwargs)
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1509: UserWarning: linewidths is ignored by contourf
   result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:403: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:404: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_over(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:405: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1479: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1479: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
@@ -101,91 +107,97 @@ rmsVR = 6.776753068494561
 Total points: 92092
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  17.5234| 117.2994|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.8763
-Norm of gradient: 0.03363053426960683
+Norm of gradient: 0.033630534269606174
 Iterations before filter: 10
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   3.3593|  44.3660|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.9330
-Norm of gradient: 0.035947666880562244
+Norm of gradient: 0.03594766688064722
 Iterations before filter: 20
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   1.6825|  26.6090|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  20.4340
-Norm of gradient: 0.019569191810257916
+Norm of gradient: 0.019569191810177976
 Iterations before filter: 30
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.9598|  18.2610|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  23.1350
-Norm of gradient: 0.011461364155837591
+Norm of gradient: 0.011461364156154737
 Iterations before filter: 40
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.5382|  14.2669|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.8571
-Norm of gradient: 0.005058645719565329
+Norm of gradient: 0.005058645720035598
 Iterations before filter: 50
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.5519|  11.2071|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  27.7493
-Norm of gradient: 0.009133848672693273
+Norm of gradient: 0.0091338486729616
 Iterations before filter: 60
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.5063|   9.0763|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.5937
-Norm of gradient: 0.004085182613747136
+Norm of gradient: 0.0040851826132652525
 Iterations before filter: 70
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.3574|   7.4804|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.4240
-Norm of gradient: 0.010016895690967385
+Norm of gradient: 0.01001689566810441
 Iterations before filter: 80
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.2502|   7.4561|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.4265
-Norm of gradient: 0.0009764931656690218
+Norm of gradient: 0.0009764931619411334
 Iterations before filter: 90
 Applying low pass filter to wind field...
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |6575.6187|   6.1340|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   8.7456
-Norm of gradient: 0.7462737969266906
+Norm of gradient: 0.7462737969223461
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |5966.0414|   6.4019|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   8.6014
-Norm of gradient: 0.6983294931215154
+Norm of gradient: 0.6983294931210545
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 | 396.1297|  84.0446|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.6213
-Norm of gradient: 0.2022252081918587
+Norm of gradient: 0.20222520819242115
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 | 210.3138|  87.8755|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.6785
-Norm of gradient: 0.12040101890728035
+Norm of gradient: 0.12040101890761887
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  46.4198|  87.9840|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.2879
-Norm of gradient: 0.08702823438943683
+Norm of gradient: 0.08702823439024826
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  47.4066|  74.8731|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3296
-Norm of gradient: 0.16339641701375401
+Norm of gradient: 0.16339641701500093
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  13.2350|  73.1213|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3530
-Norm of gradient: 0.03300072469292083
+Norm of gradient: 0.03300072469301765
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   8.7393|  68.0998|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3983
-Norm of gradient: 0.019193000300041986
+Norm of gradient: 0.01919300030010698
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   6.1531|  54.8219|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.6947
-Norm of gradient: 0.02841650585274795
+Norm of gradient: 0.02841650585299242
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   5.4481|  44.6685|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.4289
-Norm of gradient: 0.019417630224822097
+Norm of gradient: 0.019417630225047992
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  16.3036|  33.2967|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.2565
-Norm of gradient: 0.07539028471910918
+Norm of gradient: 0.0753902847196362
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   6.9822|  36.7060|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.3551
-Norm of gradient: 0.047784363384539105
+Norm of gradient: 0.04778436338487209
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 161.8
-/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
-  w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1508: UserWarning: linewidths is ignored by contourf
+Done! Time = 165.6
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1562: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
+  result = self._pcolormesh_patched(*args, **kwargs)
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1509: UserWarning: linewidths is ignored by contourf
   result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:403: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:404: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_over(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:405: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1479: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1479: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
@@ -198,91 +210,97 @@ rmsVR = 6.776753068494561
 Total points: 92092
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  17.5234| 117.2994|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.8763
-Norm of gradient: 0.03363053426960683
+Norm of gradient: 0.033630534269606174
 Iterations before filter: 10
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   3.3593|  44.3660|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.9330
-Norm of gradient: 0.035947666880562244
+Norm of gradient: 0.03594766688064722
 Iterations before filter: 20
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   1.6825|  26.6090|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  20.4340
-Norm of gradient: 0.019569191810257916
+Norm of gradient: 0.019569191810177976
 Iterations before filter: 30
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.9598|  18.2610|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  23.1350
-Norm of gradient: 0.011461364155837591
+Norm of gradient: 0.011461364156154737
 Iterations before filter: 40
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.5382|  14.2669|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.8571
-Norm of gradient: 0.005058645719565329
+Norm of gradient: 0.005058645720035598
 Iterations before filter: 50
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.5519|  11.2071|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  27.7493
-Norm of gradient: 0.009133848672693273
+Norm of gradient: 0.0091338486729616
 Iterations before filter: 60
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.5063|   9.0763|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.5937
-Norm of gradient: 0.004085182613747136
+Norm of gradient: 0.0040851826132652525
 Iterations before filter: 70
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.3574|   7.4804|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.4240
-Norm of gradient: 0.010016895690967385
+Norm of gradient: 0.01001689566810441
 Iterations before filter: 80
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.2502|   7.4561|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.4265
-Norm of gradient: 0.0009764931656690218
+Norm of gradient: 0.0009764931619411334
 Iterations before filter: 90
 Applying low pass filter to wind field...
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |6575.6187|   6.1340|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   8.7456
-Norm of gradient: 0.7462737969266906
+Norm of gradient: 0.7462737969223461
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |5966.0414|   6.4019|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   8.6014
-Norm of gradient: 0.6983294931215154
+Norm of gradient: 0.6983294931210545
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 | 396.1297|  84.0446|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.6213
-Norm of gradient: 0.2022252081918587
+Norm of gradient: 0.20222520819242115
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 | 210.3138|  87.8755|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.6785
-Norm of gradient: 0.12040101890728035
+Norm of gradient: 0.12040101890761887
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  46.4198|  87.9840|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.2879
-Norm of gradient: 0.08702823438943683
+Norm of gradient: 0.08702823439024826
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  47.4066|  74.8731|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3296
-Norm of gradient: 0.16339641701375401
+Norm of gradient: 0.16339641701500093
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  13.2350|  73.1213|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3530
-Norm of gradient: 0.03300072469292083
+Norm of gradient: 0.03300072469301765
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   8.7393|  68.0998|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3983
-Norm of gradient: 0.019193000300041986
+Norm of gradient: 0.01919300030010698
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   6.1531|  54.8219|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.6947
-Norm of gradient: 0.02841650585274795
+Norm of gradient: 0.02841650585299242
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   5.4481|  44.6685|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.4289
-Norm of gradient: 0.019417630224822097
+Norm of gradient: 0.019417630225047992
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  16.3036|  33.2967|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.2565
-Norm of gradient: 0.07539028471910918
+Norm of gradient: 0.0753902847196362
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   6.9822|  36.7060|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.3551
-Norm of gradient: 0.047784363384539105
+Norm of gradient: 0.04778436338487209
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 163.0
-/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:396: RuntimeWarning: invalid value encountered in less
-  w_filled = np.ma.masked_where(w[level, :, :] &lt; np.min(w_vel_contours),
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1508: UserWarning: linewidths is ignored by contourf
+Done! Time = 160.5
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1562: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
+  result = self._pcolormesh_patched(*args, **kwargs)
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1509: UserWarning: linewidths is ignored by contourf
   result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:403: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:404: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_over(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/streamline_plot.py:405: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1479: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:1478: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/cartopy/mpl/geoaxes.py:1479: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
 </pre></div>
 </div>
@@ -338,7 +356,7 @@ Done! Time = 163.0
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  32.110 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  34.000 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-fun-with-constraints-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/564db4ff92b5949f5865201b6023e7a2/plot_fun_with_constraints.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fun_with_constraints.py</span></code></a></p>
@@ -406,7 +424,7 @@ Done! Time = 163.0
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
     </div>
   </body>
 </html>

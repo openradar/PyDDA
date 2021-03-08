@@ -1,4 +1,4 @@
-pydda.vis.plot\_horiz\_xsection\_quiver\_map
+﻿pydda.vis.plot\_horiz\_xsection\_quiver\_map
 ============================================
 
 .. currentmodule:: pydda.vis

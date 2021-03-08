@@ -1,4 +1,4 @@
-pydda.vis.plot\_horiz\_xsection\_barbs
+﻿pydda.vis.plot\_horiz\_xsection\_barbs
 ======================================
 
 .. currentmodule:: pydda.vis

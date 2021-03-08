@@ -1,4 +1,4 @@
-pydda.vis.plot\_xz\_xsection\_streamlines
+﻿pydda.vis.plot\_xz\_xsection\_streamlines
 =========================================
 
 .. currentmodule:: pydda.vis

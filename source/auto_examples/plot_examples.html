@@ -4,20 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Example on retrieving and plotting winds &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
     
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script async="async" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -52,7 +51,8 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-examples-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-examples-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="example-on-retrieving-and-plotting-winds">
 <span id="sphx-glr-source-auto-examples-plot-examples-py"></span><h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Permalink to this headline">¶</a></h1>
@@ -68,10 +68,10 @@ using PyDDA.</p>
 </li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
+/home/travis/miniconda3/envs/testenv/lib/python3.6/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
 /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -85,103 +85,121 @@ rmsVR = 6.776753068494562
 Total points: 92092
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  22.8704| 179.9488|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.2900
-Norm of gradient: 0.06044649418953585
+Norm of gradient: 0.060446494189537625
 Iterations before filter: 10
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   3.8770|  66.1782|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  23.7764
-Norm of gradient: 0.023820509033272628
+Norm of gradient: 0.023820509033214428
 Iterations before filter: 20
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   4.0276|  37.8407|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.6265
-Norm of gradient: 0.027429368747421107
+Norm of gradient: 0.027429368747654684
 Iterations before filter: 30
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.8632|  28.6443|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.5863
-Norm of gradient: 0.006865328325901467
+Norm of gradient: 0.006865328325949884
 Iterations before filter: 40
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   1.6287|  20.6755|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  28.3852
-Norm of gradient: 0.027985401346624836
+Norm of gradient: 0.0279854013478352
 Iterations before filter: 50
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.4844|  17.9732|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0275
-Norm of gradient: 0.008561077885792502
+Norm of gradient: 0.008561077885522225
 Iterations before filter: 60
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.9036|  14.7182|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.7302
-Norm of gradient: 0.011555466540298357
+Norm of gradient: 0.011555466542872561
 Iterations before filter: 70
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.3991|  13.8528|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.3445
-Norm of gradient: 0.007752253200000249
+Norm of gradient: 0.007752253200804361
 Iterations before filter: 80
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.2828|  13.3721|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.4677
-Norm of gradient: 0.006272750311503059
+Norm of gradient: 0.006272750311994563
 Iterations before filter: 90
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.3071|  12.9929|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.6440
-Norm of gradient: 0.007580047915590302
+Norm of gradient: 0.007580047912664911
 Iterations before filter: 100
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.2213|  12.9835|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.6650
-Norm of gradient: 0.003418463982556818
+Norm of gradient: 0.0034184639826770552
 Iterations before filter: 110
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   0.2190|  12.9830|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.6806
-Norm of gradient: 0.003456007238178948
+Norm of gradient: 0.003456007238298844
 Iterations before filter: 120
 Applying low pass filter to wind field...
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |8422.4335|  12.0983|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6063
-Norm of gradient: 0.9741646711484581
+Norm of gradient: 0.9741646711485761
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |7628.5526|  12.4358|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6030
-Norm of gradient: 0.9310921736846711
+Norm of gradient: 0.9310921736847843
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 | 490.5090| 108.3447|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  17.6784
-Norm of gradient: 0.23690207200093283
+Norm of gradient: 0.2369020720008402
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 | 259.5934| 112.2486|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.0080
-Norm of gradient: 0.14310943926380804
+Norm of gradient: 0.14310943926375086
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  54.4155| 108.6827|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.8995
-Norm of gradient: 0.07850369417513638
+Norm of gradient: 0.07850369417512892
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  61.2455|  91.8403|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.6986
-Norm of gradient: 0.15163149513705068
+Norm of gradient: 0.15163149513687246
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  15.9171|  90.1737|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.7273
-Norm of gradient: 0.03769162288445527
+Norm of gradient: 0.03769162288445115
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  10.2210|  83.9800|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.6419
-Norm of gradient: 0.022538507392030963
+Norm of gradient: 0.02253850739202639
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   7.0490|  67.8050|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.3215
-Norm of gradient: 0.02463963063424351
+Norm of gradient: 0.0246396306342528
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |   6.1411|  55.8056|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.9899
-Norm of gradient: 0.01991033928197688
+Norm of gradient: 0.019910339281986288
 | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
 |  17.3015|  42.6305|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.8585
-Norm of gradient: 0.06736427648606146
+Norm of gradient: 0.06736427648598432
 Iterations after filter: 1
 Iterations after filter: 2
-Done! Time = 464.0
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:173: UserWarning: linewidths is ignored by contourf
-  cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+Done! Time = 427.0
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:132: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
+  vmax=vmax)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
+  alpha=contour_alpha)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:177: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:178: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:212: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  ax.contour(
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+  levels=[bca_min, bca_max], color=&#39;k&#39;)
 /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
   theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:212: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  ax.contour(
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:635: UserWarning: linewidths is ignored by contourf
-  cs = ax.contourf(grid_x[::, level, ::], grid_h[::, level, ::],
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:823: UserWarning: linewidths is ignored by contourf
-  cs = plt.contourf(grid_y[::, ::, level], grid_h[::, ::, level],
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+  levels=[bca_min, bca_max], color=&#39;k&#39;)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:594: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
+  vmax=vmax)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:637: UserWarning: linewidths is ignored by contourf
+  alpha=contour_alpha)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:639: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:640: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:782: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
+  vmax=vmax)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:825: UserWarning: linewidths is ignored by contourf
+  alpha=contour_alpha)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:827: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
+/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:828: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 </pre></div>
 </div>
 <div class="line-block">
@@ -238,7 +256,7 @@ Done! Time = 464.0
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  45.881 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  8.828 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
@@ -306,7 +324,7 @@ Done! Time = 464.0
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.1.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
     </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-pydda.cost\_functions.calculate\_vertical\_vorticity\_cost
+﻿pydda.cost\_functions.calculate\_vertical\_vorticity\_cost
 ==========================================================
 
 .. currentmodule:: pydda.cost_functions

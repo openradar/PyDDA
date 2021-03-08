@@ -1,4 +1,4 @@
-pydda.cost\_functions.J\_function
+﻿pydda.cost\_functions.J\_function
 =================================
 
 .. currentmodule:: pydda.cost_functions
