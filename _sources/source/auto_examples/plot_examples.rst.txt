@@ -58,10 +58,10 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /home/travis/miniconda3/envs/testenv/lib/python3.8/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
+    /home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     /home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -157,35 +157,35 @@ Author: Robert C. Jackson
     Norm of gradient: 0.06736427648598432
     Iterations after filter: 1
     Iterations after filter: 2
-    Done! Time = 438.3
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:130: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
-      the_mesh = ax.pcolormesh(grid_x[level, :, :], grid_y[level, :, :],
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:173: UserWarning: linewidths is ignored by contourf
-      cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
+    Done! Time = 450.1
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:132: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+      vmax=vmax)
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
+      alpha=contour_alpha)
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:177: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap("viridis"))
       cs.cmap.set_under(color='white', alpha=0)
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:178: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap("viridis"))
       cs.cmap.set_bad(color='white', alpha=0)
     /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:212: UserWarning: The following kwargs were not used by contour: 'color'
-      ax.contour(
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: 'color'
+      levels=[bca_min, bca_max], color='k')
     /home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
       theta_2 = np.arccos((x-rad2[1])/b)
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:212: UserWarning: The following kwargs were not used by contour: 'color'
-      ax.contour(
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:592: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
-      the_mesh = ax.pcolormesh(grid_x[:, level, :], grid_h[:, level, :],
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:635: UserWarning: linewidths is ignored by contourf
-      cs = ax.contourf(grid_x[::, level, ::], grid_h[::, level, ::],
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: 'color'
+      levels=[bca_min, bca_max], color='k')
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:594: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+      vmax=vmax)
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:637: UserWarning: linewidths is ignored by contourf
+      alpha=contour_alpha)
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:639: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap("viridis"))
       cs.cmap.set_under(color='white', alpha=0)
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:640: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap("viridis"))
       cs.cmap.set_bad(color='white', alpha=0)
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:780: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
-      the_mesh = ax.pcolormesh(grid_y[::, ::, level], grid_h[::, ::, level],
-    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:823: UserWarning: linewidths is ignored by contourf
-      cs = plt.contourf(grid_y[::, ::, level], grid_h[::, ::, level],
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:782: MatplotlibDeprecationWarning: shading='flat' when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading='auto', 'nearest' or 'gouraud', or set rcParams['pcolor.shading'].  This will become an error two minor releases later.
+      vmax=vmax)
+    /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:825: UserWarning: linewidths is ignored by contourf
+      alpha=contour_alpha)
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:827: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap("viridis"))
       cs.cmap.set_under(color='white', alpha=0)
     /home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:828: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap("viridis"))
@@ -254,7 +254,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 7 minutes  19.988 seconds)
+   **Total running time of the script:** ( 7 minutes  31.858 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
