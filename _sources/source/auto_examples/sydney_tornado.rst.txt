@@ -18,7 +18,6 @@
 .. _sphx_glr_source_auto_examples_sydney_tornado.py:
 
 
-
 Example of a wind retrieval in a tornado over Sydney
 ----------------------------------------------------
 
@@ -28,7 +27,6 @@ Grided netCDF files are downloadable from:
 https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. image:: ../../sydney_tornado.png
-
 
 .. GENERATED FROM PYTHON SOURCE LINES 14-44
 
