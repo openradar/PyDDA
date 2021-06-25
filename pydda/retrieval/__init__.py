@@ -18,9 +18,11 @@ how to call these functions.
     get_dd_wind_field
     get_dd_wind_field_nested
     get_bca
-
+    get_storm_motion
+    translation_cost_function
 """
 
 from .wind_retrieve import get_dd_wind_field
 from .wind_retrieve import get_bca
 from .nesting import get_dd_wind_field_nested
+from .advection import translation_cost_function, get_storm_motion
