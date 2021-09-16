@@ -489,14 +489,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
                     parameters.model_weights[i] = weights_model[i]
     else:
         if weights_obs is None:
-            parameters.weights[0] = tf.constant(
-                    np.where(np.isfinite(parameters.vrs[0]), 1, 0))
+            parameters.weights[0] = np.where(np.isfinite(parameters.vrs[0]), 1, 0)
         else:
             parameters.weights[0] = weights_obs[0]
 
         if weights_bg is None:
-            parameters.bg_weights = tf.constant(
-                    np.where(np.isfinite(parameters.vrs[0]), 0, 1))
+            parameters.bg_weights = np.where(np.isfinite(parameters.vrs[0]), 0, 1)
         else:
             parameters.bg_weights = weights_bg
 
