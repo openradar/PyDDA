@@ -521,7 +521,7 @@ def _tf_gradient(x, dx, axis):
         fd = tf.experimental.numpy.diff(
             tf.concat([x, tf.expand_dims(x[-1, :, :], 0)], axis=0), axis=0) / dx
         bd = tf.experimental.numpy.diff(
-                tf.concat([tf.expand_dims(x[0, :, :], 0), x], axis=0), axis=0) / dx
+            tf.concat([tf.expand_dims(x[0, :, :], 0), x], axis=0), axis=0) / dx
     elif axis == 1:
         fd = tf.experimental.numpy.diff(
             tf.concat([x, tf.expand_dims(x[:, -1, :], 1)], axis=1), axis=1) / dx
@@ -580,9 +580,9 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     """
     #Jax version of the cost function
     rho = tf.math.exp(-z / 10000.0)
-    dudx = _tf_gradient(rho*u, dx, axis=2)
-    dvdy = _tf_gradient(rho*v, dy, axis=1)
-    dwdz = _tf_gradient(rho*w, dz, axis=0)
+    dudx = _tf_gradient(u, dx, axis=2)
+    dvdy = _tf_gradient(v, dy, axis=1)
+    dwdz = _tf_gradient(w, dz, axis=0)
 
     if(anel == 1):
         drho_dz = _tf_gradient(rho, dz, axis=0)
@@ -741,7 +741,8 @@ def calculate_background_cost(u, v, weights, u_back, v_back, Cb=0.01):
     cost = tf.constant(0., dtype=tf.float32)
 
     for i in range(the_shape[0]):
-        cost += tf.math.reduce_sum(Cb * tf.math.square(u[i] - u_back[i]) * weights[i] + \
+        cost += tf.math.reduce_sum(
+                Cb * tf.math.square(u[i] - u_back[i])* weights[i] + \
                            tf.math.square(v[i] - v_back[i]) * weights[i])
     return cost
 

@@ -155,14 +155,14 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
                       refl_field=None, u_back=None, v_back=None, z_back=None,
                       frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
                       Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Cmod=0.0, Cpoint=0.0,
-                      Ut=None, Vt=None, filt_iterations=2,
+                      Ut=None, Vt=None, filter_winds=True,
                       mask_outside_opt=False, weights_obs=None,
                       weights_model=None, weights_bg=None,
                       max_iterations=200, mask_w_outside_opt=True,
-                      filter_window=9, filter_order=3, min_bca=30.0,
+                      filter_window=5, filter_order=3, min_bca=30.0,
                       max_bca=150.0, upper_bc=True, model_fields=None,
                       output_cost_functions=True, roi=1000.0,
-                      parallel_iterations=1):
+                      parallel_iterations=1, wind_tol=0.1):
     """
     This function takes in a list of Py-ART Grid objects and derives a
     wind field. Every Py-ART Grid in Grids must have the same grid
@@ -245,9 +245,9 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
     Vt: float
         Prescribed storm motion in meridional direction.
         This is only needed if Cv is not zero.
-    filt_iterations: int
-        If this is greater than 0, PyDDA will run a low pass filter on
-        the retrieved wind field. Set to 0 to disable the low pass filter.
+    filter_winds: bool
+        If this is True, PyDDA will run a low pass filter on
+        the retrieved wind field. Set to False to disable the low pass filter.
     mask_outside_opt: bool
         If set to true, wind values outside the multiple doppler lobes will
         be masked, i.e. if less than 2 radars provide coverage for a given
@@ -291,7 +291,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
         not hold any weight outside this radius.
     parallel_iterations: int
         The number of iterations to run in parallel in the optimization loop.
-
+    wind_tol: float
+        Stop iterations after maximum change in winds is less than this value.
     Returns
     =======
     new_grid_list: list
@@ -343,12 +344,14 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
         print('Interpolating sounding to radar grid')
         u_interp = interp1d(z_back, u_back, bounds_error=False)
         v_interp = interp1d(z_back, v_back, bounds_error=False)
-        parameters.u_back = tf.constant(u_interp(Grids[0].z['data']))
-        parameters.v_back = tf.constant(v_interp(Grids[0].z['data']))
+        parameters.u_back = tf.constant(
+            u_interp(Grids[0].z['data'].filled(np.nan)), dtype=tf.float32)
+        parameters.v_back = tf.constant(
+            v_interp(Grids[0].z['data'].filled(np.nan)), dtype=tf.float32)
         print('Interpolated U field:')
-        print(parameters["u_back"])
+        print(parameters.u_back)
         print('Interpolated V field:')
-        print(parameters["v_back"])
+        print(parameters.v_back)
         print('Grid levels:')
         print(Grids[0].z['data'])
 
@@ -510,9 +513,9 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
             dtype=tf.float32)
     parameters.weights[~np.isfinite(parameters.weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
-    parameters.weights = tf.constant(parameters.weights)
+    parameters.weights = tf.constant(parameters.weights, dtype=tf.float32)
     parameters.bg_weights[parameters.bg_weights > 0] = 1
-    parameters.bg_weights = tf.constant(parameters.bg_weights)
+    parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float32)
     sum_Vr = tf.experimental.numpy.nansum(
             tf.square(parameters.vrs * parameters.weights))
     parameters.rmsVr = np.sqrt(
@@ -567,73 +570,12 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
-    """
-    #Used to test the optimizer and its parameters
-    wprevmax = wcurrmax
-    parameters.print_out = False
-    winds = fmin_l_bfgs_b(J_function, winds, args=(parameters,),
-                              maxiter = 1, pgtol=1e-2, bounds=bounds, 
-                              fprime=grad_J, disp=0, iprint=-1)
-    #Additional code for debugging
-    #winds = {0:winds,2:""}
-    print("This prints the dictionary (apples) object for the optimizer:", winds[2])
-   
-    
-    parameters.print_out = True
-    if output_cost_functions is True:
-        J_function(winds[0], parameters)
-        grad_J(winds[0], parameters)
-    winds = np.reshape(
-            winds[0], (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
-    iterations = iterations+10
-    print('Iterations before filter: ' + str(iterations))
-    wcurrmax = winds[2].max()
-    winds = np.stack([winds[0], winds[1], winds[2]])
-    winds = winds.flatten()
-
-    """
-    #For the callback function in the optimizer
-    #This was used to create the animations 
-    '''
-    u_field = deepcopy(Grids[0].fields[vel_name])
-    u_field['standard_name'] = 'u_wind'
-    u_field['long_name'] = 'meridional component of wind velocity'
-    u_field['min_bca'] = min_bca
-    u_field['max_bca'] = max_bca
-    v_field = deepcopy(Grids[0].fields[vel_name])
-    v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity'
-    v_field['min_bca'] = min_bca
-    v_field['max_bca'] = max_bca
-    w_field = deepcopy(Grids[0].fields[vel_name])
-    w_field['standard_name'] = 'w_wind'
-    w_field['long_name'] = 'vertical component of wind velocity'
-    w_field['min_bca'] = min_bca
-    w_field['max_bca'] = max_bca
-    write_opt_grids = deepcopy(Grids[0])
-    '''
-    #Function that helps store the optimization picture for the animation
-    #Used to put into the callback parameter
-    '''
-    def write_time_step(winds):
-        global i
-        the_winds = np.reshape(
-        winds, (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
-        u_field['data'] = the_winds[0]
-        v_field['data'] = the_winds[1]
-        w_field['data'] = the_winds[2]
-        write_opt_grids.add_field('u', u_field, replace_existing=True)
-        write_opt_grids.add_field('v', v_field, replace_existing=True)
-        write_opt_grids.add_field('w', w_field, replace_existing=True)
-        pyart.io.write_grid('Animation/O_animation_%d.nc' %i,write_opt_grids)
-        i = i + 1  
-    '''
     loss_and_gradient = lambda x: (J_function(x, parameters), grad_J(x, parameters))
 
     winds = tfp.optimizer.lbfgs_minimize(
             loss_and_gradient, initial_position=winds,
-            tolerance=1e-3, x_tolerance=0.01,
-            max_iterations=200, parallel_iterations=parallel_iterations)
+            tolerance=1e-8, x_tolerance=wind_tol,
+            max_iterations=1000, parallel_iterations=parallel_iterations)
     print(winds)
     winds = np.reshape(
         winds.position.numpy(), (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
@@ -644,7 +586,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, points=None, vel_name=None,
     winds = winds.flatten()
     #"""
 
-    if filt_iterations > 0:
+    if filter_winds:
         print('Applying low pass filter to wind field...')
         winds = np.asarray(winds)
         winds = np.reshape(winds, 
