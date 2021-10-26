@@ -33,7 +33,7 @@ jobs:
             name: Set up anaconda env
             command: |
                 conda create -f $HOME/continuous_integration/environment-3.8.yml
-                conda activate pydda_env
+                conda activate testenv
       - run:
             name: Run tests
             # This assumes pytest is installed via the install-package step above
