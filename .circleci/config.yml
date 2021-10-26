@@ -29,15 +29,15 @@ jobs:
     # CircleCI will report the results back to your VCS provider.
     steps:
       - checkout
-    run:
-        name: Set up anaconda env
-        command: |
-            conda create -f $HOME/continuous_integration/environment-3.8.yml
-            conda activate pydda_env
-    run:
-        name: Run tests
-        # This assumes pytest is installed via the install-package step above
-        command: pytest
+      - run:
+            name: Set up anaconda env
+            command: |
+                conda create -f $HOME/continuous_integration/environment-3.8.yml
+                conda activate pydda_env
+      - run:
+            name: Run tests
+            # This assumes pytest is installed via the install-package step above
+            command: pytest
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
