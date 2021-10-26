@@ -77,18 +77,18 @@ procedures in Python, they then need to be added to
 """
 
 
-from .cost_functions import calculate_radial_vel_cost_function
-from .cost_functions import calculate_fall_speed
-from .cost_functions import calculate_grad_radial_vel
-from .cost_functions import calculate_mass_continuity
-from .cost_functions import calculate_mass_continuity_gradient
-from .cost_functions import calculate_smoothness_cost
-from .cost_functions import calculate_smoothness_gradient
-from .cost_functions import calculate_background_gradient
-from .cost_functions import calculate_background_cost
-from .cost_functions import calculate_vertical_vorticity_cost
-from .cost_functions import calculate_vertical_vorticity_gradient
-from .cost_functions import calculate_model_cost
-from .cost_functions import calculate_model_gradient
-from .cost_functions import calculate_point_cost, calculate_point_gradient
+from ._cost_functions_numpy import calculate_radial_vel_cost_function
+from ._cost_functions_numpy import calculate_fall_speed
+from ._cost_functions_numpy import calculate_grad_radial_vel
+from ._cost_functions_numpy import calculate_mass_continuity
+from ._cost_functions_numpy import calculate_mass_continuity_gradient
+from ._cost_functions_numpy import calculate_smoothness_cost
+from ._cost_functions_numpy import calculate_smoothness_gradient
+from ._cost_functions_numpy import calculate_background_gradient
+from ._cost_functions_numpy import calculate_background_cost
+from ._cost_functions_numpy import calculate_vertical_vorticity_cost
+from ._cost_functions_numpy import calculate_vertical_vorticity_gradient
+from ._cost_functions_numpy import calculate_model_cost
+from ._cost_functions_numpy import calculate_model_gradient
+from ._cost_functions_numpy import calculate_point_cost, calculate_point_gradient
 from .cost_functions import J_function, grad_J

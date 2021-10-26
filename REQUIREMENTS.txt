@@ -1,10 +1,8 @@
 arm_pyart
 numpy
 scipy
-cartopy
 wheels
 pandas
 dask
 six
-tensorflow==2.5
-tensorflow-probability
+
