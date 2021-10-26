@@ -1,6 +1,6 @@
-arm_pyart
 numpy
 scipy
+arm_pyart
 cartopy
 wheels
 pandas
