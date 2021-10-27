@@ -10,6 +10,18 @@ import pydda
 import pyart
 import numpy as np
 
+try:
+    import tensorflow as tf
+    TF_AVAILABLE = True
+except ImportError:
+    TF_AVAILABLE = False
+
+try:
+    import jax
+    JAX_AVAILABLE = True
+except ImportError:
+    JAX_AVAILABLE = False
+
 from distributed import Client, LocalCluster
 from copy import deepcopy
 
@@ -56,13 +68,13 @@ def test_twpice_case():
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
     u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
-        Grid0, sounding[1], vel_field='corrected_velocity')
+        Grid1, sounding[1], vel_field='corrected_velocity')
 
     Grids = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity',
         refl_field='reflectivity', frz=5000.0,
-        filt_iterations=0, mask_outside_opt=True, upper_bc=1)
+        mask_outside_opt=True, upper_bc=1)
 
     # In this test grid, we expect the mean flow to be to the southeast
     # Maximum updrafts should be at least 10 m/s
@@ -74,28 +86,39 @@ def test_twpice_case():
     assert v_mean < 0
     assert w_max > 10
 
-    # Now we will test the nesting. Do the same retrieval, and make sure
-    # that we get the same result within a prescribed tolerance
-    cluster = LocalCluster(n_workers=2, processes=True)
-    client = Client(cluster)
-    Grids2 = pydda.retrieval.get_dd_wind_field_nested(
-        [Grid0, Grid1], u_init, v_init, w_init, client, Co=100, Cm=1500.0,
+    if JAX_AVAILABLE:
+        Grids = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity',
-        refl_field='reflectivity', frz=5000.0,
-        filt_iterations=0, mask_outside_opt=True, upper_bc=1)
+        refl_field='reflectivity', frz=5000.0, engine="jax",
+        mask_outside_opt=True, upper_bc=1)
 
-    # Make sure features are correlated between both versions. No reason
-    # to expect the same answer, but features should be correlated
-    # Nesting tends to make the updrafts a bit better resolved, so expect
-    # less of an outright correlation (but still strong)
-    assert np.corrcoef(Grids2[0].fields["u"]["data"].flatten(),
-                       Grids[0].fields["u"]["data"].flatten())[0, 1] > 0.9
-    assert np.corrcoef(Grids2[0].fields["v"]["data"].flatten(),
-                       Grids[0].fields["v"]["data"].flatten())[0, 1] > 0.9
-    assert np.corrcoef(Grids2[0].fields["w"]["data"].flatten(),
-                       Grids[0].fields["w"]["data"].flatten())[0, 1] > 0.5
-    cluster.close()
-    client.close()
+        # In this test grid, we expect the mean flow to be to the southeast
+        # Maximum updrafts should be at least 10 m/s
+        u_mean = np.nanmean(Grids[0].fields['u']['data'])
+        v_mean = np.nanmean(Grids[0].fields['v']['data'])
+        w_max = np.max(Grids[0].fields['v']['data'])
+
+        assert u_mean > 0
+        assert v_mean < 0
+        assert w_max > 10
+
+    if TF_AVAILABLE:
+        Grids = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
+        Cz=0, Cmod=0.0, vel_name='corrected_velocity',
+        refl_field='reflectivity', frz=5000.0, engine="tensorflow",
+        mask_outside_opt=True, upper_bc=1)
+
+        # In this test grid, we expect the mean flow to be to the southeast
+        # Maximum updrafts should be at least 10 m/s
+        u_mean = np.nanmean(Grids[0].fields['u']['data'])
+        v_mean = np.nanmean(Grids[0].fields['v']['data'])
+        w_max = np.max(Grids[0].fields['v']['data'])
+
+        assert u_mean > 0
+        assert v_mean < 0
+        assert w_max > 10
 
 
 def test_smoothing():
@@ -115,7 +138,7 @@ def test_smoothing():
     w = np.zeros((20, 40, 40))
     new_grids = pydda.retrieval.get_dd_wind_field(
         [Grid], u, v, w, Co=0.0, Cx=1e-4, Cy=1e-4, Cm=0.0, Cmod=0.0,
-        mask_outside_opt=False, filt_iterations=0, vel_name='one_field',
+        mask_outside_opt=False, vel_name='one_field',
         refl_field='one_field')
     new_u = new_grids[0].fields['u']['data']
     new_v = new_grids[0].fields['v']['data']
@@ -126,7 +149,6 @@ def test_smoothing():
                                                   Cx=1e-2, Cy=1e-2, Cm=0.0,
                                                   Cmod=0.0,
                                                   mask_outside_opt=False,
-                                                  filt_iterations=0,
                                                   vel_name='one_field',
                                                   refl_field='one_field')
     new_u2 = new_grids[0].fields['u']['data']
@@ -158,7 +180,7 @@ def test_model_constraint():
 
     new_grids = pydda.retrieval.get_dd_wind_field(
         [Grid0], u_init, v_init, w_init, Co=0.0, Cx=0.0, Cy=0.0, Cm=0.0,
-        Cmod=1.0, mask_outside_opt=False, filt_iterations=0,
+        Cmod=1.0, mask_outside_opt=False,
         vel_name='corrected_velocity', refl_field='reflectivity',
         model_fields=['fakemodel'])
 

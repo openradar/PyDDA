@@ -31,8 +31,10 @@ except ImportError:
 from ..cost_functions import J_function, grad_J, calculate_fall_speed
 from copy import deepcopy
 from .angles import add_azimuth_as_field, add_elevation_as_field
-_wprevmax = 0.0
-_wcurrmax = 0.0
+_wprevmax = np.empty(0)
+_wcurrmax = np.empty(0)
+iterations = 0
+
 
 class DDParameters(object):
     """
@@ -172,11 +174,15 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                              Ut=None, Vt=None, low_pass_filter=True,
                              mask_outside_opt=False, weights_obs=None,
                              weights_model=None, weights_bg=None,
-                             max_iterations=200, mask_w_outside_opt=True,
+                             max_iterations=1000, mask_w_outside_opt=True,
                              filter_window=5, filter_order=3, min_bca=30.0,
                              max_bca=150.0, upper_bc=True, model_fields=None,
                              output_cost_functions=True, roi=1000.0,
                              wind_tol=0.1):
+    global _wcurrmax
+    global _wprevmax
+    global iterations
+
     # We have to have a prescribed storm motion for vorticity constraint
     if (Ut is None or Vt is None):
         if (Cv != 0.0):
@@ -261,12 +267,16 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
     sum_Vr = np.zeros(len(Grids))
 
     for i in range(len(Grids)):
-        parameters.wts.append(calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz))
+        parameters.wts.append(np.ma.masked_invalid(
+            calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz)))
         add_azimuth_as_field(Grids[i], dz_name=refl_field)
         add_elevation_as_field(Grids[i], dz_name=refl_field)
-        parameters.vrs.append(Grids[i].fields[vel_name]['data'])
-        parameters.azs.append(Grids[i].fields['AZ']['data'] * np.pi / 180)
-        parameters.els.append(Grids[i].fields['EL']['data'] * np.pi / 180)
+        parameters.vrs.append(np.ma.masked_invalid(
+            Grids[i].fields[vel_name]['data']))
+        parameters.azs.append(np.ma.masked_invalid(
+            Grids[i].fields['AZ']['data'] * np.pi / 180))
+        parameters.els.append(np.ma.masked_invalid(
+            Grids[i].fields['EL']['data'] * np.pi / 180))
 
     if (len(Grids) > 1):
         for i in range(len(Grids)):
@@ -283,33 +293,63 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
 
                 for k in range(parameters.vrs[i].shape[0]):
                     if (weights_obs is None):
+                        valid = np.logical_and.reduce((
+                            ~parameters.vrs[i][k].mask,
+                            ~parameters.wts[i][k].mask,
+                            ~parameters.azs[i][k].mask,
+                            ~parameters.els[i][k].mask))
+                        valid = np.logical_and.reduce((valid,
+                            np.isfinite(parameters.vrs[i][k]),
+                            np.isfinite(parameters.wts[i][k]),
+                            np.isfinite(parameters.azs[i][k]),
+                            np.isfinite(parameters.els[i][k])))
                         cur_array = parameters.weights[i, k]
                         cur_array[np.logical_and(
-                            ~parameters.vrs[i][k].mask,
-                            np.logical_and(
+                            valid, np.logical_and(
                                 bca[i, j] >= math.radians(min_bca),
                                 bca[i, j] <= math.radians(max_bca)))] += 1
+                        cur_array[~valid] = 0
                         parameters.weights[i, k] = cur_array
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
 
                     if (weights_obs is None):
+                        valid = np.logical_and.reduce((
+                            ~parameters.vrs[j][k].mask,
+                            ~parameters.wts[j][k].mask,
+                            ~parameters.azs[j][k].mask,
+                            ~parameters.els[j][k].mask))
+                        valid = np.logical_and.reduce((valid,
+                            np.isfinite(parameters.vrs[j][k]),
+                            np.isfinite(parameters.wts[j][k]),
+                            np.isfinite(parameters.azs[j][k]),
+                            np.isfinite(parameters.els[j][k])))
                         cur_array = parameters.weights[j, k]
                         cur_array[np.logical_and(
-                            ~parameters.vrs[j][k].mask,
-                            np.logical_and(
+                            valid, np.logical_and(
                                 bca[i, j] >= math.radians(min_bca),
                                 bca[i, j] <= math.radians(max_bca)))] += 1
+                        cur_array[~valid] = 0
                         parameters.weights[j, k] = cur_array
                     else:
                         parameters.weights[j, k] = weights_obs[j][k, :, :]
 
                     if (weights_bg is None):
+                        valid = np.logical_and.reduce((
+                            ~parameters.vrs[j][k].mask,
+                            ~parameters.wts[j][k].mask,
+                            ~parameters.azs[j][k].mask,
+                            ~parameters.els[j][k].mask))
+                        valid = np.logical_and.reduce((
+                            valid, np.isfinite(parameters.vrs[j][k]),
+                            np.isfinite(parameters.wts[j][k]),
+                            np.isfinite(parameters.azs[j][k]),
+                            np.isfinite(parameters.els[j][k])))
                         cur_array = parameters.bg_weights[k]
                         cur_array[np.logical_or(
                             bca[i, j] >= math.radians(min_bca),
                             bca[i, j] <= math.radians(max_bca))] = 1
-                        cur_array[parameters.vrs[i][k].mask] = 0
+                        cur_array[~valid] = 0
                         parameters.bg_weights[i] = cur_array
                     else:
                         parameters.bg_weights[i] = weights_bg[i]
@@ -339,6 +379,12 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
         else:
             parameters.bg_weights = weights_bg
 
+    parameters.vrs = [x.filled(-9999.) for x in parameters.vrs]
+    parameters.azs = [x.filled(-9999.) for x in parameters.azs]
+    parameters.els = [x.filled(-9999.) for x in parameters.els]
+    parameters.wts = [x.filled(-9999.) for x in parameters.wts]
+    parameters.weights[~np.isfinite(parameters.weights)] = 0
+    parameters.bg_weights[~np.isfinite(parameters.bg_weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     parameters.bg_weights[parameters.bg_weights > 0] = 1
     sum_Vr = np.nansum(np.square(parameters.vrs * parameters.weights))
@@ -390,26 +436,44 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
-
+    _wprevmax = np.zeros(parameters.grid_shape)
+    _wcurrmax = np.zeros(parameters.grid_shape)
+    iterations = 0
     def _vert_velocity_callback(x):
         global _wprevmax
         global _wcurrmax
+        global iterations
+        
+        if iterations % 10 > 0:
+            iterations = iterations + 1
+            return False
+         
         wind = np.reshape(
-            x, (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
-        _wcurrmax = wind[2].max()
-        if abs(_wprevmax - _wcurrmax) < wind_tol:
+            x, (3, parameters.grid_shape[0],
+                parameters.grid_shape[1],
+                parameters.grid_shape[2]))
+        _wcurrmax = wind[2]
+        if iterations == 0:
+            _wprevmax = _wcurrmax
+            iterations = iterations + 1
+            return False
+        delta = np.max(np.abs(_wprevmax - _wcurrmax))
+        if delta < wind_tol:
             return True
         _wprevmax = _wcurrmax
+        iterations = iterations + 1
+        print("Max change in w: %4.3f" % delta)
         return False
 
-    _wcurrmax = winds.max()
-    _wprevmax = _wcurrmax
     parameters.print_out = False
     winds = fmin_l_bfgs_b(J_function, winds, args=(parameters,),
-                          maxiter=1000, pgtol=1e-8, bounds=bounds,
-                          fprime=grad_J, disp=0, iprint=-1, callback=_vert_velocity_callback)
+                          maxiter=max_iterations, pgtol=1e-8, bounds=bounds,
+                          fprime=grad_J, disp=0, iprint=-1, 
+                          callback=_vert_velocity_callback)
     winds = np.reshape(
-        winds[0], (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
+        winds[0], 
+        (3, parameters.grid_shape[0], 
+            parameters.grid_shape[1], parameters.grid_shape[2]))
     parameters.print_out = True
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
@@ -492,11 +556,14 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                   Ut=None, Vt=None, low_pass_filter=True,
                                   mask_outside_opt=False, weights_obs=None,
                                   weights_model=None, weights_bg=None,
-                                  max_iterations=200, mask_w_outside_opt=True,
+                                  max_iterations=1000, mask_w_outside_opt=True,
                                   filter_window=5, filter_order=3, min_bca=30.0,
                                   max_bca=150.0, upper_bc=True, model_fields=None,
                                   output_cost_functions=True, roi=1000.0,
                                   parallel_iterations=1, wind_tol=0.1):
+    if not TENSORFLOW_AVAILABLE:
+        raise ImportError("Tensorflow >=2.5 and tensorflow-probability " + 
+                "need to be installed in order to use the tensorflow engine.")
     # We have to have a prescribed storm motion for vorticity constraint
     if (Ut is None or Vt is None):
         if (Cv != 0.0):
@@ -509,7 +576,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     parameters = DDParameters()
     parameters.Ut = Ut
     parameters.Vt = Vt
-
+    parameters.engine = "tensorflow"
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
     for g in Grids:
@@ -626,6 +693,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                                  np.logical_and(
                                                      bca[i, j] >= math.radians(min_bca),
                                                      bca[i, j] <= math.radians(max_bca)))] = 1
+                        cur_array[~valid] = 0
                         parameters.weights[i, k] = cur_array
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
@@ -646,6 +714,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                                  np.logical_and(
                                                      bca[i, j] >= math.radians(min_bca),
                                                      bca[i, j] <= math.radians(max_bca)))] = 1
+                        cur_array[~valid] = 0
                         parameters.weights[j, k] = cur_array
                     else:
                         parameters.weights[j, k] = weights_obs[j][k, :, :]
@@ -769,7 +838,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient, initial_position=winds,
         tolerance=1e-8, x_tolerance=wind_tol,
-        max_iterations=1000, parallel_iterations=parallel_iterations)
+        max_iterations=max_iterations, parallel_iterations=parallel_iterations)
     print(winds)
     winds = np.reshape(
         winds.position.numpy(), (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
@@ -1038,12 +1107,22 @@ def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
     rad2 = pyart.core.geographic_to_cartesian(rad2_lon, rad2_lat, projparams)
     # Create grid with Radar 1 in center
 
-    x = x-rad1[0]
-    y = y-rad1[1]
+    x = x - rad1[0]
+    y = y - rad1[1]
     rad2 = np.array(rad2) - np.array(rad1)
     a = np.sqrt(np.multiply(x, x) + np.multiply(y, y))
     b = np.sqrt(pow(x-rad2[0], 2) + pow(y-rad2[1], 2))
     c = np.sqrt(rad2[0]*rad2[0] + rad2[1]*rad2[1])
-    theta_1 = np.arccos(x/a)
-    theta_2 = np.arccos((x-rad2[1])/b)
-    return np.ma.masked_invalid(np.arccos((a*a+b*b-c*c)/(2*a*b)))
+    inp_array1 = x / a
+    inp_array1 = np.where(inp_array1 < -1, -1, inp_array1)
+    inp_array1 = np.where(inp_array1 > 1, 1, inp_array1)
+    theta_1 = np.arccos(inp_array1)
+    inp_array2 = (x - rad2[1]) / b
+    inp_array2 = np.where(inp_array2 < -1, -1, inp_array2)
+    inp_array2 = np.where(inp_array2 > 1, 1, inp_array2)
+    theta_2 = np.arccos(inp_array2)
+    inp_array3 = (a*a + b*b - c*c) / (2 * a *b)
+    inp_array3 = np.where(inp_array3 < -1, -1, inp_array3)
+    inp_array3 = np.where(inp_array3 > 1, 1, inp_array3)
+    
+    return np.ma.masked_invalid(np.arccos(inp_array3))

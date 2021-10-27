@@ -26,11 +26,11 @@ u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
 # Start the wind retrieval. This example only uses the mass continuity
 # and data weighting constraints.
 Grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], u_init,
-                                          v_init, w_init, Co=1.0, Cm=256.0,
+                                          v_init, w_init, Co=1.0, Cm=128.0,
                                           Cx=0.0, Cy=0., Cz=0.0, Cb=0., 
                                           frz=5000.0, filter_window=5,
                                           mask_outside_opt=True, upper_bc=1,
-                                          wind_tol=0.05, engine="jax")
+                                          wind_tol=0.1, engine="tensorflow")
 # Plot a horizontal cross section
 plt.figure(figsize=(9, 9))
 pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='reflectivity',
@@ -39,6 +39,7 @@ pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='reflectivity',
                                     barb_spacing_x_km=5.0,
                                     barb_spacing_y_km=15.0)
 plt.show()
+plt.savefig("Darwin_horiz.png")
 
 # Plot a vertical X-Z cross section
 plt.figure(figsize=(9, 9))
@@ -56,4 +57,4 @@ pydda.vis.plot_yz_xsection_barbs(Grids, background_field='reflectivity',
                                  w_vel_contours=[5, 10, 15],
                                  barb_spacing_y_km=10.0,
                                  barb_spacing_z_km=2.0)
-plt.show()
+plt.savefig('Darwin.png')
