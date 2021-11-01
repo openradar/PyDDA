@@ -9,7 +9,12 @@ import pyart
 
 from .. import retrieval
 from matplotlib.axes import Axes
-from cartopy.mpl.geoaxes import GeoAxes
+try:
+    from cartopy.mpl.geoaxes import GeoAxes
+    CARTOPY_AVAILABLE = True
+except ImportError:
+    CARTOPY_AVAILABLE = False
+
 GeoAxes._pcolormesh_patched = Axes.pcolormesh
 
 def plot_horiz_xsection_streamlines(Grids, ax=None,
@@ -297,6 +302,8 @@ def plot_horiz_xsection_streamlines_map(Grids, ax=None,
     ax: matplotlib axis
         Axis handle to output axis
     """
+    if not CARTOPY_AVAILABLE:
+        raise ModuleNotFoundError("Cartopy needs to be installed in order to use plotting module!")
 
     if(bg_grid_no > -1):
         grid_bg = Grids[bg_grid_no].fields[background_field]['data']

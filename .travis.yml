@@ -7,10 +7,6 @@ env:
    
 matrix:
     include:
-    - python: 3.6
-      env:
-        - PYTHON_VERSION="3.6"
-        - DOC_BUILD="true"
     - python: 3.7
       sudo: yes
       dist: xenial
@@ -21,8 +17,13 @@ matrix:
       sudo: yes
       dist: xenial
       env:
-        - PYTHON_VERSION="3.8"      
-install: 
+        - PYTHON_VERSION="3.8"
+    - python: 3.9
+      sudo: yes
+      dist: xenial
+      env:
+        - PYTHON_VERSION="3.9"      
+install:
     - source continuous_integration/install.sh
 script: 
     - eval xvfb-run pytest

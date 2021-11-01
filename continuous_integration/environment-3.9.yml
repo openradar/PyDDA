@@ -3,7 +3,8 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.5
+  - python=3.9
+  - pip
   - numpy
   - scipy
   - matplotlib
@@ -12,7 +13,12 @@ dependencies:
   - pytest-mpl
   - pytest-cov
   - cartopy
-  - arm_pyart
+  - cfgrib
   - eccodes
   - dask
   - distributed
+  - jax
+  - tensorflow==2.6
+  - tensorflow-probability
+  - pip:
+     - arm_pyart

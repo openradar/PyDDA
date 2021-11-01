@@ -5,7 +5,11 @@ import pydda
 import pyart
 import pytest
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
+try:
+    import cartopy.crs as ccrs
+    CARTOPY_AVAILABLE = True
+except:
+    CARTOPY_AVAILABLE = False
 
 
 @pytest.mark.mpl_image_compare(tolerance=50)
@@ -44,6 +48,7 @@ def test_plot_horiz_yz_xsection_barbs():
     return fig
 
 
+@pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_barbs_map():
     berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
@@ -68,7 +73,7 @@ def test_plot_horiz_xsection_streamlines():
     return fig
 
 
-
+@pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=60)
 def test_plot_horiz_xsection_streamlines_map():
     berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
@@ -120,6 +125,7 @@ def test_plot_horiz_xsection_quiver():
     return fig
 
 
+@pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_quiver_map():
     berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
