@@ -62,32 +62,6 @@ def test_make_updraft_from_convergence_field():
     assert np.ma.max(new_w > 3)
 
 
-def test_twpice_case():
-    """ Use a test case from TWP-ICE """
-    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
-    sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
-
-    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
-        Grid1, sounding[1], vel_field='corrected_velocity')
-
-    Grids = pydda.retrieval.get_dd_wind_field(
-        [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
-        Cz=0, Cmod=0.0, vel_name='corrected_velocity',
-        refl_field='reflectivity', frz=5000.0,
-        mask_outside_opt=True, upper_bc=1)
-
-    # In this test grid, we expect the mean flow to be to the southeast
-    # Maximum updrafts should be at least 10 m/s
-    u_mean = np.nanmean(Grids[0].fields['u']['data'])
-    v_mean = np.nanmean(Grids[0].fields['v']['data'])
-    w_max = np.max(Grids[0].fields['v']['data'])
-
-    assert u_mean > 0
-    assert v_mean < 0
-    assert w_max > 10
-
-
 @pytest.mark.skipif(~JAX_AVAILABLE)
 def test_twpice_case_jax():
     """ Use a test case from TWP-ICE """
@@ -100,6 +74,7 @@ def test_twpice_case_jax():
 
     Grids = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
+        wind_tol=0.1,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity',
         refl_field='reflectivity', frz=5000.0, engine="jax",
         mask_outside_opt=True, upper_bc=1)
@@ -126,7 +101,7 @@ def test_twpice_case_tensorflow():
         Grid1, sounding[1], vel_field='corrected_velocity')
     Grids = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
-        Cz=0, Cmod=0.0, vel_name='corrected_velocity',
+        Cz=0, Cmod=0.0, vel_name='corrected_velocity', wind_tol=0.1,
         refl_field='reflectivity', frz=5000.0, engine="tensorflow",
         mask_outside_opt=True, upper_bc=1)
 

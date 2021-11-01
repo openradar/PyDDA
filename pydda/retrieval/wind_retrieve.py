@@ -457,7 +457,9 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
             _wprevmax = _wcurrmax
             iterations = iterations + 1
             return False
-        delta = np.max(np.abs(_wprevmax - _wcurrmax))
+        diff = np.abs(_wprevmax - _wcurrmax)
+        diff = np.where(parameters.bg_weights == 0, diff, np.nan)
+        delta = np.nanmax(diff)
         if delta < wind_tol:
             return True
         _wprevmax = _wcurrmax
