@@ -30,7 +30,7 @@ Grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], u_init,
                                           Cx=0.0, Cy=0., Cz=0.0, Cb=0., 
                                           frz=5000.0, filter_window=5,
                                           mask_outside_opt=True, upper_bc=1,
-                                          wind_tol=0.1, engine="tensorflow")
+                                          wind_tol=0.1)
 # Plot a horizontal cross section
 plt.figure(figsize=(9, 9))
 pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='reflectivity',

@@ -16,7 +16,6 @@ how to call these functions.
     :toctree: generated/
 
     get_dd_wind_field
-    get_dd_wind_field_nested
     get_bca
     DDParameters
 

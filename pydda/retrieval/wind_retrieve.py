@@ -18,7 +18,7 @@ try:
     import tensorflow_probability as tfp
     import tensorflow as tf
     TENSORFLOW_AVAILABLE = True
-except ImportError:
+except (ImportError, AttributeError):
     TENSORFLOW_AVAILABLE = False
 
 try:
@@ -957,8 +957,9 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, engine="scipy", **kwargs):
         Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
         Using Tensorflow or Jax expands PyDDA's capabiability to take advantage of GPU-based systems.
         In addition, these two implementations use automatic differentation to calcualte the gradient
-        of the cost function in order to optimize the gradient calculation,
-
+        of the cost function in order to optimize the gradient calculation.
+        TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-basedengine.
+        The latest version of Jax is required for the Jax-based engine.
     points: None or list of dicts
         Point observations as returned by :func:`pydda.constraints.get_iem_obs`. Set
         to None to disable.
