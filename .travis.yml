@@ -24,7 +24,6 @@ matrix:
       env:
         - PYTHON_VERSION="3.9"      
 install:
-    - travis_wait 30 mvn install
     - source continuous_integration/install.sh
 script: 
     - eval xvfb-run pytest

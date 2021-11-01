@@ -86,39 +86,58 @@ def test_twpice_case():
     assert v_mean < 0
     assert w_max > 10
 
-    if JAX_AVAILABLE:
-        Grids = pydda.retrieval.get_dd_wind_field(
+
+@pytest.mark.skipif(~JAX_AVAILABLE)
+def test_twpice_case_jax():
+    """ Use a test case from TWP-ICE """
+    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
+
+    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
+        Grid1, sounding[1], vel_field='corrected_velocity')
+
+    Grids = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity',
         refl_field='reflectivity', frz=5000.0, engine="jax",
         mask_outside_opt=True, upper_bc=1)
 
-        # In this test grid, we expect the mean flow to be to the southeast
-        # Maximum updrafts should be at least 10 m/s
-        u_mean = np.nanmean(Grids[0].fields['u']['data'])
-        v_mean = np.nanmean(Grids[0].fields['v']['data'])
-        w_max = np.max(Grids[0].fields['v']['data'])
+    # In this test grid, we expect the mean flow to be to the southeast
+    # Maximum updrafts should be at least 10 m/s
+    u_mean = np.nanmean(Grids[0].fields['u']['data'])
+    v_mean = np.nanmean(Grids[0].fields['v']['data'])
+    w_max = np.max(Grids[0].fields['v']['data'])
 
-        assert u_mean > 0
-        assert v_mean < 0
-        assert w_max > 10
+    assert u_mean > 0
+    assert v_mean < 0
+    assert w_max > 10
 
-    if TF_AVAILABLE:
-        Grids = pydda.retrieval.get_dd_wind_field(
+
+@pytest.mark.skipif(~TF_AVAILABLE)
+def test_twpice_case_tensorflow():
+    """ Use a test case from TWP-ICE """
+    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
+
+    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
+        Grid1, sounding[1], vel_field='corrected_velocity')
+    Grids = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity',
         refl_field='reflectivity', frz=5000.0, engine="tensorflow",
         mask_outside_opt=True, upper_bc=1)
 
-        # In this test grid, we expect the mean flow to be to the southeast
-        # Maximum updrafts should be at least 10 m/s
-        u_mean = np.nanmean(Grids[0].fields['u']['data'])
-        v_mean = np.nanmean(Grids[0].fields['v']['data'])
-        w_max = np.max(Grids[0].fields['v']['data'])
+    # In this test grid, we expect the mean flow to be to the southeast
+    # Maximum updrafts should be at least 10 m/s
+    u_mean = np.nanmean(Grids[0].fields['u']['data'])
+    v_mean = np.nanmean(Grids[0].fields['v']['data'])
+    w_max = np.max(Grids[0].fields['v']['data'])
 
-        assert u_mean > 0
-        assert v_mean < 0
-        assert w_max > 10
+    assert u_mean > 0
+    assert v_mean < 0
+    assert w_max > 10
 
 
 def test_smoothing():
