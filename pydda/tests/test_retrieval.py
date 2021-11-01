@@ -8,6 +8,7 @@ Created on Thu Jul 26 11:35:43 2018
 
 import pydda
 import pyart
+import pytest
 import numpy as np
 
 try:
