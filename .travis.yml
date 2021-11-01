@@ -23,7 +23,8 @@ matrix:
       dist: xenial
       env:
         - PYTHON_VERSION="3.9"      
-install: 
+install:
+    - travis_wait 30 mvn install
     - source continuous_integration/install.sh
 script: 
     - eval xvfb-run pytest
