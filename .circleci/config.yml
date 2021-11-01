@@ -36,7 +36,7 @@ jobs:
                 chmod +x Miniconda3-py38_4.10.3-Linux-x86_64.sh
                 ./Miniconda3-py38_4.10.3-Linux-x86_64.sh -b -p $HOME/miniconda
                 export PATH="$HOME/miniconda/bin:$PATH"
-                conda create -f $HOME/continuous_integration/environment-3.8.yml
+                conda env create -f $HOME/continuous_integration/environment-3.8.yml
       - run:
             name: Run tests
             # This assumes pytest is installed via the install-package step above
