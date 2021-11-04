@@ -4,6 +4,7 @@ channels:
   - defaults
 dependencies:
   - python=3.8
+  - arm_pyart
   - numpy
   - scipy
   - matplotlib
@@ -19,5 +20,3 @@ dependencies:
   - jax
   - tensorflow==2.6
   - tensorflow-probability
-  - pip:
-     - arm_pyart

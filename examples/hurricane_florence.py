@@ -25,16 +25,16 @@ hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20180914/' +
             'hrrr.t06z.wrfprsf00.grib2')
 urllib.request.urlretrieve(hrrr_url, 'test.grib2')
 
-grid_mhx = pyart.io.read_grid(u'grid_mhx_5km.nc')
-grid_ltx = pyart.io.read_grid(u'grid_ltx_5km.nc')
+grid_mhx = pyart.io.read_grid(u'grid_mhx.nc')
+grid_ltx = pyart.io.read_grid(u'grid_ltx.nc')
 
 grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                          'test.grib2')
 u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
     grid_mhx, (0.0, 0.0, 0.0))
 out_grids = pydda.retrieval.get_dd_wind_field(
-    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=0.1, Cm=1000.0, Cmod=1e-3,
-    mask_outside_opt=True, vel_name='corrected_velocity',
+    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=1.0, Cm=128.0, Cmod=1e-3,
+    mask_outside_opt=True, vel_name='corrected_velocity', engine="tensorflow",
     model_fields=["hrrr"])
 
 fig = plt.figure(figsize=(25, 15))
