@@ -219,6 +219,7 @@ def J_function(winds, parameters):
                 parameters.point_list, Cp=parameters.Cpoint, roi=parameters.roi)
         else:
             Jpoint = 0
+            
     if(parameters.Nfeval % 10 == 0):
         print(('Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |' +
                 ' Max w  '))

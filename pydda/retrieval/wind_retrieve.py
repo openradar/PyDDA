@@ -14,6 +14,8 @@ import sys
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.signal import savgol_filter
+from .auglag import auglag
+
 try:
     import tensorflow_probability as tfp
     import tensorflow as tf
@@ -164,6 +166,9 @@ class DDParameters(object):
         self.Nfeval = 0.0
         self.engine = "scipy"
         self.point_list = []
+        self.cvtol = 1e-2
+        self.gtol = 1e-2
+        self.Jveltol = 100.0
 
 
 def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
@@ -171,6 +176,7 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                              refl_field=None, u_back=None, v_back=None, z_back=None,
                              frz=4500.0, Co=1.0, Cm=1500.0, Cx=0.0,
                              Cy=0.0, Cz=0.0, Cb=0.0, Cv=0.0, Cmod=0.0, Cpoint=0.0,
+                             cvtol=1e-2, gtol=1e-2, Jveltol=100.0,
                              Ut=None, Vt=None, low_pass_filter=True,
                              mask_outside_opt=False, weights_obs=None,
                              weights_model=None, weights_bg=None,
@@ -439,48 +445,70 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
     _wprevmax = np.zeros(parameters.grid_shape)
     _wcurrmax = np.zeros(parameters.grid_shape)
     iterations = 0
-    def _vert_velocity_callback(x):
-        global _wprevmax
-        global _wcurrmax
-        global iterations
-        
-        if iterations % 10 > 0:
-            iterations = iterations + 1
-            return False
-         
-        wind = np.reshape(
-            x, (3, parameters.grid_shape[0],
-                parameters.grid_shape[1],
-                parameters.grid_shape[2]))
-        _wcurrmax = wind[2]
-        if iterations == 0:
+    if engine.lower() == 'scipy' or engine.lower() == 'jax':
+        def _vert_velocity_callback(x):
+            global _wprevmax
+            global _wcurrmax
+            global iterations
+
+            if iterations % 10 > 0:
+                iterations = iterations + 1
+                return False
+
+            wind = np.reshape(
+                x, (3, parameters.grid_shape[0],
+                    parameters.grid_shape[1],
+                    parameters.grid_shape[2]))
+            _wcurrmax = wind[2]
+            if iterations == 0:
+                _wprevmax = _wcurrmax
+                iterations = iterations + 1
+                return False
+            diff = np.abs(_wprevmax - _wcurrmax)
+            diff = np.where(parameters.bg_weights == 0, diff, np.nan)
+            delta = np.nanmax(diff)
+            if delta < wind_tol:
+                return True
             _wprevmax = _wcurrmax
             iterations = iterations + 1
+            print("Max change in w: %4.3f" % delta)
             return False
-        diff = np.abs(_wprevmax - _wcurrmax)
-        diff = np.where(parameters.bg_weights == 0, diff, np.nan)
-        delta = np.nanmax(diff)
-        if delta < wind_tol:
-            return True
-        _wprevmax = _wcurrmax
-        iterations = iterations + 1
-        print("Max change in w: %4.3f" % delta)
-        return False
 
-    parameters.print_out = False
-    winds = fmin_l_bfgs_b(J_function, winds, args=(parameters,),
-                          maxiter=max_iterations, pgtol=1e-8, bounds=bounds,
-                          fprime=grad_J, disp=0, iprint=-1, 
-                          callback=_vert_velocity_callback)
-    winds = np.reshape(
-        winds[0], 
-        (3, parameters.grid_shape[0], 
-            parameters.grid_shape[1], parameters.grid_shape[2]))
-    parameters.print_out = True
+        parameters.print_out = False
+        winds = fmin_l_bfgs_b(J_function, winds, args=(parameters,),
+                              maxiter=max_iterations, pgtol=1e-8, bounds=bounds,
+                              fprime=grad_J, disp=0, iprint=-1,
+                              callback=_vert_velocity_callback)
+        winds = np.reshape(
+            winds[0],
+            (3, parameters.grid_shape[0],
+             parameters.grid_shape[1], parameters.grid_shape[2]))
+        parameters.print_out = True
+
+    elif engine.lower() == 'auglag':
+        if not TENSORFLOW_AVAILABLE:
+            raise ImportError("Tensorflow must be available to use the Augmented Lagrangian engine!")
+        parameters.vrs = [tf.constant(x, dtype=tf.float64) for x in parameters.vrs]
+        parameters.azs = [tf.constant(x, dtype=tf.float64) for x in parameters.azs]
+        parameters.els = [tf.constant(x, dtype=tf.float64) for x in parameters.els]
+        parameters.wts = [tf.constant(x, dtype=tf.float64) for x in parameters.wts]
+        parameters.model_weights = tf.constant(parameters.model_weights,
+                                               dtype=tf.float64)
+        parameters.weights[~np.isfinite(parameters.weights)] = 0
+        parameters.weights[parameters.weights > 0] = 1
+        parameters.weights = tf.constant(parameters.weights, dtype=tf.float64)
+        parameters.bg_weights[parameters.bg_weights > 0] = 1
+        parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float64)
+        parameters.z = tf.constant(Grids[0].point_z['data'], dtype=tf.float64)
+        parameters.x = tf.constant(Grids[0].point_x['data'], dtype=tf.float64)
+        parameters.y = tf.constant(Grids[0].point_y['data'], dtype=tf.float64)
+        bounds = [(-x, x) for x in 100 * np.ones(winds.shape, dtype='float64')]
+        winds = winds.astype('float64')
+        winds, mult, AL_Filter, funcalls = auglag(winds, parameters, bounds)
+
+        # """
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
-        # """
-
     if low_pass_filter == True:
         print('Applying low pass filter to wind field...')
         winds = np.reshape(winds, (3, parameters.grid_shape[0], parameters.grid_shape[1],
@@ -1070,7 +1098,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, engine="scipy", **kwargs):
         are displayable by the visualization module.
     """
 
-    if engine.lower() == "scipy" or engine.lower() == "jax":
+    if engine.lower() == "scipy" or engine.lower() == "jax" or engine.lower() == "auglag":
         return _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine, **kwargs)
     elif engine.lower() == "tensorflow":
         return _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, **kwargs)
