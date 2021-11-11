@@ -62,19 +62,26 @@ def al_mass_cont_function(winds, parameters, mult, mu):
             u, v, w, parameters.z,
             parameters.dx, parameters.dy, parameters.dz)
 
-    mult = tf.reshape(mult, (parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
+        mult = tf.reshape(mult, (parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
 
-    rho = tf.math.exp(-parameters.z / 10000.0)
-    drho_dz = _tf_gradient(rho, parameters.dz, axis=0)
+        #rho = tf.math.exp(-parameters.z / 10000.0)
+        #drho_dz = _tf_gradient(rho, parameters.dz, axis=0)
+        #anel_coeffs = drho_dz/rho
 
-    # COMPUTING THE GRADIENT: THIS CAN BE REPLACED WITH JAX/TENSORFLOW/WHATEVER
+        # COMPUTING THE GRADIENT: THIS CAN BE REPLACED WITH JAX/TENSORFLOW/WHATEVER
+        #vars = {'u': u, 'v': v, 'w': w}
+        #grad = tape.gradient(div, vars)
+        #grad_u = grad['u']
+        #grad_v = grad['v']
+        #grad_w = grad['w']
+
+        al = -tf.math.reduce_sum(mult * div) + (mu / 2.0) * tf.math.reduce_sum(div ** 2)
+    
     vars = {'u': u, 'v': v, 'w': w}
-    grad = tape.gradient(div, vars)
+    grad = tape.gradient(al, vars)
     grad_u = grad['u']
     grad_v = grad['v']
     grad_w = grad['w']
-
-    al = -tf.math.reduce_sum(mult * div) + (mu / 2.0) * tf.math.reduce_sum(div ** 2)
 
     al_grad = tf.stack([grad_u, grad_v, grad_w], axis=0)
 
@@ -89,9 +96,10 @@ def al_vert_vort_function(winds, parameters, mult, mu):
         vort = calculate_vertical_vorticity(winds[0], winds[1], winds[2], parameters.dx, parameters.dy, parameters.dz,
                                         parameters.Ut, parameters.Vt)
 
-    al = -tf.math.reduce_sum(mult * vort) + (mu / 2.0) * tf.math.reduce_sum(vort ** 2)
+    
+        al = -tf.math.reduce_sum(mult * vort) + (mu / 2.0) * tf.math.reduce_sum(vort ** 2)
     vars = {'u': winds[0], 'v': winds[1], 'w': winds[2]}
-    grad = tape.gradient(vort, vars)
+    grad = tape.gradient(al, vars)
     grad_u = grad['u']
     grad_v = grad['v']
     grad_w = grad['w']
