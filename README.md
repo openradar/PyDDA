@@ -50,6 +50,14 @@ In addition, in order to use the capability to load HRRR data as a constraint, t
 
     pip install cfgrib
     
+Finally, PyDDA now supports Jax and TensorFlow as optional dependencies. PyDDA can be configured to use these two packages to perform the cost function minimization. We highly encourage users to take advantage of these two new engines, as they offer advantages such as better calculation of gradients and faster convergence. In addition, GPUs and TPUs are supported by these packages that can help drastically accelerate the calculations. For Tensorflow type:
+
+    conda install -c conda-forge tensorflow=2.6 tensorflow-probability
+    
+For Jax, type:
+
+    conda install -c conda-forge jax
+    
 =======
 ## Links to important documentation
 
