@@ -36,20 +36,20 @@ def auglag_function(winds, parameters, mult, mu, resto):
 
 class Filter:
     def __init__(self, winds, cv0, g0, Jvel0, beta = 0.9, gamma = 0.9):
-        self.cvs = tf.constant(cv0, dtype=tf.float64)
-        self.gs = tf.constant(g0, dtype=tf.float64)
-        self.Jvels = tf.constant(Jvel0, dtype=tf.float64)
-        self.cv_min = cv0
-        self.g_min = g0
+        self.cvs = cv0
+        self.gs = g0
+        self.Jvels = Jvel0
+        self.cv_min = self.cvs
+        self.g_min = self.gs
         self.beta = beta
         self.gamma = gamma
         self.sols = winds
 
     def add_to_filter(self, winds, cv, g, Jvel):
-        self.cvs = tf.concat(self.cvs, cv)
-        self.gs = tf.concat(self.gs, g)
-        self.sols = tf.experimental.numpy.vstack((self.sols, winds))
-        self.Jvels = tf.concat([self.Jvels, Jvel], axis=0)
+        self.cvs = np.append(self.cvs,cv)
+        self.gs = np.append(self.gs, g)
+        self.sols = np.vstack((self.sols,winds))
+        self.Jvels = np.append(self.Jvels,Jvel)
         if g < self.g_min:
             self.g_min = g
         if self.cv_min == 0 or cv < self.cv_min:
@@ -58,9 +58,9 @@ class Filter:
     def check_acceptable(self, cv, g):
         cond1 = (cv <= self.beta*self.cvs)
         cond2 = (g <= (self.gs - self.gamma*cv))
-        acceptable = tf.logical_or(cond1, cond2)
+        acceptable = np.logical_or(cond1,cond2)
 
-        return tf.math.reduce_all(acceptable)
+        return acceptable.all()
 
 class StopOptimizingException(Exception):
     pass
@@ -278,7 +278,7 @@ def auglag(winds, parameters, bounds):
             if AL_Filter.beta * np.maximum(AL_Filter.g_min / AL_Filter.gamma,AL_Filter.beta*AL_Filter.cv_min) <= cv or \
                     (g_mu <= gtol and cv >= AL_Filter.beta * AL_Filter.cv_min):
                 # increase penalty
-                mu = 2.0 * mu
+                mu = 10.0 * mu
                 # run L-BFGS-B to minimize constraint violation
                 print("Restoration phase, mu = :", mu)
                 obj_func = lambda winds, parameters: auglag_function(winds, parameters, mults, mu, False)
