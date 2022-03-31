@@ -3,8 +3,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.7
+  - python
   - arm_pyart
+  - pip
   - numpy
   - scipy
   - matplotlib
@@ -20,4 +21,3 @@ dependencies:
   - jax
   - tensorflow==2.6
   - tensorflow-probability
-
