@@ -13,6 +13,7 @@ def make_normal_storm(sigma, mu):
     z = test_grid.z['data']
     zg, yg, xg = np.meshgrid(z, y, x, indexing='ij')
     r = np.sqrt((xg - mu[0])**2 + (yg - mu[1])**2)
+    r = r/1e3
     term1 = 1.0 / (sigma * np.sqrt(2.0 * np.pi))
     term2 = -1.0 * (r**2 / (2.0 * sigma**2))
     data = term1 * np.exp(term2)
@@ -24,10 +25,10 @@ def make_normal_storm(sigma, mu):
     return test_grid
 
 def test_advection():
-    Grid1 = make_normal_storm(500., (0., 0.))
-    Grid2 = make_normal_storm(500., (40000., 40000.))
-    Grid1.fields["reflectivity"]["data"] = Grid1.fields["reflectivity"]["data"] * 500.
-    Grid2.fields["reflectivity"]["data"] = Grid2.fields["reflectivity"]["data"] * 500.
+    Grid1 = make_normal_storm(1., (0., 0.))
+    Grid2 = make_normal_storm(1., (40000., 40000.))
+    Grid1.fields["reflectivity"]["data"] = Grid1.fields["reflectivity"]["data"]
+    Grid2.fields["reflectivity"]["data"] = Grid2.fields["reflectivity"]["data"]
     Grid1.radar_time = {'long_name': 'Time in seconds of the volume start for each radar',
                         'units': 'seconds since 2005-12-24T12:30:08Z',
                         'calendar': 'gregorian',
