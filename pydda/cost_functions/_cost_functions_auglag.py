@@ -442,7 +442,7 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
 
-def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
+def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
     wind field.
@@ -458,6 +458,12 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
         Float array with v component of wind field
     w: Float array
         Float array with w component of wind field
+    dx: float
+        Grid spacing in x-direction
+    dy: float
+        Grid spacing in in y-direction
+    dz: float
+        Grid spacing in in z-direction
     Cx: float
         Constant controlling smoothness in x-direction
     Cy: float
@@ -489,7 +495,7 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     return tf.math.reduce_sum(x_term + y_term + z_term)
 
 
-def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
+def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
                                   upper_bc=True):
     """
     Calculates the gradient of the smoothness cost function
@@ -506,6 +512,12 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
         Float array with v component of wind field
     w: Float array
         Float array with w component of wind field
+    dx: float
+        Grid spacing in x-direction
+    dy: float
+        Grid spacing in in y-direction
+    dz: float
+        Grid spacing in in z-direction
     Cx: float
         Constant controlling smoothness in x-direction
     Cy: float
@@ -1017,7 +1029,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
 
 
 def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5):
+                                          coeff=1e-5, upper_bc=True):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -1043,6 +1055,8 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
         V component of storm motion
     coeff: float
         Weighting coefficient
+    upper_bc: bool
+        If true, impose w=0 at top of domain as a boundary condition.
 
     Returns
     -------
@@ -1127,7 +1141,7 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
 
 
 def calculate_model_gradient(u, v, w, weights, u_model,
-                             v_model, w_model, coeff=1.0):
+                             v_model, w_model, coeff=1.0, upper_bc=True):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as twice the differences
@@ -1154,6 +1168,8 @@ def calculate_model_gradient(u, v, w, weights, u_model,
         Vertical wind field from model
     coeff: float
         Weight of background constraint to total cost function
+    upper_bc: bool
+        If true, impose w=0 at top of domain as boundary condition.
 
     Returns
     -------

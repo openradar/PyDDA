@@ -1,4 +1,6 @@
 import numpy as np
+import scipy
+
 try:
     import jax
     import jax.numpy as jnp
@@ -127,7 +129,7 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     return np.copy(y.flatten())
 
 
-def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
+def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
     wind field.
@@ -143,6 +145,12 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
         Float array with v component of wind field
     w: Float array
         Float array with w component of wind field
+    dx: float
+        Grid spacing in x-direction
+    dy: float
+        Grid spacing in in y-direction
+    dz: float
+        Grid spacing in in z-direction
     Cx: float
         Constant controlling smoothness in x-direction
     Cy: float
@@ -180,7 +188,7 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     return np.asanyarray(jnp.sum(x_term + y_term + z_term))
 
 
-def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
+def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
                                   upper_bc=True):
     """
     Calculates the gradient of the smoothness cost function
@@ -197,6 +205,12 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
         Float array with v component of wind field
     w: Float array
         Float array with w component of wind field
+    dx: float
+        Grid spacing in x-direction
+    dy: float
+        Grid spacing in in y-direction
+    dz: float
+        Grid spacing in in z-direction
     Cx: float
         Constant controlling smoothness in x-direction
     Cy: float
@@ -320,7 +334,7 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     grad_u, grad_v, _, _, _, _, _, _, _ = fun_vjp(1.0)
 
     gradJ_w = jnp.zeros_like(grad_u)
-    gradJ = jnp.stack([gradJ_u, gradJ_v, gradJ_w], axis=0)
+    gradJ = jnp.stack([grad_u, grad_v, gradJ_w], axis=0)
     return np.copy(gradJ.flatten()) * Cp
 
 
@@ -689,7 +703,7 @@ def calculate_model_gradient(u, v, w, weights, u_model,
         value of gradient of background cost function
     """
     primals, fun_vjp = jax.vjp(
-            calculate_model_cost, u, v, w, dx, dy, dz, Ut, Vt, coeff)
+            calculate_model_cost, u, v, w, u_model, v_model, w_model, coeff)
     u_grad, v_grad, w_grad, _, _, _, _, _, _ = fun_vjp(1.0)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
