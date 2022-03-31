@@ -1,5 +1,7 @@
 import numpy as np
 import scipy
+import pyart
+
 
 def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
                                        w, wts, rmsVr, weights, coeff=1.0):
