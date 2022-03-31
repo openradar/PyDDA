@@ -5,5 +5,5 @@ channels:
 dependencies:
   - sphinx
   - numpydoc
-  pip:
+  - pip:
     - sphinx_gallery
