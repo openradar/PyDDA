@@ -17,14 +17,9 @@ how to call these functions.
 
     get_dd_wind_field
     get_bca
-    get_storm_motion
-    source_term
     DDParameters
-
->>>>>>> 1642248d58e0fd63ea3564e23612a1865844fc6f
 """
 
 from .wind_retrieve import get_dd_wind_field
 from .wind_retrieve import get_bca
-from .advection import source_term, get_storm_motion
 from .wind_retrieve import DDParameters
