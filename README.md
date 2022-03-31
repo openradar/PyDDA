@@ -1,9 +1,12 @@
 # PyDDA (Pythonic Direct Data Assimilation)
 ![alt text](https://github.com/openradar/PyDDA/blob/pydda_devel/pydda%20logo.png "Logo Title Text 1")
 
-![https://anaconda.org/conda-forge/pydda](https://anaconda.org/conda-forge/pydda/badges/version.svg)
-![https://anaconda.org/conda-forge/pydda/files](https://anaconda.org/conda-forge/pydda/badges/downloads.svg)
-![https://travis-ci.org/openradar/PyDDA](https://img.shields.io/travis/openradar/PyDDA.svg)  
+[<img src="https://anaconda.org/conda-forge/pydda/badges/version.svg">](https://anaconda.org/conda-forge/pydda)
+[<img src="https://anaconda.org/conda-forge/pydda/badges/downloads.svg">](https://anaconda.org/conda-forge/pydda/files)
+[<img src="https://img.shields.io/travis/openradar/PyDDA.svg">](https://travis-ci.org/openradar/PyDDA) 
+[<img src="https://img.shields.io/badge/docs-here-green">](https://openradarscience.org/PyDDA)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg)](https://doi.org/10.5281/zenodo.3942686)
 
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
@@ -27,7 +30,7 @@ Angles.py is from Multidop and was written by Timothy Lang of NASA.
 
 Right now this has been tested on and depends on:
 
-    Python 3.5+
+    Python 3.6+
 
     Py-ART 1.9.0
     
@@ -46,6 +49,14 @@ Right now this has been tested on and depends on:
 In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
     pip install cfgrib
+    
+Finally, PyDDA now supports Jax and TensorFlow as optional dependencies. PyDDA can be configured to use these two packages to perform the cost function minimization. We highly encourage users to take advantage of these two new engines, as they offer advantages such as better calculation of gradients and faster convergence. In addition, GPUs and TPUs are supported by these packages that can help drastically accelerate the calculations. For Tensorflow type:
+
+    conda install -c conda-forge tensorflow=2.6 tensorflow-probability
+    
+For Jax, type:
+
+    conda install -c conda-forge jax
     
 =======
 ## Links to important documentation

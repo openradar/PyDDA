@@ -20,6 +20,9 @@ simply add (name) into the model_fields option of
 
      make_constraint_from_wrf
      add_hrrr_constraint_to_grid
+     make_constraint_from_era_interim
+     download_needed_era_data
+     get_iem_obs
 
 """
 
@@ -27,3 +30,4 @@ from .model_data import make_constraint_from_wrf
 from .model_data import add_hrrr_constraint_to_grid
 from .model_data import make_constraint_from_era_interim
 from .model_data import download_needed_era_data
+from .station_data import get_iem_obs
