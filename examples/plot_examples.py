@@ -55,7 +55,6 @@ plt.show()
 plt.figure(figsize=(9, 9))
 pydda.vis.plot_yz_xsection_barbs(Grids, background_field='reflectivity', 
                                  level=40,
-                                 w_vel_contours=[5, 10, 15],
                                  barb_spacing_y_km=10.0,
                                  barb_spacing_z_km=2.0)
 plt.savefig('Darwin.png')
