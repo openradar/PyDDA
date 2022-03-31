@@ -1,0 +1,9 @@
+name: pydda-docs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sphinx
+  - numpydoc
+  pip:
+    - sphinx_gallery
