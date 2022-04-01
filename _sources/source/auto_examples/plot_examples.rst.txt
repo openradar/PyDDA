@@ -118,7 +118,7 @@ Author: Robert C. Jackson
     Lagrangian norm:  0.262021
     AugLag converged to specified tolerance
     Applying low pass filter to wind field...
-    Done! Time = 79.0
+    Done! Time = 70.9
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:179: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
       cs.cmap.set_under(color='white', alpha=0)
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:180: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
@@ -195,7 +195,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  20.599 seconds)
+   **Total running time of the script:** ( 1 minutes  12.473 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
