@@ -62,7 +62,7 @@ def test_make_updraft_from_convergence_field():
     assert np.ma.max(new_w > 3)
 
 
-@pytest.mark.skipif(~JAX_AVAILABLE, reason="Jax not installed")
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
 def test_twpice_case_jax():
     """ Use a test case from TWP-ICE """
     Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
@@ -90,7 +90,7 @@ def test_twpice_case_jax():
     assert w_max > 10
 
 
-@pytest.mark.skipif(~TF_AVAILABLE, reason="TensorFlow not installed")
+@pytest.mark.skipif(not TF_AVAILABLE, reason="TensorFlow not installed")
 def test_twpice_case_tensorflow():
     """ Use a test case from TWP-ICE """
     Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
