@@ -11,9 +11,9 @@ from . import initialization
 from . import tests
 from . import constraints
 
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
-print("Welcome to PyDDA 1.0")
+print("Welcome to PyDDA 1.0.2")
 print("Detecting Jax...")
 try:
     import jax
@@ -28,6 +28,6 @@ try:
     import tensorflow_probability
     print("TensorFlow-probability detected. TensorFlow engine enabled!")
 except (ImportError, AttributeError):
-    print("Unable to load TensorFlow or tensorflow-probability. " +
+    print("Unable to load both TensorFlow and tensorflow-probability. " +
             "TensorFlow engine disabled.")
 

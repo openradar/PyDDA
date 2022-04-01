@@ -223,6 +223,9 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
 
         prev_grid = g
 
+    if engine.lower() == "auglag" and not TENSORFLOW_AVAILABLE:
+        raise ModuleNotFoundError("Tensorflow 2.6+ needs to be installed for the Augmented Lagrangian solver.")
+
     # Disable background constraint if none provided
     if (u_back is None or v_back is None):
         parameters.u_back = np.zeros(u_init.shape[0])

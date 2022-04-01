@@ -18,7 +18,6 @@ how to call these functions.
     get_dd_wind_field
     get_bca
     DDParameters
-
 """
 
 from .wind_retrieve import get_dd_wind_field

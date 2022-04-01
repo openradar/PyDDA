@@ -26,7 +26,7 @@ u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
 # Start the wind retrieval. This example only uses the mass continuity
 # and data weighting constraints.
 Grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], u_init,
-                                          v_init, w_init, Co=1.0, Cm=100.0,
+                                          v_init, w_init, Co=1.0, Cm=1.0,
                                           Jveltol=1e-3, cvtol=1e-4,
                                           Cx=0.0, Cy=0., Cz=0.0, Cb=0., 
                                           frz=5000.0, filter_window=5,
@@ -55,7 +55,6 @@ plt.show()
 plt.figure(figsize=(9, 9))
 pydda.vis.plot_yz_xsection_barbs(Grids, background_field='reflectivity', 
                                  level=40,
-                                 w_vel_contours=[5, 10, 15],
                                  barb_spacing_y_km=10.0,
                                  barb_spacing_z_km=2.0)
 plt.savefig('Darwin.png')

@@ -1,7 +1,12 @@
 import numpy as np
 from scipy.optimize import fmin_l_bfgs_b
 import copy
-import tensorflow as tf
+try:
+    import tensorflow as tf
+    TENSORFLOW_AVAILABLE = True
+except ImportError:
+    TENSORFLOW_AVAILABLE = False
+
 from ..cost_functions._cost_functions_auglag import *
 
 def auglag_function(winds, parameters, mult, mu, resto):
@@ -158,7 +163,6 @@ class Multipliers(object):
     pass
 
 def auglag(winds, parameters, bounds):
-
     mu = parameters.Cm
     
     # stopping criteria:
@@ -349,9 +353,3 @@ def auglag(winds, parameters, bounds):
         multk = copy.deepcopy(mults)
 
     return winds, mults, AL_Filter, funcalls
-
-
-
-
-
-
