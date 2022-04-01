@@ -27,7 +27,8 @@ u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(grid1, ve
 new_grids = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
                                               u_init, v_init, w_init,
                                               vel_name='VRADH_corr', refl_field='DBZH',
-                                              mask_outside_opt=True)
+                                              mask_outside_opt=True,
+                                              engine='tensorflow')
 # Make a neat plot
 fig = plt.figure(figsize=(10,7))
 ax = pydda.vis.plot_horiz_xsection_quiver_map(new_grids, background_field='DBZH', level=3,

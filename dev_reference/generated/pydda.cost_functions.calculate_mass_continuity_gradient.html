@@ -4,16 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.cost_functions.calculate_mass_continuity_gradient &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>pydda.cost_functions.calculate_mass_continuity_gradient &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -38,7 +39,7 @@
         <li class="right" >
           <a href="pydda.cost_functions.calculate_mass_continuity.html" title="pydda.cost_functions.calculate_mass_continuity"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pydda.cost_functions.calculate_mass_continuity_gradient</a></li> 
       </ul>
@@ -49,47 +50,45 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pydda-cost-functions-calculate-mass-continuity-gradient">
+  <section id="pydda-cost-functions-calculate-mass-continuity-gradient">
 <h1>pydda.cost_functions.calculate_mass_continuity_gradient<a class="headerlink" href="#pydda-cost-functions-calculate-mass-continuity-gradient" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pydda.cost_functions.calculate_mass_continuity_gradient">
-<code class="sig-prename descclassname"><span class="pre">pydda.cost_functions.</span></code><code class="sig-name descname"><span class="pre">calculate_mass_continuity_gradient</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1500.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#calculate_mass_continuity_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.cost_functions.calculate_mass_continuity_gradient" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pydda.cost_functions.calculate_mass_continuity_gradient">
+<span class="sig-prename descclassname"><span class="pre">pydda.cost_functions.</span></span><span class="sig-name descname"><span class="pre">calculate_mass_continuity_gradient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1500.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_bc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/_cost_functions_numpy.html#calculate_mass_continuity_gradient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.cost_functions.calculate_mass_continuity_gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the gradient of mass continuity cost function. This is done by
-taking the negative gradient of the divergence of the wind field.</p>
-<p>All grids must have the same grid specification.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>u: Float array</strong></dt><dd><p>Float array with u component of wind field</p>
+taking the negative gradient of the divergence of the wind field.
+All grids must have the same grid specification.
+Parameters
+———-
+u: Float array</p>
+<blockquote>
+<div><p>Float array with u component of wind field</p>
+</div></blockquote>
+<dl class="simple">
+<dt>v: Float array</dt><dd><p>Float array with v component of wind field</p>
 </dd>
-<dt><strong>v: Float array</strong></dt><dd><p>Float array with v component of wind field</p>
+<dt>w: Float array</dt><dd><p>Float array with w component of wind field</p>
 </dd>
-<dt><strong>w: Float array</strong></dt><dd><p>Float array with w component of wind field</p>
+<dt>z: Float array (1D)</dt><dd><p>1D Float array with heights of grid</p>
 </dd>
-<dt><strong>z: Float array (1D)</strong></dt><dd><p>1D Float array with heights of grid</p>
+<dt>dx: float</dt><dd><p>Grid spacing in x direction.</p>
 </dd>
-<dt><strong>dx: float</strong></dt><dd><p>Grid spacing in x direction.</p>
+<dt>dy: float</dt><dd><p>Grid spacing in y direction.</p>
 </dd>
-<dt><strong>dy: float</strong></dt><dd><p>Grid spacing in y direction.</p>
+<dt>dz: float</dt><dd><p>Grid spacing in z direction.</p>
 </dd>
-<dt><strong>dz: float</strong></dt><dd><p>Grid spacing in z direction.</p>
+<dt>coeff: float</dt><dd><p>Constant controlling contribution of mass continuity to cost function</p>
 </dd>
-<dt><strong>coeff: float</strong></dt><dd><p>Constant controlling contribution of mass continuity to cost function</p>
-</dd>
-<dt><strong>anel: int</strong></dt><dd><p>= 1 use anelastic approximation, 0=don’t</p>
+<dt>anel: int</dt><dd><p>= 1 use anelastic approximation, 0=don’t</p>
 </dd>
 </dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
+<dl class="simple">
 <dt>y: float array</dt><dd><p>value of gradient of mass continuity cost function</p>
-</dd>
-</dl>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -98,12 +97,16 @@ taking the negative gradient of the divergence of the wind field.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.cost_functions.calculate_mass_continuity.html"
-                        title="previous chapter">pydda.cost_functions.calculate_mass_continuity</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pydda.cost_functions.calculate_smoothness_cost.html"
-                        title="next chapter">pydda.cost_functions.calculate_smoothness_cost</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pydda.cost_functions.calculate_mass_continuity.html"
+                          title="previous chapter">pydda.cost_functions.calculate_mass_continuity</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pydda.cost_functions.calculate_smoothness_cost.html"
+                          title="next chapter">pydda.cost_functions.calculate_smoothness_cost</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -115,7 +118,7 @@ taking the negative gradient of the divergence of the wind field.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -140,14 +143,14 @@ taking the negative gradient of the divergence of the wind field.</p>
         <li class="right" >
           <a href="pydda.cost_functions.calculate_mass_continuity.html" title="pydda.cost_functions.calculate_mass_continuity"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pydda.cost_functions.calculate_mass_continuity_gradient</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

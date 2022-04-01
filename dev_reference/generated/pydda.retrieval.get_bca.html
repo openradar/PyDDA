@@ -4,16 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.retrieval.get_bca &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>pydda.retrieval.get_bca &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -21,7 +22,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pydda.retrieval.DDParameters" href="pydda.retrieval.DDParameters.html" />
-    <link rel="prev" title="pydda.retrieval.get_dd_wind_field_nested" href="pydda.retrieval.get_dd_wind_field_nested.html" /> 
+    <link rel="prev" title="pydda.retrieval.get_dd_wind_field" href="pydda.retrieval.get_dd_wind_field.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -36,9 +37,9 @@
           <a href="pydda.retrieval.DDParameters.html" title="pydda.retrieval.DDParameters"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pydda.retrieval.get_dd_wind_field_nested.html" title="pydda.retrieval.get_dd_wind_field_nested"
+          <a href="pydda.retrieval.get_dd_wind_field.html" title="pydda.retrieval.get_dd_wind_field"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pydda.retrieval.get_bca</a></li> 
       </ul>
@@ -49,11 +50,11 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pydda-retrieval-get-bca">
+  <section id="pydda-retrieval-get-bca">
 <h1>pydda.retrieval.get_bca<a class="headerlink" href="#pydda-retrieval-get-bca" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pydda.retrieval.get_bca">
-<code class="sig-prename descclassname"><span class="pre">pydda.retrieval.</span></code><code class="sig-name descname"><span class="pre">get_bca</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rad1_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad1_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad2_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad2_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projparams</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_bca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.retrieval.get_bca" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pydda.retrieval.get_bca">
+<span class="sig-prename descclassname"><span class="pre">pydda.retrieval.</span></span><span class="sig-name descname"><span class="pre">get_bca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rad1_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad1_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad2_lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rad2_lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projparams</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_bca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.retrieval.get_bca" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function gets the beam crossing angle between two lat/lon pairs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -83,7 +84,7 @@
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -92,12 +93,16 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.retrieval.get_dd_wind_field_nested.html"
-                        title="previous chapter">pydda.retrieval.get_dd_wind_field_nested</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pydda.retrieval.DDParameters.html"
-                        title="next chapter">pydda.retrieval.DDParameters</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pydda.retrieval.get_dd_wind_field.html"
+                          title="previous chapter">pydda.retrieval.get_dd_wind_field</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pydda.retrieval.DDParameters.html"
+                          title="next chapter">pydda.retrieval.DDParameters</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -109,7 +114,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -132,16 +137,16 @@
           <a href="pydda.retrieval.DDParameters.html" title="pydda.retrieval.DDParameters"
              >next</a> |</li>
         <li class="right" >
-          <a href="pydda.retrieval.get_dd_wind_field_nested.html" title="pydda.retrieval.get_dd_wind_field_nested"
+          <a href="pydda.retrieval.get_dd_wind_field.html" title="pydda.retrieval.get_dd_wind_field"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pydda.retrieval.get_bca</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

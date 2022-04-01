@@ -4,16 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Developer Reference Manual &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Developer Reference Manual &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
@@ -22,7 +23,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pydda.cost_functions.J_function" href="generated/pydda.cost_functions.J_function.html" />
-    <link rel="prev" title="Example on retrieving and plotting winds on a distributed cluster" href="../source/auto_examples/plot_examples_nested.html" /> 
+    <link rel="prev" title="Example on retrieving and plotting winds" href="../source/auto_examples/plot_examples.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -37,9 +38,9 @@
           <a href="generated/pydda.cost_functions.J_function.html" title="pydda.cost_functions.J_function"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="../source/auto_examples/plot_examples_nested.html" title="Example on retrieving and plotting winds on a distributed cluster"
+          <a href="../source/auto_examples/plot_examples.html" title="Example on retrieving and plotting winds"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Developer Reference Manual</a></li> 
       </ul>
     </div>  
@@ -49,22 +50,22 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="developer-reference-manual">
+  <section id="developer-reference-manual">
 <span id="user"></span><h1>Developer Reference Manual<a class="headerlink" href="#developer-reference-manual" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release</dt>
-<dd class="field-odd"><p>0.5.2</p>
+<dd class="field-odd"><p>1.0.2</p>
 </dd>
 <dt class="field-even">Date</dt>
-<dd class="field-even"><p>Mar 08, 2021</p>
+<dd class="field-even"><p>Apr 01, 2022</p>
 </dd>
 </dl>
 <p>This is the developer reference guide for PyDDA which covers most of the
 available functions, modules, and classes.</p>
-<div class="section" id="cost-functions-module">
+<section id="cost-functions-module">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">cost_functions</span></code> Module<a class="headerlink" href="#cost-functions-module" title="Permalink to this headline">¶</a></h2>
 <p>Module containing cost functions and their gradients.</p>
-<span class="target" id="module-pydda.cost_functions"></span><div class="section" id="pydda-cost-functions-pydda-cost-functions">
+<span class="target" id="module-pydda.cost_functions"></span><section id="pydda-cost-functions-pydda-cost-functions">
 <h3>pydda.cost_functions (pydda.cost_functions)<a class="headerlink" href="#pydda-cost-functions-pydda-cost-functions" title="Permalink to this headline">¶</a></h3>
 <p>The procedures in this module calculate the individual
 cost functions and their gradients. All cost functions 
@@ -100,7 +101,7 @@ observation, you need to explicitly be able to write both the cost function
 and its gradient using the methodology above. One you have implemented both
 procedures in Python, they then need to be added to 
 <a class="reference internal" href="#module-pydda.cost_functions" title="pydda.cost_functions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydda.cost_functions</span></code></a>.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -112,59 +113,59 @@ procedures in Python, they then need to be added to
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad_J</span></code></a>(winds, parameters)</p></td>
 <td><p>Calculates the gradient of the cost function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function" title="pydda.cost_functions.calculate_radial_vel_cost_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_radial_vel_cost_function</span></code></a>(vrs, azs, …)</p></td>
-<td><p>Calculates the cost function due to difference of the wind field from radar radial velocities.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function" title="pydda.cost_functions.calculate_radial_vel_cost_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_radial_vel_cost_function</span></code></a>(vrs, azs, ...)</p></td>
+<td><p>Calculates the cost function due to difference of the wind field from radar radial velocities. For more information on this cost function, see Potvin et al. (2012) and Shapiro et al. (2009). All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. Parameters ---------- vrs: List of float arrays     List of radial velocities from each radar els: List of float arrays     List of elevations from each radar azs: List of float arrays     List of azimuths from each radar u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field wts: List of float arrays     Float array containing fall speed from radar. rmsVr: float     The sum of squares of velocity/num_points. Use for normalization     of data weighting coefficient weights: n_radars x_bins x y_bins float array     Data weights for each pair of radars coeff: float     Constant for cost function Returns ------- J_o: float      Observational cost function References ----------- Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, <a class="reference external" href="https://doi.org/10.1175/JTECH-D-11-00019.1">https://doi.org/10.1175/JTECH-D-11-00019.1</a> Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic Technol., 26, 2089–2106, <a class="reference external" href="https://doi.org/10.1175/2009JTECHA1256.1">https://doi.org/10.1175/2009JTECHA1256.1</a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_grad_radial_vel.html#pydda.cost_functions.calculate_grad_radial_vel" title="pydda.cost_functions.calculate_grad_radial_vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_grad_radial_vel</span></code></a>(vrs, els, azs, u, …)</p></td>
-<td><p>Calculates the gradient of the cost function due to difference of wind field from radar radial velocities.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_grad_radial_vel.html#pydda.cost_functions.calculate_grad_radial_vel" title="pydda.cost_functions.calculate_grad_radial_vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_grad_radial_vel</span></code></a>(vrs, els, azs, u, ...)</p></td>
+<td><p>Calculates the gradient of the cost function due to difference of wind field from radar radial velocities. All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. Parameters ---------- vrs: List of float arrays     List of radial velocities from each radar els: List of float arrays     List of elevations from each radar azs: List of azimuths     List of azimuths from each radar u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field coeff: float     Constant for cost function vel_name: str     Background velocity field name weights: n_radars x_bins x y_bins float array     Data weights for each pair of radars Returns ------- y: 1-D float array      Gradient vector of observational cost function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_mass_continuity.html#pydda.cost_functions.calculate_mass_continuity" title="pydda.cost_functions.calculate_mass_continuity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_mass_continuity</span></code></a>(u, v, w, z, dx, dy, dz)</p></td>
-<td><p>Calculates the mass continuity cost function by taking the divergence of the wind field.</p></td>
+<td><p>Calculates the mass continuity cost function by taking the divergence of the wind field. All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field dx: float     Grid spacing in x direction. dy: float     Grid spacing in y direction. dz: float     Grid spacing in z direction. z: Float array (1D)     1D Float array with heights of grid coeff: float     Constant controlling contribution of mass continuity to cost function anel: int     = 1 use anelastic approximation, 0=don't Returns ------- J: float     value of mass continuity cost function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient" title="pydda.cost_functions.calculate_mass_continuity_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_mass_continuity_gradient</span></code></a>(u, v, w, …)</p></td>
-<td><p>Calculates the gradient of mass continuity cost function.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient" title="pydda.cost_functions.calculate_mass_continuity_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_mass_continuity_gradient</span></code></a>(u, v, w, ...)</p></td>
+<td><p>Calculates the gradient of mass continuity cost function. This is done by taking the negative gradient of the divergence of the wind field. All grids must have the same grid specification. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field z: Float array (1D)     1D Float array with heights of grid dx: float     Grid spacing in x direction. dy: float     Grid spacing in y direction. dz: float     Grid spacing in z direction. coeff: float     Constant controlling contribution of mass continuity to cost function anel: int     = 1 use anelastic approximation, 0=don't Returns ------- y: float array     value of gradient of mass continuity cost function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost" title="pydda.cost_functions.calculate_smoothness_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_cost</span></code></a>(u, v, w[, Cx, Cy, Cz])</p></td>
-<td><p>Calculates the smoothness cost function by taking the Laplacian of the wind field.</p></td>
+<td><p>Calculates the smoothness cost function by taking the Laplacian of the wind field. All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field Cx: float     Constant controlling smoothness in x-direction Cy: float     Constant controlling smoothness in y-direction Cz: float     Constant controlling smoothness in z-direction Returns ------- Js: float     value of smoothness cost function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient" title="pydda.cost_functions.calculate_smoothness_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_gradient</span></code></a>(u, v, w[, Cx, …])</p></td>
-<td><p>Calculates the gradient of the smoothness cost function by taking the Laplacian of the Laplacian of the wind field.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient" title="pydda.cost_functions.calculate_smoothness_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_gradient</span></code></a>(u, v, w[, Cx, ...])</p></td>
+<td><p>Calculates the gradient of the smoothness cost function by taking the Laplacian of the Laplacian of the wind field. All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field Cx: float     Constant controlling smoothness in x-direction Cy: float     Constant controlling smoothness in y-direction Cz: float     Constant controlling smoothness in z-direction Returns ------- y: float array     value of gradient of smoothness cost function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost" title="pydda.cost_functions.calculate_background_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_background_cost</span></code></a>(u, v, w, weights, …)</p></td>
-<td><p>Calculates the background cost function.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost" title="pydda.cost_functions.calculate_background_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_background_cost</span></code></a>(u, v, w, weights, ...)</p></td>
+<td><p>Calculates the background cost function. The background cost function is simply the sum of the squared differences between the wind field and the background wind field multiplied by the weighting coefficient. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field weights: Float array     Weights for each point to consider into cost function u_back: 1D float array     Zonal winds vs height from sounding w_back: 1D float array     Meridional winds vs height from sounding Cb: float     Weight of background constraint to total cost function Returns ------- cost: float     value of background cost function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_background_gradient.html#pydda.cost_functions.calculate_background_gradient" title="pydda.cost_functions.calculate_background_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_background_gradient</span></code></a>(u, v, w, …)</p></td>
-<td><p>Calculates the gradient of the background cost function.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_background_gradient.html#pydda.cost_functions.calculate_background_gradient" title="pydda.cost_functions.calculate_background_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_background_gradient</span></code></a>(u, v, w, ...)</p></td>
+<td><p>Calculates the gradient of the background cost function. For each u, v this is given as 2*coefficent*(analysis wind - background wind). Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field weights: Float array     Weights for each point to consider into cost function u_back: 1D float array     Zonal winds vs height from sounding w_back: 1D float array     Meridional winds vs height from sounding Cb: float     Weight of background constraint to total cost function Returns ------- y: float array     value of gradient of background cost function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_vertical_vorticity_cost.html#pydda.cost_functions.calculate_vertical_vorticity_cost" title="pydda.cost_functions.calculate_vertical_vorticity_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_vertical_vorticity_cost</span></code></a>(u, v, w, …)</p></td>
-<td><p>Calculates the cost function due to deviance from vertical vorticity equation.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_vertical_vorticity_cost.html#pydda.cost_functions.calculate_vertical_vorticity_cost" title="pydda.cost_functions.calculate_vertical_vorticity_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_vertical_vorticity_cost</span></code></a>(u, v, w, ...)</p></td>
+<td><p>Calculates the cost function due to deviance from vertical vorticity equation. For more information of the vertical vorticity cost function, see Potvin et al. (2012) and Shapiro et al. (2009). Parameters ---------- u: 3D array     Float array with u component of wind field v: 3D array     Float array with v component of wind field w: 3D array     Float array with w component of wind field dx: float array     Spacing in x grid dy: float array     Spacing in y grid dz: float array     Spacing in z grid coeff: float     Weighting coefficient Ut: float     U component of storm motion Vt: float     V component of storm motion Returns ------- Jv: float     Value of vertical vorticity cost function. References ---------- Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, <a class="reference external" href="https://doi.org/10.1175/JTECH-D-11-00019.1">https://doi.org/10.1175/JTECH-D-11-00019.1</a> Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic Technol., 26, 2089–2106, <a class="reference external" href="https://doi.org/10.1175/2009JTECHA1256.1">https://doi.org/10.1175/2009JTECHA1256.1</a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient" title="pydda.cost_functions.calculate_vertical_vorticity_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_vertical_vorticity_gradient</span></code></a>(u, v, …)</p></td>
-<td><p>Calculates the gradient of the cost function due to deviance from vertical vorticity equation.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient" title="pydda.cost_functions.calculate_vertical_vorticity_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_vertical_vorticity_gradient</span></code></a>(u, v, ...)</p></td>
+<td><p>Calculates the gradient of the cost function due to deviance from vertical vorticity equation. This is done by taking the functional derivative of the vertical vorticity cost function. Parameters ---------- u: 3D array     Float array with u component of wind field v: 3D array     Float array with v component of wind field w: 3D array     Float array with w component of wind field dx: float array     Spacing in x grid dy: float array     Spacing in y grid dz: float array     Spacing in z grid Ut: float     U component of storm motion Vt: float     V component of storm motion coeff: float     Weighting coefficient Returns ------- Jv: 1D float array     Value of the gradient of the vertical vorticity cost function. References ---------- Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity Constraint in Variational Dual-Doppler Wind Analysis: Tests with Real and Simulated Supercell Data. J. Atmos. Oceanic Technol., 29, 32–49, <a class="reference external" href="https://doi.org/10.1175/JTECH-D-11-00019.1">https://doi.org/10.1175/JTECH-D-11-00019.1</a> Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic Technol., 26, 2089–2106, <a class="reference external" href="https://doi.org/10.1175/2009JTECHA1256.1">https://doi.org/10.1175/2009JTECHA1256.1</a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_model_cost.html#pydda.cost_functions.calculate_model_cost" title="pydda.cost_functions.calculate_model_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_model_cost</span></code></a>(u, v, w, weights, …)</p></td>
-<td><p>Calculates the cost function for the model constraint.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_model_cost.html#pydda.cost_functions.calculate_model_cost" title="pydda.cost_functions.calculate_model_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_model_cost</span></code></a>(u, v, w, weights, ...)</p></td>
+<td><p>Calculates the cost function for the model constraint. This is calculated simply as the sum of squares of the differences between the model wind field and the analysis wind field. Vertical velocities are not factored into this cost function as there is typically a high amount of uncertainty in model derived vertical velocities. Parameters ---------- u: 3D array     Float array with u component of wind field v: 3D array     Float array with v component of wind field w: 3D array     Float array with w component of wind field weights: list of 3D arrays     Float array showing how much each point from model weighs into     constraint. u_model: list of 3D arrays     Float array with u component of wind field from model v_model: list of 3D arrays     Float array with v component of wind field from model w_model: list of 3D arrays     Float array with w component of wind field from model coeff: float     Weighting coefficient Returns ------- Jv: float     Value of model cost function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_model_gradient.html#pydda.cost_functions.calculate_model_gradient" title="pydda.cost_functions.calculate_model_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_model_gradient</span></code></a>(u, v, w, weights, …)</p></td>
-<td><p>Calculates the cost function for the model constraint.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_model_gradient.html#pydda.cost_functions.calculate_model_gradient" title="pydda.cost_functions.calculate_model_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_model_gradient</span></code></a>(u, v, w, weights, ...)</p></td>
+<td><p>Calculates the cost function for the model constraint. This is calculated simply as twice the differences between the model wind field and the analysis wind field for each u, v. Vertical velocities are not factored into this cost function as there is typically a high amount of uncertainty in model derived vertical velocities. Therefore, the gradient for all of the w's will be 0. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field w: Float array     Float array with w component of wind field weights: list of 3D float arrays     Weights for each point to consider into cost function u_model: list of 3D float arrays     Zonal wind field from model v_model: list of 3D float arrays     Meridional wind field from model w_model: list of 3D float arrays     Vertical wind field from model coeff: float     Weight of background constraint to total cost function Returns ------- y: float array     value of gradient of background cost function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_fall_speed.html#pydda.cost_functions.calculate_fall_speed" title="pydda.cost_functions.calculate_fall_speed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_fall_speed</span></code></a>(grid[, refl_field, frz])</p></td>
-<td><p>Estimates fall speed based on reflectivity.</p></td>
+<td><p>Estimates fall speed based on reflectivity. Uses methodology of Mike Biggerstaff and Dan Betten Parameters ---------- Grid: Py-ART Grid     Py-ART Grid containing reflectivity to calculate fall speed from refl_field: str     String containing name of reflectivity field. None will automatically     determine the name. frz: float     Height of freezing level in m Returns ------- 3D float array:     Float array of terminal velocities.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost" title="pydda.cost_functions.calculate_point_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_point_cost</span></code></a>(u, v, x, y, z, point_list)</p></td>
-<td><p>Calculates the cost function related to point observations.</p></td>
+<td><p>Calculates the cost function related to point observations. A mean square error cost function term is applied to points that are within the sphere of influence whose radius is determined by <em>roi</em>. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field x:  Float array     X coordinates of grid centers y:  Float array     Y coordinates of grid centers z:  Float array     Z coordinated of grid centers point_list: list of dicts     List of point constraints. Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;, to correspond     to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;     to correspond to the location of the point observation. In addition, &quot;site_id&quot; gives the METAR code (or name) to the station. Cp: float     The weighting coefficient of the point cost function. roi: float     Radius of influence of observations Returns ------- J: float     The cost function related to the difference between wind field and points.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient" title="pydda.cost_functions.calculate_point_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_point_gradient</span></code></a>(u, v, x, y, z, …)</p></td>
-<td><p>Calculates the gradient of the cost function related to point observations.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient" title="pydda.cost_functions.calculate_point_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_point_gradient</span></code></a>(u, v, x, y, z, ...)</p></td>
+<td><p>Calculates the gradient of the cost function related to point observations. A mean square error cost function term is applied to points that are within the sphere of influence whose radius is determined by <em>roi</em>. Parameters ---------- u: Float array     Float array with u component of wind field v: Float array     Float array with v component of wind field x: Float array     X coordinates of grid centers y: Float array     Y coordinates of grid centers z: Float array     Z coordinated of grid centers point_list: list of dicts     List of point constraints. Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;,     to correspond to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;     to correspond to the location of the point observation. In addition, &quot;site_id&quot; gives the METAR code (or name) to the station. Cp: float     The weighting coefficient of the point cost function. roi: float     Radius of influence of observations Returns ------- gradJ: float array     The gradient of the cost function related to the difference between wind field and points.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="retrieval-module">
+</section>
+</section>
+<section id="retrieval-module">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">retrieval</span></code> Module<a class="headerlink" href="#retrieval-module" title="Permalink to this headline">¶</a></h2>
 <p>Main module for wind retrieval.</p>
-<span class="target" id="module-pydda.retrieval"></span><div class="section" id="pydda-retrieval-pydda-retrieval">
+<span class="target" id="module-pydda.retrieval"></span><section id="pydda-retrieval-pydda-retrieval">
 <h3>pydda.retrieval (pydda.retrieval)<a class="headerlink" href="#pydda-retrieval-pydda-retrieval" title="Permalink to this headline">¶</a></h3>
 <p>The module containing the core techniques for the multiple doppler 
 wind retrieval. The <a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field" title="pydda.retrieval.get_dd_wind_field"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_dd_wind_field()</span></code></a> procedure is the
@@ -172,7 +173,7 @@ primary wind retrieval procedure in PyDDA. It contains the optimization
 loop that calls all of the cost functions and gradients in 
 <a class="reference internal" href="#module-pydda.cost_functions" title="pydda.cost_functions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydda.cost_functions</span></code></a> so that the user does not need to know
 how to call these functions.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -181,77 +182,74 @@ how to call these functions.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field" title="pydda.retrieval.get_dd_wind_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field</span></code></a>(Grids, u_init, v_init, w_init)</p></td>
 <td><p>This function takes in a list of Py-ART Grid objects and derives a wind field.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field_nested.html#pydda.retrieval.get_dd_wind_field_nested" title="pydda.retrieval.get_dd_wind_field_nested"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field_nested</span></code></a>(grid_list, u_init, …)</p></td>
-<td><p>This function performs a wind retrieval using a nested domain.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_bca.html#pydda.retrieval.get_bca" title="pydda.retrieval.get_bca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bca</span></code></a>(rad1_lon, rad1_lat, rad2_lon, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_bca.html#pydda.retrieval.get_bca" title="pydda.retrieval.get_bca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bca</span></code></a>(rad1_lon, rad1_lat, rad2_lon, ...)</p></td>
 <td><p>This function gets the beam crossing angle between two lat/lon pairs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.retrieval.DDParameters.html#pydda.retrieval.DDParameters" title="pydda.retrieval.DDParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DDParameters</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.DDParameters.html#pydda.retrieval.DDParameters" title="pydda.retrieval.DDParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DDParameters</span></code></a>()</p></td>
 <td><p>This is a helper class for inserting more arguments into the <a class="reference internal" href="generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function" title="pydda.cost_functions.J_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.J_function()</span></code></a> and <a class="reference internal" href="generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.grad_J()</span></code></a> function.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="vis-module">
+</section>
+</section>
+<section id="vis-module">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">vis</span></code> Module<a class="headerlink" href="#vis-module" title="Permalink to this headline">¶</a></h2>
 <p>Visualization module for PyDDA.</p>
-<span class="target" id="module-pydda.vis"></span><div class="section" id="pydda-vis-pydda-vis">
+<span class="target" id="module-pydda.vis"></span><section id="pydda-vis-pydda-vis">
 <h3>pydda.vis (pydda.vis)<a class="headerlink" href="#pydda-vis-pydda-vis" title="Permalink to this headline">¶</a></h3>
 <p>A visualization module for plotting generated wind fields. There is basic
 support for the visualization of wind fields over a given background field
 using barbs, streamlines, and quivers.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_barbs.html#pydda.vis.plot_horiz_xsection_barbs" title="pydda.vis.plot_horiz_xsection_barbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_barbs</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_barbs.html#pydda.vis.plot_horiz_xsection_barbs" title="pydda.vis.plot_horiz_xsection_barbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_barbs</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a horizontal cross section of winds from wind fields generated by PyDDA using barbs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_xz_xsection_barbs.html#pydda.vis.plot_xz_xsection_barbs" title="pydda.vis.plot_xz_xsection_barbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_xz_xsection_barbs</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_xz_xsection_barbs.html#pydda.vis.plot_xz_xsection_barbs" title="pydda.vis.plot_xz_xsection_barbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_xz_xsection_barbs</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a cross section of winds from wind fields generated by PyDDA in the X-Z plane using barbs.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_yz_xsection_barbs.html#pydda.vis.plot_yz_xsection_barbs" title="pydda.vis.plot_yz_xsection_barbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_yz_xsection_barbs</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_yz_xsection_barbs.html#pydda.vis.plot_yz_xsection_barbs" title="pydda.vis.plot_yz_xsection_barbs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_yz_xsection_barbs</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a cross section of winds from wind fields generated by PyDDA in the Y-Z plane using barbs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_barbs_map.html#pydda.vis.plot_horiz_xsection_barbs_map" title="pydda.vis.plot_horiz_xsection_barbs_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_barbs_map</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_barbs_map.html#pydda.vis.plot_horiz_xsection_barbs_map" title="pydda.vis.plot_horiz_xsection_barbs_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_barbs_map</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a horizontal cross section of winds from wind fields generated by PyDDA onto a geographical map using barbs.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_streamlines.html#pydda.vis.plot_horiz_xsection_streamlines" title="pydda.vis.plot_horiz_xsection_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_streamlines</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_streamlines.html#pydda.vis.plot_horiz_xsection_streamlines" title="pydda.vis.plot_horiz_xsection_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_streamlines</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a horizontal cross section of winds from wind fields generated by PyDDA using streamlines.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_xz_xsection_streamlines.html#pydda.vis.plot_xz_xsection_streamlines" title="pydda.vis.plot_xz_xsection_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_xz_xsection_streamlines</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_xz_xsection_streamlines.html#pydda.vis.plot_xz_xsection_streamlines" title="pydda.vis.plot_xz_xsection_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_xz_xsection_streamlines</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a cross section of winds from wind fields generated by PyDDA in the X-Z plane using streamlines.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_yz_xsection_streamlines.html#pydda.vis.plot_yz_xsection_streamlines" title="pydda.vis.plot_yz_xsection_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_yz_xsection_streamlines</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_yz_xsection_streamlines.html#pydda.vis.plot_yz_xsection_streamlines" title="pydda.vis.plot_yz_xsection_streamlines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_yz_xsection_streamlines</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a cross section of winds from wind fields generated by PyDDA in the Y-Z plane using streamlines.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_streamlines_map.html#pydda.vis.plot_horiz_xsection_streamlines_map" title="pydda.vis.plot_horiz_xsection_streamlines_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_streamlines_map</span></code></a>(Grids[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_streamlines_map.html#pydda.vis.plot_horiz_xsection_streamlines_map" title="pydda.vis.plot_horiz_xsection_streamlines_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_streamlines_map</span></code></a>(Grids[, ...])</p></td>
 <td><p>This procedure plots a horizontal cross section of winds from wind fields generated by PyDDA using streamlines.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_quiver.html#pydda.vis.plot_horiz_xsection_quiver" title="pydda.vis.plot_horiz_xsection_quiver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_quiver</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_quiver.html#pydda.vis.plot_horiz_xsection_quiver" title="pydda.vis.plot_horiz_xsection_quiver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_quiver</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a horizontal cross section of winds from wind fields generated by PyDDA using quivers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_xz_xsection_quiver.html#pydda.vis.plot_xz_xsection_quiver" title="pydda.vis.plot_xz_xsection_quiver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_xz_xsection_quiver</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_xz_xsection_quiver.html#pydda.vis.plot_xz_xsection_quiver" title="pydda.vis.plot_xz_xsection_quiver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_xz_xsection_quiver</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a cross section of winds from wind fields generated by PyDDA in the X-Z plane using quivers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_yz_xsection_quiver.html#pydda.vis.plot_yz_xsection_quiver" title="pydda.vis.plot_yz_xsection_quiver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_yz_xsection_quiver</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.vis.plot_yz_xsection_quiver.html#pydda.vis.plot_yz_xsection_quiver" title="pydda.vis.plot_yz_xsection_quiver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_yz_xsection_quiver</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a cross section of winds from wind fields generated by PyDDA in the Y-Z plane using quivers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_quiver_map.html#pydda.vis.plot_horiz_xsection_quiver_map" title="pydda.vis.plot_horiz_xsection_quiver_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_quiver_map</span></code></a>(Grids[, ax, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.vis.plot_horiz_xsection_quiver_map.html#pydda.vis.plot_horiz_xsection_quiver_map" title="pydda.vis.plot_horiz_xsection_quiver_map"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_horiz_xsection_quiver_map</span></code></a>(Grids[, ax, ...])</p></td>
 <td><p>This procedure plots a horizontal cross section of winds from wind fields generated by PyDDA using quivers onto a geographical map.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="initalization-module">
+</section>
+</section>
+<section id="initalization-module">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">initalization</span></code> Module<a class="headerlink" href="#initalization-module" title="Permalink to this headline">¶</a></h2>
 <p>The module for creating custom initial states for the PyDDA retrieval.</p>
-<span class="target" id="module-pydda.initialization"></span><div class="section" id="pydda-initialization-pydda-initialization">
+<span class="target" id="module-pydda.initialization"></span><section id="pydda-initialization-pydda-initialization">
 <h3>pydda.initialization (pydda.initialization)<a class="headerlink" href="#pydda-initialization-pydda-initialization" title="Permalink to this headline">¶</a></h3>
 <p>The module containing the core techniques for the multiple doppler 
 wind retrieval. All of these techniques take in data from
@@ -262,7 +260,7 @@ add a procedure that takes in a Py-Art Grid that is used for
 the grid specification (shape, x, y, z) and the dataset of your
 choice. Your output from the function should then be a 3-tuple
 of numpy arrays with the same shape as the fields in Grid.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -274,20 +272,20 @@ of numpy arrays with the same shape as the fields in Grid.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.initialization.make_wind_field_from_profile.html#pydda.initialization.make_wind_field_from_profile" title="pydda.initialization.make_wind_field_from_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_wind_field_from_profile</span></code></a>(Grid, profile)</p></td>
 <td><p>This function makes a 3D wind field from a sounding.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf" title="pydda.initialization.make_background_from_wrf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_background_from_wrf</span></code></a>(Grid, file_path, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf" title="pydda.initialization.make_background_from_wrf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_background_from_wrf</span></code></a>(Grid, file_path, ...)</p></td>
 <td><p>This function makes an initalization field based off of the u and w from a WRF run.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim" title="pydda.initialization.make_initialization_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_initialization_from_era_interim</span></code></a>(Grid[, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim" title="pydda.initialization.make_initialization_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_initialization_from_era_interim</span></code></a>(Grid[, ...])</p></td>
 <td><p>This function will read ERA Interim in NetCDF format and add it to the Py-ART grid specified by Grid.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-<div class="section" id="constraints-module">
+</section>
+</section>
+<section id="constraints-module">
 <h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">constraints</span></code> Module<a class="headerlink" href="#constraints-module" title="Permalink to this headline">¶</a></h2>
 <p>The module for creating custom constraints (i.e. from models, satellites) for the PyDDA retrieval.</p>
-<span class="target" id="module-pydda.constraints"></span><div class="section" id="pydda-constraints-pydda-constraints">
+<span class="target" id="module-pydda.constraints"></span><section id="pydda-constraints-pydda-constraints">
 <h3>pydda.constraints (pydda.constraints)<a class="headerlink" href="#pydda-constraints-pydda-constraints" title="Permalink to this headline">¶</a></h3>
 <p>The procedures in this module are used to add spatial fields from non-radar
 based datasets for use as a constraint. The model cost function uses the 
@@ -298,22 +296,22 @@ create a function that adds 3 fields into the input Py-ART Grid with names
 dataset. Then, in order to have PyDDA use this dataset as a constraint,
 simply add (name) into the model_fields option of 
 <code class="xref py py-func docutils literal notranslate"><span class="pre">get_dd_wind_field()</span></code>.</p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.make_constraint_from_wrf.html#pydda.constraints.make_constraint_from_wrf" title="pydda.constraints.make_constraint_from_wrf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_constraint_from_wrf</span></code></a>(Grid, file_path, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.make_constraint_from_wrf.html#pydda.constraints.make_constraint_from_wrf" title="pydda.constraints.make_constraint_from_wrf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_constraint_from_wrf</span></code></a>(Grid, file_path, ...)</p></td>
 <td><p>This function makes an initalization field based off of the u and w from a WRF run in netCDF format.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.add_hrrr_constraint_to_grid.html#pydda.constraints.add_hrrr_constraint_to_grid" title="pydda.constraints.add_hrrr_constraint_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_hrrr_constraint_to_grid</span></code></a>(Grid, file_path)</p></td>
 <td><p>This function will read an HRRR GRIB2 file and create the constraining u, v, and w fields for the model constraint</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.make_constraint_from_era_interim.html#pydda.constraints.make_constraint_from_era_interim" title="pydda.constraints.make_constraint_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_constraint_from_era_interim</span></code></a>(Grid[, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.make_constraint_from_era_interim.html#pydda.constraints.make_constraint_from_era_interim" title="pydda.constraints.make_constraint_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_constraint_from_era_interim</span></code></a>(Grid[, ...])</p></td>
 <td><p>This function will read ERA Interim in NetCDF format and add it  to the Py-ART grid specified by Grid.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data" title="pydda.constraints.download_needed_era_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_needed_era_data</span></code></a>(Grid, start_date, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data" title="pydda.constraints.download_needed_era_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_needed_era_data</span></code></a>(Grid, start_date, ...)</p></td>
 <td><p>This function will download the ERA interim data in the region specified by the input Py-ART Grid within the interval specified by start_date and end_date.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_iem_obs</span></code></a>(Grid[, window])</p></td>
@@ -321,9 +319,9 @@ simply add (name) into the model_fields option of
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -332,8 +330,9 @@ simply add (name) into the model_fields option of
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Developer Reference Manual</a><ul>
 <li><a class="reference internal" href="#cost-functions-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cost_functions</span></code> Module</a><ul>
 <li><a class="reference internal" href="#pydda-cost-functions-pydda-cost-functions">pydda.cost_functions (pydda.cost_functions)</a></li>
@@ -359,12 +358,17 @@ simply add (name) into the model_fields option of
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../source/auto_examples/plot_examples_nested.html"
-                        title="previous chapter">Example on retrieving and plotting winds on a distributed cluster</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="generated/pydda.cost_functions.J_function.html"
-                        title="next chapter">pydda.cost_functions.J_function</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../source/auto_examples/plot_examples.html"
+                          title="previous chapter">Example on retrieving and plotting winds</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="generated/pydda.cost_functions.J_function.html"
+                          title="next chapter">pydda.cost_functions.J_function</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -376,7 +380,7 @@ simply add (name) into the model_fields option of
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -399,15 +403,15 @@ simply add (name) into the model_fields option of
           <a href="generated/pydda.cost_functions.J_function.html" title="pydda.cost_functions.J_function"
              >next</a> |</li>
         <li class="right" >
-          <a href="../source/auto_examples/plot_examples_nested.html" title="Example on retrieving and plotting winds on a distributed cluster"
+          <a href="../source/auto_examples/plot_examples.html" title="Example on retrieving and plotting winds"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Developer Reference Manual</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

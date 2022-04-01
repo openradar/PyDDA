@@ -4,23 +4,24 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Example on retrieving and plotting winds &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Example on retrieving and plotting winds &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Example on retrieving and plotting winds on a distributed cluster" href="plot_examples_nested.html" />
+    <link rel="next" title="Developer Reference Manual" href="../../dev_reference/index.html" />
     <link rel="prev" title="Example on geographic plotting and constraint variation" href="plot_fun_with_constraints.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -33,12 +34,12 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_examples_nested.html" title="Example on retrieving and plotting winds on a distributed cluster"
+          <a href="../../dev_reference/index.html" title="Developer Reference Manual"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plot_fun_with_constraints.html" title="Example on geographic plotting and constraint variation"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Example on retrieving and plotting winds</a></li> 
       </ul>
@@ -54,151 +55,86 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-examples-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="example-on-retrieving-and-plotting-winds">
+<section class="sphx-glr-example-title" id="example-on-retrieving-and-plotting-winds">
 <span id="sphx-glr-source-auto-examples-plot-examples-py"></span><h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Permalink to this headline">¶</a></h1>
 <p>This is a simple example for how to retrieve and plot winds from 2 radars
 using PyDDA.</p>
 <p>Author: Robert C. Jackson</p>
 <ul class="sphx-glr-horizontal">
-<li><img alt="PyDDA retreived winds &#64;4.05 km" class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_examples_001.png" />
-</li>
-<li><img alt="PyDDA retreived winds &#64;20.0 km south of origin." class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_examples_002.png" />
-</li>
-<li><img alt="PyDDA retreived winds &#64;20.0 km west of origin." class="sphx-glr-multi-img" src="../../_images/sphx_glr_plot_examples_003.png" />
-</li>
+<li><img src="../../_images/sphx_glr_plot_examples_001.png" srcset="../../_images/sphx_glr_plot_examples_001.png" alt="PyDDA retreived winds @4.05 km" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_examples_002.png" srcset="../../_images/sphx_glr_plot_examples_002.png" alt="PyDDA retreived winds @20.0 km south of origin." class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_examples_003.png" srcset="../../_images/sphx_glr_plot_examples_003.png" alt="PyDDA retreived winds @20.0 km west of origin." class = "sphx-glr-multi-img"/></li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:372: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/miniconda3/envs/testenv/lib/python3.7/site-packages/pyart/io/cfradial.py:365: UserWarning: WARNING: valid_max not used since it
+/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:372: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/home/travis/build/openradar/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
+/home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
   elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
 Calculating weights for radars 0 and 1
-/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
-  theta_2 = np.arccos((x-rad2[1])/b)
 Calculating weights for models...
 Starting solver
-rmsVR = 6.776753068494562
-Total points: 92092
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|  22.8704| 179.9488|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  14.2900
-Norm of gradient: 0.060446494189537625
-Iterations before filter: 10
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   3.8770|  66.1782|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  23.7764
-Norm of gradient: 0.023820509033214428
-Iterations before filter: 20
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   4.0276|  37.8407|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.6265
-Norm of gradient: 0.027429368747654684
-Iterations before filter: 30
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.8632|  28.6443|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.5863
-Norm of gradient: 0.006865328325949884
-Iterations before filter: 40
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   1.6287|  20.6755|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  28.3852
-Norm of gradient: 0.0279854013478352
-Iterations before filter: 50
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.4844|  17.9732|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0275
-Norm of gradient: 0.008561077885522225
-Iterations before filter: 60
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.9036|  14.7182|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.7302
-Norm of gradient: 0.011555466542872561
-Iterations before filter: 70
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.3991|  13.8528|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.3445
-Norm of gradient: 0.007752253200804361
-Iterations before filter: 80
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.2828|  13.3721|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.4677
-Norm of gradient: 0.006272750311994563
-Iterations before filter: 90
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.3071|  12.9929|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.6440
-Norm of gradient: 0.007580047912664911
-Iterations before filter: 100
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.2213|  12.9835|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.6650
-Norm of gradient: 0.0034184639826770552
-Iterations before filter: 110
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   0.2190|  12.9830|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.6806
-Norm of gradient: 0.003456007238298844
-Iterations before filter: 120
+rmsVR = 6.776540662375731
+Total points: 92100
+The max of w_init is 0.0
+Initial constraint violation:  0.000000
+Initial Lagrangian norm:  106.766222
+Iter:  1
+Jvel:  tf.Tensor(1.8308261338947736, shape=(), dtype=float64)
+Constraint violation:  0.6818282075000476
+Maximum mass continuity violation:  0.02703218738201795
+Lagrangian norm:  0.333181
+Added most recent point to filter
+Restoration phase, mu = : 10.0
+Iter:  2
+Jvel:  tf.Tensor(776.0735096651767, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.32457978698474044, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.02703218738201795
+Lagrangian norm:  8.965855
+Added most recent point to filter
+Restoration phase, mu = : 100.0
+Iter:  3
+Jvel:  tf.Tensor(0.1809088981510601, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.43120861608918903, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.018148225691186577
+Lagrangian norm:  0.075149
+Added most recent point to filter
+Restoration phase, mu = : 1000.0
+Iter:  4
+Jvel:  tf.Tensor(931.095825066986, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.23440116381294548, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.018148202063226836
+Lagrangian norm:  9.954166
+Added most recent point to filter
+Restoration phase, mu = : 10000.0
+Iter:  5
+Jvel:  tf.Tensor(1.6383734061938682, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.2860483774207875, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.011858196401273563
+Lagrangian norm:  0.307412
+Added most recent point to filter
+Iter:  6
+Jvel:  tf.Tensor(3.087757975949226, shape=(), dtype=float64)
+Constraint violation:  0.051330460781750846
+Maximum mass continuity violation:  0.0015490391557071003
+Lagrangian norm:  0.262021
+AugLag converged to specified tolerance
 Applying low pass filter to wind field...
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|8422.4335|  12.0983|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6063
-Norm of gradient: 0.9741646711485761
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|7628.5526|  12.4358|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.6030
-Norm of gradient: 0.9310921736847843
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-| 490.5090| 108.3447|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  17.6784
-Norm of gradient: 0.2369020720008402
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-| 259.5934| 112.2486|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.0080
-Norm of gradient: 0.14310943926375086
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|  54.4155| 108.6827|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.8995
-Norm of gradient: 0.07850369417512892
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|  61.2455|  91.8403|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.6986
-Norm of gradient: 0.15163149513687246
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|  15.9171|  90.1737|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.7273
-Norm of gradient: 0.03769162288445115
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|  10.2210|  83.9800|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.6419
-Norm of gradient: 0.02253850739202639
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   7.0490|  67.8050|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.3215
-Norm of gradient: 0.0246396306342528
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|   6.1411|  55.8056|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.9899
-Norm of gradient: 0.019910339281986288
-| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-|  17.3015|  42.6305|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.8585
-Norm of gradient: 0.06736427648598432
-Iterations after filter: 1
-Iterations after filter: 2
-Done! Time = 450.1
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:132: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
-  vmax=vmax)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:175: UserWarning: linewidths is ignored by contourf
-  alpha=contour_alpha)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:177: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+Done! Time = 79.0
+/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:179: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
   cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:178: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:180: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
   cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
-/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
-  theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  levels=[bca_min, bca_max], color=&#39;k&#39;)
-/home/travis/build/openradar/PyDDA/pydda/retrieval/wind_retrieve.py:653: RuntimeWarning: invalid value encountered in arccos
-  theta_2 = np.arccos((x-rad2[1])/b)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:214: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  levels=[bca_min, bca_max], color=&#39;k&#39;)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:594: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
-  vmax=vmax)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:637: UserWarning: linewidths is ignored by contourf
-  alpha=contour_alpha)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:639: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+  ax.contour(
+/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
+  ax.contour(
+/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:637: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
   cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:640: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
-  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:782: MatplotlibDeprecationWarning: shading=&#39;flat&#39; when X and Y have the same dimensions as C is deprecated since 3.3.  Either specify the corners of the quadrilaterals with X and Y, or pass shading=&#39;auto&#39;, &#39;nearest&#39; or &#39;gouraud&#39;, or set rcParams[&#39;pcolor.shading&#39;].  This will become an error two minor releases later.
-  vmax=vmax)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:825: UserWarning: linewidths is ignored by contourf
-  alpha=contour_alpha)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:827: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
-  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
-/home/travis/build/openradar/PyDDA/pydda/vis/barb_plot.py:828: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. In future versions, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = copy.copy(mpl.cm.get_cmap(&quot;viridis&quot;))
+/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:638: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
   cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 </pre></div>
 </div>
@@ -207,41 +143,42 @@ Done! Time = 450.1
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">import</span> <span class="nn">pydda</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 
 <span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span><span class="p">)</span>
 <span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR1</span><span class="p">)</span>
 
-<span class="n">sounding</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_arm_sonde</span><span class="p">(</span>
-    <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">SOUNDING_PATH</span><span class="p">)</span>
-
 
 <span class="c1"># Load sounding data and insert as an intialization</span>
-<span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_wind_field_from_profile</span><span class="p">(</span>
-        <span class="n">cpol_grid</span><span class="p">,</span> <span class="n">sounding</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">)</span>
+<span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
+        <span class="n">cpol_grid</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">)</span>
 
 <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
 <span class="c1"># and data weighting constraints.</span>
 <span class="n">Grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span>
-                                          <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span>
-                                          <span class="n">Cz</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                          <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span> <span class="n">filt_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                                          <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                                          <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                                          <span class="n">Jveltol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">cvtol</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
+                                          <span class="n">Cx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                                          <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span> <span class="n">filter_window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                          <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                          <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;auglag&quot;</span><span class="p">)</span>
 <span class="c1"># Plot a horizontal cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
                                     <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-                                    <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+                                    <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                     <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
                                     <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">15.0</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;Darwin_horiz.png&quot;</span><span class="p">)</span>
 
 <span class="c1"># Plot a vertical X-Z cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_xz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
                                  <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
-                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                  <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
                                  <span class="n">barb_spacing_z_km</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -250,13 +187,12 @@ Done! Time = 450.1
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_yz_xsection_barbs</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
                                  <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
-                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
                                  <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
                                  <span class="n">barb_spacing_z_km</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;Darwin.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 7 minutes  31.858 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  20.599 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
@@ -266,7 +202,7 @@ Done! Time = 450.1
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -275,12 +211,16 @@ Done! Time = 450.1
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="plot_fun_with_constraints.html"
-                        title="previous chapter">Example on geographic plotting and constraint variation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="plot_examples_nested.html"
-                        title="next chapter">Example on retrieving and plotting winds on a distributed cluster</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="plot_fun_with_constraints.html"
+                          title="previous chapter">Example on geographic plotting and constraint variation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../dev_reference/index.html"
+                          title="next chapter">Developer Reference Manual</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -292,7 +232,7 @@ Done! Time = 450.1
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -312,19 +252,19 @@ Done! Time = 450.1
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_examples_nested.html" title="Example on retrieving and plotting winds on a distributed cluster"
+          <a href="../../dev_reference/index.html" title="Developer Reference Manual"
              >next</a> |</li>
         <li class="right" >
           <a href="plot_fun_with_constraints.html" title="Example on geographic plotting and constraint variation"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Example on retrieving and plotting winds</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

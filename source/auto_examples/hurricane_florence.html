@@ -4,16 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Example on integrating radar and HRRR data &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Example on integrating radar and HRRR data &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -38,7 +39,7 @@
         <li class="right" >
           <a href="index.html" title="PyDDA Example Gallery"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">PyDDA Example Gallery</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Example on integrating radar and HRRR data</a></li> 
       </ul>
@@ -54,7 +55,7 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-source-auto-examples-hurricane-florence-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="example-on-integrating-radar-and-hrrr-data">
+<section class="sphx-glr-example-title" id="example-on-integrating-radar-and-hrrr-data">
 <span id="sphx-glr-source-auto-examples-hurricane-florence-py"></span><h1>Example on integrating radar and HRRR data<a class="headerlink" href="#example-on-integrating-radar-and-hrrr-data" title="Permalink to this headline">¶</a></h1>
 <p>This is an example of how to retrieve winds in Hurricane Florence.
 In this example, we use data from 2 NEXRAD radars as well as from
@@ -82,8 +83,8 @@ the HRRR to retrieve the winds</p>
 <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
     <span class="n">grid_mhx</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
 <span class="n">out_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
-    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;auglag&quot;</span><span class="p">,</span>
     <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">])</span>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
@@ -107,7 +108,7 @@ the HRRR to retrieve the winds</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -116,12 +117,16 @@ the HRRR to retrieve the winds</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">PyDDA Example Gallery</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="sydney_tornado.html"
-                        title="next chapter">Example of a wind retrieval in a tornado over Sydney</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">PyDDA Example Gallery</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="sydney_tornado.html"
+                          title="next chapter">Example of a wind retrieval in a tornado over Sydney</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -133,7 +138,7 @@ the HRRR to retrieve the winds</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -158,14 +163,14 @@ the HRRR to retrieve the winds</p>
         <li class="right" >
           <a href="index.html" title="PyDDA Example Gallery"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >PyDDA Example Gallery</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Example on integrating radar and HRRR data</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

@@ -33,8 +33,8 @@ grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
 u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
     grid_mhx, (0.0, 0.0, 0.0))
 out_grids = pydda.retrieval.get_dd_wind_field(
-    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=0.1, Cm=1000.0, Cmod=1e-3,
-    mask_outside_opt=True, vel_name='corrected_velocity',
+    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=1.0, Cm=1.0, Cmod=1.0,
+    mask_outside_opt=True, vel_name='corrected_velocity', engine="auglag",
     model_fields=["hrrr"])
 
 fig = plt.figure(figsize=(25, 15))

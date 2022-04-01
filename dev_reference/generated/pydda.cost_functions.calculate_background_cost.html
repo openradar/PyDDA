@@ -4,16 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.cost_functions.calculate_background_cost &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>pydda.cost_functions.calculate_background_cost &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -38,7 +39,7 @@
         <li class="right" >
           <a href="pydda.cost_functions.calculate_smoothness_gradient.html" title="pydda.cost_functions.calculate_smoothness_gradient"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pydda.cost_functions.calculate_background_cost</a></li> 
       </ul>
@@ -49,43 +50,41 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pydda-cost-functions-calculate-background-cost">
+  <section id="pydda-cost-functions-calculate-background-cost">
 <h1>pydda.cost_functions.calculate_background_cost<a class="headerlink" href="#pydda-cost-functions-calculate-background-cost" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="pydda.cost_functions.calculate_background_cost">
-<code class="sig-prename descclassname"><span class="pre">pydda.cost_functions.</span></code><code class="sig-name descname"><span class="pre">calculate_background_cost</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_back</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_back</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/cost_functions.html#calculate_background_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.cost_functions.calculate_background_cost" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pydda.cost_functions.calculate_background_cost">
+<span class="sig-prename descclassname"><span class="pre">pydda.cost_functions.</span></span><span class="sig-name descname"><span class="pre">calculate_background_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_back</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_back</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/cost_functions/_cost_functions_numpy.html#calculate_background_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.cost_functions.calculate_background_cost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the background cost function. The background cost function is
 simply the sum of the squared differences between the wind field and the
-background wind field multiplied by the weighting coefficient.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>u: Float array</strong></dt><dd><p>Float array with u component of wind field</p>
+background wind field multiplied by the weighting coefficient.
+Parameters
+———-
+u: Float array</p>
+<blockquote>
+<div><p>Float array with u component of wind field</p>
+</div></blockquote>
+<dl class="simple">
+<dt>v: Float array</dt><dd><p>Float array with v component of wind field</p>
 </dd>
-<dt><strong>v: Float array</strong></dt><dd><p>Float array with v component of wind field</p>
+<dt>w: Float array</dt><dd><p>Float array with w component of wind field</p>
 </dd>
-<dt><strong>w: Float array</strong></dt><dd><p>Float array with w component of wind field</p>
+<dt>weights: Float array</dt><dd><p>Weights for each point to consider into cost function</p>
 </dd>
-<dt><strong>weights: Float array</strong></dt><dd><p>Weights for each point to consider into cost function</p>
+<dt>u_back: 1D float array</dt><dd><p>Zonal winds vs height from sounding</p>
 </dd>
-<dt><strong>u_back: 1D float array</strong></dt><dd><p>Zonal winds vs height from sounding</p>
+<dt>w_back: 1D float array</dt><dd><p>Meridional winds vs height from sounding</p>
 </dd>
-<dt><strong>w_back: 1D float array</strong></dt><dd><p>Meridional winds vs height from sounding</p>
-</dd>
-<dt><strong>Cb: float</strong></dt><dd><p>Weight of background constraint to total cost function</p>
+<dt>Cb: float</dt><dd><p>Weight of background constraint to total cost function</p>
 </dd>
 </dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
+<dl class="simple">
 <dt>cost: float</dt><dd><p>value of background cost function</p>
-</dd>
-</dl>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -94,12 +93,16 @@ background wind field multiplied by the weighting coefficient.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="pydda.cost_functions.calculate_smoothness_gradient.html"
-                        title="previous chapter">pydda.cost_functions.calculate_smoothness_gradient</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pydda.cost_functions.calculate_background_gradient.html"
-                        title="next chapter">pydda.cost_functions.calculate_background_gradient</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="pydda.cost_functions.calculate_smoothness_gradient.html"
+                          title="previous chapter">pydda.cost_functions.calculate_smoothness_gradient</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="pydda.cost_functions.calculate_background_gradient.html"
+                          title="next chapter">pydda.cost_functions.calculate_background_gradient</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -111,7 +114,7 @@ background wind field multiplied by the weighting coefficient.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -136,14 +139,14 @@ background wind field multiplied by the weighting coefficient.</p>
         <li class="right" >
           <a href="pydda.cost_functions.calculate_smoothness_gradient.html" title="pydda.cost_functions.calculate_smoothness_gradient"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">pydda.cost_functions.calculate_background_cost</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

@@ -4,16 +4,17 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 0.5.2 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 1.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -34,7 +35,7 @@
         <li class="right" >
           <a href="contributors_guide/index.html" title="Contributor’s Guide"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">PyDDA 1.0.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Welcome to the PyDDA documentation!</a></li> 
       </ul>
     </div>  
@@ -44,14 +45,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-the-pydda-documentation">
+  <section id="welcome-to-the-pydda-documentation">
 <h1>Welcome to the PyDDA documentation!<a class="headerlink" href="#welcome-to-the-pydda-documentation" title="Permalink to this headline">¶</a></h1>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="alternate text" class="align-center" src="_images/logo.png" style="width: 400px; height: 200px;" /></a>
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3942686"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg" /></a>
 <p>This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as
 description of each of PyDDA’s subroutines.</p>
-<div class="section" id="system-requirements">
+<section id="system-requirements">
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
 <p>This works on any modern version of Linux, Mac OS X, and Windows. For Windows,
 HRRR data integration is not supported. In addition, since PyDDA takes advtange
@@ -62,19 +63,21 @@ of parallelism we recommend:</p>
 </pre></div>
 </div>
 <p>While PyDDA will work on less than this, you may run into performance issues.
-In addition, we do not support Python versions less than 3.6. If you have an older version installed, PyDDA may work just fine but we will not provide support for any issues unless you are using at least Python 3.6.</p>
-</div>
-<div class="section" id="installation-instructions">
+In addition, we do not support Python versions less than 3.6.
+If you have an older version installed, PyDDA may work just fine but we will
+not provide support for any issues unless you are using at least Python 3.6.</p>
+</section>
+<section id="installation-instructions">
 <h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h2>
 <p>The GitHub repository for PyDDA is available at:</p>
 <p><a class="reference external" href="https://github.com/openradar/PyDDA">https://github.com/openradar/PyDDA</a></p>
 <p>Before you install PyDDA, ensure that the following dependencies are installed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Python</span> <span class="mf">3.6</span><span class="o">+</span>
-<span class="n">Py</span><span class="o">-</span><span class="n">ART</span> <span class="mf">1.9</span><span class="o">.</span><span class="mi">0</span><span class="o">+</span>
-<span class="n">scipy</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span><span class="o">+</span>
-<span class="n">numpy</span> <span class="mf">1.13</span><span class="o">.</span><span class="mi">1</span><span class="o">+</span>
-<span class="n">matplotlib</span> <span class="mf">1.5</span><span class="o">.</span><span class="mi">3</span><span class="o">+</span>
-<span class="n">cartopy</span> <span class="mf">0.16</span><span class="o">.</span><span class="mi">0</span><span class="o">+</span>
+<span class="n">Py</span><span class="o">-</span><span class="n">ART</span> <span class="mf">1.9.0</span><span class="o">+</span>
+<span class="n">scipy</span> <span class="mf">1.0.1</span><span class="o">+</span>
+<span class="n">numpy</span> <span class="mf">1.13.1</span><span class="o">+</span>
+<span class="n">matplotlib</span> <span class="mf">1.5.3</span><span class="o">+</span>
+<span class="n">cartopy</span> <span class="mf">0.16.0</span><span class="o">+</span>
 </pre></div>
 </div>
 <p>In order to use the HRRR data constraint, cfgrib needs to be installed. <a class="reference external" href="http://github.com/ecmwf/cfgrib">cfgrib</a> currently only works on Mac OS and Linux, so
@@ -103,6 +106,14 @@ just type in the following commands assuming you have the above dependencies ins
 <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
+<p>Finally, PyDDA now supports using <cite>Jax &lt;jax.readthedocs.io&gt;</cite> and <cite>TensorFlow &lt;tensorflow.org&gt;</cite>
+for solving the three dimensional wind field. PyDDA requries TensorFlow 2.6 and the
+tensorflow-probability package for TensorFlow to be enabled. Both the Jax and
+TensorFlow-based engines now use automatic differentiation to solve for the gradients
+of each cost function. This therefore will create gradients that are less susceptible
+to boundary artifacts and rounding errors. In addition, both of these packages can
+utilize CUDA-enabled GPUs for much faster processing. These two
+dependencies are optional as the user can still use PyDDA with the SciPy ecosystem.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -142,16 +153,16 @@ just type in the following commands assuming you have the above dependencies ins
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
+</section>
+</section>
+<section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -160,8 +171,9 @@ just type in the following commands assuming you have the above dependencies ins
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Welcome to the PyDDA documentation!</a><ul>
 <li><a class="reference internal" href="#system-requirements">System Requirements</a></li>
 <li><a class="reference internal" href="#installation-instructions">Installation instructions</a></li>
@@ -170,9 +182,12 @@ just type in the following commands assuming you have the above dependencies ins
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="contributors_guide/index.html"
-                        title="next chapter">Contributor’s Guide</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="contributors_guide/index.html"
+                          title="next chapter">Contributor’s Guide</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -184,7 +199,7 @@ just type in the following commands assuming you have the above dependencies ins
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -206,13 +221,13 @@ just type in the following commands assuming you have the above dependencies ins
         <li class="right" >
           <a href="contributors_guide/index.html" title="Contributor’s Guide"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.5.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">PyDDA 1.0.2 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Welcome to the PyDDA documentation!</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>
