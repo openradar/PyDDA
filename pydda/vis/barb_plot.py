@@ -804,7 +804,7 @@ def plot_yz_xsection_barbs(Grids, ax=None,
     if(v_vel_contours is not None):
         v_filled = np.ma.filled(v[:, :, level], fill_value=0)
         cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                          v_filled, levels=w_vel_contours, linewidths=2)
+                          v_filled, levels=v_vel_contours, linewidths=2)
         cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
         cs.cmap.set_under(color='white', alpha=0)
         cs.cmap.set_bad(color='white', alpha=0)
