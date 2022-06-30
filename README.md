@@ -28,23 +28,8 @@ field from a grid.
 
 Angles.py is from Multidop and was written by Timothy Lang of NASA.
 
-Right now this has been tested on and depends on:
-
-    Python 3.6+
-
-    Py-ART 1.9.0
-    
-    scipy 1.0.1
-    
-    numpy 1.13.1
-    
-    matplotlib 1.5.3
-    
-    cartopy 0.15.1
-    
-    dask 0.17.1
-    
-    distributed 1.21.2
+We recommend using Python 3.8+ or better and using anaconda or pip to install
+the required dependencies of PyDDA.
     
 In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
