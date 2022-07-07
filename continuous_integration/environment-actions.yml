@@ -19,5 +19,5 @@ dependencies:
   - dask
   - distributed
   - jax
-  - tensorflow>=2.6
+  - tensorflow
   - tensorflow-probability
