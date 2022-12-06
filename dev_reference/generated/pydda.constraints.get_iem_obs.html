@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>pydda.constraints.get_iem_obs &#8212; PyDDA 1.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
@@ -17,7 +17,9 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -47,14 +49,14 @@
           <div class="body" role="main">
             
   <section id="pydda-constraints-get-iem-obs">
-<h1>pydda.constraints.get_iem_obs<a class="headerlink" href="#pydda-constraints-get-iem-obs" title="Permalink to this headline">¶</a></h1>
+<h1>pydda.constraints.get_iem_obs<a class="headerlink" href="#pydda-constraints-get-iem-obs" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pydda.constraints.get_iem_obs">
 <span class="sig-prename descclassname"><span class="pre">pydda.constraints.</span></span><span class="sig-name descname"><span class="pre">get_iem_obs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/constraints/station_data.html#get_iem_obs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.constraints.get_iem_obs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all of the station observations from the Iowa Mesonet for a given Grid in the format
 needed for PyDDA.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Grid: pyART Grid</strong></dt><dd><p>The Grid to retrieve the station data for.</p>
 </dd>
@@ -62,7 +64,7 @@ needed for PyDDA.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt>station_data: list of dicts</dt><dd><p>A list of dictionaries containing the following entries as keys:</p>
 <p><em>lat</em> - Latitude of the site (float)</p>
@@ -88,6 +90,16 @@ needed for PyDDA.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">pydda.constraints.get_iem_obs</a><ul>
+<li><a class="reference internal" href="#pydda.constraints.get_iem_obs"><code class="docutils literal notranslate"><span class="pre">get_iem_obs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="pydda.constraints.download_needed_era_data.html"
                           title="previous chapter">pydda.constraints.download_needed_era_data</a></p>
@@ -108,7 +120,7 @@ needed for PyDDA.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -132,7 +144,7 @@ needed for PyDDA.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

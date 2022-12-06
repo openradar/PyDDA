@@ -61,28 +61,20 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:372: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:372: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1714: UserWarning: linewidths is ignored by contourf
-      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:410: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_under(color='white', alpha=0)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:411: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_over(color='white', alpha=0)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:412: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_bad(color='white', alpha=0)
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1666: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1666: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
+      result = super().contourf(*args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
+      result = super().contour(*args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
+      result = super().contour(*args, **kwargs)
     /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
@@ -96,176 +88,170 @@ questionable winds at the edges of the Dual Doppler Lobes.
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/tensorflow_probability/python/__init__.py:58: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
       distutils.version.LooseVersion(required_tensorflow_version)):
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-          0|94406.4531|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 30.77616
+          0|94406.4375|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
+    The gradient of the cost functions is 30.776155
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10| 792.6586|  27.0629|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4189
+         10| 792.6587|  27.0629|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4189
     The gradient of the cost functions is 1.1458552
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          20|  11.9915|  27.5590|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3768
-    The gradient of the cost functions is 0.1604216
+    The gradient of the cost functions is 0.16042161
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          30|   8.6511|  24.9324|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.2213
-    The gradient of the cost functions is 0.47717267
+    The gradient of the cost functions is 0.4771724
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          40|   1.3918|  22.3669|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.2279
-    The gradient of the cost functions is 0.2949825
+    The gradient of the cost functions is 0.29498246
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          50|   1.0119|  13.2022|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.5467
-    The gradient of the cost functions is 0.07316961
+    The gradient of the cost functions is 0.07316962
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          60|   1.4775|  12.0977|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.8451
-    The gradient of the cost functions is 0.32597795
+    The gradient of the cost functions is 0.32597876
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          70|   0.7970|  10.4695|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.4474
-    The gradient of the cost functions is 0.1480086
+    The gradient of the cost functions is 0.14800872
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          80|   0.2632|   7.7988|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.5507
-    The gradient of the cost functions is 0.0529411
+    The gradient of the cost functions is 0.052941103
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          90|   0.5726|   7.2286|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.3683
-    The gradient of the cost functions is 0.29541263
+    The gradient of the cost functions is 0.29541352
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        100|   0.4691|   6.2155|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  17.1830
-    The gradient of the cost functions is 0.09950947
+        100|   0.4691|   6.2155|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  17.1831
+    The gradient of the cost functions is 0.09950946
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         110|   0.1378|   5.1916|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.8398
-    The gradient of the cost functions is 0.039999872
+    The gradient of the cost functions is 0.039999932
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        120|   0.3247|   4.8510|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  19.4605
-    The gradient of the cost functions is 0.2199047
+        120|   0.3247|   4.8510|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  19.4606
+    The gradient of the cost functions is 0.21990514
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        130|   0.2561|   4.3347|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  19.9514
-    The gradient of the cost functions is 0.07602217
+        130|   0.2561|   4.3347|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  19.9515
+    The gradient of the cost functions is 0.076022156
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         140|   0.0774|   3.7146|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  21.0764
-    The gradient of the cost functions is 0.033464957
+    The gradient of the cost functions is 0.033464972
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         150|   0.2037|   3.4826|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  21.3898
-    The gradient of the cost functions is 0.19237836
+    The gradient of the cost functions is 0.19237712
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        160|   0.1705|   3.1348|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  21.5361
-    The gradient of the cost functions is 0.061364476
+        160|   0.1705|   3.1348|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  21.5362
+    The gradient of the cost functions is 0.061364368
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         170|   0.0528|   2.7625|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  21.8001
-    The gradient of the cost functions is 0.025923768
+    The gradient of the cost functions is 0.02592373
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        180|   0.1334|   2.6163|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1034
-    The gradient of the cost functions is 0.15037021
+        180|   0.1334|   2.6163|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1033
+    The gradient of the cost functions is 0.15037319
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         190|   0.1231|   2.3543|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  23.0739
-    The gradient of the cost functions is 0.04286515
+    The gradient of the cost functions is 0.042865142
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         200|   0.0209|   2.1243|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.9178
-    The gradient of the cost functions is 0.022783883
+    The gradient of the cost functions is 0.022783943
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        210|   0.0856|   2.0139|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.5360
-    The gradient of the cost functions is 0.1661005
+        210|   0.0856|   2.0139|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.5361
+    The gradient of the cost functions is 0.16609997
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         220|   0.0842|   1.7763|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7545
-    The gradient of the cost functions is 0.026297642
+    The gradient of the cost functions is 0.026297385
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         230|   0.0093|   1.6984|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  27.7018
-    The gradient of the cost functions is 0.025802685
+    The gradient of the cost functions is 0.025802936
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         240|   0.1035|   1.5561|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  28.2987
-    The gradient of the cost functions is 0.15996218
+    The gradient of the cost functions is 0.15996143
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         250|   0.0358|   1.4296|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.1080
-    The gradient of the cost functions is 0.020044466
+    The gradient of the cost functions is 0.02004459
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         260|   0.0070|   1.3981|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.4189
-    The gradient of the cost functions is 0.029165942
+    The gradient of the cost functions is 0.02916602
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         270|   0.1365|   1.2257|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.0542
-    The gradient of the cost functions is 0.11316908
+    The gradient of the cost functions is 0.11317099
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        280|   0.0134|   1.1967|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.2897
-    The gradient of the cost functions is 0.020000866
+        280|   0.0134|   1.1967|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.2898
+    The gradient of the cost functions is 0.020001035
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         290|   0.0094|   1.1672|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  30.3941
-    The gradient of the cost functions is 0.026978083
+    The gradient of the cost functions is 0.026978092
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        300|   0.1529|   1.0299|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  31.3113
-    The gradient of the cost functions is 0.06731502
+        300|   0.1529|   1.0299|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  31.3112
+    The gradient of the cost functions is 0.0673162
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        310|   0.0064|   1.0191|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  31.1193
-    The gradient of the cost functions is 0.024613056
+        310|   0.0064|   1.0191|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  31.1192
+    The gradient of the cost functions is 0.024613187
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        320|   0.0145|   0.9754|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  31.5184
-    The gradient of the cost functions is 0.018947298
+        320|   0.0145|   0.9754|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  31.5183
+    The gradient of the cost functions is 0.01894762
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         330|   0.1138|   0.8911|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  33.2778
-    The gradient of the cost functions is 0.042048894
+    The gradient of the cost functions is 0.04204874
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         340|   0.0052|   0.8774|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  32.9678
-    The gradient of the cost functions is 0.029981056
+    The gradient of the cost functions is 0.029980619
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        350|   0.0186|   0.8122|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  33.5074
-    The gradient of the cost functions is 0.011791135
+        350|   0.0186|   0.8122|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  33.5073
+    The gradient of the cost functions is 0.01179132
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         360|   0.0481|   0.7714|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.3528
-    The gradient of the cost functions is 0.03361639
+    The gradient of the cost functions is 0.03361709
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        370|   0.0070|   0.7603|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.3031
-    The gradient of the cost functions is 0.028041294
+        370|   0.0070|   0.7603|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.3032
+    The gradient of the cost functions is 0.028040366
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         380|   0.0130|   0.6953|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.8399
-    The gradient of the cost functions is 0.008323041
+    The gradient of the cost functions is 0.008324462
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         390|   0.0199|   0.6796|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.1329
-    The gradient of the cost functions is 0.037041042
+    The gradient of the cost functions is 0.037039127
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        400|   0.0110|   0.6606|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.1940
-    The gradient of the cost functions is 0.019841934
+        400|   0.0110|   0.6607|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.1941
+    The gradient of the cost functions is 0.019848885
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        410|   0.0059|   0.6170|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.5225
+        410|   0.0059|   0.6170|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  35.5223
     LBfgsOptimizerResults(converged=<tf.Tensor: shape=(), dtype=bool, numpy=True>, failed=<tf.Tensor: shape=(), dtype=bool, numpy=False>, num_iterations=<tf.Tensor: shape=(), dtype=int32, numpy=139>, num_objective_evaluations=<tf.Tensor: shape=(), dtype=int32, numpy=419>, position=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=
-    array([-3.8652565e-29, -1.1250952e-28, -2.5916167e-27, ...,
-            0.0000000e+00,  0.0000000e+00,  0.0000000e+00], dtype=float32)>, objective_value=<tf.Tensor: shape=(), dtype=float32, numpy=0.6155035>, objective_gradient=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=
-    array([1.9636414e-31, 4.9867296e-31, 9.8747258e-30, ..., 0.0000000e+00,
+    array([-3.8674193e-29, -1.1256556e-28, -2.5927603e-27, ...,
+            0.0000000e+00,  0.0000000e+00,  0.0000000e+00], dtype=float32)>, objective_value=<tf.Tensor: shape=(), dtype=float32, numpy=0.6155101>, objective_gradient=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=
+    array([1.9645911e-31, 4.9889720e-31, 9.8786898e-30, ..., 0.0000000e+00,
            0.0000000e+00, 0.0000000e+00], dtype=float32)>, position_deltas=<tf.Tensor: shape=(10, 1712997), dtype=float32, numpy=
-    array([[-3.5871174e-32, -1.9784087e-31, -6.3573894e-30, ...,
+    array([[-3.5872955e-32, -1.9785808e-31, -6.3580033e-30, ...,
              0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
-           [-6.4801454e-32, -2.9289515e-31, -8.8174189e-30, ...,
+           [-6.4805756e-32, -2.9292078e-31, -8.8182539e-30, ...,
              0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
-           [-1.4130955e-31, -5.7121530e-31, -1.6402513e-29, ...,
+           [-1.4130340e-31, -5.7119358e-31, -1.6401924e-29, ...,
              0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
            ...,
-           [-5.4627115e-30, -1.6456927e-29, -3.9187710e-28, ...,
+           [-5.4617808e-30, -1.6454125e-29, -3.9181032e-28, ...,
              0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
-           [-6.1289591e-30, -1.7481823e-29, -3.9609966e-28, ...,
+           [-6.1342358e-30, -1.7497495e-29, -3.9646789e-28, ...,
              0.0000000e+00,  0.0000000e+00,  0.0000000e+00],
-           [-7.4103314e-30, -2.0233760e-29, -4.3829524e-28, ...,
+           [-7.4212054e-30, -2.0264394e-29, -4.3897991e-28, ...,
              0.0000000e+00,  0.0000000e+00,  0.0000000e+00]], dtype=float32)>, gradient_deltas=<tf.Tensor: shape=(10, 1712997), dtype=float32, numpy=
-    array([[3.58973016e-34, 1.16131495e-33, 2.94857829e-32, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           [5.34493975e-34, 1.62919366e-33, 3.95153828e-32, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           [1.04188619e-33, 3.05483725e-33, 7.16098111e-32, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
+    array([[3.5900332e-34, 1.1614237e-33, 2.9488757e-32, ..., 0.0000000e+00,
+            0.0000000e+00, 0.0000000e+00],
+           [5.3453962e-34, 1.6293450e-33, 3.9519332e-32, ..., 0.0000000e+00,
+            0.0000000e+00, 0.0000000e+00],
+           [1.0418452e-33, 3.0547259e-33, 7.1607366e-32, ..., 0.0000000e+00,
+            0.0000000e+00, 0.0000000e+00],
            ...,
-           [2.90873609e-32, 7.51074827e-32, 1.52481572e-30, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           [3.05056712e-32, 7.64695280e-32, 1.48876717e-30, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-           [3.48460019e-32, 8.51564783e-32, 1.59402526e-30, ...,
-            0.00000000e+00, 0.00000000e+00, 0.00000000e+00]], dtype=float32)>)
+           [2.9082430e-32, 7.5094682e-32, 1.5245556e-30, ..., 0.0000000e+00,
+            0.0000000e+00, 0.0000000e+00],
+           [3.0533207e-32, 7.6540222e-32, 1.4901894e-30, ..., 0.0000000e+00,
+            0.0000000e+00, 0.0000000e+00],
+           [3.4899158e-32, 8.5288862e-32, 1.5965749e-30, ..., 0.0000000e+00,
+            0.0000000e+00, 0.0000000e+00]], dtype=float32)>)
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 107.4
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1714: UserWarning: linewidths is ignored by contourf
-      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:410: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_under(color='white', alpha=0)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:411: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_over(color='white', alpha=0)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:412: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_bad(color='white', alpha=0)
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1666: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1666: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    Done! Time = 153.6
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
+      result = super().contourf(*args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
+      result = super().contour(*args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
+      result = super().contour(*args, **kwargs)
     /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
@@ -275,56 +261,56 @@ questionable winds at the edges of the Dual Doppler Lobes.
     Total points: 92100
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-          0|944064.4375|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 61.58508
+          0|944064.3750|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
+    The gradient of the cost functions is 61.585083
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          10|2796.5776|  28.0660|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.5678
-    The gradient of the cost functions is 6.0187683
+    The gradient of the cost functions is 6.018768
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20|1805.0454|  30.2036|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.1664
-    The gradient of the cost functions is 8.139958
+         20|1805.0437|  30.2036|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.1664
+    The gradient of the cost functions is 8.139959
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          30|   4.7020|  29.4402|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4764
-    The gradient of the cost functions is 0.32402733
+    The gradient of the cost functions is 0.32402736
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          40|   0.4515|  29.2483|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4868
-    The gradient of the cost functions is 0.2222393
+    The gradient of the cost functions is 0.22223921
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          50|   0.8612|  28.3777|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.4620
-    The gradient of the cost functions is 2.1056774
+    The gradient of the cost functions is 2.1056516
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          60|   2.0815|  23.5633|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3138
-    The gradient of the cost functions is 0.4199252
+    The gradient of the cost functions is 0.41992563
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         70|   2.5454|  19.2934|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.1570
-    The gradient of the cost functions is 0.25878608
+         70|   2.5454|  19.2935|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.1570
+    The gradient of the cost functions is 0.25878623
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          80|   3.2603|  17.9574|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.1852
-    The gradient of the cost functions is 2.0410612
+    The gradient of the cost functions is 2.0410674
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          90|   2.6984|  15.2552|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3531
-    The gradient of the cost functions is 0.49387187
+    The gradient of the cost functions is 0.49387243
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         100|   0.3357|  13.3571|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.9904
-    The gradient of the cost functions is 0.09958899
+    The gradient of the cost functions is 0.09958901
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        110|   0.3088|  13.2139|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.2757
-    The gradient of the cost functions is 0.32027122
+        110|   0.3088|  13.2139|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.2758
+    The gradient of the cost functions is 0.3202762
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         120|   0.0671|  13.1229|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.2845
-    The gradient of the cost functions is 0.42487344
+    The gradient of the cost functions is 0.4248666
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        130|   0.5471|  11.6873|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.8064
-    The gradient of the cost functions is 0.39589852
+        130|   0.5470|  11.6873|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.8064
+    The gradient of the cost functions is 0.39589947
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        140|   4.0218|   8.4661|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.8704
-    The gradient of the cost functions is 0.8938507
+        140|   4.0218|   8.4661|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.8703
+    The gradient of the cost functions is 0.89387614
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        150|   0.0711|   8.3564|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.3598
-    The gradient of the cost functions is 0.07521062
+        150|   0.0711|   8.3564|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.3597
+    The gradient of the cost functions is 0.07521078
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-        160|   0.0072|   8.3180|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.4269
-    LBfgsOptimizerResults(converged=<tf.Tensor: shape=(), dtype=bool, numpy=True>, failed=<tf.Tensor: shape=(), dtype=bool, numpy=False>, num_iterations=<tf.Tensor: shape=(), dtype=int32, numpy=54>, num_objective_evaluations=<tf.Tensor: shape=(), dtype=int32, numpy=163>, position=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=array([0., 0., 0., ..., 0., 0., 0.], dtype=float32)>, objective_value=<tf.Tensor: shape=(), dtype=float32, numpy=8.320534>, objective_gradient=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=array([0., 0., 0., ..., 0., 0., 0.], dtype=float32)>, position_deltas=<tf.Tensor: shape=(10, 1712997), dtype=float32, numpy=
+        160|   0.0072|   8.3180|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  15.4268
+    LBfgsOptimizerResults(converged=<tf.Tensor: shape=(), dtype=bool, numpy=True>, failed=<tf.Tensor: shape=(), dtype=bool, numpy=False>, num_iterations=<tf.Tensor: shape=(), dtype=int32, numpy=54>, num_objective_evaluations=<tf.Tensor: shape=(), dtype=int32, numpy=163>, position=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=array([0., 0., 0., ..., 0., 0., 0.], dtype=float32)>, objective_value=<tf.Tensor: shape=(), dtype=float32, numpy=8.320535>, objective_gradient=<tf.Tensor: shape=(1712997,), dtype=float32, numpy=array([0., 0., 0., ..., 0., 0., 0.], dtype=float32)>, position_deltas=<tf.Tensor: shape=(10, 1712997), dtype=float32, numpy=
     array([[0., 0., 0., ..., 0., 0., 0.],
            [0., 0., 0., ..., 0., 0., 0.],
            [0., 0., 0., ..., 0., 0., 0.],
@@ -341,19 +327,13 @@ questionable winds at the edges of the Dual Doppler Lobes.
            [0., 0., 0., ..., 0., 0., 0.]], dtype=float32)>)
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 43.4
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1714: UserWarning: linewidths is ignored by contourf
-      result = matplotlib.axes.Axes.contourf(self, *args, **kwargs)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:410: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_under(color='white', alpha=0)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:411: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_over(color='white', alpha=0)
-    /home/runner/work/PyDDA/PyDDA/pydda/vis/streamline_plot.py:412: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap("viridis").copy()
-      cs.cmap.set_bad(color='white', alpha=0)
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1666: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1666: UserWarning: The following kwargs were not used by contour: 'color'
-      result = matplotlib.axes.Axes.contour(self, *args, **kwargs)
+    Done! Time = 59.7
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
+      result = super().contourf(*args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
+      result = super().contour(*args, **kwargs)
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
+      result = super().contour(*args, **kwargs)
 
 
 
@@ -418,28 +398,23 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  38.916 seconds)
+   **Total running time of the script:** ( 3 minutes  41.454 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_fun_with_constraints.py <plot_fun_with_constraints.py>`
 
-     :download:`Download Python source code: plot_fun_with_constraints.py <plot_fun_with_constraints.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_fun_with_constraints.ipynb <plot_fun_with_constraints.ipynb>`
+      :download:`Download Jupyter notebook: plot_fun_with_constraints.ipynb <plot_fun_with_constraints.ipynb>`
 
 
 .. only:: html

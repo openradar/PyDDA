@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>pydda.vis.plot_horiz_xsection_streamlines_map &#8212; PyDDA 1.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
@@ -17,7 +17,9 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -51,7 +53,7 @@
           <div class="body" role="main">
             
   <section id="pydda-vis-plot-horiz-xsection-streamlines-map">
-<h1>pydda.vis.plot_horiz_xsection_streamlines_map<a class="headerlink" href="#pydda-vis-plot-horiz-xsection-streamlines-map" title="Permalink to this headline">¶</a></h1>
+<h1>pydda.vis.plot_horiz_xsection_streamlines_map<a class="headerlink" href="#pydda-vis-plot-horiz-xsection-streamlines-map" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pydda.vis.plot_horiz_xsection_streamlines_map">
 <span class="sig-prename descclassname"><span class="pre">pydda.vis.</span></span><span class="sig-name descname"><span class="pre">plot_horiz_xsection_streamlines_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reflectivity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pyart_LangRainbow12'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_vel_contours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_vel_contours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_vel_contours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wind_vel_contours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'u'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'v'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'w'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_lobes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes_labels_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar_contour_flag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bg_grid_no</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contour_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coastlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrowsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linewidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/vis/streamline_plot.html#plot_horiz_xsection_streamlines_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.vis.plot_horiz_xsection_streamlines_map" title="Permalink to this definition">¶</a></dt>
@@ -59,7 +61,7 @@
 generated by PyDDA using streamlines. The density of streamlines varies 
 with horizontal wind speed.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Grids: list</strong></dt><dd><p>List of Py-ART Grids to visualize</p>
 </dd>
@@ -121,7 +123,7 @@ Set to -1 to use maximum value from all grids.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>ax: matplotlib axis</dt><dd><p>Axis handle to output axis</p>
 </dd>
@@ -139,6 +141,16 @@ Set to -1 to use maximum value from all grids.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">pydda.vis.plot_horiz_xsection_streamlines_map</a><ul>
+<li><a class="reference internal" href="#pydda.vis.plot_horiz_xsection_streamlines_map"><code class="docutils literal notranslate"><span class="pre">plot_horiz_xsection_streamlines_map()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="pydda.vis.plot_yz_xsection_streamlines.html"
@@ -165,7 +177,7 @@ Set to -1 to use maximum value from all grids.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -192,7 +204,7 @@ Set to -1 to use maximum value from all grids.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

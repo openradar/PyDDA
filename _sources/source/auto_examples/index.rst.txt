@@ -1,9 +1,5 @@
 :orphan:
 
-
-
-.. _sphx_glr_source_auto_examples:
-
 PyDDA Example Gallery
 ====================
 
@@ -17,14 +13,93 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to retrieve winds in Hurricane Florence. In this example, we use data...">
 
 .. only:: html
 
- .. figure:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
-     :alt: Example on integrating radar and HRRR data
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
+    :alt: Example on integrating radar and HRRR data
 
-     :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
+  :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example on integrating radar and HRRR data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
+    :alt: Example of a wind retrieval in a tornado over Sydney
+
+  :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example of a wind retrieval in a tornado over Sydney</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to combine data from 3 radars and HRRR in the vicinity of the SGP ...">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
+    :alt: Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma
+
+  :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we show how to plot wind fields on a map and change the default constraint coef...">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
+    :alt: Example on geographic plotting and constraint variation
+
+  :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example on geographic plotting and constraint variation</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This is a simple example for how to retrieve and plot winds from 2 radars using PyDDA.">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
+    :alt: Example on retrieving and plotting winds
+
+  :ref:`sphx_glr_source_auto_examples_plot_examples.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example on retrieving and plotting winds</div>
+    </div>
+
 
 .. raw:: html
 
@@ -35,111 +110,23 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
    :hidden:
 
    /source/auto_examples/hurricane_florence
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
-
-.. only:: html
-
- .. figure:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
-     :alt: Example of a wind retrieval in a tornado over Sydney
-
-     :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /source/auto_examples/sydney_tornado
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to combine data from 3 radars and HRRR in the vicinity of the SGP ...">
-
-.. only:: html
-
- .. figure:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
-     :alt: Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma
-
-     :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /source/auto_examples/oklahoma_example
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example we show how to plot wind fields on a map and change the default constraint coef...">
-
-.. only:: html
-
- .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
-     :alt: Example on geographic plotting and constraint variation
-
-     :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /source/auto_examples/plot_fun_with_constraints
+   /source/auto_examples/plot_examples
 
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This is a simple example for how to retrieve and plot winds from 2 radars using PyDDA.">
 
 .. only:: html
 
- .. figure:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
-     :alt: Example on retrieving and plotting winds
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
 
-     :ref:`sphx_glr_source_auto_examples_plot_examples.py`
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-.. raw:: html
+      :download:`Download all examples in Python source code: auto_examples_python.zip </source/auto_examples/auto_examples_python.zip>`
 
-    </div>
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-.. toctree::
-   :hidden:
-
-   /source/auto_examples/plot_examples
-.. raw:: html
-
-    <div class="sphx-glr-clear"></div>
-
-
-
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-gallery
-
-
-  .. container:: sphx-glr-download sphx-glr-download-python
-
-    :download:`Download all examples in Python source code: auto_examples_python.zip </source/auto_examples/auto_examples_python.zip>`
-
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip </source/auto_examples/auto_examples_jupyter.zip>`
+      :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip </source/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html

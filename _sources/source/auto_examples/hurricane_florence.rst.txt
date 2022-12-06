@@ -78,23 +78,18 @@ Author: Robert C. Jackson
 
 .. _sphx_glr_download_source_auto_examples_hurricane_florence.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: hurricane_florence.py <hurricane_florence.py>`
 
-     :download:`Download Python source code: hurricane_florence.py <hurricane_florence.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: hurricane_florence.ipynb <hurricane_florence.ipynb>`
+      :download:`Download Jupyter notebook: hurricane_florence.ipynb <hurricane_florence.ipynb>`
 
 
 .. only:: html

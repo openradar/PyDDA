@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Welcome to the PyDDA documentation! &#8212; PyDDA 1.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -17,7 +17,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -46,14 +48,14 @@
           <div class="body" role="main">
             
   <section id="welcome-to-the-pydda-documentation">
-<h1>Welcome to the PyDDA documentation!<a class="headerlink" href="#welcome-to-the-pydda-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>Welcome to the PyDDA documentation!<a class="headerlink" href="#welcome-to-the-pydda-documentation" title="Permalink to this heading">¶</a></h1>
 <a class="reference internal image-reference" href="_images/logo.png"><img alt="alternate text" class="align-center" src="_images/logo.png" style="width: 400px; height: 200px;" /></a>
 <a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3942686"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg" /></a>
 <p>This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as
 description of each of PyDDA’s subroutines.</p>
 <section id="system-requirements">
-<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this heading">¶</a></h2>
 <p>This works on any modern version of Linux, Mac OS X, and Windows. For Windows,
 HRRR data integration is not supported. In addition, since PyDDA takes advtange
 of parallelism we recommend:</p>
@@ -68,7 +70,7 @@ If you have an older version installed, PyDDA may work just fine but we will
 not provide support for any issues unless you are using at least Python 3.6.</p>
 </section>
 <section id="installation-instructions">
-<h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h2>
+<h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h2>
 <p>The GitHub repository for PyDDA is available at:</p>
 <p><a class="reference external" href="https://github.com/openradar/PyDDA">https://github.com/openradar/PyDDA</a></p>
 <p>Before you install PyDDA, ensure that the following dependencies are installed:</p>
@@ -125,9 +127,7 @@ dependencies are optional as the user can still use PyDDA with the SciPy ecosyst
 <li class="toctree-l2"><a class="reference internal" href="contributors_guide/index.html#github">GitHub</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="source/auto_examples/index.html">PyDDA Example Gallery</a><ul>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="source/auto_examples/index.html">PyDDA Example Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_reference/index.html">Developer Reference Manual</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#cost-functions-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cost_functions</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-cost-functions-pydda-cost-functions">pydda.cost_functions (pydda.cost_functions)</a></li>
@@ -156,7 +156,7 @@ dependencies are optional as the user can still use PyDDA with the SciPy ecosyst
 </section>
 </section>
 <section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
@@ -204,7 +204,7 @@ dependencies are optional as the user can still use PyDDA with the SciPy ecosyst
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -227,7 +227,7 @@ dependencies are optional as the user can still use PyDDA with the SciPy ecosyst
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Example on retrieving and plotting winds &#8212; PyDDA 1.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
@@ -17,7 +17,9 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -56,7 +58,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="example-on-retrieving-and-plotting-winds">
-<span id="sphx-glr-source-auto-examples-plot-examples-py"></span><h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-source-auto-examples-plot-examples-py"></span><h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Permalink to this heading">¶</a></h1>
 <p>This is a simple example for how to retrieve and plot winds from 2 radars
 using PyDDA.</p>
 <p>Author: Robert C. Jackson</p>
@@ -65,11 +67,10 @@ using PyDDA.</p>
 <li><img src="../../_images/sphx_glr_plot_examples_002.png" srcset="../../_images/sphx_glr_plot_examples_002.png" alt="PyDDA retreived winds @20.0 km south of origin." class = "sphx-glr-multi-img"/></li>
 <li><img src="../../_images/sphx_glr_plot_examples_003.png" srcset="../../_images/sphx_glr_plot_examples_003.png" alt="PyDDA retreived winds @20.0 km west of origin." class = "sphx-glr-multi-img"/></li>
 </ul>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:372: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:372: UserWarning: WARNING: valid_max not used since it
+/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
 /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -83,59 +84,51 @@ The max of w_init is 0.0
 Initial constraint violation:  0.000000
 Initial Lagrangian norm:  106.766222
 Iter:  1
-Jvel:  tf.Tensor(1.8308261338947736, shape=(), dtype=float64)
-Constraint violation:  0.6818282075000476
-Maximum mass continuity violation:  0.02703218738201795
+Jvel:  tf.Tensor(1.8308261338948282, shape=(), dtype=float64)
+Constraint violation:  0.6818282075000475
+Maximum mass continuity violation:  0.027032187382017923
 Lagrangian norm:  0.333181
 Added most recent point to filter
 Restoration phase, mu = : 10.0
 Iter:  2
-Jvel:  tf.Tensor(776.0735096651767, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.32457978698474044, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.02703218738201795
+Jvel:  tf.Tensor(776.0735097684178, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.32457978698080797, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.027032187382017923
 Lagrangian norm:  8.965855
 Added most recent point to filter
 Restoration phase, mu = : 100.0
 Iter:  3
-Jvel:  tf.Tensor(0.1809088981510601, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.43120861608918903, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.018148225691186577
+Jvel:  tf.Tensor(0.18090889817168548, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.431208616080527, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.01814822569066563
 Lagrangian norm:  0.075149
 Added most recent point to filter
 Restoration phase, mu = : 1000.0
 Iter:  4
-Jvel:  tf.Tensor(931.095825066986, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.23440116381294548, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.018148202063226836
+Jvel:  tf.Tensor(931.0958250692948, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.23440116380932383, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.018148202062705898
 Lagrangian norm:  9.954166
 Added most recent point to filter
 Restoration phase, mu = : 10000.0
 Iter:  5
-Jvel:  tf.Tensor(1.6383734061938682, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.2860483774207875, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.011858196401273563
+Jvel:  tf.Tensor(1.638373406159619, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.2860483774171418, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.011858196401085843
 Lagrangian norm:  0.307412
 Added most recent point to filter
 Iter:  6
-Jvel:  tf.Tensor(3.087757975949226, shape=(), dtype=float64)
-Constraint violation:  0.051330460781750846
-Maximum mass continuity violation:  0.0015490391557071003
+Jvel:  tf.Tensor(3.0877579759907574, shape=(), dtype=float64)
+Constraint violation:  0.051330460782699754
+Maximum mass continuity violation:  0.0015490391557233488
 Lagrangian norm:  0.262021
 AugLag converged to specified tolerance
 Applying low pass filter to wind field...
-Done! Time = 70.9
-/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:179: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
-  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
-/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:180: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
-  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
+Done! Time = 91.1
 /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   ax.contour(
 /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   ax.contour(
-/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:637: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
-  cs.cmap.set_under(color=&#39;white&#39;, alpha=0)
-/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:638: MatplotlibDeprecationWarning: You are modifying the state of a globally registered colormap. This has been deprecated since 3.3 and in 3.6, you will not be able to modify a registered colormap in-place. To remove this warning, you can make a copy of the colormap first. cmap = mpl.cm.get_cmap(&quot;viridis&quot;).copy()
-  cs.cmap.set_bad(color=&#39;white&#39;, alpha=0)
 </pre></div>
 </div>
 <div class="line-block">
@@ -192,8 +185,8 @@ Done! Time = 70.9
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;Darwin.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  12.473 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  32.918 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
 </div>
@@ -237,7 +230,7 @@ Done! Time = 70.9
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -264,7 +257,7 @@ Done! Time = 70.9
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
