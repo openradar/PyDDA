@@ -18,5 +18,6 @@ dependencies:
   - eccodes
   - dask
   - distributed
+  - jax
   - tensorflow>=2.6
   - tensorflow-probability
