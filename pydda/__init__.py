@@ -27,7 +27,8 @@ try:
     print("TensorFlow detected.")
     import tensorflow_probability
     print("TensorFlow-probability detected. TensorFlow engine enabled!")
-except (ImportError, AttributeError):
+except (ImportError, AttributeError) as e:
     print("Unable to load both TensorFlow and tensorflow-probability. " +
             "TensorFlow engine disabled.")
+    print(e)
 
