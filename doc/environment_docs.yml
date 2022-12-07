@@ -20,7 +20,7 @@ dependencies:
   - distributed
   - sphinx
   - numpydoc
-  - tensorflow
-  - tensorflow-probability
+  - tensorflow>=2.6
+  - tensorflow-probability<=0.18
   - pip:
     - sphinx_gallery
