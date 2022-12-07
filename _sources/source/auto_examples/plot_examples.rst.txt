@@ -116,7 +116,7 @@ Author: Robert C. Jackson
     Lagrangian norm:  0.262021
     AugLag converged to specified tolerance
     Applying low pass filter to wind field...
-    Done! Time = 91.1
+    Done! Time = 81.0
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
@@ -185,7 +185,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  32.918 seconds)
+   **Total running time of the script:** ( 1 minutes  22.648 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

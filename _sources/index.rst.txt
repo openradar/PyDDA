@@ -114,6 +114,14 @@ Contents:
    source/auto_examples/index
    dev_reference/index
 
+Further support
+===============
+
+We are now requesting that all questions related to PyDDA that are not potential software issues to be 
+relegated to the `openradar Discourse group <openradar.discourse.group>` with a 'pydda' tag on it. This
+enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
+and users can answer questions people may have.
+
 Indices and tables
 ==================
 

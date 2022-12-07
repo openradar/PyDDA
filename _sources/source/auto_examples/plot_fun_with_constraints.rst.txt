@@ -245,7 +245,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
             0.0000000e+00, 0.0000000e+00]], dtype=float32)>)
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 153.6
+    Done! Time = 137.1
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
       result = super().contourf(*args, **kwargs)
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
@@ -327,7 +327,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
            [0., 0., 0., ..., 0., 0., 0.]], dtype=float32)>)
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 59.7
+    Done! Time = 53.8
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
       result = super().contourf(*args, **kwargs)
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
@@ -398,7 +398,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  41.454 seconds)
+   **Total running time of the script:** ( 3 minutes  18.989 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
