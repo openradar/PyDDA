@@ -44,7 +44,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'numpydoc',
+    'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
 ]
 
@@ -54,6 +54,17 @@ sphinx_gallery_conf = {
 }
 
 mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+
+# Generate the API documentation when building
+autoclass_content = 'both'
+autosummary_generate = True
+autosummary_imported_members = True
+
+# Otherwise, the Return parameter list looks different from the Parameter list
+napoleon_use_rtype = False
+napoleon_use_ivar = True
+napoleon_include_init_with_doc = False
+napoleon_use_param = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -73,7 +84,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'PyDDA'
-copyright = '2018, PyDDA Developers'
+copyright = '2023, PyDDA Developers'
 author = 'Robert Jackson'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -144,7 +155,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'default'
+html_theme = 'pydata_sphinx_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

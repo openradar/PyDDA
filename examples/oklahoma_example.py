@@ -18,22 +18,34 @@ import pydda
 import matplotlib.pyplot as plt
 import numpy as np
 import urllib
+import pooch
 
-hrrr_url = ('https://pando-rgw01.chpc.utah.edu/hrrr/prs/20181004/' +
-            'hrrr.t10z.wrfprsf00.grib2')
-grid0 = pyart.io.read_grid(u'grid0.20171004.095021.nc')
-grid1 = pyart.io.read_grid(u'grid1.20171004.095021.nc')
-grid2 = pyart.io.read_grid(u'grid2.20171004.095021.nc')
+from herbie import Herbie
 
-urllib.request.urlretrieve(hrrr_url, 'test.grib2')
+H = Herbie("2018-10-04 10:00", model="hrrr", product="prs", fxx=0)
+H.download()
+
+grid0_file = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid0.20171004.095021.nc",
+    known_hash=None)
+grid1_file = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid1.20171004.095021.nc",
+    known_hash=None)
+grid2_file = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid2.20171004.095021.nc",
+    known_hash=None)
+grid0 = pyart.io.read_grid(grid0_file)
+grid1 = pyart.io.read_grid(grid1_file)
+grid2 = pyart.io.read_grid(grid2_file)
+
 grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid0,
-                                                         'test.grib2')
+                                                         H.grib)
 
 # Set initialization and do retrieval
 u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(grid1)
 new_grids = pydda.retrieval.get_dd_wind_field([grid0, grid1, grid2],
                                               u_init, v_init, w_init, Co=0.1, Cm=100.0,
-                                              model_fields=["hrrr"],
+                                              model_fields=["hrrr"], engine="tensorflow",
                                               mask_outside_opt=True)
 # Make a neat plot
 fig = plt.figure(figsize=(10,10))
