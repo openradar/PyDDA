@@ -378,7 +378,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dwdz = jnp.gradient(w, dz, axis=0)
     
     if (anel == 1):
-        if not isinsance(z, np.ma.MaskedArray):
+        if not isinstance(z, np.ma.MaskedArray):
             rho = jnp.exp(-z / 10000.0)
         else:
             rho = jnp.exp(-z.filled() / 10000.0)
