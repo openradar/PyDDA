@@ -16,18 +16,32 @@ import pyart
 import pydda
 import matplotlib.pyplot as plt
 import numpy as np
+import pooch
 
-grid1 = pyart.io.read_grid('grid1_sydney.nc')
-grid2 = pyart.io.read_grid('grid2_sydney.nc')
-grid3 = pyart.io.read_grid('grid3_sydney.nc')
-grid4 = pyart.io.read_grid('grid4_sydney.nc')
+grid1_path = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid1_sydney.nc",
+    known_hash=None)
+grid2_path = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid2_sydney.nc",
+    known_hash=None)
+grid3_path = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid3_sydney.nc",
+    known_hash=None)
+grid4_path = pooch.retrieve(
+    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid4_sydney.nc",
+    known_hash=None)
+grid1 = pyart.io.read_grid(grid1_path)
+grid2 = pyart.io.read_grid(grid2_path)
+grid3 = pyart.io.read_grid(grid3_path)
+grid4 = pyart.io.read_grid(grid4_path)
 
 # Set initialization and do retrieval
 u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
 new_grids = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
-                                              u_init, v_init, w_init,
+                                              u_init, v_init, w_init, Co=1e-3, Cm=256.0,
+                                              Cz=1e2, Cx=1e2, Cy=1e2,
                                               vel_name='VRADH_corr', refl_field='DBZH',
-                                              mask_outside_opt=True,
+                                              mask_outside_opt=True, 
                                               engine='tensorflow')
 # Make a neat plot
 fig = plt.figure(figsize=(10,7))
@@ -41,4 +55,4 @@ ax.set_xticks(np.arange(150.5, 153, 0.1))
 ax.set_yticks(np.arange(-36, -32.0, 0.1))
 ax.set_xlim([151.0, 151.35])
 ax.set_ylim([-34.15, -33.9])
-plt.show(ax)
+plt.show()

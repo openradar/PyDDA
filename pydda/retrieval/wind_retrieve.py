@@ -161,6 +161,7 @@ class DDParameters(object):
         self.Ut = 0.0
         self.Vt = 0.0
         self.upper_bc = True
+        self.lower_bc = True
         self.roi = 1000.0
         self.frz = 4500.0
         self.Nfeval = 0.0
@@ -600,7 +601,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                   max_iterations=1000, mask_w_outside_opt=True,
                                   filter_window=5, filter_order=3, min_bca=30.0,
                                   max_bca=150.0, upper_bc=True, model_fields=None,
-                                  output_cost_functions=True, roi=1000.0,
+                                  output_cost_functions=True, roi=1000.0, lower_bc=True,
                                   parallel_iterations=1, wind_tol=0.1):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError("Tensorflow >=2.5 and tensorflow-probability " + 
@@ -617,6 +618,8 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     parameters = DDParameters()
     parameters.Ut = Ut
     parameters.Vt = Vt
+    parameters.upper_bc = upper_bc
+    parameters.lower_bc = lower_bc
     parameters.engine = "tensorflow"
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
@@ -881,10 +884,10 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     parameters.points = points
     parameters.point_list = points
     loss_and_gradient = lambda x: (J_function(x, parameters), grad_J(x, parameters))
-
+    tolerance = 1e-6 * (Co + Cm + Cx + Cy + Cz + Cb + Cv) 
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient, initial_position=winds,
-        tolerance=1e-8, x_tolerance=wind_tol,
+        tolerance=tolerance, x_tolerance=wind_tol,
         max_iterations=max_iterations, parallel_iterations=parallel_iterations)
     print(winds)
     winds = np.reshape(

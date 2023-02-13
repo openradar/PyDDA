@@ -268,14 +268,16 @@ def grad_J(winds, parameters):
         grad = _cost_functions_tensorflow.calculate_grad_radial_vel(
             parameters.vrs, parameters.els, parameters.azs,
             winds[0], winds[1], winds[2], parameters.wts, parameters.weights,
-            parameters.rmsVr, coeff=parameters.Co, upper_bc=parameters.upper_bc)
+            parameters.rmsVr, coeff=parameters.Co, upper_bc=parameters.upper_bc,
+            lower_bc=parameters.lower_bc)
 
         if(parameters.Cm > 0):
             grad += _cost_functions_tensorflow.calculate_mass_continuity_gradient(
                 winds[0], winds[1], winds[2],
                 parameters.z,
                 parameters.dx, parameters.dy, parameters.dz,
-                coeff=parameters.Cm, upper_bc=parameters.upper_bc)
+                coeff=parameters.Cm, upper_bc=parameters.upper_bc,
+                lower_bc=parameters.lower_bc)
 
         if(parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
             grad += _cost_functions_tensorflow.calculate_smoothness_gradient(
@@ -291,7 +293,8 @@ def grad_J(winds, parameters):
             grad += _cost_functions_tensorflow.calculate_vertical_vorticity_gradient(
                 winds[0], winds[1], winds[2], parameters.dx,
                 parameters.dy, parameters.dz, parameters.Ut,
-                parameters.Vt, coeff=parameters.Cv, upper_bc=parameters.upper_bc).numpy()
+                parameters.Vt, coeff=parameters.Cv, upper_bc=parameters.upper_bc,
+                lower_bc=parameters.lower_bc).numpy()
 
         if(parameters.Cmod > 0):
             grad += _cost_functions_tensorflow.calculate_model_gradient(
@@ -390,7 +393,6 @@ def grad_J(winds, parameters):
 
     if(parameters.Nfeval % 10 == 0):
         print("The gradient of the cost functions is", str(np.linalg.norm(grad, 2)))
-
     return grad
 
 
@@ -444,5 +446,6 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     B[np.logical_and(grid_z >= frz, refl > 49)] = 0.0148
 
     fallspeed = A * np.power(10, refl * B) * np.power(1.2 / rho, 0.4)
+    print(fallspeed.max())
     del A, B, rho
     return np.ma.masked_invalid(fallspeed)
