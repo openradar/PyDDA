@@ -425,8 +425,13 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
     y: float array
         value of gradient of mass continuity cost function
     """
+    # Z should not be masked, but just in case it is
+    if isinstance(z, np.ma.MaskedArray):
+        z_in = z.filled(-9999.)
+    else:
+        z_in = z
     primals, fun_vjp = jax.vjp(
-            calculate_mass_continuity, u, v, w, z, dx, dy, dz, coeff, anel)
+            calculate_mass_continuity, u, v, w, z_in, dx, dy, dz, coeff, anel)
     grad_u, grad_v, grad_w, _, _, _, _, _, _ = fun_vjp(1.0)
 
     # Impermeability condition
