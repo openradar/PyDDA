@@ -376,9 +376,12 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dudx = jnp.gradient(u, dx, axis=2)
     dvdy = jnp.gradient(v, dy, axis=1)
     dwdz = jnp.gradient(w, dz, axis=0)
-
+    
     if (anel == 1):
-        rho = jnp.exp(-z / 10000.0)
+        if not isinsance(z, np.ma.MaskedArray):
+            rho = jnp.exp(-z / 10000.0)
+        else:
+            rho = jnp.exp(-z.filled() / 10000.0)
         drho_dz = jnp.gradient(rho, dz, axis=0)
         anel_term = w / rho * drho_dz
     else:
