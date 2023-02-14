@@ -460,8 +460,8 @@ def plot_horiz_xsection_barbs_map(Grids, ax=None,
                         levels=[bca_min, bca_max], color='k', zorder=1)
 
     if(axes_labels_flag is True):
-        ax.set_xlabel(('Latitude [$^{\circ}$]'))
-        ax.set_ylabel(('Longitude [$^{\circ}$]'))
+        ax.set_xlabel(('Latitude [$\degree$]'))
+        ax.set_ylabel(('Longitude [$\degree$]'))
 
     if(title_flag is True):
         ax.set_title(

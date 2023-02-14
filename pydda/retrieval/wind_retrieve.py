@@ -235,8 +235,12 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
         print('Interpolating sounding to radar grid')
         u_interp = interp1d(z_back, u_back, bounds_error=False)
         v_interp = interp1d(z_back, v_back, bounds_error=False)
-        parameters.u_back = u_interp(Grids[0].z['data'])
-        parameters.v_back = v_interp(Grids[0].z['data'])
+        if isinstance(Grids[0].z['data'], np.ma.MaskedArray):
+            z_grid = Grids[0].z['data'].filled(np.nan)
+        else:
+            z_grid = Grids[0].z['data']
+        parameters.u_back = u_interp(z_grid)
+        parameters.v_back = v_interp(z_grid)
         print('Interpolated U field:')
         print(parameters["u_back"])
         print('Interpolated V field:')
@@ -639,10 +643,14 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
         print('Interpolating sounding to radar grid')
         u_interp = interp1d(z_back, u_back, bounds_error=False)
         v_interp = interp1d(z_back, v_back, bounds_error=False)
+        if isinstance(Grids[0].z['data'], np.ma.MaskedArray):
+            z_grid = Grids[0].z['data'].filled(np.nan)
+        else:
+            z_grid = Grids[0].z['data']
         parameters.u_back = tf.constant(
-            u_interp(Grids[0].z['data'].filled(np.nan)), dtype=tf.float32)
+            u_interp(z_grid), dtype=tf.float32)
         parameters.v_back = tf.constant(
-            v_interp(Grids[0].z['data'].filled(np.nan)), dtype=tf.float32)
+            v_interp(z_grid), dtype=tf.float32)
         print('Interpolated U field:')
         print(parameters.u_back)
         print('Interpolated V field:')

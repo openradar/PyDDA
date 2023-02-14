@@ -196,27 +196,24 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
 
     if(u_vel_contours is not None):
         u_filled = np.ma.filled(u[level, :, :], fill_value=np.nan)
-        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
-                         u_filled, levels=u_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
+                        u_filled, levels=u_vel_contours, linewidths=2)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
         v_filled = np.ma.filled(v[level, :, :], fill_value=np.nan)
-        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
-                         v_filled, levels=u_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
+                        v_filled, levels=u_vel_contours, linewidths=2)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
         w_filled = np.ma.filled(w[level, :, :], fill_value=np.nan)
-        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
-                         w_filled, levels=w_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
+                        w_filled, levels=w_vel_contours, linewidths=2)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
@@ -224,9 +221,8 @@ def plot_horiz_xsection_quiver(Grids, ax=None,
     if(wind_vel_contours is not None):
         vel = np.ma.sqrt(u[level, :, :]**2 + v[level, :, :]**2)
         #vel = vel.filled(fill_value=np.nan)
-        cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
-                         vel, levels=wind_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
+                        vel, levels=wind_vel_contours, linewidths=2)
         cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
         cs.cmap.set_under(color='white', alpha=0)
         cs.cmap.set_bad(color='white', alpha=0)
@@ -475,9 +471,9 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
         u_filled = np.ma.masked_where(u[level, :, :] < np.min(u_vel_contours), 
                                       u[level, :, :])
         try:
-            cs = ax.contourf(grid_lon[:, :], grid_lat[:, :],
-                             u_filled, levels=u_vel_contours, linewidths=2,
-                             alpha=contour_alpha, zorder=2, extend='both')
+            cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
+                            u_filled, levels=u_vel_contours, linewidths=2,
+                            zorder=2, extend='both')
             cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
             cs.cmap.set_under(color='white', alpha=0)
             cs.cmap.set_over(color='white', alpha=0)
@@ -495,9 +491,9 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
         v_filled = np.ma.masked_where(v[level, :, :] < np.min(v_vel_contours), 
                                       v[level, :, :])
         try:
-            cs = ax.contourf(grid_lon[:, :], grid_lat[:, :],
-                             v_filled, levels=u_vel_contours, linewidths=2,
-                             alpha=contour_alpha, zorder=2, extend='both')
+            cs = ax.contour(grid_lon[:, :], grid_lat[:, :],
+                            v_filled, levels=u_vel_contours, linewidths=2,
+                            zorder=2, extend='both')
             cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
             cs.cmap.set_under(color='white', alpha=0)
             cs.cmap.set_over(color='white', alpha=0)
@@ -514,9 +510,9 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
         w_filled = np.ma.masked_where(w[level, :, :] < np.min(w_vel_contours), 
                                       w[level, :, :])
         try:
-            cs = ax.contourf(grid_lon[::, ::], grid_lat[::, ::],
-                             w_filled, levels=w_vel_contours, linewidths=2,
-                             alpha=contour_alpha, zorder=2, extend='both')
+            cs = ax.contour(grid_lon[::, ::], grid_lat[::, ::],
+                            w_filled, levels=w_vel_contours, linewidths=2,
+                            zorder=2, extend='both')
             cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
             cs.cmap.set_under(color='white', alpha=0)
             cs.cmap.set_over(color='white', alpha=0)
@@ -535,9 +531,8 @@ def plot_horiz_xsection_quiver_map(Grids, ax=None,
         vel = np.ma.sqrt(u[level, :, :]**2 + v[level, :, :]**2)
         vel = vel.filled(fill_value=np.nan)
         try:
-            cs = ax.contourf(grid_x[level, :, :], grid_y[level, :, :],
-                             vel, levels=wind_vel_contours, linewidths=2,
-                             alpha=contour_alpha)
+            cs = ax.contour(grid_x[level, :, :], grid_y[level, :, :],
+                            vel, levels=wind_vel_contours, linewidths=2)
             cs.cmap.set_under(color='white', alpha=0)
             cs.cmap.set_bad(color='white', alpha=0)
 
@@ -772,27 +767,24 @@ def plot_xz_xsection_quiver(Grids, ax=None,
 
     if(u_vel_contours is not None):
         u_filled = np.ma.filled(u[:, level, :], fill_value=np.nan)
-        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
-                         u_filled, levels=u_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
+                        u_filled, levels=u_vel_contours, linewidths=2)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
         v_filled = np.ma.filled(w[:, level, :], fill_value=np.nan)
-        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
-                         v_filled, levels=v_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
+                        v_filled, levels=v_vel_contours, linewidths=2)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
         w_filled = np.ma.filled(w[:, level, :], fill_value=np.nan)
-        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
-                         w_filled, levels=w_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
+                        w_filled, levels=w_vel_contours, linewidths=2)
         ax.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
@@ -800,9 +792,8 @@ def plot_xz_xsection_quiver(Grids, ax=None,
     if(wind_vel_contours is not None):
         vel = np.ma.sqrt(u[:, level, :]**2 + v[:, level, :]**2)
         vel = vel.filled(fill_value=np.nan)
-        cs = ax.contourf(grid_x[:, level, :], grid_h[:, level, :],
-                         vel, levels=wind_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+        cs = ax.contour(grid_x[:, level, :], grid_h[:, level, :],
+                        vel, levels=wind_vel_contours, linewidths=2)
         cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
         cs.cmap.set_under(color='white', alpha=0)
         cs.cmap.set_bad(color='white', alpha=0)
@@ -1002,27 +993,24 @@ def plot_yz_xsection_quiver(Grids, ax=None,
 
     if(u_vel_contours is not None):
         u_filled = np.ma.filled(u[:, :, level], fill_value=np.nan)
-        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
-                          u_filled, levels=u_vel_contours, linewidths=2,
-                          alpha=contour_alpha)
+        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
+                         u_filled, levels=u_vel_contours, linewidths=2)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
         v_filled = np.ma.filled(v[:, :, level], fill_value=np.nan)
-        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
-                          v_filled, levels=w_vel_contours, linewidths=2,
-                          alpha=contour_alpha)
+        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
+                         v_filled, levels=w_vel_contours, linewidths=2)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
         w_filled = np.ma.filled(w[:, :, level], fill_value=np.nan)
-        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
-                          w_filled, levels=w_vel_contours, linewidths=2,
-                          alpha=contour_alpha)
+        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
+                         w_filled, levels=w_vel_contours, linewidths=2)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
@@ -1031,8 +1019,7 @@ def plot_yz_xsection_quiver(Grids, ax=None,
         vel = np.ma.sqrt(u[:, :, level]**2 + v[:, :, level]**2)
         vel = vel.filled(fill_value=np.nan)
         cs = ax.contourf(grid_y[:, :, level], grid_h[:, :, level],
-                         vel, levels=wind_vel_contours, linewidths=2,
-                         alpha=contour_alpha)
+                         vel, levels=wind_vel_contours, linewidths=2)
         cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
         cs.cmap.set_under(color='white', alpha=0)
         cs.cmap.set_bad(color='white', alpha=0)

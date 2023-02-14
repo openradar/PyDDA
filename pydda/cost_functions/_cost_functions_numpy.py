@@ -160,9 +160,9 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     du = np.zeros(w.shape)
     dv = np.zeros(w.shape)
     dw = np.zeros(w.shape)
-    scipy.ndimage.filters.laplace(u, du, mode='wrap')
-    scipy.ndimage.filters.laplace(v, dv, mode='wrap')
-    scipy.ndimage.filters.laplace(w, dw, mode='wrap')
+    scipy.ndimage.laplace(u, du, mode='wrap')
+    scipy.ndimage.laplace(v, dv, mode='wrap')
+    scipy.ndimage.laplace(w, dw, mode='wrap')
     return np.sum(Cx * du ** 2 + Cy * dv ** 2 + Cz * dw ** 2)
 
 
@@ -198,12 +198,12 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    scipy.ndimage.filters.laplace(u, du, mode='wrap')
-    scipy.ndimage.filters.laplace(v, dv, mode='wrap')
-    scipy.ndimage.filters.laplace(w, dw, mode='wrap')
-    scipy.ndimage.filters.laplace(du, grad_u, mode='wrap')
-    scipy.ndimage.filters.laplace(dv, grad_v, mode='wrap')
-    scipy.ndimage.filters.laplace(dw, grad_w, mode='wrap')
+    scipy.ndimage.laplace(u, du, mode='wrap')
+    scipy.ndimage.laplace(v, dv, mode='wrap')
+    scipy.ndimage.laplace(w, dw, mode='wrap')
+    scipy.ndimage.laplace(du, grad_u, mode='wrap')
+    scipy.ndimage.laplace(dv, grad_v, mode='wrap')
+    scipy.ndimage.laplace(dw, grad_w, mode='wrap')
 
     # Impermeability condition
     grad_w[0, :, :] = 0
