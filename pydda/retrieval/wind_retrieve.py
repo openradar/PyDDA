@@ -1,5 +1,5 @@
 """
-Created on Mon Aug  7 09:17:40 2017
+reated on Mon Aug  7 09:17:40 2017
 
 @author: rjackson
 """
@@ -161,6 +161,7 @@ class DDParameters(object):
         self.Ut = 0.0
         self.Vt = 0.0
         self.upper_bc = True
+        self.lower_bc = True
         self.roi = 1000.0
         self.frz = 4500.0
         self.Nfeval = 0.0
@@ -233,18 +234,23 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
     else:
         # Interpolate sounding to radar grid
         print('Interpolating sounding to radar grid')
-        u_interp = interp1d(z_back, u_back, bounds_error=False)
-        v_interp = interp1d(z_back, v_back, bounds_error=False)
+
+        if isinstance(u_back, np.ma.MaskedArray):
+            u_back = u_back.filled(-9999.)
+        if isinstance(v_back, np.ma.MaskedArray):
+            v_back = v_back.filled(-9999.)
+        if isinstance(z_back, np.ma.MaskedArray):
+            z_back = z_back.filled(-9999.)
+        valid_inds = np.logical_and.reduce((u_back > -9998, v_back > -9998, z_back > -9998))
+        u_interp = interp1d(z_back[valid_inds], u_back[valid_inds], bounds_error=False)
+        v_interp = interp1d(z_back[valid_inds], v_back[valid_inds], bounds_error=False)
         if isinstance(Grids[0].z['data'], np.ma.MaskedArray):
-            z_grid = Grids[0].z['data'].filled(np.nan)
+            parameters.u_back = u_interp(Grids[0].z['data'].filled(np.nan))
+            parameters.v_back = v_interp(Grids[0].z['data'].filled(np.nan))
         else:
-            z_grid = Grids[0].z['data']
-        parameters.u_back = u_interp(z_grid)
-        parameters.v_back = v_interp(z_grid)
-        print('Interpolated U field:')
-        print(parameters["u_back"])
-        print('Interpolated V field:')
-        print(parameters["v_back"])
+            parameters.u_back = u_interp(Grids[0].z['data'])
+            parameters.v_back = v_interp(Grids[0].z['data'])
+
         print('Grid levels:')
         print(Grids[0].z['data'])
 
@@ -316,36 +322,25 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                             np.isfinite(parameters.wts[i][k]),
                             np.isfinite(parameters.azs[i][k]),
                             np.isfinite(parameters.els[i][k])))
-                        cur_array = parameters.weights[i, k]
-                        cur_array[np.logical_and(
-                            valid, np.logical_and(
-                                bca[i, j] >= math.radians(min_bca),
-                                bca[i, j] <= math.radians(max_bca)))] += 1
-                        cur_array[~valid] = 0
-                        parameters.weights[i, k] = cur_array
-                    else:
-                        parameters.weights[i, k] = weights_obs[i][k, :, :]
-
-                    if (weights_obs is None):
-                        valid = np.logical_and.reduce((
-                            ~parameters.vrs[j][k].mask,
-                            ~parameters.wts[j][k].mask,
-                            ~parameters.azs[j][k].mask,
-                            ~parameters.els[j][k].mask))
                         valid = np.logical_and.reduce((valid,
                             np.isfinite(parameters.vrs[j][k]),
                             np.isfinite(parameters.wts[j][k]),
                             np.isfinite(parameters.azs[j][k]),
                             np.isfinite(parameters.els[j][k])))
-                        cur_array = parameters.weights[j, k]
+                        valid = np.logical_and.reduce((valid,
+                            ~parameters.vrs[j][k].mask,
+                            ~parameters.wts[j][k].mask,
+                            ~parameters.azs[j][k].mask,
+                            ~parameters.els[j][k].mask))
+                        cur_array = parameters.weights[i, k]
                         cur_array[np.logical_and(
                             valid, np.logical_and(
                                 bca[i, j] >= math.radians(min_bca),
-                                bca[i, j] <= math.radians(max_bca)))] += 1
+                                bca[i, j] <= math.radians(max_bca)))] = 1
                         cur_array[~valid] = 0
-                        parameters.weights[j, k] = cur_array
+                        parameters.weights[i, k] = cur_array
                     else:
-                        parameters.weights[j, k] = weights_obs[j][k, :, :]
+                        parameters.weights[i, k] = weights_obs[i][k, :, :]
 
                     if (weights_bg is None):
                         valid = np.logical_and.reduce((
@@ -358,11 +353,21 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                             np.isfinite(parameters.wts[j][k]),
                             np.isfinite(parameters.azs[j][k]),
                             np.isfinite(parameters.els[j][k])))
+                        valid = np.logical_and.reduce((valid,
+                            np.isfinite(parameters.vrs[j][k]),
+                            np.isfinite(parameters.wts[j][k]),
+                            np.isfinite(parameters.azs[j][k]),
+                            np.isfinite(parameters.els[j][k])))
+                        valid = np.logical_and.reduce((valid,
+                            ~parameters.vrs[j][k].mask,
+                            ~parameters.wts[j][k].mask,
+                            ~parameters.azs[j][k].mask,
+                            ~parameters.els[j][k].mask))
                         cur_array = parameters.bg_weights[k]
                         cur_array[np.logical_or(
-                            bca[i, j] >= math.radians(min_bca),
-                            bca[i, j] <= math.radians(max_bca))] = 1
-                        cur_array[~valid] = 0
+                            bca[i, j] < math.radians(min_bca),
+                            bca[i, j] > math.radians(max_bca))] = 1
+                        cur_array[~valid] = 1
                         parameters.bg_weights[i] = cur_array
                     else:
                         parameters.bg_weights[i] = weights_bg[i]
@@ -495,22 +500,22 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
     elif engine.lower() == 'auglag':
         if not TENSORFLOW_AVAILABLE:
             raise ImportError("Tensorflow must be available to use the Augmented Lagrangian engine!")
-        parameters.vrs = [tf.constant(x, dtype=tf.float64) for x in parameters.vrs]
-        parameters.azs = [tf.constant(x, dtype=tf.float64) for x in parameters.azs]
-        parameters.els = [tf.constant(x, dtype=tf.float64) for x in parameters.els]
-        parameters.wts = [tf.constant(x, dtype=tf.float64) for x in parameters.wts]
+        parameters.vrs = [tf.constant(x, dtype=tf.float32) for x in parameters.vrs]
+        parameters.azs = [tf.constant(x, dtype=tf.float32) for x in parameters.azs]
+        parameters.els = [tf.constant(x, dtype=tf.float32) for x in parameters.els]
+        parameters.wts = [tf.constant(x, dtype=tf.float32) for x in parameters.wts]
         parameters.model_weights = tf.constant(parameters.model_weights,
-                                               dtype=tf.float64)
+                                               dtype=tf.float32)
         parameters.weights[~np.isfinite(parameters.weights)] = 0
         parameters.weights[parameters.weights > 0] = 1
-        parameters.weights = tf.constant(parameters.weights, dtype=tf.float64)
+        parameters.weights = tf.constant(parameters.weights, dtype=tf.float32)
         parameters.bg_weights[parameters.bg_weights > 0] = 1
-        parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float64)
-        parameters.z = tf.constant(Grids[0].point_z['data'], dtype=tf.float64)
-        parameters.x = tf.constant(Grids[0].point_x['data'], dtype=tf.float64)
-        parameters.y = tf.constant(Grids[0].point_y['data'], dtype=tf.float64)
-        bounds = [(-x, x) for x in 100 * np.ones(winds.shape, dtype='float64')]
-        winds = winds.astype('float64')
+        parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float32)
+        parameters.z = tf.constant(Grids[0].point_z['data'], dtype=tf.float32)
+        parameters.x = tf.constant(Grids[0].point_x['data'], dtype=tf.float32)
+        parameters.y = tf.constant(Grids[0].point_y['data'], dtype=tf.float32)
+        bounds = [(-x, x) for x in 100 * np.ones(winds.shape, dtype='float32')]
+        winds = winds.astype('float32')
         winds, mult, AL_Filter, funcalls = auglag(winds, parameters, bounds)
 
         # """
@@ -596,7 +601,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                   max_iterations=1000, mask_w_outside_opt=True,
                                   filter_window=5, filter_order=3, min_bca=30.0,
                                   max_bca=150.0, upper_bc=True, model_fields=None,
-                                  output_cost_functions=True, roi=1000.0,
+                                  output_cost_functions=True, roi=1000.0, lower_bc=True,
                                   parallel_iterations=1, wind_tol=0.1):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError("Tensorflow >=2.5 and tensorflow-probability " + 
@@ -613,6 +618,8 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     parameters = DDParameters()
     parameters.Ut = Ut
     parameters.Vt = Vt
+    parameters.upper_bc = upper_bc
+    parameters.lower_bc = lower_bc
     parameters.engine = "tensorflow"
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
@@ -641,16 +648,27 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     else:
         # Interpolate sounding to radar grid
         print('Interpolating sounding to radar grid')
-        u_interp = interp1d(z_back, u_back, bounds_error=False)
-        v_interp = interp1d(z_back, v_back, bounds_error=False)
+
+        if isinstance(u_back, np.ma.MaskedArray):
+            u_back = u_back.filled(-9999.)
+        if isinstance(v_back, np.ma.MaskedArray):
+            v_back = v_back.filled(-9999.)
+        if isinstance(z_back, np.ma.MaskedArray):
+            z_back = z_back.filled(-9999.)
+        valid_inds = np.logical_and.reduce((u_back > -9998, v_back > -9998, z_back > -9998))
+        u_interp = interp1d(z_back[valid_inds], u_back[valid_inds], bounds_error=False)
+        v_interp = interp1d(z_back[valid_inds], v_back[valid_inds], bounds_error=False)
         if isinstance(Grids[0].z['data'], np.ma.MaskedArray):
-            z_grid = Grids[0].z['data'].filled(np.nan)
+            parameters.u_back = tf.constant(
+                u_interp(Grids[0].z['data'].filled(np.nan)), dtype=tf.float32)
+            parameters.v_back = tf.constant(
+                v_interp(Grids[0].z['data'].filled(np.nan)), dtype=tf.float32)
         else:
-            z_grid = Grids[0].z['data']
-        parameters.u_back = tf.constant(
-            u_interp(z_grid), dtype=tf.float32)
-        parameters.v_back = tf.constant(
-            v_interp(z_grid), dtype=tf.float32)
+            parameters.u_back = tf.constant(
+                u_interp(Grids[0].z['data']), dtype=tf.float32)
+            parameters.v_back = tf.constant(
+                v_interp(Grids[0].z['data']), dtype=tf.float32)
+
         print('Interpolated U field:')
         print(parameters.u_back)
         print('Interpolated V field:')
@@ -726,10 +744,21 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                             ~parameters.azs[i][k].mask,
                             ~parameters.els[i][k].mask))
                         valid = np.logical_and.reduce((valid,
-                                                       np.isfinite(parameters.vrs[i][k]),
-                                                       np.isfinite(parameters.wts[i][k]),
-                                                       np.isfinite(parameters.azs[i][k]),
-                                                       np.isfinite(parameters.els[i][k])))
+                            np.isfinite(parameters.vrs[i][k]),
+                            np.isfinite(parameters.wts[i][k]),
+                            np.isfinite(parameters.azs[i][k]),
+                            np.isfinite(parameters.els[i][k])))
+                        valid = np.logical_and.reduce((valid,
+                            np.isfinite(parameters.vrs[j][k]),
+                            np.isfinite(parameters.wts[j][k]),
+                            np.isfinite(parameters.azs[j][k]),
+                            np.isfinite(parameters.els[j][k])))
+                        valid = np.logical_and.reduce((valid,
+                            ~parameters.vrs[j][k].mask,
+                            ~parameters.wts[j][k].mask,
+                            ~parameters.azs[j][k].mask,
+                            ~parameters.els[j][k].mask))
+
                         cur_array[np.logical_and(valid,
                                                  np.logical_and(
                                                      bca[i, j] >= math.radians(min_bca),
@@ -739,26 +768,6 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
 
-                    if (weights_obs is None):
-                        cur_array = parameters.weights[j, k]
-                        valid = np.logical_and.reduce((
-                            ~parameters.vrs[j][k].mask,
-                            ~parameters.wts[j][k].mask,
-                            ~parameters.azs[j][k].mask,
-                            ~parameters.els[j][k].mask))
-                        valid = np.logical_and.reduce((valid,
-                                                       np.isfinite(parameters.vrs[j][k]),
-                                                       np.isfinite(parameters.wts[j][k]),
-                                                       np.isfinite(parameters.azs[j][k]),
-                                                       np.isfinite(parameters.els[j][k])))
-                        cur_array[np.logical_and(valid,
-                                                 np.logical_and(
-                                                     bca[i, j] >= math.radians(min_bca),
-                                                     bca[i, j] <= math.radians(max_bca)))] = 1
-                        cur_array[~valid] = 0
-                        parameters.weights[j, k] = cur_array
-                    else:
-                        parameters.weights[j, k] = weights_obs[j][k, :, :]
 
                     if (weights_bg is None):
                         cur_array = parameters.bg_weights[k]
@@ -772,10 +781,20 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                                        np.isfinite(parameters.wts[i][k]),
                                                        np.isfinite(parameters.azs[i][k]),
                                                        np.isfinite(parameters.els[i][k])))
+                        valid = np.logical_and.reduce((valid,
+                            np.isfinite(parameters.vrs[j][k]),
+                            np.isfinite(parameters.wts[j][k]),
+                            np.isfinite(parameters.azs[j][k]),
+                            np.isfinite(parameters.els[j][k])))
+                        valid = np.logical_and.reduce((valid,
+                            ~parameters.vrs[j][k].mask,
+                            ~parameters.wts[j][k].mask,
+                            ~parameters.azs[j][k].mask,
+                            ~parameters.els[j][k].mask))
                         cur_array[np.logical_or(
-                            bca[i, j] >= math.radians(min_bca),
-                            bca[i, j] <= math.radians(max_bca))] = 1
-                        cur_array[~valid] = 0
+                            bca[i, j] < math.radians(min_bca),
+                            bca[i, j] > math.radians(max_bca))] = 1
+                        cur_array[~valid] = 1
                         parameters.bg_weights[i] = cur_array
                     else:
                         parameters.bg_weights[i] = weights_bg[i]
@@ -875,12 +894,11 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     parameters.points = points
     parameters.point_list = points
     loss_and_gradient = lambda x: (J_function(x, parameters), grad_J(x, parameters))
-
+    tolerance = 1e-6 * (Co + Cm + Cx + Cy + Cz + Cb + Cv) 
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient, initial_position=winds,
-        tolerance=1e-8, x_tolerance=wind_tol,
+        tolerance=tolerance, x_tolerance=wind_tol,
         max_iterations=max_iterations, parallel_iterations=parallel_iterations)
-    print(winds)
     winds = np.reshape(
         winds.position.numpy(), (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
     iterations = iterations + 10

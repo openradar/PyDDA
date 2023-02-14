@@ -5,8 +5,15 @@ Example of a wind retrieval in a tornado over Sydney
 
 This shows an example of how to retrieve winds from 4 radars over Sydney.
 
-Grided netCDF files are downloadable from:
-https://drive.google.com/drive/u/1/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
+We use smoothing to decrease the magnitude of the updraft in the region of
+the mesocyclone. The reduction of noise also helps the solution converge
+much faster since the cost function is smoother and therefore less susecptible
+to find a local minimum that is in noise.
+
+The observational constraint is reduced to 0.01 from the usual 1because we are factoring in
+many more data points as we are using 4 radars instead of the two in the Darwin example.
+
+This example uses pooch to download the data files.
 
 .. image:: ../../sydney_tornado.png
 
