@@ -132,11 +132,11 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     # Impermeability condition
     if lower_bc is True:
         p_z1 = tf.concat(
-            [tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]], axis=0)
     if (upper_bc is True):
         p_z1 = tf.concat(
             [p_z1[:-1, :, :],
-             tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+             tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -179,12 +179,12 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdy = _tf_gradient(w, dy, axis=1)
     dwdz = _tf_gradient(w, dz, axis=0)
 
-    x_term = Cx * (_tf_gradient(dudx, dx, axis=2) ** 2 + _tf_gradient(dvdx, dx, axis=1) ** 2 +
+    x_term = Cx * (_tf_gradient(dudx, dx, axis=2) ** 2 + _tf_gradient(dvdx, dx, axis=2) ** 2 +
                    _tf_gradient(dwdx, dx, axis=2) ** 2)
-    y_term = Cy * (_tf_gradient(dudy, dy, axis=2) ** 2 + _tf_gradient(dvdy, dy, axis=1) ** 2 +
-                   _tf_gradient(dwdy, dy, axis=2) ** 2)
-    z_term = Cz * (_tf_gradient(dudz, dz, axis=2) ** 2 + _tf_gradient(dvdz, dz, axis=1) ** 2 +
-                   _tf_gradient(dwdz, dz, axis=2) ** 2)
+    y_term = Cy * (_tf_gradient(dudy, dy, axis=1) ** 2 + _tf_gradient(dvdy, dy, axis=1) ** 2 +
+                   _tf_gradient(dwdy, dy, axis=1) ** 2)
+    z_term = Cz * (_tf_gradient(dudz, dz, axis=0) ** 2 + _tf_gradient(dvdz, dz, axis=0) ** 2 +
+                   _tf_gradient(dwdz, dz, axis=0) ** 2)
     return tf.math.reduce_sum(x_term + y_term + z_term)
 
 
@@ -236,11 +236,11 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
 
     # Impermeability condition
     if lower_bc is True:
-        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])),
+        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
                           p_z1[1:, :, :]], axis=0)
     if (upper_bc is True):
         p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), )], axis=0)
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -483,11 +483,11 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
     # Impermeability condition
     if lower_bc is True:
         p_z1 = tf.concat(
-            [tf.zeros((1, u.shape[1], u.shape[2])),
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
             p_z1[1:, :, :]], axis=0)
     if (upper_bc is True):
         p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -705,11 +705,11 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
 
     # Impermeability condition
     if lower_bc is True:
-        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])),
+        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
                           p_z1[1:, :, :]], axis=0)
     if (upper_bc is True):
         p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -807,10 +807,10 @@ def calculate_model_gradient(u, v, w, weights, u_model,
 
     # Impermeability condition
     if lower_bc is True:
-        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])),
+        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
                           p_z1[1:, :, :]], axis=0)
     if (upper_bc is True):
         p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))

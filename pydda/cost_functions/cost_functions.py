@@ -129,10 +129,10 @@ def J_function(winds, parameters):
                 Cx=parameters.Cx, Cy=parameters.Cy, Cz=parameters.Cz)
         else:
             Jsmooth = 0
-
+     
         if (parameters.Cb > 0):
             Jbackground = _cost_functions_numpy.calculate_background_cost(
-                winds[0], winds[1], parameters.bg_weights,
+                winds[0], winds[1], winds[2], parameters.bg_weights,
                 parameters.u_back, parameters.v_back, parameters.Cb)
         else:
             Jbackground = 0
@@ -191,7 +191,7 @@ def J_function(winds, parameters):
 
         if (parameters.Cb > 0):
             Jbackground = _cost_functions_jax.calculate_background_cost(
-                winds[0], winds[1], parameters.bg_weights,
+                winds[0], winds[1], winds[2], parameters.bg_weights,
                 parameters.u_back, parameters.v_back, parameters.Cb)
         else:
             Jbackground = 0
@@ -329,7 +329,7 @@ def grad_J(winds, parameters):
 
         if (parameters.Cb > 0):
             grad += _cost_functions_numpy.calculate_background_gradient(
-                winds[0], winds[1], parameters.bg_weights,
+                winds[0], winds[1], winds[2], parameters.bg_weights,
                 parameters.u_back, parameters.v_back, parameters.Cb)
 
         if (parameters.Cv > 0):
@@ -371,7 +371,7 @@ def grad_J(winds, parameters):
 
         if (parameters.Cb > 0):
             grad += _cost_functions_jax.calculate_background_gradient(
-                winds[0], winds[1], parameters.bg_weights,
+                winds[0], winds[1], winds[2], parameters.bg_weights,
                 parameters.u_back, parameters.v_back, parameters.Cb)
 
         if (parameters.Cv > 0):

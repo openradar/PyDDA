@@ -41,7 +41,7 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 LICENSE = 'BSD'
 PLATFORMS = "Linux, Windows, OSX"
 MAJOR = 1
-MINOR = 1
+MINOR = 2
 MICRO = 0
 
 #SCRIPTS = glob.glob('scripts/*')

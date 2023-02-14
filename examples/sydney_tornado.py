@@ -38,16 +38,15 @@ grid4 = pyart.io.read_grid(grid4_path)
 # Set initialization and do retrieval
 u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
 new_grids = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
-                                              u_init, v_init, w_init, Co=1e-3, Cm=256.0,
-                                              Cz=1e2, Cx=1e2, Cy=1e2,
-                                              vel_name='VRADH_corr', refl_field='DBZH',
-                                              mask_outside_opt=True, 
+                                              u_init, v_init, w_init, Co=1e-2, Cm=256.0, Cx=1e3, Cy=1e3, Cz=1e3,
+                                              vel_name='VRADH_corr', refl_field='DBZH', 
+                                              mask_outside_opt=True, wind_tol=0.1,
                                               engine='tensorflow')
 # Make a neat plot
 fig = plt.figure(figsize=(10,7))
 ax = pydda.vis.plot_horiz_xsection_quiver_map(new_grids, background_field='DBZH', level=3,
                                               show_lobes=False, bg_grid_no=3, vmin=0, vmax=60,
-                                              quiverkey_len=40.0,
+                                              quiverkey_len=20.0, w_vel_contours=[5., 10., 20, 30., 40.],
                                               quiver_spacing_x_km=2.0, quiver_spacing_y_km=2.0,
                                               quiverkey_loc='top', colorbar_contour_flag=True,
                                               cmap='pyart_HomeyerRainbow')
@@ -56,3 +55,4 @@ ax.set_yticks(np.arange(-36, -32.0, 0.1))
 ax.set_xlim([151.0, 151.35])
 ax.set_ylim([-34.15, -33.9])
 plt.show()
+
