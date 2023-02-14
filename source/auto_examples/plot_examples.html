@@ -15,9 +15,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     
@@ -67,10 +64,10 @@ using PyDDA.</p>
 <li><img src="../../_images/sphx_glr_plot_examples_002.png" srcset="../../_images/sphx_glr_plot_examples_002.png" alt="PyDDA retreived winds @20.0 km south of origin." class = "sphx-glr-multi-img"/></li>
 <li><img src="../../_images/sphx_glr_plot_examples_003.png" srcset="../../_images/sphx_glr_plot_examples_003.png" alt="PyDDA retreived winds @20.0 km west of origin." class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_min not used since it
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
-/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_max not used since it
+/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
 cannot be safely cast to variable data type
   data = self.ncvar[:]
 /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -84,47 +81,47 @@ The max of w_init is 0.0
 Initial constraint violation:  0.000000
 Initial Lagrangian norm:  106.766222
 Iter:  1
-Jvel:  tf.Tensor(1.8308261338948282, shape=(), dtype=float64)
-Constraint violation:  0.6818282075000475
-Maximum mass continuity violation:  0.027032187382017923
+Jvel:  tf.Tensor(1.8308261338947391, shape=(), dtype=float64)
+Constraint violation:  0.6818282075000477
+Maximum mass continuity violation:  0.027032187382017948
 Lagrangian norm:  0.333181
 Added most recent point to filter
 Restoration phase, mu = : 10.0
 Iter:  2
-Jvel:  tf.Tensor(776.0735097684178, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.32457978698080797, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.027032187382017923
+Jvel:  tf.Tensor(776.07350966592, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.32457978698477885, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.027032187382017948
 Lagrangian norm:  8.965855
 Added most recent point to filter
 Restoration phase, mu = : 100.0
 Iter:  3
-Jvel:  tf.Tensor(0.18090889817168548, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.431208616080527, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.01814822569066563
+Jvel:  tf.Tensor(0.1809088981506799, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.43120861608916716, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.01814822569128924
 Lagrangian norm:  0.075149
 Added most recent point to filter
 Restoration phase, mu = : 1000.0
 Iter:  4
-Jvel:  tf.Tensor(931.0958250692948, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.23440116380932383, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.018148202062705898
+Jvel:  tf.Tensor(931.0958252021085, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.23440116381622558, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.018148202063329504
 Lagrangian norm:  9.954166
 Added most recent point to filter
 Restoration phase, mu = : 10000.0
 Iter:  5
-Jvel:  tf.Tensor(1.638373406159619, shape=(), dtype=float64)
-Constraint violation:  tf.Tensor(0.2860483774171418, shape=(), dtype=float64)
-Maximum mass continuity violation:  0.011858196401085843
+Jvel:  tf.Tensor(1.6383734062883764, shape=(), dtype=float64)
+Constraint violation:  tf.Tensor(0.28604837741522643, shape=(), dtype=float64)
+Maximum mass continuity violation:  0.011858196401057628
 Lagrangian norm:  0.307412
 Added most recent point to filter
 Iter:  6
-Jvel:  tf.Tensor(3.0877579759907574, shape=(), dtype=float64)
-Constraint violation:  0.051330460782699754
-Maximum mass continuity violation:  0.0015490391557233488
+Jvel:  tf.Tensor(3.087757975985009, shape=(), dtype=float64)
+Constraint violation:  0.0513304607821485
+Maximum mass continuity violation:  0.0015490391557296285
 Lagrangian norm:  0.262021
 AugLag converged to specified tolerance
 Applying low pass filter to wind field...
-Done! Time = 81.0
+Done! Time = 80.9
 /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   ax.contour(
 /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
@@ -185,7 +182,7 @@ Done! Time = 81.0
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;Darwin.png&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  22.648 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  22.567 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
@@ -257,7 +254,7 @@ Done! Time = 81.0
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

@@ -59,10 +59,10 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -76,47 +76,47 @@ Author: Robert C. Jackson
     Initial constraint violation:  0.000000
     Initial Lagrangian norm:  106.766222
     Iter:  1
-    Jvel:  tf.Tensor(1.8308261338948282, shape=(), dtype=float64)
-    Constraint violation:  0.6818282075000475
-    Maximum mass continuity violation:  0.027032187382017923
+    Jvel:  tf.Tensor(1.8308261338947391, shape=(), dtype=float64)
+    Constraint violation:  0.6818282075000477
+    Maximum mass continuity violation:  0.027032187382017948
     Lagrangian norm:  0.333181
     Added most recent point to filter
     Restoration phase, mu = : 10.0
     Iter:  2
-    Jvel:  tf.Tensor(776.0735097684178, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.32457978698080797, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.027032187382017923
+    Jvel:  tf.Tensor(776.07350966592, shape=(), dtype=float64)
+    Constraint violation:  tf.Tensor(0.32457978698477885, shape=(), dtype=float64)
+    Maximum mass continuity violation:  0.027032187382017948
     Lagrangian norm:  8.965855
     Added most recent point to filter
     Restoration phase, mu = : 100.0
     Iter:  3
-    Jvel:  tf.Tensor(0.18090889817168548, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.431208616080527, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.01814822569066563
+    Jvel:  tf.Tensor(0.1809088981506799, shape=(), dtype=float64)
+    Constraint violation:  tf.Tensor(0.43120861608916716, shape=(), dtype=float64)
+    Maximum mass continuity violation:  0.01814822569128924
     Lagrangian norm:  0.075149
     Added most recent point to filter
     Restoration phase, mu = : 1000.0
     Iter:  4
-    Jvel:  tf.Tensor(931.0958250692948, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.23440116380932383, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.018148202062705898
+    Jvel:  tf.Tensor(931.0958252021085, shape=(), dtype=float64)
+    Constraint violation:  tf.Tensor(0.23440116381622558, shape=(), dtype=float64)
+    Maximum mass continuity violation:  0.018148202063329504
     Lagrangian norm:  9.954166
     Added most recent point to filter
     Restoration phase, mu = : 10000.0
     Iter:  5
-    Jvel:  tf.Tensor(1.638373406159619, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.2860483774171418, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.011858196401085843
+    Jvel:  tf.Tensor(1.6383734062883764, shape=(), dtype=float64)
+    Constraint violation:  tf.Tensor(0.28604837741522643, shape=(), dtype=float64)
+    Maximum mass continuity violation:  0.011858196401057628
     Lagrangian norm:  0.307412
     Added most recent point to filter
     Iter:  6
-    Jvel:  tf.Tensor(3.0877579759907574, shape=(), dtype=float64)
-    Constraint violation:  0.051330460782699754
-    Maximum mass continuity violation:  0.0015490391557233488
+    Jvel:  tf.Tensor(3.087757975985009, shape=(), dtype=float64)
+    Constraint violation:  0.0513304607821485
+    Maximum mass continuity violation:  0.0015490391557296285
     Lagrangian norm:  0.262021
     AugLag converged to specified tolerance
     Applying low pass filter to wind field...
-    Done! Time = 81.0
+    Done! Time = 80.9
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
@@ -185,7 +185,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  22.648 seconds)
+   **Total running time of the script:** ( 1 minutes  22.567 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

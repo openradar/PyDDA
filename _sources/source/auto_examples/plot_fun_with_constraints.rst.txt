@@ -63,14 +63,12 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:376: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
-      result = super().contourf(*args, **kwargs)
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
       result = super().contour(*args, **kwargs)
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
@@ -83,10 +81,6 @@ questionable winds at the edges of the Dual Doppler Lobes.
     rmsVR = 6.7765408
     Total points: 92100
     The max of w_init is 0.0
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/tensorflow_probability/python/__init__.py:57: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
-      if (distutils.version.LooseVersion(tf.__version__) <
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/tensorflow_probability/python/__init__.py:58: DeprecationWarning: distutils Version classes are deprecated. Use packaging.version instead.
-      distutils.version.LooseVersion(required_tensorflow_version)):
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|94406.4375|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
     The gradient of the cost functions is 30.776155
@@ -245,9 +239,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
             0.0000000e+00, 0.0000000e+00]], dtype=float32)>)
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 137.1
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
-      result = super().contourf(*args, **kwargs)
+    Done! Time = 136.3
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
       result = super().contour(*args, **kwargs)
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
@@ -327,9 +319,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
            [0., 0., 0., ..., 0., 0., 0.]], dtype=float32)>)
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 53.8
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1662: UserWarning: linewidths is ignored by contourf
-      result = super().contourf(*args, **kwargs)
+    Done! Time = 55.8
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
       result = super().contour(*args, **kwargs)
     /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/cartopy/mpl/geoaxes.py:1614: UserWarning: The following kwargs were not used by contour: 'color'
@@ -398,7 +388,7 @@ questionable winds at the edges of the Dual Doppler Lobes.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  18.989 seconds)
+   **Total running time of the script:** ( 3 minutes  20.646 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
