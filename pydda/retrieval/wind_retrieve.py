@@ -234,6 +234,7 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
     else:
         # Interpolate sounding to radar grid
         print('Interpolating sounding to radar grid')
+
         if isinstance(u_back, np.ma.MaskedArray):
             u_back = u_back.filled(-9999.)
         if isinstance(v_back, np.ma.MaskedArray):
@@ -249,6 +250,7 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
         else:
             parameters.u_back = u_interp(Grids[0].z['data'])
             parameters.v_back = v_interp(Grids[0].z['data'])
+
         print('Grid levels:')
         print(Grids[0].z['data'])
 
@@ -646,6 +648,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     else:
         # Interpolate sounding to radar grid
         print('Interpolating sounding to radar grid')
+
         if isinstance(u_back, np.ma.MaskedArray):
             u_back = u_back.filled(-9999.)
         if isinstance(v_back, np.ma.MaskedArray):
@@ -665,6 +668,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                 u_interp(Grids[0].z['data']), dtype=tf.float32)
             parameters.v_back = tf.constant(
                 v_interp(Grids[0].z['data']), dtype=tf.float32)
+
         print('Interpolated U field:')
         print(parameters.u_back)
         print('Interpolated V field:')
