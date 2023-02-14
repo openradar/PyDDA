@@ -35,6 +35,23 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This is a simple example for how to retrieve and plot winds from 2 radars using PyDDA.">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
+    :alt: Example on retrieving and plotting winds
+
+  :ref:`sphx_glr_source_auto_examples_plot_examples.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example on retrieving and plotting winds</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
 
 .. only:: html
@@ -52,18 +69,18 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to combine data from 3 radars and HRRR in the vicinity of the SGP ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
 
 .. only:: html
 
-  .. image:: /source/auto_examples/images/thumb/sphx_glr_oklahoma_example_thumb.png
-    :alt: Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_sydney_tornado_thumb.png
+    :alt: Example of a wind retrieval in a tornado over Sydney
 
-  :ref:`sphx_glr_source_auto_examples_oklahoma_example.py`
+  :ref:`sphx_glr_source_auto_examples_plot_sydney_tornado.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Example of a wind retrieval from KVNX and 2 XSAPRs in Oklahoma</div>
+      <div class="sphx-glr-thumbnail-title">Example of a wind retrieval in a tornado over Sydney</div>
     </div>
 
 
@@ -86,23 +103,6 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is a simple example for how to retrieve and plot winds from 2 radars using PyDDA.">
-
-.. only:: html
-
-  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
-    :alt: Example on retrieving and plotting winds
-
-  :ref:`sphx_glr_source_auto_examples_plot_examples.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Example on retrieving and plotting winds</div>
-    </div>
-
-
-.. raw:: html
-
     </div>
 
 
@@ -110,10 +110,10 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
    :hidden:
 
    /source/auto_examples/hurricane_florence
-   /source/auto_examples/sydney_tornado
-   /source/auto_examples/oklahoma_example
-   /source/auto_examples/plot_fun_with_constraints
    /source/auto_examples/plot_examples
+   /source/auto_examples/sydney_tornado
+   /source/auto_examples/plot_sydney_tornado
+   /source/auto_examples/plot_fun_with_constraints
 
 
 .. only:: html

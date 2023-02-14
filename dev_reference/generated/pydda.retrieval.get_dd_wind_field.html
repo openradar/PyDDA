@@ -1,59 +1,382 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pydda.retrieval.get_dd_wind_field &#8212; PyDDA 1.1.0 documentation</title>
+    <title>pydda.retrieval.get_dd_wind_field &#8212; PyDDA 1.2.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pydda.retrieval.get_bca" href="pydda.retrieval.get_bca.html" />
-    <link rel="prev" title="pydda.cost_functions.calculate_point_gradient" href="pydda.cost_functions.calculate_point_gradient.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="pydda.cost_functions.calculate_point_gradient.html" title="pydda.cost_functions.calculate_point_gradient"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.1.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Developer Reference Manual</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">pydda.retrieval.get_dd_wind_field</a></li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="pydda.cost_functions.calculate_point_gradient" href="pydda.cost_functions.calculate_point_gradient.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">PyDDA</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../contributors_guide/index.html">
+  Contributor’s Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../source/auto_examples/index.html">
+  PyDDA Example Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Developer Reference Manual
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
             
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.J_function.html">
+   pydda.cost_functions.J_function
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.grad_J.html">
+   pydda.cost_functions.grad_J
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_radial_vel_cost_function.html">
+   pydda.cost_functions.calculate_radial_vel_cost_function
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_grad_radial_vel.html">
+   pydda.cost_functions.calculate_grad_radial_vel
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_mass_continuity.html">
+   pydda.cost_functions.calculate_mass_continuity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_mass_continuity_gradient.html">
+   pydda.cost_functions.calculate_mass_continuity_gradient
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_smoothness_cost.html">
+   pydda.cost_functions.calculate_smoothness_cost
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_smoothness_gradient.html">
+   pydda.cost_functions.calculate_smoothness_gradient
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_background_cost.html">
+   pydda.cost_functions.calculate_background_cost
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_background_gradient.html">
+   pydda.cost_functions.calculate_background_gradient
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_vertical_vorticity_cost.html">
+   pydda.cost_functions.calculate_vertical_vorticity_cost
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_vertical_vorticity_gradient.html">
+   pydda.cost_functions.calculate_vertical_vorticity_gradient
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_model_cost.html">
+   pydda.cost_functions.calculate_model_cost
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_model_gradient.html">
+   pydda.cost_functions.calculate_model_gradient
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_fall_speed.html">
+   pydda.cost_functions.calculate_fall_speed
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_point_cost.html">
+   pydda.cost_functions.calculate_point_cost
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.cost_functions.calculate_point_gradient.html">
+   pydda.cost_functions.calculate_point_gradient
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   pydda.retrieval.get_dd_wind_field
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.retrieval.get_bca.html">
+   pydda.retrieval.get_bca
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.retrieval.DDParameters.html">
+   pydda.retrieval.DDParameters
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_horiz_xsection_barbs.html">
+   pydda.vis.plot_horiz_xsection_barbs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_xz_xsection_barbs.html">
+   pydda.vis.plot_xz_xsection_barbs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_yz_xsection_barbs.html">
+   pydda.vis.plot_yz_xsection_barbs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_horiz_xsection_barbs_map.html">
+   pydda.vis.plot_horiz_xsection_barbs_map
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_horiz_xsection_streamlines.html">
+   pydda.vis.plot_horiz_xsection_streamlines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_xz_xsection_streamlines.html">
+   pydda.vis.plot_xz_xsection_streamlines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_yz_xsection_streamlines.html">
+   pydda.vis.plot_yz_xsection_streamlines
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_horiz_xsection_streamlines_map.html">
+   pydda.vis.plot_horiz_xsection_streamlines_map
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_horiz_xsection_quiver.html">
+   pydda.vis.plot_horiz_xsection_quiver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_xz_xsection_quiver.html">
+   pydda.vis.plot_xz_xsection_quiver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_yz_xsection_quiver.html">
+   pydda.vis.plot_yz_xsection_quiver
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.vis.plot_horiz_xsection_quiver_map.html">
+   pydda.vis.plot_horiz_xsection_quiver_map
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.initialization.make_constant_wind_field.html">
+   pydda.initialization.make_constant_wind_field
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.initialization.make_wind_field_from_profile.html">
+   pydda.initialization.make_wind_field_from_profile
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.initialization.make_background_from_wrf.html">
+   pydda.initialization.make_background_from_wrf
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.initialization.make_initialization_from_era_interim.html">
+   pydda.initialization.make_initialization_from_era_interim
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.constraints.make_constraint_from_wrf.html">
+   pydda.constraints.make_constraint_from_wrf
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.constraints.add_hrrr_constraint_to_grid.html">
+   pydda.constraints.add_hrrr_constraint_to_grid
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.constraints.make_constraint_from_era_interim.html">
+   pydda.constraints.make_constraint_from_era_interim
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.constraints.download_needed_era_data.html">
+   pydda.constraints.download_needed_era_data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pydda.constraints.get_iem_obs.html">
+   pydda.constraints.get_iem_obs
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
   <section id="pydda-retrieval-get-dd-wind-field">
-<h1>pydda.retrieval.get_dd_wind_field<a class="headerlink" href="#pydda-retrieval-get-dd-wind-field" title="Permalink to this heading">¶</a></h1>
+<h1>pydda.retrieval.get_dd_wind_field<a class="headerlink" href="#pydda-retrieval-get-dd-wind-field" title="Permalink to this headline">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pydda.retrieval.get_dd_wind_field">
-<span class="sig-prename descclassname"><span class="pre">pydda.retrieval.</span></span><span class="sig-name descname"><span class="pre">get_dd_wind_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scipy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pydda.retrieval.</span></span><span class="sig-name descname"><span class="pre">get_dd_wind_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scipy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">#</a></dt>
 <dd><p>This function takes in a list of Py-ART Grid objects and derives a
 wind field. Every Py-ART Grid in Grids must have the same grid
 specification.</p>
@@ -65,136 +388,94 @@ and HRRR data in <a class="reference internal" href="../index.html#module-pydda.
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">make_constraint_from_wrf()</span></code></p>
 <p><code class="xref py py-func docutils literal notranslate"><span class="pre">add_hrrr_constraint_to_grid()</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>Grids: list of Py-ART Grids</strong></dt><dd><p>The list of Py-ART grids to take in corresponding to each radar.
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Grids</strong> (<em>list of Py-ART Grids</em>) – The list of Py-ART grids to take in corresponding to each radar.
 All grids must have the same shape, x coordinates, y coordinates
-and z coordinates.</p>
-</dd>
-<dt><strong>u_init: 3D ndarray</strong></dt><dd><p>The intial guess for the zonal wind field, input as a 3D array
-with the same shape as the fields in Grids.</p>
-</dd>
-<dt><strong>v_init: 3D ndarray</strong></dt><dd><p>The intial guess for the meridional wind field, input as a 3D array
-with the same shape as the fields in Grids.</p>
-</dd>
-<dt><strong>w_init: 3D ndarray</strong></dt><dd><p>The intial guess for the vertical wind field, input as a 3D array
-with the same shape as the fields in Grids.</p>
-</dd>
-<dt><strong>engine: str (one of “scipy”, “tensorflow”, “jax”)</strong></dt><dd><p>Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
+and z coordinates.</p></li>
+<li><p><strong>u_init</strong> (<em>3D ndarray</em>) – The intial guess for the zonal wind field, input as a 3D array
+with the same shape as the fields in Grids.</p></li>
+<li><p><strong>v_init</strong> (<em>3D ndarray</em>) – The intial guess for the meridional wind field, input as a 3D array
+with the same shape as the fields in Grids.</p></li>
+<li><p><strong>w_init</strong> (<em>3D ndarray</em>) – The intial guess for the vertical wind field, input as a 3D array
+with the same shape as the fields in Grids.</p></li>
+<li><p><strong>engine</strong> (<em>str (one of “scipy”, “tensorflow”, “jax”)</em>) – Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
 Using Tensorflow or Jax expands PyDDA’s capabiability to take advantage of GPU-based systems.
 In addition, these two implementations use automatic differentation to calcualte the gradient
 of the cost function in order to optimize the gradient calculation.
 TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-basedengine.
-The latest version of Jax is required for the Jax-based engine.</p>
-</dd>
-<dt><strong>points: None or list of dicts</strong></dt><dd><p>Point observations as returned by <a class="reference internal" href="pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.constraints.get_iem_obs()</span></code></a>. Set
-to None to disable.</p>
-</dd>
-<dt><strong>vel_name: string</strong></dt><dd><p>Name of radial velocity field. Setting to None will have PyDDA attempt
-to automatically detect the velocity field name.</p>
-</dd>
-<dt><strong>refl_field: string</strong></dt><dd><p>Name of reflectivity field. Setting to None will have PyDDA attempt 
-to automatically detect the reflectivity field name.</p>
-</dd>
-<dt><strong>u_back: 1D array</strong></dt><dd><p>Background zonal wind field from a sounding as a function of height.
-This should be given in the sounding’s vertical coordinates.</p>
-</dd>
-<dt><strong>v_back: 1D array</strong></dt><dd><p>Background meridional wind field from a sounding as a function of
-height. This should be given in the sounding’s vertical coordinates.</p>
-</dd>
-<dt><strong>z_back: 1D array</strong></dt><dd><p>Heights corresponding to background wind field levels in meters. This
-is given in the sounding’s original coordinates.</p>
-</dd>
-<dt><strong>frz: float</strong></dt><dd><p>Freezing level used for fall speed calculation in meters.</p>
-</dd>
-<dt><strong>Co: float</strong></dt><dd><p>Weight for cost function related to observed radial velocities.</p>
-</dd>
-<dt><strong>Cm: float</strong></dt><dd><p>Weight for cost function related to the mass continuity equation.</p>
-</dd>
-<dt><strong>Cx: float</strong></dt><dd><p>Weight for cost function related to smoothness in x direction</p>
-</dd>
-<dt><strong>Cy: float</strong></dt><dd><p>Weight for cost function related to smoothness in y direction</p>
-</dd>
-<dt><strong>Cz: float</strong></dt><dd><p>Weight for cost function related to smoothness in z direction</p>
-</dd>
-<dt><strong>Cv: float</strong></dt><dd><p>Weight for cost function related to vertical vorticity equation.</p>
-</dd>
-<dt><strong>Cmod: float</strong></dt><dd><p>Weight for cost function related to custom constraints.</p>
-</dd>
-<dt><strong>Cpoint: float</strong></dt><dd><p>Weight for cost function related to point observations.</p>
-</dd>
-<dt><strong>weights_obs: list of floating point arrays or None</strong></dt><dd><p>List of weights for each point in grid from each radar in Grids.
-Set to None to let PyDDA determine this automatically.</p>
-</dd>
-<dt><strong>weights_model: list of floating point arrays or None</strong></dt><dd><p>List of weights for each point in grid from each custom field in
-model_fields. Set to None to let PyDDA determine this automatically.</p>
-</dd>
-<dt><strong>weights_bg: list of floating point arrays or None</strong></dt><dd><p>List of weights for each point in grid from the sounding. Set to None
-to let PyDDA determine this automatically.</p>
-</dd>
-<dt><strong>Ut: float</strong></dt><dd><p>Prescribed storm motion in zonal direction.
-This is only needed if Cv is not zero.</p>
-</dd>
-<dt><strong>Vt: float</strong></dt><dd><p>Prescribed storm motion in meridional direction.
-This is only needed if Cv is not zero.</p>
-</dd>
-<dt><strong>filter_winds: bool</strong></dt><dd><p>If this is True, PyDDA will run a low pass filter on
-the retrieved wind field. Set to False to disable the low pass filter.</p>
-</dd>
-<dt><strong>mask_outside_opt: bool</strong></dt><dd><p>If set to true, wind values outside the multiple doppler lobes will
+The latest version of Jax is required for the Jax-based engine.</p></li>
+<li><p><strong>points</strong> (<em>None or list of dicts</em>) – Point observations as returned by <a class="reference internal" href="pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.constraints.get_iem_obs()</span></code></a>. Set
+to None to disable.</p></li>
+<li><p><strong>vel_name</strong> (<em>string</em>) – Name of radial velocity field. Setting to None will have PyDDA attempt
+to automatically detect the velocity field name.</p></li>
+<li><p><strong>refl_field</strong> (<em>string</em>) – Name of reflectivity field. Setting to None will have PyDDA attempt
+to automatically detect the reflectivity field name.</p></li>
+<li><p><strong>u_back</strong> (<em>1D array</em>) – Background zonal wind field from a sounding as a function of height.
+This should be given in the sounding’s vertical coordinates.</p></li>
+<li><p><strong>v_back</strong> (<em>1D array</em>) – Background meridional wind field from a sounding as a function of
+height. This should be given in the sounding’s vertical coordinates.</p></li>
+<li><p><strong>z_back</strong> (<em>1D array</em>) – Heights corresponding to background wind field levels in meters. This
+is given in the sounding’s original coordinates.</p></li>
+<li><p><strong>frz</strong> (<em>float</em>) – Freezing level used for fall speed calculation in meters.</p></li>
+<li><p><strong>Co</strong> (<em>float</em>) – Weight for cost function related to observed radial velocities.</p></li>
+<li><p><strong>Cm</strong> (<em>float</em>) – Weight for cost function related to the mass continuity equation.</p></li>
+<li><p><strong>Cx</strong> (<em>float</em>) – Weight for cost function related to smoothness in x direction</p></li>
+<li><p><strong>Cy</strong> (<em>float</em>) – Weight for cost function related to smoothness in y direction</p></li>
+<li><p><strong>Cz</strong> (<em>float</em>) – Weight for cost function related to smoothness in z direction</p></li>
+<li><p><strong>Cv</strong> (<em>float</em>) – Weight for cost function related to vertical vorticity equation.</p></li>
+<li><p><strong>Cmod</strong> (<em>float</em>) – Weight for cost function related to custom constraints.</p></li>
+<li><p><strong>Cpoint</strong> (<em>float</em>) – Weight for cost function related to point observations.</p></li>
+<li><p><strong>weights_obs</strong> (<em>list of floating point arrays or None</em>) – List of weights for each point in grid from each radar in Grids.
+Set to None to let PyDDA determine this automatically.</p></li>
+<li><p><strong>weights_model</strong> (<em>list of floating point arrays or None</em>) – List of weights for each point in grid from each custom field in
+model_fields. Set to None to let PyDDA determine this automatically.</p></li>
+<li><p><strong>weights_bg</strong> (<em>list of floating point arrays or None</em>) – List of weights for each point in grid from the sounding. Set to None
+to let PyDDA determine this automatically.</p></li>
+<li><p><strong>Ut</strong> (<em>float</em>) – Prescribed storm motion in zonal direction.
+This is only needed if Cv is not zero.</p></li>
+<li><p><strong>Vt</strong> (<em>float</em>) – Prescribed storm motion in meridional direction.
+This is only needed if Cv is not zero.</p></li>
+<li><p><strong>filter_winds</strong> (<em>bool</em>) – If this is True, PyDDA will run a low pass filter on
+the retrieved wind field. Set to False to disable the low pass filter.</p></li>
+<li><p><strong>mask_outside_opt</strong> (<em>bool</em>) – If set to true, wind values outside the multiple doppler lobes will
 be masked, i.e. if less than 2 radars provide coverage for a given
-point.</p>
-</dd>
-<dt><strong>max_iterations: int</strong></dt><dd><p>The maximum number of iterations to run the optimization loop for.</p>
-</dd>
-<dt><strong>mask_w_outside_opt: bool</strong></dt><dd><p>If set to true, vertical winds outside the multiple doppler lobes will
+point.</p></li>
+<li><p><strong>max_iterations</strong> (<em>int</em>) – The maximum number of iterations to run the optimization loop for.</p></li>
+<li><p><strong>mask_w_outside_opt</strong> (<em>bool</em>) – If set to true, vertical winds outside the multiple doppler lobes will
 be masked, i.e. if less than 2 radars provide coverage for a given
-point.</p>
-</dd>
-<dt><strong>filter_window: int</strong></dt><dd><p>Window size to use for the low pass filter. A larger window will
+point.</p></li>
+<li><p><strong>filter_window</strong> (<em>int</em>) – Window size to use for the low pass filter. A larger window will
 increase the number of points factored into the polynomial fit for
-the filter, and hence will increase the smoothness.</p>
-</dd>
-<dt><strong>filter_order: int</strong></dt><dd><p>The order of the polynomial to use for the low pass filter. Higher
+the filter, and hence will increase the smoothness.</p></li>
+<li><p><strong>filter_order</strong> (<em>int</em>) – The order of the polynomial to use for the low pass filter. Higher
 order polynomials allow for the retention of smaller scale features
-but may also not remove enough noise.</p>
-</dd>
-<dt><strong>min_bca: float</strong></dt><dd><p>Minimum beam crossing angle in degrees between two radars. 30.0 is the
-typical value used in many publications.</p>
-</dd>
-<dt><strong>max_bca: float</strong></dt><dd><p>Minimum beam crossing angle in degrees between two radars. 150.0 is the
-typical value used in many publications.</p>
-</dd>
-<dt><strong>upper_bc: bool</strong></dt><dd><p>Set this to true to enforce w = 0 at the top of the atmosphere. This is
-commonly called the impermeability condition.</p>
-</dd>
-<dt><strong>model_fields: list of strings</strong></dt><dd><p>The list of fields in the first grid in Grids that contain the custom
+but may also not remove enough noise.</p></li>
+<li><p><strong>min_bca</strong> (<em>float</em>) – Minimum beam crossing angle in degrees between two radars. 30.0 is the
+typical value used in many publications.</p></li>
+<li><p><strong>max_bca</strong> (<em>float</em>) – Minimum beam crossing angle in degrees between two radars. 150.0 is the
+typical value used in many publications.</p></li>
+<li><p><strong>upper_bc</strong> (<em>bool</em>) – Set this to true to enforce w = 0 at the top of the atmosphere. This is
+commonly called the impermeability condition.</p></li>
+<li><p><strong>model_fields</strong> (<em>list of strings</em>) – The list of fields in the first grid in Grids that contain the custom
 data interpolated to the Grid’s grid specification. Helper functions
 to create such gridded fields for HRRR and NetCDF WRF data exist
 in ::pydda.constraints::. PyDDA will look for fields named U_(model
 field name), V_(model field name), and W_(model field name). For
 example, if you have U_hrrr, V_hrrr, and W_hrrr, then specify [“hrrr”]
-into model_fields.</p>
+into model_fields.</p></li>
+<li><p><strong>output_cost_functions</strong> (<em>bool</em>) – Set to True to output the value of each cost function every
+10 iterations.</p></li>
+<li><p><strong>roi</strong> (<em>float</em>) – Radius of influence for the point observations. The point observation will
+not hold any weight outside this radius.</p></li>
+<li><p><strong>parallel_iterations</strong> (<em>int</em>) – The number of iterations to run in parallel in the optimization loop.
+This is only for the TensorFlow-based engine.</p></li>
+<li><p><strong>wind_tol</strong> (<em>float</em>) – Stop iterations after maximum change in winds is less than this value.</p></li>
+</ul>
 </dd>
-<dt><strong>output_cost_functions: bool</strong></dt><dd><p>Set to True to output the value of each cost function every
-10 iterations.</p>
-</dd>
-<dt><strong>roi: float</strong></dt><dd><p>Radius of influence for the point observations. The point observation will
-not hold any weight outside this radius.</p>
-</dd>
-<dt><strong>parallel_iterations: int</strong></dt><dd><p>The number of iterations to run in parallel in the optimization loop.
-This is only for the TensorFlow-based engine.</p>
-</dd>
-<dt><strong>wind_tol: float</strong></dt><dd><p>Stop iterations after maximum change in winds is less than this value.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>new_grid_list: list</dt><dd><p>A list of Py-ART grids containing the derived wind fields. These fields
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>new_grid_list</strong> (<em>list</em>) – A list of Py-ART grids containing the derived wind fields. These fields
 are displayable by the visualization module.</p>
-</dd>
-</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -202,76 +483,51 @@ are displayable by the visualization module.</p>
 </section>
 
 
-            <div class="clearer"></div>
-          </div>
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="pydda.cost_functions.calculate_point_gradient.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">pydda.cost_functions.calculate_point_gradient</p>
         </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">pydda.retrieval.get_dd_wind_field</a><ul>
-<li><a class="reference internal" href="#pydda.retrieval.get_dd_wind_field"><code class="docutils literal notranslate"><span class="pre">get_dd_wind_field()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="pydda.cost_functions.calculate_point_gradient.html"
-                          title="previous chapter">pydda.cost_functions.calculate_point_gradient</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="pydda.retrieval.get_bca.html"
-                          title="next chapter">pydda.retrieval.get_bca</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/dev_reference/generated/pydda.retrieval.get_dd_wind_field.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
+    </a>
+    <a class='right-next' id="next-link" href="pydda.retrieval.get_bca.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">pydda.retrieval.get_bca</p>
     </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
+              
+          </main>
+          
+
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="pydda.retrieval.get_bca.html" title="pydda.retrieval.get_bca"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="pydda.cost_functions.calculate_point_gradient.html" title="pydda.cost_functions.calculate_point_gradient"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">PyDDA 1.1.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">pydda.retrieval.get_dd_wind_field</a></li> 
-      </ul>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2023, PyDDA Developers.<br>
+</p>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
     </div>
+    
+  </div>
+</footer>
   </body>
 </html>

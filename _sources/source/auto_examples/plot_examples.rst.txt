@@ -26,7 +26,7 @@ using PyDDA.
 
 Author: Robert C. Jackson
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-61
+.. GENERATED FROM PYTHON SOURCE LINES 11-59
 
 
 
@@ -70,53 +70,23 @@ Author: Robert C. Jackson
     Calculating weights for radars 0 and 1
     Calculating weights for models...
     Starting solver 
-    rmsVR = 6.776540662375731
-    Total points: 92100
+    rmsVR = 5.994068
+    Total points: 40597
     The max of w_init is 0.0
-    Initial constraint violation:  0.000000
-    Initial Lagrangian norm:  106.766222
-    Iter:  1
-    Jvel:  tf.Tensor(1.8308261338947391, shape=(), dtype=float64)
-    Constraint violation:  0.6818282075000477
-    Maximum mass continuity violation:  0.027032187382017948
-    Lagrangian norm:  0.333181
-    Added most recent point to filter
-    Restoration phase, mu = : 10.0
-    Iter:  2
-    Jvel:  tf.Tensor(776.07350966592, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.32457978698477885, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.027032187382017948
-    Lagrangian norm:  8.965855
-    Added most recent point to filter
-    Restoration phase, mu = : 100.0
-    Iter:  3
-    Jvel:  tf.Tensor(0.1809088981506799, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.43120861608916716, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.01814822569128924
-    Lagrangian norm:  0.075149
-    Added most recent point to filter
-    Restoration phase, mu = : 1000.0
-    Iter:  4
-    Jvel:  tf.Tensor(931.0958252021085, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.23440116381622558, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.018148202063329504
-    Lagrangian norm:  9.954166
-    Added most recent point to filter
-    Restoration phase, mu = : 10000.0
-    Iter:  5
-    Jvel:  tf.Tensor(1.6383734062883764, shape=(), dtype=float64)
-    Constraint violation:  tf.Tensor(0.28604837741522643, shape=(), dtype=float64)
-    Maximum mass continuity violation:  0.011858196401057628
-    Lagrangian norm:  0.307412
-    Added most recent point to filter
-    Iter:  6
-    Jvel:  tf.Tensor(3.087757975985009, shape=(), dtype=float64)
-    Constraint violation:  0.0513304607821485
-    Maximum mass continuity violation:  0.0015490391557296285
-    Lagrangian norm:  0.262021
-    AugLag converged to specified tolerance
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+          0|42749.9414|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
+    The gradient of the cost functions is 0.17578308
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         10|   0.1199|  15.8856|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.3499
+    The gradient of the cost functions is 0.044670418
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         20|   0.0096|   6.5933|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.2022
+    The gradient of the cost functions is 0.03325785
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         30|   0.0072|   3.8130|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5972
+    Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 80.9
+    Done! Time = 15.0
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
@@ -149,12 +119,11 @@ Author: Robert C. Jackson
     # Start the wind retrieval. This example only uses the mass continuity
     # and data weighting constraints.
     Grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], u_init,
-                                              v_init, w_init, Co=1.0, Cm=1.0,
-                                              Jveltol=1e-3, cvtol=1e-4,
+                                              v_init, w_init, Co=1.0, Cm=256.0,
                                               Cx=0.0, Cy=0., Cz=0.0, Cb=0., 
                                               frz=5000.0, filter_window=5,
                                               mask_outside_opt=True, upper_bc=1,
-                                              wind_tol=0.5, engine="auglag")
+                                              wind_tol=0.5, engine="tensorflow")
     # Plot a horizontal cross section
     plt.figure(figsize=(9, 9))
     pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='reflectivity',
@@ -164,7 +133,6 @@ Author: Robert C. Jackson
                                         barb_spacing_y_km=15.0)
     plt.show()
     plt.savefig("Darwin_horiz.png")
-
     # Plot a vertical X-Z cross section
     plt.figure(figsize=(9, 9))
     pydda.vis.plot_xz_xsection_barbs(Grids, background_field='reflectivity',
@@ -185,7 +153,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  22.567 seconds)
+   **Total running time of the script:** ( 0 minutes  17.638 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
