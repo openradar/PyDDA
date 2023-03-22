@@ -109,7 +109,7 @@ Contents:
 
 .. toctree::
    :maxdepth: 3
-    
+   user_guide/index
    contributors_guide/index
    source/auto_examples/index
    dev_reference/index
