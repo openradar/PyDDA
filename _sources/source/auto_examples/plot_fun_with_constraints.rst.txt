@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py>`
+        :ref:`Go to the end <sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -323,7 +323,7 @@ at the edges of data coverage.
         680|  18.5079|  18.1502|   0.0000|   3.8162|   0.0000|   0.0000|   0.0000|  44.7650
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 557.1
+    Done! Time = 542.0
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -365,7 +365,7 @@ at the edges of data coverage.
     The gradient of the cost functions is 0.9690954
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 15.9
+    Done! Time = 15.7
     /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
       elev = np.arccos((Re**2 + slantrsq - rh**2)/(2 * Re * slantr))
     Calculating weights for radars 0 and 1
@@ -384,7 +384,7 @@ at the edges of data coverage.
          20|   0.0058|   9.2385|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.5898
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 10.3
+    Done! Time = 10.1
 
 
 
@@ -466,7 +466,7 @@ at the edges of data coverage.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 9 minutes  49.524 seconds)
+   **Total running time of the script:** ( 9 minutes  34.391 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
@@ -474,6 +474,8 @@ at the edges of data coverage.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

@@ -23,7 +23,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
   .. image:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
-    :alt: Example on integrating radar and HRRR data
+    :alt:
 
   :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
 
@@ -40,7 +40,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
   .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_examples_thumb.png
-    :alt: Example on retrieving and plotting winds
+    :alt:
 
   :ref:`sphx_glr_source_auto_examples_plot_examples.py`
 
@@ -57,7 +57,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
   .. image:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
-    :alt: Example of a wind retrieval in a tornado over Sydney
+    :alt:
 
   :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
 
@@ -74,7 +74,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
   .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_sydney_tornado_thumb.png
-    :alt: Example of a wind retrieval in a tornado over Sydney
+    :alt:
 
   :ref:`sphx_glr_source_auto_examples_plot_sydney_tornado.py`
 
@@ -91,7 +91,7 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. only:: html
 
   .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_fun_with_constraints_thumb.png
-    :alt: Example on geographic plotting and constraint variation
+    :alt:
 
   :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py`
 
