@@ -21,6 +21,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
@@ -35,6 +36,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributor’s Guide" href="../contributors_guide/index.html" />
+    <link rel="prev" title="Overview" href="overview.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -69,7 +72,7 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
+    <li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="index.html">
   User Guide
  </a>
@@ -123,7 +126,19 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="overview.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Reading in Radar Data in Native Radial Coordinates
+  </a>
+ </li>
+</ul>
+
   </div>
 </nav>
               </div>
@@ -198,12 +213,7 @@
 <p>In this notebook, we will showcase how to read in two radar files using Py-ART
 and visualize them before utilizing them in PyDDA. By doing this we can see if
 there is convection as well as velocity values for dual doppler analysis.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
-
-<span class="c1"># Author: Zach Sherman (zsherman@anl.gov)</span>
-<span class="c1"># License: BSD 3 clause</span>
-
-<span class="kn">import</span> <span class="nn">warnings</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -282,6 +292,10 @@ then see their applicability to PyDDA.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>(<a class="reference download internal" download="" href="../_downloads/8878cda2c0935cf1916bd14869b59352/read_radar_data-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/2f4ccf8fe9ea2b700c68361f7ab594ce/read_radar_data-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/99ef7a02342d24946876f1d3bc3ceef5/read_radar_data-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/3624a9871816be35b65b6896d8cd819b/read_radar_data-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/read_radar_data-1.png" class="plot-directive" src="../_images/read_radar_data-1.png" />
+</figure>
 <p>We can see convection on both radar images near eachother with similar timestamps which will be perfect for PyDDA.</p>
 </section>
 <section id="plot-velocity-of-both-radars">
@@ -290,6 +304,7 @@ then see their applicability to PyDDA.</p>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
 <span class="c1"># Plot the southwestern radar</span>
+<span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_sw</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
     <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -307,6 +322,7 @@ then see their applicability to PyDDA.</p>
 
 <span class="c1"># Plot the southeastern radar</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_se</span><span class="p">)</span>
 <span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
     <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -323,6 +339,10 @@ then see their applicability to PyDDA.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>(<a class="reference download internal" download="" href="../_downloads/eaa9ed18f416309ca80df61750797a55/read_radar_data-2.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5be7ec654a2b031eb942faf1f6463c7b/read_radar_data-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/1dff157e3d5b720dc36a4f758dc6bb07/read_radar_data-2.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/487873a14fc40ce89e74967058fe3431/read_radar_data-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/read_radar_data-2.png" class="plot-directive" src="../_images/read_radar_data-2.png" />
+</figure>
 <p>As we can see, the Doppler velocities will need to be dealiased before using
 PyDDA, which will be shown in the next notebook.</p>
 </section>
@@ -344,6 +364,20 @@ notebook.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Overview</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../contributors_guide/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contributor’s Guide</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
               
           </main>
