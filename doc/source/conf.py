@@ -36,6 +36,7 @@ sys.path.insert(0, os.path.abspath('../../pydda'))
 # ones.
 extensions = [
     'sphinx_gallery.gen_gallery',
+    'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
