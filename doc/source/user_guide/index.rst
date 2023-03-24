@@ -8,3 +8,4 @@ This is a place to include our user guide.
    :maxdepth: 3
 
    overview.rst
+   read_radar_data.rst
