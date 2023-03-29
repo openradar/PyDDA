@@ -1,3 +1,5 @@
+.. _dealiasing-velocities:
+
 Radar Data Quality Control - Dealiasing
 =======================================
 
@@ -11,7 +13,8 @@ Read the Data
 
 For this example, we use test data found in Py-ART for two X-Band Scanning ARM
 Precipitation Radars (X-SAPR) found at the Atmospheric Radiation Measurment
-(ARM) Southern Great Plains (SGP) site in Oklahoma.
+(ARM) Southern Great Plains (SGP) site in Oklahoma. For more information on
+reading the radar data, consult :ref:`reading-radar-data`.
 
 Get test data::
     https://arm-doe.github.io/pyart/API/generated/pyart.testing.get_test_data.html
