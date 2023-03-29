@@ -75,18 +75,18 @@ Author: Robert C. Jackson
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|42749.9414|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 0.17578329
+    The gradient of the cost functions is 0.17578308
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          10|   0.1199|  15.8856|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.3499
-    The gradient of the cost functions is 0.044670463
+    The gradient of the cost functions is 0.044670418
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          20|   0.0096|   6.5933|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.2022
-    The gradient of the cost functions is 0.033257786
+    The gradient of the cost functions is 0.03325785
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          30|   0.0072|   3.8130|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5972
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 10.9
+    Done! Time = 14.7
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
@@ -153,7 +153,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.814 seconds)
+   **Total running time of the script:** ( 0 minutes  17.394 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

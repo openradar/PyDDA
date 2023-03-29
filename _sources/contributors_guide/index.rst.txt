@@ -107,12 +107,12 @@ For more on PEP8 style:
 
 To install pycode style:
 ::
-    conda install pycodestyle
+conda install pycodestyle
 ::
 
 To install pylint:
 ::
-    conda install pylint
+conda install pylint
 ::
 
 
@@ -233,14 +233,14 @@ forking the repository on GitHub, create your own branch by doing:
 
 ::
 
-   git checkout -b this_branch
-   git branch this_branch
+git checkout -b this_branch
+git branch this_branch
 
 ::
 
 Make your changes, commit, and then to push to that branch do:
 ::
-   git push origin this_branch
+git push origin this_branch
 ::
 
 After that is done, make a pull request from that branch to the master branch

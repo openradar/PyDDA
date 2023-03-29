@@ -36,7 +36,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributor’s Guide" href="../contributors_guide/index.html" />
+    <link rel="next" title="Converting the radar data to Cartesian coordinates with Py-ART" href="gridding.html" />
     <link rel="prev" title="Reading in Radar Data in Native Radial Coordinates" href="read_radar_data.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -142,6 +142,11 @@
    Radar Data Quality Control - Dealiasing
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gridding.html">
+   Converting the radar data to Cartesian coordinates with Py-ART
+  </a>
+ </li>
 </ul>
 
   </div>
@@ -233,7 +238,7 @@
               <div>
                 
   <section id="radar-data-quality-control-dealiasing">
-<h1>Radar Data Quality Control - Dealiasing<a class="headerlink" href="#radar-data-quality-control-dealiasing" title="Permalink to this headline">#</a></h1>
+<span id="dealiasing-velocities"></span><h1>Radar Data Quality Control - Dealiasing<a class="headerlink" href="#radar-data-quality-control-dealiasing" title="Permalink to this headline">#</a></h1>
 <p>In this notebook, we will showcase how to preform quality control of your
 radar files, specifically dealiasing velocities. By doing this we can provide
 PyDDA with quality controlled doppler velocities for dual doppler analysis.</p>
@@ -241,7 +246,8 @@ PyDDA with quality controlled doppler velocities for dual doppler analysis.</p>
 <h2>Read the Data<a class="headerlink" href="#read-the-data" title="Permalink to this headline">#</a></h2>
 <p>For this example, we use test data found in Py-ART for two X-Band Scanning ARM
 Precipitation Radars (X-SAPR) found at the Atmospheric Radiation Measurment
-(ARM) Southern Great Plains (SGP) site in Oklahoma.</p>
+(ARM) Southern Great Plains (SGP) site in Oklahoma. For more information on
+reading the radar data, consult <a class="reference internal" href="read_radar_data.html#reading-radar-data"><span class="std std-ref">Reading in Radar Data in Native Radial Coordinates</span></a>.</p>
 <dl class="simple">
 <dt>Get test data::</dt><dd><p><a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.testing.get_test_data.html">https://arm-doe.github.io/pyart/API/generated/pyart.testing.get_test_data.html</a></p>
 </dd>
@@ -495,10 +501,10 @@ will be shown in the next notebook.</p>
             <p class="prev-next-title">Reading in Radar Data in Native Radial Coordinates</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../contributors_guide/index.html" title="next page">
+    <a class='right-next' id="next-link" href="gridding.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contributor’s Guide</p>
+        <p class="prev-next-title">Converting the radar data to Cartesian coordinates with Py-ART</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="PyDDA Example Gallery" href="../source/auto_examples/index.html" />
-    <link rel="prev" title="Radar Data Quality Control - Dealiasing" href="../user_guide/dealiasing_velocities.html" />
+    <link rel="prev" title="Converting the radar data to Cartesian coordinates with Py-ART" href="../user_guide/gridding.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -276,14 +276,12 @@ style, there are checkers available out there such as pylint and pycodestyle.</p
 <dt>For more on PEP8 style:</dt><dd><p><a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a></p>
 </dd>
 </dl>
-<p>To install pycode style:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pycodestyle</span>
-</pre></div>
-</div>
-<p>To install pylint:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pylint</span>
-</pre></div>
-</div>
+<p>To install pycode style:
+::
+conda install pycodestyle</p>
+<p>To install pylint:
+::
+conda install pylint</p>
 </section>
 <section id="python-file-setup">
 <h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this headline">#</a></h2>
@@ -386,14 +384,11 @@ determine how the pull request will affect the functionality of PyDDA.</p>
 <p>When you make contributions to PyDDA, we ask that you make your own fork
 of openradar/PyDDA and create your own branch from within that fork. After
 forking the repository on GitHub, create your own branch by doing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">this_branch</span>
-<span class="n">git</span> <span class="n">branch</span> <span class="n">this_branch</span>
-</pre></div>
-</div>
-<p>Make your changes, commit, and then to push to that branch do:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="n">this_branch</span>
-</pre></div>
-</div>
+<p>git checkout -b this_branch
+git branch this_branch</p>
+<p>Make your changes, commit, and then to push to that branch do:
+::
+git push origin this_branch</p>
 <p>After that is done, make a pull request from that branch to the master branch
 on openradar/PyDDA where the maintainers will review your pull request.</p>
 </section>
@@ -405,11 +400,11 @@ on openradar/PyDDA where the maintainers will review your pull request.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../user_guide/dealiasing_velocities.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../user_guide/gridding.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Radar Data Quality Control - Dealiasing</p>
+            <p class="prev-next-title">Converting the radar data to Cartesian coordinates with Py-ART</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../source/auto_examples/index.html" title="next page">
