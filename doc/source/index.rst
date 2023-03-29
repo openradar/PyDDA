@@ -96,7 +96,7 @@ just type in the following commands assuming you have the above dependencies ins
  python setup.py install
 ::
 
-Finally, PyDDA now supports using `Jax <jax.readthedocs.io>` and `TensorFlow <tensorflow.org>`
+Finally, PyDDA now supports using `Jax <jax.readthedocs.io>`_ and `TensorFlow <tensorflow.org>`_
 for solving the three dimensional wind field. PyDDA requries TensorFlow 2.6 and the
 tensorflow-probability package for TensorFlow to be enabled. Both the Jax and
 TensorFlow-based engines now use automatic differentiation to solve for the gradients
@@ -119,7 +119,7 @@ Further support
 ===============
 
 We are now requesting that all questions related to PyDDA that are not potential software issues to be 
-relegated to the `openradar Discourse group <openradar.discourse.group>` with a 'pydda' tag on it. This
+relegated to the `openradar Discourse group <openradar.discourse.group>`_ with a 'pydda' tag on it. This
 enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
 and users can answer questions people may have.
 

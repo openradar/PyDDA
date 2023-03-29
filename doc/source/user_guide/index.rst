@@ -10,3 +10,4 @@ This is a place to include our user guide.
    overview.rst
    read_radar_data.rst
    dealiasing_velocities.rst
+   gridding.rst
