@@ -86,7 +86,7 @@ Author: Robert C. Jackson
          30|   0.0072|   3.8130|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  13.5972
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 10.8
+    Done! Time = 10.9
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:213: UserWarning: The following kwargs were not used by contour: 'color'
@@ -153,7 +153,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.688 seconds)
+   **Total running time of the script:** ( 0 minutes  12.814 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

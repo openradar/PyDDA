@@ -76,7 +76,7 @@ This example uses pooch to download the data files.
          20|  25.3526|  30.0023|   0.0040|   0.0000|   0.0000|   0.0000|   0.0000|  73.6514
     Iterations before filter: 10
     Applying low pass filter to wind field...
-    Done! Time = 53.8
+    Done! Time = 54.0
 
 
 
@@ -136,7 +136,7 @@ This example uses pooch to download the data files.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  2.499 seconds)
+   **Total running time of the script:** ( 1 minutes  14.993 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_sydney_tornado.py:
