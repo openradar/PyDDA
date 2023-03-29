@@ -31,14 +31,13 @@ retrieval to have artificial noise, especially in updraft velocity. Therefore,
 you will need to choose a grid spacing that is coarse enough to have a continuous
 input radial velocity field at all altitudes. For example, Kosiba et al. (2013)
 chose their grid spacing such that it is about 1/2.5 the data spacing at the feature
-of interest. For this grid, we have about 350 m between vertical sweeps at 20 km range,
-so we will select 200 m grid spacing.
+of interest. In this example, we will elect for a 500 m grid spacing.
 
 
 .. code-block:: python
 
     grid_limits = ((0., 15000.), (-50000., 50000.), (-50000., 50000.))
-    grid_shape = (75, 500, 500)
+    grid_shape = (31, 201, 201)
 
 
 The :code:`grid_limits` is a 3-tuple of 2-tuples specifying the :math:`z`, :math:`y`, and :math:`x`
@@ -128,7 +127,7 @@ Finally, we should visualize the output grids using Py-ART's
     radar_sw.add_field('corrected_velocity', vel_dealias_sw, replace_existing=True)
 
     grid_limits = ((0., 15000.), (-50000., 50000.), (-50000., 50000.))
-    grid_shape = (75, 500, 500)
+    grid_shape = (31, 201, 201)
 
     grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits, 
                                      grid_shape=grid_shape, gatefilter=gatefilter_sw)
