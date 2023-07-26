@@ -788,27 +788,24 @@ def plot_yz_xsection_streamlines(Grids, ax=None,
 
     if(u_vel_contours is not None):
         u_filled = np.ma.filled(u[:, :, level], fill_value=np.nan)
-        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
-                          u_filled, levels=u_vel_contours,
-                          alpha=contour_alpha)
+        cs = ax.contour(grid_y[:, :, level], grid_h[:, :, level],
+                          u_filled, levels=u_vel_contours)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='U [m/s]')
 
     if(v_vel_contours is not None):
         v_filled = np.ma.filled(v[:, :, level], fill_value=np.nan)
-        cs = plt.contourf(grid_y[:, :, level], grid_h[:, :, level],
-                          v_filled, levels=w_vel_contours,
-                          alpha=contour_alpha)
+        cs = ax.contour(grid_y[:, :, level], grid_h[:, :, level],
+                          v_filled, levels=w_vel_contours)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='V [m/s]')
 
     if(w_vel_contours is not None):
         w_filled = np.ma.filled(w[:, :, level], fill_value=np.nan)
-        cs = plt.contour(grid_y[:, :, level], grid_h[:, :, level],
-                          w_filled, levels=w_vel_contours, linewidths=2,
-                          alpha=contour_alpha)
+        cs = ax.contour(grid_y[:, :, level], grid_h[:, :, level],
+                          w_filled, levels=w_vel_contours, linewidths=2)
         plt.clabel(cs)
         if(colorbar_contour_flag is True):
             plt.colorbar(cs, ax=ax, label='W [m/s]')
