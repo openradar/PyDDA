@@ -205,15 +205,9 @@ def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
     Returns
     =======
 
-    u: 3D float array
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    v: 3D float array
-        Returns a 3D float array containing the v component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    w: 3D float array
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
+    new_Grid: Py-ART Grid
+        The Py-ART Grid with the constant wind field added in the u, v, and w
+        fields.
     """
 
     # Parse names of velocity field
@@ -227,7 +221,24 @@ def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
     u = np.ma.filled(u, 0)
     v = np.ma.filled(v, 0)
     w = np.ma.filled(w, 0)
-    return u, v, w
+    u_field = {}
+    u_field['data'] = u
+    u_field['standard_name'] = 'u_wind'
+    u_field['long_name'] = 'meridional component of wind velocity'
+    v_field = {}
+    v_field['data'] = v
+    v_field['standard_name'] = 'v_wind'
+    v_field['long_name'] = 'zonal component of wind velocity'
+    w_field = {}
+    w_field['data'] = w
+    w_field['standard_name'] = 'w_wind'
+    w_field['long_name'] = 'vertical component of wind velocity'
+   
+    temp_grid = deepcopy(Grid)
+    temp_grid.add_field('u', u_field, replace_existing=True)
+    temp_grid.add_field('v', v_field, replace_existing=True)
+    temp_grid.add_field('w', w_field, replace_existing=True)
+    return temp_grid
 
 
 def make_wind_field_from_profile(Grid, profile, vel_field=None):
@@ -253,16 +264,10 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     Returns
     =======
 
-    u: 3D float array
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    v: 3D float array
-        Returns a 3D float array containing the v component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-    w: 3D float array
-        Returns a 3D float array containing the u component of the wind field.
-        The shape will be the same shape as the fields in Grid.
-        """
+    new_Grid: Py-ART Grid
+        The Py-ART Grid with the sounding wind field added in the u, v, and w
+        fields.
+    """
     # Parse names of velocity field
     if vel_field is None:
         vel_field = pyart.config.get_field_name('corrected_velocity')
@@ -285,7 +290,24 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     u = np.ma.filled(u, 0)
     v = np.ma.filled(v, 0)
     w = np.ma.filled(w, 0)
-    return u, v, w
+    u_field = {}
+    u_field['data'] = u
+    u_field['standard_name'] = 'u_wind'
+    u_field['long_name'] = 'meridional component of wind velocity'
+    v_field = {}
+    v_field['data'] = v
+    v_field['standard_name'] = 'v_wind'
+    v_field['long_name'] = 'zonal component of wind velocity'
+    w_field = {}
+    w_field['data'] = w
+    w_field['standard_name'] = 'w_wind'
+    w_field['long_name'] = 'vertical component of wind velocity'
+   
+    temp_grid = deepcopy(Grid)
+    temp_grid.add_field('u', u_field, replace_existing=True)
+    temp_grid.add_field('v', v_field, replace_existing=True)
+    temp_grid.add_field('w', w_field, replace_existing=True)
+    return temp_grid
 
 
 def make_background_from_wrf(Grid, file_path, wrf_time,
@@ -314,19 +336,9 @@ def make_background_from_wrf(Grid, file_path, wrf_time,
 
     Returns
     -------
-    u: 3D ndarray
-        The initialization u field.
-        The shape will be the same shape as the fields in Grid and will
-        correspond to the same x, y, and z locations as in Grid.
-    v: 3D ndarray
-        The initialization v field.
-        The shape will be the same shape as the fields in Grid and will
-        correspond to the same x, y, and z locations as in Grid.
-    w: 3D ndarray
-        The initialization w field. The shape will be the same shape 
-        as the fields in Grid and will correspond to the same x, y, and z
-        locations as in Grid.
-
+    new_Grid: Py-ART Grid
+        The Py-ART Grid with the WRF wind field added in the u, v, and w
+        fields.
     """
     # Parse names of velocity field
     if vel_field is None:
@@ -388,7 +400,23 @@ def make_background_from_wrf(Grid, file_path, wrf_time,
     u = griddata((z, y, x_stag), U_wrf,
                  (new_grid_z, new_grid_y, new_grid_x), fill_value=0.)
 
-    return u, v, w
+    u_field = {}
+    u_field['data'] = u
+    u_field['standard_name'] = 'u_wind'
+    u_field['long_name'] = 'meridional component of wind velocity'
+    v_field = {}
+    v_field['data'] = v
+    v_field['standard_name'] = 'v_wind'
+    v_field['long_name'] = 'zonal component of wind velocity'
+    w_field = {}
+    w_field['data'] = w
+    w_field['standard_name'] = 'w_wind'
+    w_field['long_name'] = 'vertical component of wind velocity' 
+    temp_grid = deepcopy(Grid)
+    temp_grid.add_field('u', u_field, replace_existing=True)
+    temp_grid.add_field('v', v_field, replace_existing=True)
+    temp_grid.add_field('w', w_field, replace_existing=True)
+    return temp_grid
 
 
 def make_intialization_from_hrrr(Grid, file_path):
@@ -482,4 +510,20 @@ def make_intialization_from_hrrr(Grid, file_path):
     del the_grib
     gc.collect()
 
-    return u_new, v_new, w_new
+    u_field = {}
+    u_field['data'] = u_new
+    u_field['standard_name'] = 'u_wind'
+    u_field['long_name'] = 'meridional component of wind velocity'
+    v_field = {}
+    v_field['data'] = v_new
+    v_field['standard_name'] = 'v_wind'
+    v_field['long_name'] = 'zonal component of wind velocity'
+    w_field = {}
+    w_field['data'] = w_new
+    w_field['standard_name'] = 'w_wind'
+    w_field['long_name'] = 'vertical component of wind velocity'
+    temp_grid = deepcopy(Grid)
+    temp_grid.add_field('u', u_field, replace_existing=True)
+    temp_grid.add_field('v', v_field, replace_existing=True)
+    temp_grid.add_field('w', w_field, replace_existing=True)
+    return temp_grid

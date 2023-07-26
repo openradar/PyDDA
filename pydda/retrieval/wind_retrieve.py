@@ -299,7 +299,9 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
 
     if (len(Grids) > 1):
         for i in range(len(Grids)):
-            for j in range(i + 1, len(Grids)):
+            for j in range(len(Grids)):
+                if i == j:
+                    continue
                 print(("Calculating weights for radars " + str(i) +
                        " and " + str(j)))
                 bca[i, j] = get_bca(Grids[i].radar_longitude['data'],
@@ -338,9 +340,10 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                                 bca[i, j] >= math.radians(min_bca),
                                 bca[i, j] <= math.radians(max_bca)))] = 1
                         cur_array[~valid] = 0
-                        parameters.weights[i, k] = cur_array
+                        parameters.weights[i, k] += cur_array
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
+                        
 
                     if (weights_bg is None):
                         valid = np.logical_and.reduce((
@@ -588,7 +591,7 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
         temp_grid.add_field('w', w_field, replace_existing=True)
         new_grid_list.append(temp_grid)
 
-    return new_grid_list
+    return new_grid_list, parameters
 
 
 def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, vel_name=None,
@@ -724,7 +727,9 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
 
     if (len(Grids) > 1):
         for i in range(len(Grids)):
-            for j in range(i + 1, len(Grids)):
+            for j in range(len(Grids)):
+                if i == j:
+                    continue
                 print(("Calculating weights for radars " + str(i) +
                        " and " + str(j)))
                 bca[i, j] = get_bca(Grids[i].radar_longitude['data'],
@@ -764,9 +769,10 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                                      bca[i, j] >= math.radians(min_bca),
                                                      bca[i, j] <= math.radians(max_bca)))] = 1
                         cur_array[~valid] = 0
-                        parameters.weights[i, k] = cur_array
+                        parameters.weights[i, k] += cur_array
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
+
 
 
                     if (weights_bg is None):
@@ -836,6 +842,8 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                            dtype=tf.float32)
     parameters.weights[~np.isfinite(parameters.weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
+    for i in range(len(Grids)):
+        print("Points from Radar %d: %d"% (i, parameters.weights[i].sum()))
     parameters.weights = tf.constant(parameters.weights, dtype=tf.float32)
     parameters.bg_weights[parameters.bg_weights > 0] = 1
     parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float32)
@@ -901,8 +909,6 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
         max_iterations=max_iterations, parallel_iterations=parallel_iterations)
     winds = np.reshape(
         winds.position.numpy(), (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
-    iterations = iterations + 10
-    print('Iterations before filter: ' + str(iterations))
     wcurrmax = winds[2].max()
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
@@ -928,7 +934,6 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
 
     print("Done! Time = " + "{:2.1f}".format(time.time() - bt))
 
-    # First pass - no filter
     the_winds = np.reshape(
         winds, (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
     u = the_winds[0]
@@ -977,10 +982,10 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
         temp_grid.add_field('w', w_field, replace_existing=True)
         new_grid_list.append(temp_grid)
 
-    return new_grid_list
+    return new_grid_list, parameters
 
 
-def get_dd_wind_field(Grids, u_init, v_init, w_init, engine="scipy", **kwargs):
+def get_dd_wind_field(Grids, u_init=None, v_init=None, w_init=None, engine="scipy", **kwargs):
     """
     This function takes in a list of Py-ART Grid objects and derives a
     wind field. Every Py-ART Grid in Grids must have the same grid
@@ -1005,13 +1010,16 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, engine="scipy", **kwargs):
         and z coordinates.
     u_init: 3D ndarray
         The intial guess for the zonal wind field, input as a 3D array
-        with the same shape as the fields in Grids.
+        with the same shape as the fields in Grids. If this is None,
+        PyDDA will use the u field in the first Grid as the initalization.
     v_init: 3D ndarray
         The intial guess for the meridional wind field, input as a 3D array
-        with the same shape as the fields in Grids.
+        with the same shape as the fields in Grids. If this is None,
+        PyDDA will use the v field in the first Grid as the initalization.
     w_init: 3D ndarray
         The intial guess for the vertical wind field, input as a 3D array
-        with the same shape as the fields in Grids.
+        with the same shape as the fields in Grids. If this is None,
+        PyDDA will use the w field in the first Grid as the initalization.
     engine: str (one of "scipy", "tensorflow", "jax")
         Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
         Using Tensorflow or Jax expands PyDDA's capabiability to take advantage of GPU-based systems.
@@ -1125,8 +1133,24 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, engine="scipy", **kwargs):
     new_grid_list: list
         A list of Py-ART grids containing the derived wind fields. These fields
         are displayable by the visualization module.
+    parameters: struct
+        The parameters used in the generation of the Multi-Doppler wind field.
     """
-
+    if u_init is None:
+        if isinstance(u_init, np.ma.MaskedArray):
+            u_init = Grids[0].fields["u"]["data"].filled(0)
+        else:
+            u_init = Grids[0].fields["u"]["data"]
+    if v_init is None:
+        if isinstance(u_init, np.ma.MaskedArray):
+            v_init = Grids[0].fields["v"]["data"].filled(0)
+        else:
+            v_init = Grids[0].fields["v"]["data"]
+    if w_init is None:
+        if isinstance(u_init, np.ma.MaskedArray):
+            w_init = Grids[0].fields["w"]["data"].filled(0)
+        else:
+            w_init = Grids[0].fields["w"]["data"]
     if engine.lower() == "scipy" or engine.lower() == "jax" or engine.lower() == "auglag":
         return _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine, **kwargs)
     elif engine.lower() == "tensorflow":

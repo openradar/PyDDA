@@ -11,7 +11,7 @@ from . import initialization
 from . import tests
 from . import constraints
 
-__version__ = '1.2.0'
+__version__ = '1.3.0'
 
 print("Welcome to PyDDA %s" % __version__)
 print("Detecting Jax...")
@@ -24,7 +24,7 @@ except ImportError:
 print("Detecting TensorFlow...")
 try:
     import tensorflow
-    print("TensorFlow detected.")
+    print("TensorFlow detected. Checking for tensorflow-probability...")
     import tensorflow_probability
     print("TensorFlow-probability detected. TensorFlow engine enabled!")
 except (ImportError, AttributeError) as e:

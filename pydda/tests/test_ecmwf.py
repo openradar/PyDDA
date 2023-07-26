@@ -54,12 +54,12 @@ def test_era_initialization():
     Grid0 = pydda.constraints.make_constraint_from_era_interim(
         Grid0, pydda.tests.sample_files.ERA_PATH,
         vel_field='corrected_velocity')
-    u_init, v_init, w_init = pydda.initialization.make_initialization_from_era_interim(
+    u, v, w = pydda.initialization.make_initialization_from_era_interim(
         Grid0, pydda.tests.sample_files.ERA_PATH,
         vel_field='corrected_velocity')
     np.testing.assert_allclose(
-        u_init, Grid0.fields["U_erainterim"]["data"], atol=1e-2)
+        u, Grid0.fields["U_erainterim"]["data"], atol=1e-2)
     np.testing.assert_allclose(
-        v_init, Grid0.fields["V_erainterim"]["data"], atol=1e-2)
+        v, Grid0.fields["V_erainterim"]["data"], atol=1e-2)
     np.testing.assert_allclose(
-        w_init, Grid0.fields["W_erainterim"]["data"], atol=1e-2)
+        w, Grid0.fields["W_erainterim"]["data"], atol=1e-2)

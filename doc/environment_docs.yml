@@ -6,6 +6,7 @@ dependencies:
   - python
   - pip
   - arm_pyart
+  - cython
   - pytest
   - pytest-mpl
   - pytest-cov
