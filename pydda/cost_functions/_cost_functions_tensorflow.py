@@ -141,7 +141,7 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
 
-def calculate_smoothness_cost(u, v, w, dx=1, dy=1, dz=1, Cx=1e-5, Cy=1e-5, Cz=1e-5):
+def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
     wind field.
@@ -188,7 +188,7 @@ def calculate_smoothness_cost(u, v, w, dx=1, dy=1, dz=1, Cx=1e-5, Cy=1e-5, Cz=1e
     return tf.math.reduce_sum(x_term + y_term + z_term)
 
 
-def calculate_smoothness_gradient(u, v, w, dx=1, dy=1, dz=1, Cx=1e-5, Cy=1e-5, Cz=1e-5,
+def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
                                   upper_bc=True, lower_bc=True):
     """
     Calculates the gradient of the smoothness cost function

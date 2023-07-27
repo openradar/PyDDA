@@ -232,15 +232,22 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     scipy.ndimage.filters.laplace(u, du, mode='wrap')
     scipy.ndimage.filters.laplace(v, dv, mode='wrap')
     scipy.ndimage.filters.laplace(w, dw, mode='wrap')
+    du = du / dx
+    dv = dv / dy
+    dw = dw / dz
     scipy.ndimage.filters.laplace(du, grad_u, mode='wrap')
     scipy.ndimage.filters.laplace(dv, grad_v, mode='wrap')
     scipy.ndimage.filters.laplace(dw, grad_w, mode='wrap')
-
+    
+    grad_u = grad_u / du
+    grad_v = grad_v / dy
+    grad_w = grad_w / dw
     # Impermeability condition
     grad_w[0, :, :] = 0
     if (upper_bc is True):
         grad_w[-1, :, :] = 0
     y = np.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
+    y = np.nan_to_num(y)
     return y.flatten()
 
 
