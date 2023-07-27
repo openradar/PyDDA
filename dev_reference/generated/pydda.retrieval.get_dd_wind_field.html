@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pydda.retrieval.get_dd_wind_field &#8212; PyDDA 1.2.0 documentation</title>
+    <title>pydda.retrieval.get_dd_wind_field &#8212; PyDDA 1.3.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -383,7 +383,7 @@
 <h1>pydda.retrieval.get_dd_wind_field<a class="headerlink" href="#pydda-retrieval-get-dd-wind-field" title="Permalink to this headline">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pydda.retrieval.get_dd_wind_field">
-<span class="sig-prename descclassname"><span class="pre">pydda.retrieval.</span></span><span class="sig-name descname"><span class="pre">get_dd_wind_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scipy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pydda.retrieval.</span></span><span class="sig-name descname"><span class="pre">get_dd_wind_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scipy'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/retrieval/wind_retrieve.html#get_dd_wind_field"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.retrieval.get_dd_wind_field" title="Permalink to this definition">#</a></dt>
 <dd><p>This function takes in a list of Py-ART Grid objects and derives a
 wind field. Every Py-ART Grid in Grids must have the same grid
 specification.</p>
@@ -401,11 +401,14 @@ and HRRR data in <a class="reference internal" href="../index.html#module-pydda.
 All grids must have the same shape, x coordinates, y coordinates
 and z coordinates.</p></li>
 <li><p><strong>u_init</strong> (<em>3D ndarray</em>) – The intial guess for the zonal wind field, input as a 3D array
-with the same shape as the fields in Grids.</p></li>
+with the same shape as the fields in Grids. If this is None,
+PyDDA will use the u field in the first Grid as the initalization.</p></li>
 <li><p><strong>v_init</strong> (<em>3D ndarray</em>) – The intial guess for the meridional wind field, input as a 3D array
-with the same shape as the fields in Grids.</p></li>
+with the same shape as the fields in Grids. If this is None,
+PyDDA will use the v field in the first Grid as the initalization.</p></li>
 <li><p><strong>w_init</strong> (<em>3D ndarray</em>) – The intial guess for the vertical wind field, input as a 3D array
-with the same shape as the fields in Grids.</p></li>
+with the same shape as the fields in Grids. If this is None,
+PyDDA will use the w field in the first Grid as the initalization.</p></li>
 <li><p><strong>engine</strong> (<em>str (one of “scipy”, “tensorflow”, “jax”)</em>) – Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
 Using Tensorflow or Jax expands PyDDA’s capabiability to take advantage of GPU-based systems.
 In addition, these two implementations use automatic differentation to calcualte the gradient
@@ -481,8 +484,12 @@ This is only for the TensorFlow-based engine.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>new_grid_list</strong> (<em>list</em>) – A list of Py-ART grids containing the derived wind fields. These fields
-are displayable by the visualization module.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>new_grid_list</strong> (<em>list</em>) – A list of Py-ART grids containing the derived wind fields. These fields
+are displayable by the visualization module.</p></li>
+<li><p><strong>parameters</strong> (<em>struct</em>) – The parameters used in the generation of the Multi-Doppler wind field.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

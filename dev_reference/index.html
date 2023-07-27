@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Developer Reference Manual &#8212; PyDDA 1.2.0 documentation</title>
+    <title>Developer Reference Manual &#8212; PyDDA 1.3.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -474,10 +474,10 @@
 <span id="user"></span><h1>Developer Reference Manual<a class="headerlink" href="#developer-reference-manual" title="Permalink to this headline">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release</dt>
-<dd class="field-odd"><p>1.2.0</p>
+<dd class="field-odd"><p>1.3.0</p>
 </dd>
 <dt class="field-even">Date</dt>
-<dd class="field-even"><p>Mar 29, 2023</p>
+<dd class="field-even"><p>Jul 27, 2023</p>
 </dd>
 </dl>
 <p>This is the developer reference guide for PyDDA which covers most of the
@@ -545,10 +545,10 @@ procedures in Python, they then need to be added to
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient" title="pydda.cost_functions.calculate_mass_continuity_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_mass_continuity_gradient</span></code></a>(u, v, w, ...)</p></td>
 <td><p>Calculates the gradient of mass continuity cost function. This is done by taking the negative gradient of the divergence of the wind field. All grids must have the same grid specification. :Parameters: * <strong>u</strong> (<em>Float array</em>) -- Float array with u component of wind field              * <strong>v</strong> (<em>Float array</em>) -- Float array with v component of wind field              * <strong>w</strong> (<em>Float array</em>) -- Float array with w component of wind field              * <strong>z</strong> (<em>Float array (1D)</em>) -- 1D Float array with heights of grid              * <strong>dx</strong> (<em>float</em>) -- Grid spacing in x direction. * <strong>dy</strong> (<em>float</em>) -- Grid spacing in y direction. * <strong>dz</strong> (<em>float</em>) -- Grid spacing in z direction. * <strong>coeff</strong> (<em>float</em>) -- Constant controlling contribution of mass continuity to cost function              * <strong>anel</strong> (<em>int</em>) -- = 1 use anelastic approximation, 0=don't.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost" title="pydda.cost_functions.calculate_smoothness_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_cost</span></code></a>(u, v, w[, Cx, Cy, Cz])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost" title="pydda.cost_functions.calculate_smoothness_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_cost</span></code></a>(u, v, w, dx, dy, dz)</p></td>
 <td><p>Calculates the smoothness cost function by taking the Laplacian of the wind field. All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. :Parameters: * <strong>u</strong> (<em>Float array</em>) -- Float array with u component of wind field              * <strong>v</strong> (<em>Float array</em>) -- Float array with v component of wind field              * <strong>w</strong> (<em>Float array</em>) -- Float array with w component of wind field              * <strong>Cx</strong> (<em>float</em>) -- Constant controlling smoothness in x-direction              * <strong>Cy</strong> (<em>float</em>) -- Constant controlling smoothness in y-direction              * <strong>Cz</strong> (<em>float</em>) -- Constant controlling smoothness in z-direction.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient" title="pydda.cost_functions.calculate_smoothness_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_gradient</span></code></a>(u, v, w[, Cx, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient" title="pydda.cost_functions.calculate_smoothness_gradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_smoothness_gradient</span></code></a>(u, v, w, dx, ...)</p></td>
 <td><p>Calculates the gradient of the smoothness cost function by taking the Laplacian of the Laplacian of the wind field. All arrays in the given lists must have the same dimensions and represent the same spatial coordinates. :Parameters: * <strong>u</strong> (<em>Float array</em>) -- Float array with u component of wind field              * <strong>v</strong> (<em>Float array</em>) -- Float array with v component of wind field              * <strong>w</strong> (<em>Float array</em>) -- Float array with w component of wind field              * <strong>Cx</strong> (<em>float</em>) -- Constant controlling smoothness in x-direction              * <strong>Cy</strong> (<em>float</em>) -- Constant controlling smoothness in y-direction              * <strong>Cz</strong> (<em>float</em>) -- Constant controlling smoothness in z-direction.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost" title="pydda.cost_functions.calculate_background_cost"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_background_cost</span></code></a>(u, v, w, weights, ...)</p></td>
@@ -599,7 +599,7 @@ how to call these functions.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field" title="pydda.retrieval.get_dd_wind_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field</span></code></a>(Grids, u_init, v_init, w_init)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field.html#pydda.retrieval.get_dd_wind_field" title="pydda.retrieval.get_dd_wind_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field</span></code></a>(Grids[, u_init, v_init, ...])</p></td>
 <td><p>This function takes in a list of Py-ART Grid objects and derives a wind field.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_bca.html#pydda.retrieval.get_bca" title="pydda.retrieval.get_bca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bca</span></code></a>(rad1_lon, rad1_lat, rad2_lon, ...)</p></td>

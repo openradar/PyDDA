@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pydda.initialization.make_background_from_wrf &#8212; PyDDA 1.2.0 documentation</title>
+    <title>pydda.initialization.make_background_from_wrf &#8212; PyDDA 1.3.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -402,18 +402,8 @@ Grid. None will try to automatically detect this value.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>u</strong> (<em>3D ndarray</em>) – The initialization u field.
-The shape will be the same shape as the fields in Grid and will
-correspond to the same x, y, and z locations as in Grid.</p></li>
-<li><p><strong>v</strong> (<em>3D ndarray</em>) – The initialization v field.
-The shape will be the same shape as the fields in Grid and will
-correspond to the same x, y, and z locations as in Grid.</p></li>
-<li><p><strong>w</strong> (<em>3D ndarray</em>) – The initialization w field. The shape will be the same shape
-as the fields in Grid and will correspond to the same x, y, and z
-locations as in Grid.</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>new_Grid</strong> (<em>Py-ART Grid</em>) – The Py-ART Grid with the WRF wind field added in the u, v, and w
+fields.</p>
 </dd>
 </dl>
 </dd></dl>

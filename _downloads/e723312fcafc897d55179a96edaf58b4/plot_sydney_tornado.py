@@ -43,12 +43,14 @@ grid3 = pyart.io.read_grid(grid3_path)
 grid4 = pyart.io.read_grid(grid4_path)
 
 # Set initialization and do retrieval
-u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
-new_grids = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
-                                              u_init, v_init, w_init, Co=1e-2, Cm=256.0, Cx=1e3, Cy=1e3, Cz=1e3,
-                                              vel_name='VRADH_corr', refl_field='DBZH', 
-                                              mask_outside_opt=True, wind_tol=0.1,
-                                              engine='tensorflow')
+grid1 = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
+new_grids, _ = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
+                                                 Co=1e-2, Cm=256.0, Cx=1e-4, Cy=1e-4,
+                                                 Cz=1e-4,
+                                                 vel_name='VRADH_corr', refl_field='DBZH', 
+                                                 mask_outside_opt=True, wind_tol=0.1,
+                                                 max_iterations=200,
+                                                 engine='jax')
 # Make a neat plot
 fig = plt.figure(figsize=(10,7))
 ax = pydda.vis.plot_horiz_xsection_quiver_map(new_grids, background_field='DBZH', level=3,

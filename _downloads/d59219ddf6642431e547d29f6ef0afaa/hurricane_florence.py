@@ -42,10 +42,11 @@ grid_ltx = pyart.io.read_grid(grid_ltx_path)
 
 grid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx,
                                                          H.grib)
-u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
+grid_mhx = pydda.initialization.make_constant_wind_field(
     grid_mhx, (0.0, 0.0, 0.0))
-out_grids = pydda.retrieval.get_dd_wind_field(
-    [grid_mhx, grid_ltx], u_init, v_init, w_init, Co=1.0, Cm=1.0, Cmod=1.0,
+out_grids, _ = pydda.retrieval.get_dd_wind_field(
+    [grid_mhx, grid_ltx], Co=1e-3, Cm=1.0, Cmod=1e-3, Cx=1, Cy=1, Cz=1,
+    max_iterations=100, 
     mask_outside_opt=True, vel_name='corrected_velocity', engine="tensorflow",
     model_fields=["hrrr"])
 

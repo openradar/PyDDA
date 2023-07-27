@@ -6,16 +6,14 @@
 
 Computation times
 =================
-**11:22.884** total execution time for **source_auto_examples** files:
+**50:09.579** total execution time for **source_auto_examples** files:
 
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``) | 09:37.852 | 0.0 MB |
+| :ref:`sphx_glr_source_auto_examples_plot_fun_with_constraints.py` (``plot_fun_with_constraints.py``) | 43:19.072 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_plot_sydney_tornado.py` (``plot_sydney_tornado.py``)             | 01:27.637 | 0.0 MB |
+| :ref:`sphx_glr_source_auto_examples_plot_sydney_tornado.py` (``plot_sydney_tornado.py``)             | 06:37.728 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)                         | 00:17.394 | 0.0 MB |
+| :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)                         | 00:12.779 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr_source_auto_examples_hurricane_florence.py` (``hurricane_florence.py``)               | 00:00.000 | 0.0 MB |
-+------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_source_auto_examples_sydney_tornado.py` (``sydney_tornado.py``)                       | 00:00.000 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+

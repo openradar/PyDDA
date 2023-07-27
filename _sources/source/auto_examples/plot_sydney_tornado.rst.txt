@@ -35,7 +35,7 @@ This example uses pooch to download the data files.
 
 .. image:: ../../sydney_tornado.png
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-66
+.. GENERATED FROM PYTHON SOURCE LINES 21-68
 
 
 
@@ -49,34 +49,89 @@ This example uses pooch to download the data files.
 
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     Calculating weights for radars 0 and 1
     Calculating weights for radars 0 and 2
     Calculating weights for radars 0 and 3
+    Calculating weights for radars 1 and 0
     Calculating weights for radars 1 and 2
     Calculating weights for radars 1 and 3
+    Calculating weights for radars 2 and 0
+    Calculating weights for radars 2 and 1
     Calculating weights for radars 2 and 3
+    Calculating weights for radars 3 and 0
+    Calculating weights for radars 3 and 1
+    Calculating weights for radars 3 and 2
     Calculating weights for models...
     Starting solver 
-    rmsVR = 6.566297
-    Total points: 173398
+    rmsVR = 7.242250167336596
+    Total points: 281276
     The max of w_init is 0.0
+    No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-          0|1739.2842|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 0.14342465
+          0|2864.7900|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
+    The gradient of the cost functions is 0.5753010145055387
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10|  32.7141|  50.6668|   0.0021|   0.0000|   0.0000|   0.0000|   0.0000|  24.8819
-    The gradient of the cost functions is 0.049718775
+         10| 487.3236|  27.0467|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   7.5290
+    /home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:484: RuntimeWarning: All-NaN slice encountered
+      delta = np.nanmax(diff)
+    Max change in w:  nan
+    The gradient of the cost functions is 0.3196080952213296
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20|  25.3526|  30.0023|   0.0040|   0.0000|   0.0000|   0.0000|   0.0000|  73.6514
-    Iterations before filter: 10
+         20| 264.6357|  24.2828|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.1181
+    The gradient of the cost functions is 0.27984898686514137
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         30| 241.4635|  23.0494|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.6345
+    The gradient of the cost functions is 0.27985379130816934
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         40| 241.4635|  23.0494|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.6345
+    Max change in w:  nan
+    The gradient of the cost functions is 0.8482792841710158
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         50| 242.1883|  20.9507|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.3168
+    Max change in w:  nan
+    The gradient of the cost functions is 0.14334497127729234
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         60| 225.4447|  16.4656|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   9.7028
+    Max change in w:  nan
+    The gradient of the cost functions is 0.12608622303894243
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         70| 208.0925|  14.6111|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  10.8253
+    The gradient of the cost functions is 0.08355310693560879
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         80| 193.7388|  14.7644|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3436
+    The gradient of the cost functions is 0.0892863062806901
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         90| 193.7343|  14.7665|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3438
+    The gradient of the cost functions is 0.08547671160352914
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        100| 193.7427|  14.7551|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3443
+    Max change in w:  nan
+    The gradient of the cost functions is 0.07559055183506301
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        110| 193.7427|  14.7551|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3443
+    The gradient of the cost functions is 0.07559083473887696
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        120| 193.7427|  14.7551|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3443
+    The gradient of the cost functions is 0.05746838675187186
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        130| 193.7643|  14.7371|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3439
+    The gradient of the cost functions is 0.07448210413236746
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        140| 193.7447|  14.7530|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3443
+    The gradient of the cost functions is 0.07442746039595546
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        150| 193.7448|  14.7530|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3443
+    The gradient of the cost functions is 0.07448210709225016
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        160| 193.7447|  14.7530|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3443
     Applying low pass filter to wind field...
-    Done! Time = 75.0
+    Done! Time = 383.2
 
 
 
@@ -112,12 +167,14 @@ This example uses pooch to download the data files.
     grid4 = pyart.io.read_grid(grid4_path)
 
     # Set initialization and do retrieval
-    u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
-    new_grids = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
-                                                  u_init, v_init, w_init, Co=1e-2, Cm=256.0, Cx=1e3, Cy=1e3, Cz=1e3,
-                                                  vel_name='VRADH_corr', refl_field='DBZH', 
-                                                  mask_outside_opt=True, wind_tol=0.1,
-                                                  engine='tensorflow')
+    grid1 = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
+    new_grids, _ = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
+                                                     Co=1e-2, Cm=256.0, Cx=1e-4, Cy=1e-4,
+                                                     Cz=1e-4,
+                                                     vel_name='VRADH_corr', refl_field='DBZH', 
+                                                     mask_outside_opt=True, wind_tol=0.1,
+                                                     max_iterations=200,
+                                                     engine='jax')
     # Make a neat plot
     fig = plt.figure(figsize=(10,7))
     ax = pydda.vis.plot_horiz_xsection_quiver_map(new_grids, background_field='DBZH', level=3,
@@ -136,7 +193,7 @@ This example uses pooch to download the data files.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  27.637 seconds)
+   **Total running time of the script:** ( 6 minutes  37.728 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_sydney_tornado.py:

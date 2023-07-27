@@ -20,17 +20,17 @@ cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
 
 
 # Load sounding data and insert as an intialization
-u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
+cpol_grid = pydda.initialization.make_constant_wind_field(
         cpol_grid, (0.0, 0.0, 0.0), vel_field='corrected_velocity')
 
 # Start the wind retrieval. This example only uses the mass continuity
 # and data weighting constraints.
-Grids = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], u_init,
-                                          v_init, w_init, Co=1.0, Cm=256.0,
-                                          Cx=0.0, Cy=0., Cz=0.0, Cb=0., 
-                                          frz=5000.0, filter_window=5,
-                                          mask_outside_opt=True, upper_bc=1,
-                                          wind_tol=0.5, engine="tensorflow")
+Grids, _ = pydda.retrieval.get_dd_wind_field([berr_grid, cpol_grid], 
+                                             Co=1.0, Cm=256.0,
+                                             Cx=0.0, Cy=0., Cz=0.0, Cb=0., 
+                                             frz=5000.0, filter_window=5,
+                                             mask_outside_opt=True, upper_bc=1,
+                                             wind_tol=0.5, engine="tensorflow")
 # Plot a horizontal cross section
 plt.figure(figsize=(9, 9))
 pydda.vis.plot_horiz_xsection_barbs(Grids, background_field='reflectivity',

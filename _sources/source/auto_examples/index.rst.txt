@@ -56,23 +56,6 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. only:: html
 
-  .. image:: /source/auto_examples/images/thumb/sphx_glr_sydney_tornado_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_source_auto_examples_sydney_tornado.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Example of a wind retrieval in a tornado over Sydney</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
-
-.. only:: html
-
   .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_sydney_tornado_thumb.png
     :alt:
 
@@ -111,7 +94,6 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
    /source/auto_examples/hurricane_florence
    /source/auto_examples/plot_examples
-   /source/auto_examples/sydney_tornado
    /source/auto_examples/plot_sydney_tornado
    /source/auto_examples/plot_fun_with_constraints
 

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Example on integrating radar and HRRR data &#8212; PyDDA 1.2.0 documentation</title>
+    <title>Example on integrating radar and HRRR data &#8212; PyDDA 1.3.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -138,11 +138,6 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="sydney_tornado.html">
-   Example of a wind retrieval in a tornado over Sydney
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="plot_sydney_tornado.html">
    Example of a wind retrieval in a tornado over Sydney
   </a>
@@ -231,10 +226,11 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
 
 <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span>
                                                          <span class="n">H</span><span class="o">.</span><span class="n">grib</span><span class="p">)</span>
-<span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
+<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
     <span class="n">grid_mhx</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-<span class="n">out_grids</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="n">out_grids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">Cm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
     <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">vel_name</span><span class="o">=</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;tensorflow&quot;</span><span class="p">,</span>
     <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">])</span>
 
