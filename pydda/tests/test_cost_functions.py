@@ -92,7 +92,7 @@ def test_calculate_smoothness_cost():
         u, v, w, dx, dy, dz, Cx=1e-4, Cy=1e-4, Cz=1e-4)
 
     assert cost == 0
-    assert np.isnan(np.max(cost_grad))
+    assert np.all(cost_grad == 0)
 
     """ Now, put in a discontinuity """
     u[:, :, 5] = -10

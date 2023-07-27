@@ -11,7 +11,7 @@ from . import initialization
 from . import tests
 from . import constraints
 
-__version__ = '1.3.0'
+__version__ = '1.3.1'
 
 print("Welcome to PyDDA %s" % __version__)
 print("Detecting Jax...")

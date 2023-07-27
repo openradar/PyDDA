@@ -157,16 +157,29 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     Js: float
         value of smoothness cost function
     """
-    du = np.zeros(w.shape)
-    dv = np.zeros(w.shape)
-    dw = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode='wrap')
-    scipy.ndimage.laplace(v, dv, mode='wrap')
-    scipy.ndimage.laplace(w, dw, mode='wrap')
-    du = du / dx
-    dv = dv / dy
-    dw = dw / dz 
-    return np.sum(Cx * du ** 2 + Cy * dv ** 2 + Cz * dw ** 2)
+    dudx = np.gradient(u, dx, axis=2)
+    dudy = np.gradient(u, dy, axis=1)
+    dudz = np.gradient(u, dz, axis=0)
+    dvdx = np.gradient(v, dx, axis=2)
+    dvdy = np.gradient(v, dy, axis=1)
+    dvdz = np.gradient(v, dz, axis=0)
+    dwdx = np.gradient(w, dx, axis=2)
+    dwdy = np.gradient(w, dy, axis=1)
+    dwdz = np.gradient(w, dz, axis=0)
+
+    x_term = Cx * (
+            np.gradient(dudx, dx, axis=2) ** 2 + 
+            np.gradient(dvdx, dx, axis=1) ** 2 +
+            np.gradient(dwdx, dx, axis=2) ** 2)
+    y_term = Cy * (
+            np.gradient(dudy, dy, axis=2) ** 2 +
+            np.gradient(dvdy, dy, axis=1) ** 2 +
+            np.gradient(dwdy, dy, axis=2) ** 2)
+    z_term = Cz * (
+            np.gradient(dudz, dz, axis=2) ** 2 +
+            np.gradient(dvdz, dz, axis=1) ** 2 +
+            np.gradient(dwdz, dz, axis=2) ** 2)
+    return np.sum(np.nan_to_num(x_term + y_term + z_term))
 
 
 def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
@@ -201,15 +214,15 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode='wrap')
-    scipy.ndimage.laplace(v, dv, mode='wrap')
-    scipy.ndimage.laplace(w, dw, mode='wrap')
+    scipy.ndimage.filters.laplace(u, du, mode='wrap')
+    scipy.ndimage.filters.laplace(v, dv, mode='wrap')
+    scipy.ndimage.filters.laplace(w, dw, mode='wrap')
     du = du / dx
     dv = dv / dy
-    dz = dv / dz
-    scipy.ndimage.laplace(du, grad_u, mode='wrap')
-    scipy.ndimage.laplace(dv, grad_v, mode='wrap')
-    scipy.ndimage.laplace(dw, grad_w, mode='wrap')
+    dw = dw / dz
+    scipy.ndimage.filters.laplace(du, grad_u, mode='wrap')
+    scipy.ndimage.filters.laplace(dv, grad_v, mode='wrap')
+    scipy.ndimage.filters.laplace(dw, grad_w, mode='wrap')
     grad_u = grad_u / dx
     grad_v = grad_v / dy
     grad_w = grad_w / dz
@@ -218,7 +231,9 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     grad_w[0, :, :] = 0
     if (upper_bc is True):
         grad_w[-1, :, :] = 0
+    
     y = np.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
+    
     return y.flatten()
 
 

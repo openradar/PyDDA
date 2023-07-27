@@ -50,7 +50,7 @@ new_grids, _ = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
                                                  vel_name='VRADH_corr', refl_field='DBZH', 
                                                  mask_outside_opt=True, wind_tol=0.1,
                                                  max_iterations=200,
-                                                 engine='jax')
+                                                 engine='tensorflow')
 # Make a neat plot
 fig = plt.figure(figsize=(10,7))
 ax = pydda.vis.plot_horiz_xsection_quiver_map(new_grids, background_field='DBZH', level=3,

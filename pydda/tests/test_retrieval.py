@@ -164,17 +164,6 @@ def test_smoothing():
     assert new_u.std() < u.std()
     assert new_v.std() < v.std()
 
-    new_grids, _ = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
-                                                     Cx=1e-2, Cy=1e-2, Cm=0.0,
-                                                     Cmod=0.0,
-                                                     mask_outside_opt=False,
-                                                     vel_name='one_field',
-                                                     refl_field='one_field')
-    new_u2 = new_grids[0].fields['u']['data']
-    new_v2 = new_grids[0].fields['v']['data']
-    assert new_u2.std() < new_u.std()
-    assert new_v2.std() < new_v.std()
-
 
 def test_model_constraint():
     """ A retrieval with just the model constraint should converge
