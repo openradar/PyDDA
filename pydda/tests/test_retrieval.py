@@ -51,11 +51,11 @@ def test_make_updraft_from_convergence_field():
         Grid, wind_vel, z_ground, z_top, radius, back_u, back_v,
         x_center, y_center)
 
-    new_grids = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
-                                                  Cz=0, Cm=500.0, Cmod=0.0,
-                                                  mask_outside_opt=False,
-                                                  vel_name='one_field',
-                                                  refl_field='one_field')
+    new_grids, _ = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
+                                                     Cz=0, Cm=500.0, Cmod=0.0,
+                                                     mask_outside_opt=False,
+                                                     vel_name='one_field',
+                                                     refl_field='one_field')
     new_w = new_grids[0].fields['w']['data']
 
     # We should have a pretty strong updraft in the retrieval!
@@ -69,12 +69,12 @@ def test_twpice_case_jax():
     Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
+    Grid1 = pydda.initialization.make_wind_field_from_profile(
         Grid1, sounding[1], vel_field='corrected_velocity')
 
-    Grids = pydda.retrieval.get_dd_wind_field(
-        [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
-        wind_tol=0.1,
+    Grids, _ = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], Co=100, Cm=1500.0,
+        wind_tol=0.1, max_iterations=20,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity',
         refl_field='reflectivity', frz=5000.0, engine="jax",
         mask_outside_opt=True, upper_bc=1)
@@ -97,10 +97,10 @@ def test_twpice_case_tensorflow():
     Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    u_init, v_init, w_init = pydda.initialization.make_wind_field_from_profile(
+    Grid = pydda.initialization.make_wind_field_from_profile(
         Grid1, sounding[1], vel_field='corrected_velocity')
-    Grids = pydda.retrieval.get_dd_wind_field(
-        [Grid0, Grid1], u_init, v_init, w_init, Co=100, Cm=1500.0,
+    Grids, _ = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], Co=100, Cm=1500.0, max_iterations=20,
         Cz=0, Cmod=0.0, vel_name='corrected_velocity', wind_tol=0.1,
         refl_field='reflectivity', frz=5000.0, engine="tensorflow",
         mask_outside_opt=True, upper_bc=1)
@@ -115,6 +115,29 @@ def test_twpice_case_tensorflow():
     assert v_mean < 0
     assert w_max > 10
 
+def test_twpice_case():
+    """ Use a test case from TWP-ICE """
+    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
+
+    Grid = pydda.initialization.make_wind_field_from_profile(
+        Grid1, sounding[1], vel_field='corrected_velocity')
+    Grids, _ = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], Co=100, Cm=1500.0, max_iterations=20,
+        Cz=0, Cmod=0.0, vel_name='corrected_velocity', wind_tol=0.1,
+        refl_field='reflectivity', frz=5000.0, engine="scipy",
+        mask_outside_opt=True, upper_bc=1)
+
+    # In this test grid, we expect the mean flow to be to the southeast
+    # Maximum updrafts should be at least 10 m/s
+    u_mean = np.nanmean(Grids[0].fields['u']['data'])
+    v_mean = np.nanmean(Grids[0].fields['v']['data'])
+    w_max = np.max(Grids[0].fields['v']['data'])
+
+    assert u_mean > 0
+    assert v_mean < 0
+    assert w_max > 10
 
 def test_smoothing():
     """ A field of random numbers from 0 to 1
@@ -131,8 +154,9 @@ def test_smoothing():
     u = np.random.random((20, 40, 40))
     v = np.random.random((20, 40, 40))
     w = np.zeros((20, 40, 40))
-    new_grids = pydda.retrieval.get_dd_wind_field(
-        [Grid], u, v, w, Co=0.0, Cx=1e-4, Cy=1e-4, Cm=0.0, Cmod=0.0,
+    new_grids, _ = pydda.retrieval.get_dd_wind_field(
+        [Grid], u_init=u, v_init=v, w_init=w, Co=0.0,
+         Cx=1e-4, Cy=1e-4, Cm=0.0, Cmod=0.0,
         mask_outside_opt=False, vel_name='one_field',
         refl_field='one_field')
     new_u = new_grids[0].fields['u']['data']
@@ -140,12 +164,12 @@ def test_smoothing():
     assert new_u.std() < u.std()
     assert new_v.std() < v.std()
 
-    new_grids = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
-                                                  Cx=1e-2, Cy=1e-2, Cm=0.0,
-                                                  Cmod=0.0,
-                                                  mask_outside_opt=False,
-                                                  vel_name='one_field',
-                                                  refl_field='one_field')
+    new_grids, _ = pydda.retrieval.get_dd_wind_field([Grid], u, v, w, Co=0.0,
+                                                     Cx=1e-2, Cy=1e-2, Cm=0.0,
+                                                     Cmod=0.0,
+                                                     mask_outside_opt=False,
+                                                     vel_name='one_field',
+                                                     refl_field='one_field')
     new_u2 = new_grids[0].fields['u']['data']
     new_v2 = new_grids[0].fields['v']['data']
     assert new_u2.std() < new_u.std()
@@ -173,7 +197,7 @@ def test_model_constraint():
     v_init = np.zeros(Grid0.fields["V_fakemodel"]["data"].shape)
     w_init = np.zeros(Grid0.fields["W_fakemodel"]["data"].shape)
 
-    new_grids = pydda.retrieval.get_dd_wind_field(
+    new_grids, _ = pydda.retrieval.get_dd_wind_field(
         [Grid0], u_init, v_init, w_init, Co=0.0, Cx=0.0, Cy=0.0, Cm=0.0,
         Cmod=1.0, mask_outside_opt=False,
         vel_name='corrected_velocity', refl_field='reflectivity',

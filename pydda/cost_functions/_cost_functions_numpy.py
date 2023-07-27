@@ -132,7 +132,7 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     return y.flatten()
 
 
-def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
+def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
     wind field.
@@ -163,10 +163,13 @@ def calculate_smoothness_cost(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     scipy.ndimage.laplace(u, du, mode='wrap')
     scipy.ndimage.laplace(v, dv, mode='wrap')
     scipy.ndimage.laplace(w, dw, mode='wrap')
+    du = du / dx
+    dv = dv / dy
+    dw = dw / dz 
     return np.sum(Cx * du ** 2 + Cy * dv ** 2 + Cz * dw ** 2)
 
 
-def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
+def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
                                   upper_bc=True):
     """
     Calculates the gradient of the smoothness cost function
@@ -201,9 +204,15 @@ def calculate_smoothness_gradient(u, v, w, Cx=1e-5, Cy=1e-5, Cz=1e-5,
     scipy.ndimage.laplace(u, du, mode='wrap')
     scipy.ndimage.laplace(v, dv, mode='wrap')
     scipy.ndimage.laplace(w, dw, mode='wrap')
+    du = du / dx
+    dv = dv / dy
+    dz = dv / dz
     scipy.ndimage.laplace(du, grad_u, mode='wrap')
     scipy.ndimage.laplace(dv, grad_v, mode='wrap')
     scipy.ndimage.laplace(dw, grad_w, mode='wrap')
+    grad_u = grad_u / dx
+    grad_v = grad_v / dy
+    grad_w = grad_w / dz
 
     # Impermeability condition
     grad_w[0, :, :] = 0

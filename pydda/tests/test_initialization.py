@@ -22,12 +22,12 @@ def test_make_const_wind_field():
 
     vel_field = 'zero_field'
 
-    u, v, w = pydda.initialization.make_constant_wind_field(
+    Grid = pydda.initialization.make_constant_wind_field(
         Grid, wind=(2.0, 3.0, 4.0), vel_field='zero_field')
 
-    assert np.all(u == 2.0)
-    assert np.all(v == 3.0)
-    assert np.all(w == 4.0)
+    assert np.all(Grid.fields["u"]["data"] == 2.0)
+    assert np.all(Grid.fields["v"]["data"] == 3.0)
+    assert np.all(Grid.fields["w"]["data"] == 4.0)
 
 
 def test_make_wind_field_from_profile():
@@ -46,12 +46,12 @@ def test_make_wind_field_from_profile():
     profile = pyart.core.HorizontalWindProfile.from_u_and_v(
         height, u_sound, v_sound)
 
-    u, v, w = pydda.initialization.make_wind_field_from_profile(
+    Grid = pydda.initialization.make_wind_field_from_profile(
         Grid, profile, vel_field='zero_field')
 
-    assert np.all(np.round(u) == 1)
-    assert np.all(np.round(v) == 1)
-    assert np.all(w == 0.0)
+    assert np.all(np.round(Grid.fields["u"]["data"]) == 1)
+    assert np.all(np.round(Grid.fields["v"]["data"]) == 1)
+    assert np.all(Grid.fields["w"]["data"] == 0.0)
 
 
 def test_get_iem_data():
