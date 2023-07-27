@@ -125,7 +125,7 @@ def J_function(winds, parameters):
 
         if (parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
             Jsmooth = _cost_functions_numpy.calculate_smoothness_cost(
-                winds[0], winds[1], winds[2], 
+                winds[0], winds[1], winds[2], parameters.dx, parameters.dy, parameters.dz,
                 Cx=parameters.Cx, Cy=parameters.Cy, Cz=parameters.Cz)
         else:
             Jsmooth = 0
@@ -184,8 +184,8 @@ def J_function(winds, parameters):
 
         if (parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
             Jsmooth = _cost_functions_jax.calculate_smoothness_cost(
-                winds[0], winds[1], winds[2], 
-                Cx=parameters.Cx, Cy=parameters.Cy, Cz=parameters.Cz)
+                winds[0], winds[1], winds[2], parameters.dx, parameters.dy,
+                parameters.dz, Cx=parameters.Cx, Cy=parameters.Cy, Cz=parameters.Cz)
         else:
             Jsmooth = 0
 
@@ -324,7 +324,7 @@ def grad_J(winds, parameters):
 
         if (parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
             grad += _cost_functions_numpy.calculate_smoothness_gradient(
-                winds[0], winds[1], winds[2], 
+                winds[0], winds[1], winds[2],  parameters.dx, parameters.dy, parameters.dz,
                 Cx=parameters.Cx, Cy=parameters.Cy, Cz=parameters.Cz, upper_bc=parameters.upper_bc)
 
         if (parameters.Cb > 0):
@@ -366,7 +366,7 @@ def grad_J(winds, parameters):
 
         if (parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0):
             grad += _cost_functions_jax.calculate_smoothness_gradient(
-                winds[0], winds[1], winds[2], 
+                winds[0], winds[1], winds[2], parameters.dx, parameters.dy, parameters.dz,
                 Cx=parameters.Cx, Cy=parameters.Cy, Cz=parameters.Cz, upper_bc=parameters.upper_bc)
 
         if (parameters.Cb > 0):

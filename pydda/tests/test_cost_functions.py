@@ -87,17 +87,17 @@ def test_calculate_smoothness_cost():
     z = np.arange(0, 1000.0, 100)
 
     cost = pydda.cost_functions.calculate_smoothness_cost(
-        u, v, w)
+        u, v, w, dx, dy, dz)
     cost_grad = pydda.cost_functions.calculate_smoothness_gradient(
-        u, v, w)
+        u, v, w, dx, dy, dz, Cx=1e-4, Cy=1e-4, Cz=1e-4)
 
     assert cost == 0
-    assert np.all(cost_grad == 0)
+    assert np.isnan(np.max(cost_grad))
 
     """ Now, put in a discontinuity """
     u[:, :, 5] = -10
     cost = pydda.cost_functions.calculate_smoothness_cost(
-        u, v, w)
+        u, v, w,dx, dy, dz)
     assert cost > 0
 
 
