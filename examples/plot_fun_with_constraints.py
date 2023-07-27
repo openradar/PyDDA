@@ -31,7 +31,7 @@ cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
 # Load our radar data
 sounding = pyart.io.read_arm_sonde(
     pydda.tests.SOUNDING_PATH)
-u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
+berr_grid = pydda.initialization.make_constant_wind_field(
     berr_grid, (0.0, 0.0, 0.0))
 
 # Let's make a plot on a map
