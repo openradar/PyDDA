@@ -229,15 +229,15 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    scipy.ndimage.filters.laplace(u, du, mode='wrap')
-    scipy.ndimage.filters.laplace(v, dv, mode='wrap')
-    scipy.ndimage.filters.laplace(w, dw, mode='wrap')
+    scipy.ndimage.laplace(u, du, mode='wrap')
+    scipy.ndimage.laplace(v, dv, mode='wrap')
+    scipy.ndimage.laplace(w, dw, mode='wrap')
     du = du / dx
     dv = dv / dy
     dw = dw / dz
-    scipy.ndimage.filters.laplace(du, grad_u, mode='wrap')
-    scipy.ndimage.filters.laplace(dv, grad_v, mode='wrap')
-    scipy.ndimage.filters.laplace(dw, grad_w, mode='wrap')
+    scipy.ndimage.laplace(du, grad_u, mode='wrap')
+    scipy.ndimage.laplace(dv, grad_v, mode='wrap')
+    scipy.ndimage.laplace(dw, grad_w, mode='wrap')
     
     grad_u = grad_u / du
     grad_v = grad_v / dy
@@ -289,10 +289,9 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
     J = 0.0
     for the_point in point_list:
-        the_box = jnp.where(np.logical_and.reduce(
-            (jnp.abs(x - the_point["x"]) < roi,
-                jnp.abs(y - the_point["y"]) < roi,
-             jnp.abs(z - the_point["z"]) < roi)))
+        the_box = jnp.logical_and(
+            jnp.logical_and(jnp.abs(x - the_point["x"]) < roi,
+            jnp.abs(y - the_point["y"]) < roi), jnp.abs(z - the_point["z"]) < roi)
         J += jnp.sum(
                 ((u[the_box] - the_point["u"]) ** 2 + 
                     (v[the_box] - the_point["v"]) ** 2))
@@ -336,13 +335,19 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
 
     """
 
-    primals, fun_vjp = jax.vjp(
-            calculate_point_gradient, u, v, x, y, z, point_list, Cp, roi)
-    grad_u, grad_v, _, _, _, _, _, _, _ = fun_vjp(1.0)
+    gradJ_u = jnp.zeros_like(u)
+    gradJ_v = jnp.zeros_like(v)
+    gradJ_w = jnp.zeros_like(u)
 
-    gradJ_w = jnp.zeros_like(grad_u)
-    gradJ = jnp.stack([grad_u, grad_v, gradJ_w], axis=0)
-    return np.copy(gradJ.flatten()) * Cp
+    for the_point in point_list:
+        the_box = jnp.where(jnp.logical_and(jnp.logical_and(
+            np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi),
+             np.abs(z - the_point["z"]) < roi), 1., 0.)
+        gradJ_u += 2 * (u - the_point["u"]) * the_box
+        gradJ_v += 2 * (v - the_point["v"]) * the_box
+
+    gradJ = jnp.stack([gradJ_u, gradJ_v, gradJ_w], axis=0).flatten()
+    return gradJ * Cp
 
 
 def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
@@ -582,11 +587,12 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     jv_array = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy +
                 w * dzeta_dz + (dvdz * dwdx - dudz * dwdy) +
                 zeta * (dudx + dvdy))
+    
     return jnp.sum(coeff * jv_array ** 2)
 
 
 def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5):
+                                          coeff=1e-5, upper_bc=True):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -637,6 +643,10 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
             calculate_vertical_vorticity_cost, u, v, w, dx, dy,
             dz, Ut, Vt, coeff)
     u_grad, v_grad, w_grad, _, _, _, _, _, _ = fun_vjp(1.0)
+    # Impermeability condition
+    w_grad.at[0, :, :].set(0)
+    if(upper_bc is True):
+       w_grad.at[-1, :, :].set(0)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
 
@@ -715,10 +725,10 @@ def calculate_model_gradient(u, v, w, weights, u_model,
     Returns
     -------
     y: float array
-        value of gradient of background cost function
+        value of gradient of model cost function
     """
     primals, fun_vjp = jax.vjp(
-            calculate_model_cost, u, v, w, u_model, v_model, w_model, coeff)
-    u_grad, v_grad, w_grad, _, _, _, _, _, _ = fun_vjp(1.0)
+            calculate_model_cost, u, v, w, weights, u_model, v_model, w_model, coeff)
+    u_grad, v_grad, w_grad, _, _, _, _, _ = fun_vjp(1.0)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()

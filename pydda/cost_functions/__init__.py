@@ -76,7 +76,9 @@ procedures in Python, they then need to be added to
     calculate_point_gradient
 """
 
-
+from . import _cost_functions_tensorflow as tf
+from . import _cost_functions_numpy as np
+from . import _cost_functions_jax as jax
 from ._cost_functions_numpy import calculate_radial_vel_cost_function
 from ._cost_functions_numpy import calculate_fall_speed
 from ._cost_functions_numpy import calculate_grad_radial_vel

@@ -214,15 +214,15 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    scipy.ndimage.filters.laplace(u, du, mode='wrap')
-    scipy.ndimage.filters.laplace(v, dv, mode='wrap')
-    scipy.ndimage.filters.laplace(w, dw, mode='wrap')
+    scipy.ndimage.laplace(u, du, mode='wrap')
+    scipy.ndimage.laplace(v, dv, mode='wrap')
+    scipy.ndimage.laplace(w, dw, mode='wrap')
     du = du / dx
     dv = dv / dy
     dw = dw / dz
-    scipy.ndimage.filters.laplace(du, grad_u, mode='wrap')
-    scipy.ndimage.filters.laplace(dv, grad_v, mode='wrap')
-    scipy.ndimage.filters.laplace(dw, grad_w, mode='wrap')
+    scipy.ndimage.laplace(du, grad_u, mode='wrap')
+    scipy.ndimage.laplace(dv, grad_v, mode='wrap')
+    scipy.ndimage.laplace(dw, grad_w, mode='wrap')
     grad_u = grad_u / dx
     grad_v = grad_v / dy
     grad_w = grad_w / dz
@@ -611,7 +611,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
 
 
 def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5):
+                                          coeff=1e-5, upper_bc=True):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -702,7 +702,11 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
     u_grad = u_grad * 2 * dzeta_dt * coeff
     v_grad = v_grad * 2 * dzeta_dt * coeff
     w_grad = w_grad * 2 * dzeta_dt * coeff
-
+    
+    # Impermeability condition
+    w_grad[0, :, :] = 0
+    if(upper_bc is True):
+       w_grad[-1, :, :] = 0
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
 
