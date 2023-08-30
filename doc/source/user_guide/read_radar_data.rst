@@ -1,3 +1,5 @@
+.. _reading-radar-data:
+
 Reading in Radar Data in Native Radial Coordinates
 ==================================================
 
