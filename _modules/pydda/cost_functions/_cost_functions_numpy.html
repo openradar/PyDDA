@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.cost_functions._cost_functions_numpy &#8212; PyDDA 1.3.1 documentation</title>
+    <title>pydda.cost_functions._cost_functions_numpy &#8212; PyDDA 1.4.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -364,15 +364,15 @@
     <span class="n">grad_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">grad_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">grad_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
     <span class="n">du</span> <span class="o">=</span> <span class="n">du</span> <span class="o">/</span> <span class="n">dx</span>
     <span class="n">dv</span> <span class="o">=</span> <span class="n">dv</span> <span class="o">/</span> <span class="n">dy</span>
     <span class="n">dw</span> <span class="o">=</span> <span class="n">dw</span> <span class="o">/</span> <span class="n">dz</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">grad_u</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dw</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">grad_u</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dw</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;wrap&#39;</span><span class="p">)</span>
     <span class="n">grad_u</span> <span class="o">=</span> <span class="n">grad_u</span> <span class="o">/</span> <span class="n">dx</span>
     <span class="n">grad_v</span> <span class="o">=</span> <span class="n">grad_v</span> <span class="o">/</span> <span class="n">dy</span>
     <span class="n">grad_w</span> <span class="o">=</span> <span class="n">grad_w</span> <span class="o">/</span> <span class="n">dz</span>
@@ -761,7 +761,7 @@
 
 
 <div class="viewcode-block" id="calculate_vertical_vorticity_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span>
-                                          <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+                                          <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the cost function due to deviance from vertical</span>
 <span class="sd">    vorticity equation. This is done by taking the functional derivative of</span>
@@ -852,7 +852,11 @@
     <span class="n">u_grad</span> <span class="o">=</span> <span class="n">u_grad</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dzeta_dt</span> <span class="o">*</span> <span class="n">coeff</span>
     <span class="n">v_grad</span> <span class="o">=</span> <span class="n">v_grad</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dzeta_dt</span> <span class="o">*</span> <span class="n">coeff</span>
     <span class="n">w_grad</span> <span class="o">=</span> <span class="n">w_grad</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dzeta_dt</span> <span class="o">*</span> <span class="n">coeff</span>
-
+    
+    <span class="c1"># Impermeability condition</span>
+    <span class="n">w_grad</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">upper_bc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+       <span class="n">w_grad</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">u_grad</span><span class="p">,</span> <span class="n">v_grad</span><span class="p">,</span> <span class="n">w_grad</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 

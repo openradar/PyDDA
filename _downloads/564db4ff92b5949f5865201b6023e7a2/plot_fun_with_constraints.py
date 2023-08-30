@@ -34,37 +34,36 @@ sounding = pyart.io.read_arm_sonde(
 berr_grid = pydda.initialization.make_constant_wind_field(
     berr_grid, (0.0, 0.0, 0.0))
 
-# Let's make a plot on a map
-fig = plt.figure(figsize=(7, 3))
-
-pydda.vis.plot_xz_xsection_streamlines(
-    [cpol_grid, berr_grid], bg_grid_no=-1, level=50, w_vel_contours=[1, 3, 5, 8])
-plt.show()
-
 # Let's provide an initial state from the sounding
 u_back = sounding[1].u_wind
 v_back = sounding[1].v_wind
 z_back = sounding[1].height
 cpol_grid = pydda.initialization.make_wind_field_from_profile(cpol_grid, sounding[1])
 
-new_grids, _ = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
-                                    
+new_grids, _ = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],       
                                     u_back=u_back, v_back=v_back, z_back=z_back,
-                                    Co=10.0, Cm=4096.0, frz=5000.0, Cb=1e-6,
-                                    mask_outside_opt=False, wind_tol=0.2,
+                                    Co=1.0, Cm=64.0, frz=5000.0, Cb=1e-5,
+                                    Cx=1e2, Cy=1e2, Cz=1e2,
+                                    mask_outside_opt=False, wind_tol=0.1,
                                     engine="tensorflow")
 fig = plt.figure(figsize=(7, 7))
 
 pydda.vis.plot_xz_xsection_streamlines(
     new_grids,  bg_grid_no=-1, level=50, w_vel_contours=[1, 3, 5, 8])
 plt.show()
+
 # Let's see what happens when we use a zero initialization
+# This causes there to be convergence in the cone of silence
+# This is an artifact that we want to avoid!
+# Prescribing winds inside the background through either a constraint
+# Or through the initial state will help mitigate this issue.
 cpol_grid = pydda.initialization.make_constant_wind_field(
-    berr_grid, (0.0, 0.0, 0.0))    
+    cpol_grid, (0.0, 0.0, 0.0))    
 new_grids, _ = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
                                     u_back=u_back, v_back=v_back, z_back=z_back,
-                                    Co=1.0, Cm=128.0, frz=5000.0, Cb=1e-6,
-                                    mask_outside_opt=False, wind_tol=0.2,
+                                    Co=1.0, Cm=64.0, frz=5000.0, Cb=1e-5,
+                                    Cx=1e2, Cy=1e2, Cz=1e2,
+                                    mask_outside_opt=False, wind_tol=0.5,
                                     engine="tensorflow")
 
 fig = plt.figure(figsize=(7, 7))
@@ -74,9 +73,12 @@ pydda.vis.plot_xz_xsection_streamlines(
 plt.show()
 
 # Or, let's make the radar data more important!
+cpol_grid = pydda.initialization.make_wind_field_from_profile(cpol_grid, sounding[1])
 new_grids, _ = pydda.retrieval.get_dd_wind_field([cpol_grid, berr_grid],
-                                    Co=100.0, Cm=128.0, frz=5000.0,
-                                    mask_outside_opt=False, wind_tol=0.2,
+                                    Co=10.0, Cm=64.0, frz=5000.0,
+                                    u_back=u_back, v_back=v_back, z_back=z_back, Cb=1e-5,
+                                    Cx=1e2, Cy=1e2, Cz=1e2,
+                                    mask_outside_opt=False, wind_tol=0.1,
                                     engine="tensorflow")
 fig = plt.figure(figsize=(7, 7))
 
