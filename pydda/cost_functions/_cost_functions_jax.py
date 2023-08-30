@@ -174,17 +174,17 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdz = jnp.gradient(w, dz, axis=0)
 
     x_term = Cx * (
-            jnp.gradient(dudx, dx, axis=2) ** 2 + 
-            jnp.gradient(dvdx, dx, axis=1) ** 2 +
-            jnp.gradient(dwdx, dx, axis=2) ** 2)
+            jnp.gradient(dudx, dx, axis=2) + 
+            jnp.gradient(dvdx, dx, axis=1) +
+            jnp.gradient(dwdx, dx, axis=2)) ** 2
     y_term = Cy * (
-            jnp.gradient(dudy, dy, axis=2) ** 2 +
-            jnp.gradient(dvdy, dy, axis=1) ** 2 +
-            jnp.gradient(dwdy, dy, axis=2) ** 2)
+            jnp.gradient(dudy, dy, axis=2) +
+            jnp.gradient(dvdy, dy, axis=1) +
+            jnp.gradient(dwdy, dy, axis=2)) ** 2
     z_term = Cz * (
-            jnp.gradient(dudz, dz, axis=2) ** 2 +
-            jnp.gradient(dvdz, dz, axis=1) ** 2 +
-            jnp.gradient(dwdz, dz, axis=2) ** 2)
+            jnp.gradient(dudz, dz, axis=2) +
+            jnp.gradient(dvdz, dz, axis=1) +
+            jnp.gradient(dwdz, dz, axis=2)) ** 2
     return np.asanyarray(jnp.sum(x_term + y_term + z_term))
 
 

@@ -367,11 +367,11 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                             ~parameters.azs[j][k].mask,
                             ~parameters.els[j][k].mask))
                         cur_array = parameters.bg_weights[k]
-                        cur_array[np.logical_or(
+                        cur_array[np.logical_or.reduce((~valid,
                             bca[i, j] < math.radians(min_bca),
-                            bca[i, j] > math.radians(max_bca))] = 1
+                            bca[i, j] > math.radians(max_bca)))] = 1
                         cur_array[~valid] = 1
-                        parameters.bg_weights[i] = cur_array
+                        parameters.bg_weights[i] += cur_array
                     else:
                         parameters.bg_weights[i] = weights_bg[i]
 
@@ -601,7 +601,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                   Ut=None, Vt=None, low_pass_filter=True,
                                   mask_outside_opt=False, weights_obs=None,
                                   weights_model=None, weights_bg=None,
-                                  max_iterations=1000, mask_w_outside_opt=True,
+                                  max_iterations=200, mask_w_outside_opt=True,
                                   filter_window=5, filter_order=3, min_bca=30.0,
                                   max_bca=150.0, upper_bc=True, model_fields=None,
                                   output_cost_functions=True, roi=1000.0, lower_bc=True,
@@ -797,11 +797,11 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                             ~parameters.wts[j][k].mask,
                             ~parameters.azs[j][k].mask,
                             ~parameters.els[j][k].mask))
-                        cur_array[np.logical_or(
+                        cur_array[np.logical_or.reduce((~valid,
                             bca[i, j] < math.radians(min_bca),
-                            bca[i, j] > math.radians(max_bca))] = 1
+                            bca[i, j] > math.radians(max_bca)))] = 1
                         cur_array[~valid] = 1
-                        parameters.bg_weights[i] = cur_array
+                        parameters.bg_weights[i] += cur_array
                     else:
                         parameters.bg_weights[i] = weights_bg[i]
 
@@ -902,10 +902,11 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
     parameters.points = points
     parameters.point_list = points
     loss_and_gradient = lambda x: (J_function(x, parameters), grad_J(x, parameters))
-    tolerance = 1e-6 * (Co + Cm + Cx + Cy + Cz + Cb + Cv) 
+    
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient, initial_position=winds,
-        tolerance=tolerance, x_tolerance=wind_tol,
+        f_relative_tolerance=1e-3, 
+        tolerance=1e-3, x_tolerance=wind_tol,
         max_iterations=max_iterations, parallel_iterations=parallel_iterations)
     winds = np.reshape(
         winds.position.numpy(), (3, parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
