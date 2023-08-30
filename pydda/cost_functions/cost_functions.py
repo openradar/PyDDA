@@ -336,7 +336,7 @@ def grad_J(winds, parameters):
             grad += _cost_functions_numpy.calculate_vertical_vorticity_gradient(
                 winds[0], winds[1], winds[2], parameters.dx,
                 parameters.dy, parameters.dz, parameters.Ut,
-                parameters.Vt, coeff=parameters.Cv, upper_bc=parameters.upper_bc).numpy()
+                parameters.Vt, coeff=parameters.Cv, upper_bc=parameters.upper_bc)
 
         if (parameters.Cmod > 0):
             grad += _cost_functions_numpy.calculate_model_gradient(

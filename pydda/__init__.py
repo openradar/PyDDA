@@ -11,9 +11,11 @@ from . import initialization
 from . import tests
 from . import constraints
 
-__version__ = '1.3.1'
+__version__ = '1.4.0'
 
 print("Welcome to PyDDA %s" % __version__)
+print("If you are using PyDDA in your publications, please cite:")
+print("Jackson et al. (2020) Journal of Open Research Science")
 print("Detecting Jax...")
 try:
     import jax
