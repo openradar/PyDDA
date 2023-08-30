@@ -7,8 +7,8 @@ Developer Reference Manual
 :Release: |version|
 :Date: |today|
 
-This is the developer reference guide for PyDDA which covers most of the 
-available functions, modules, and classes. 
+This is the developer reference guide for PyDDA which covers most of the
+available functions, modules, and classes.
 
 ============================
 :mod:`cost_functions` Module
@@ -36,13 +36,13 @@ Main module for wind retrieval.
 :mod:`vis` Module
 =================
 
-Visualization module for PyDDA. 
+Visualization module for PyDDA.
 
 .. automodule:: pydda.vis
     :members:
     :undoc-members:
     :show-inheritance:
-    
+
 ===========================
 :mod:`initalization` Module
 ===========================
@@ -64,4 +64,3 @@ The module for creating custom constraints (i.e. from models, satellites) for th
     :members:
     :undoc-members:
     :show-inheritance:
-

@@ -1,8 +1,10 @@
 import numpy as np
 import pyart
 import scipy.ndimage.filters
+
 try:
     import tensorflow as tf
+
     TENSORFLOW_AVAILABLE = True
 except ImportError:
     TENSORFLOW_AVAILABLE = False
@@ -10,6 +12,7 @@ except ImportError:
 from scipy.signal import savgol_filter
 
 from ._cost_functions_tensorflow import _tf_gradient
+
 
 def radial_velocity_function(winds, parameters):
     """
@@ -33,14 +36,28 @@ def radial_velocity_function(winds, parameters):
     J: float
         The value of the cost function
     """
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     Jvel = calculate_radial_vel_cost_function(
-        parameters.vrs, parameters.azs, parameters.els,
-        winds[0], winds[1], winds[2], parameters.wts, rmsVr=parameters.rmsVr,
-        weights=parameters.weights, coeff=parameters.Co)
+        parameters.vrs,
+        parameters.azs,
+        parameters.els,
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.wts,
+        rmsVr=parameters.rmsVr,
+        weights=parameters.weights,
+        coeff=parameters.Co,
+    )
 
     grad = grad_radial_velocity(winds, parameters)
 
@@ -48,9 +65,15 @@ def radial_velocity_function(winds, parameters):
 
 
 def al_mass_cont_function(winds, parameters, mult, mu):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
     u = winds[0]
     v = winds[1]
     w = winds[2]
@@ -59,33 +82,45 @@ def al_mass_cont_function(winds, parameters, mult, mu):
         tape.watch(v)
         tape.watch(w)
         div = calculate_mass_continuity(
-            u, v, w, parameters.z,
-            parameters.dx, parameters.dy, parameters.dz)
+            u, v, w, parameters.z, parameters.dx, parameters.dy, parameters.dz
+        )
 
-        mult = tf.reshape(mult, (parameters.grid_shape[0], parameters.grid_shape[1], parameters.grid_shape[2]))
+        mult = tf.reshape(
+            mult,
+            (
+                parameters.grid_shape[0],
+                parameters.grid_shape[1],
+                parameters.grid_shape[2],
+            ),
+        )
 
-        #rho = tf.math.exp(-parameters.z / 10000.0)
-        #drho_dz = _tf_gradient(rho, parameters.dz, axis=0)
-        #anel_coeffs = drho_dz/rho
+        # rho = tf.math.exp(-parameters.z / 10000.0)
+        # drho_dz = _tf_gradient(rho, parameters.dz, axis=0)
+        # anel_coeffs = drho_dz/rho
 
         # COMPUTING THE GRADIENT: THIS CAN BE REPLACED WITH JAX/TENSORFLOW/WHATEVER
-        #vars = {'u': u, 'v': v, 'w': w}
-        #grad = tape.gradient(div, vars)
-        #grad_u = grad['u']
-        #grad_v = grad['v']
-        #grad_w = grad['w']
+        # vars = {'u': u, 'v': v, 'w': w}
+        # grad = tape.gradient(div, vars)
+        # grad_u = grad['u']
+        # grad_v = grad['v']
+        # grad_w = grad['w']
 
-        al = -tf.math.reduce_sum(mult * div) + (mu / 2.0) * tf.math.reduce_sum(div ** 2)
-    
-    vars = {'u': u, 'v': v, 'w': w}
+        al = -tf.math.reduce_sum(mult * div) + (mu / 2.0) * tf.math.reduce_sum(div**2)
+
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(al, vars)
-    grad_u = grad['u']
-    grad_v = grad['v']
-    grad_w = grad['w']
+    grad_u = grad["u"]
+    grad_v = grad["v"]
+    grad_w = grad["w"]
 
     al_grad = tf.stack([grad_u, grad_v, grad_w], axis=0)
 
-    return al, tf.reshape(al_grad, np.prod(al_grad.shape, ))
+    return al, tf.reshape(
+        al_grad,
+        np.prod(
+            al_grad.shape,
+        ),
+    )
 
 
 def al_vert_vort_function(winds, parameters, mult, mu):
@@ -93,28 +128,49 @@ def al_vert_vort_function(winds, parameters, mult, mu):
         tape.watch(winds[0])
         tape.watch(winds[1])
         tape.watch(winds[2])
-        vort = calculate_vertical_vorticity(winds[0], winds[1], winds[2], parameters.dx, parameters.dy, parameters.dz,
-                                        parameters.Ut, parameters.Vt)
+        vort = calculate_vertical_vorticity(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters.dx,
+            parameters.dy,
+            parameters.dz,
+            parameters.Ut,
+            parameters.Vt,
+        )
 
-    
-        al = -tf.math.reduce_sum(mult * vort) + (mu / 2.0) * tf.math.reduce_sum(vort ** 2)
-    vars = {'u': winds[0], 'v': winds[1], 'w': winds[2]}
+        al = -tf.math.reduce_sum(mult * vort) + (mu / 2.0) * tf.math.reduce_sum(
+            vort**2
+        )
+    vars = {"u": winds[0], "v": winds[1], "w": winds[2]}
     grad = tape.gradient(al, vars)
-    grad_u = grad['u']
-    grad_v = grad['v']
-    grad_w = grad['w']
+    grad_u = grad["u"]
+    grad_v = grad["v"]
+    grad_w = grad["w"]
     al_grad = tf.stack([grad_u, grad_v, grad_w], axis=0)
 
-    return al, tf.reshape(al_grad, np.prod(al_grad.shape, ))
+    return al, tf.reshape(
+        al_grad,
+        np.prod(
+            al_grad.shape,
+        ),
+    )
 
 
 def smooth_cost_function(winds, parameters, grad, pos):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     Jsmooth = calculate_smoothness_cost(
-        winds[0], winds[1], winds[2], Cx=1.0, Cy=1.0, Cz=1.0)
+        winds[0], winds[1], winds[2], Cx=1.0, Cy=1.0, Cz=1.0
+    )
 
     if grad.size > 0:
         grad = grad_smooth_cost(winds, parameters)
@@ -127,13 +183,25 @@ def smooth_cost_function(winds, parameters, grad, pos):
 
 
 def background_cost_function(winds, parameters, grad, pos):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     Jbackground = calculate_background_cost(
-        winds[0], winds[1], winds[2], parameters.bg_weights,
-        parameters.u_back, parameters.v_back, 1.0)
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.bg_weights,
+        parameters.u_back,
+        parameters.v_back,
+        1.0,
+    )
     if grad.size > 0:
         grad = grad_background_cost(winds, parameters)
 
@@ -145,14 +213,27 @@ def background_cost_function(winds, parameters, grad, pos):
 
 
 def vertical_vorticity_cost_function(winds, parameters, grad, pos):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     Jvorticity = calculate_vertical_vorticity_cost(
-        winds[0], winds[1], winds[2], parameters.dx,
-        parameters.dy, parameters.dz, parameters.Ut,
-        parameters.Vt, coeff=1.0)
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.dx,
+        parameters.dy,
+        parameters.dz,
+        parameters.Ut,
+        parameters.Vt,
+        coeff=1.0,
+    )
     if grad.size > 0:
         grad = grad_vertical_vorticity_cost(winds, parameters)
 
@@ -164,15 +245,26 @@ def vertical_vorticity_cost_function(winds, parameters, grad, pos):
 
 
 def model_cost_function(winds, parameters, grad, pos):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     Jmod = calculate_model_cost(
-        winds[0], winds[1], winds[2],
-        parameters.model_weights, parameters.u_model,
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.model_weights,
+        parameters.u_model,
         parameters.v_model,
-        parameters.w_model, coeff=1.0)
+        parameters.w_model,
+        coeff=1.0,
+    )
 
     if grad.size > 0:
         grad = grad_model_cost(winds, parameters)
@@ -185,13 +277,26 @@ def model_cost_function(winds, parameters, grad, pos):
 
 
 def point_cost_function(winds, parameters, grad, pos):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0], parameters.grid_shape[1],
-                        parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     Jpoint = calculate_point_cost(
-        winds[0], winds[1], parameters.x, parameters.y, parameters.z,
-        parameters.point_list, Cp=1.0, roi=parameters.roi)
+        winds[0],
+        winds[1],
+        parameters.x,
+        parameters.y,
+        parameters.z,
+        parameters.point_list,
+        Cp=1.0,
+        roi=parameters.roi,
+    )
     if grad.size > 0:
         grad = grad_point_cost(winds, parameters)
 
@@ -223,94 +328,186 @@ def grad_radial_velocity(winds, parameters):
     grad: 1D float array
         Gradient vector of cost function
     """
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
     grad = calculate_grad_radial_vel(
-        parameters.vrs, parameters.els, parameters.azs,
-        winds[0], winds[1], winds[2], parameters.wts, parameters.weights,
-        parameters.rmsVr, coeff=parameters.Co, upper_bc=parameters.upper_bc)
+        parameters.vrs,
+        parameters.els,
+        parameters.azs,
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.wts,
+        parameters.weights,
+        parameters.rmsVr,
+        coeff=parameters.Co,
+        upper_bc=parameters.upper_bc,
+    )
 
     return grad
 
 
 def grad_mass_cont(winds, parameters):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     grad = calculate_mass_continuity_gradient(
-        winds[0], winds[1], winds[2], parameters.z,
-        parameters.dx, parameters.dy, parameters.dz, upper_bc=parameters.upper_bc, coeff=1.0)
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.z,
+        parameters.dx,
+        parameters.dy,
+        parameters.dz,
+        upper_bc=parameters.upper_bc,
+        coeff=1.0,
+    )
 
     return grad
 
 
 def grad_smooth_cost(winds, parameters):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     grad = calculate_smoothness_gradient(
-        winds[0], winds[1], winds[2], Cx=parameters.Cx,
-        Cy=parameters.Cy, Cz=parameters.Cz, upper_bc=parameters.upper_bc)
+        winds[0],
+        winds[1],
+        winds[2],
+        Cx=parameters.Cx,
+        Cy=parameters.Cy,
+        Cz=parameters.Cz,
+        upper_bc=parameters.upper_bc,
+    )
 
     return grad
 
 
 def grad_background_cost(winds, parameters):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     grad = calculate_background_gradient(
-        winds[0], winds[1], winds[2], parameters.bg_weights,
-        parameters.u_back, parameters.v_back, parameters.Cb,
-        upper_bc=parameters.upper_bc)
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.bg_weights,
+        parameters.u_back,
+        parameters.v_back,
+        parameters.Cb,
+        upper_bc=parameters.upper_bc,
+    )
 
     return grad
 
 
 def grad_vertical_vorticity_cost(winds, parameters):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     grad = calculate_vertical_vorticity_gradient(
-        winds[0], winds[1], winds[2], parameters.dx,
-        parameters.dy, parameters.dz, parameters.Ut,
-        parameters.Vt, coeff=parameters.Cv)
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.dx,
+        parameters.dy,
+        parameters.dz,
+        parameters.Ut,
+        parameters.Vt,
+        coeff=parameters.Cv,
+    )
 
     return grad
 
 
 def grad_model_cost(winds, parameters):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     grad = calculate_model_gradient(
-        winds[0], winds[1], winds[2],
-        parameters.model_weights, parameters.u_model, parameters.v_model,
-        parameters.w_model, coeff=parameters.Cmod)
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters.model_weights,
+        parameters.u_model,
+        parameters.v_model,
+        parameters.w_model,
+        coeff=parameters.Cmod,
+    )
 
     return grad
 
 
 def grad_point_cost(winds, parameters):
-    winds = tf.reshape(winds,
-                       (3, parameters.grid_shape[0],
-                        parameters.grid_shape[1], parameters.grid_shape[2]))
+    winds = tf.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
 
     grad = calculate_point_gradient(
-        winds[0], winds[1], parameters.x, parameters.y, parameters.z,
-        parameters.point_list, Cp=parameters.Cpoint, roi=parameters.roi)
+        winds[0],
+        winds[1],
+        parameters.x,
+        parameters.y,
+        parameters.z,
+        parameters.point_list,
+        Cp=parameters.Cpoint,
+        roi=parameters.roi,
+    )
 
     return grad
 
 
-def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
-                                       w, wts, rmsVr, weights, coeff=1.0):
+def calculate_radial_vel_cost_function(
+    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
+):
     """
     Calculates the cost function due to difference of the wind field from
     radar radial velocities. For more information on this cost function, see
@@ -364,17 +561,20 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
     J_o = 0
     lambda_o = coeff / (rmsVr * rmsVr)
     for i in range(len(vrs)):
-        v_ar = (tf.math.cos(els[i]) * tf.math.sin(azs[i]) * u +
-                tf.math.cos(els[i]) * tf.math.cos(azs[i]) * v +
-                tf.math.sin(els[i]) * (w - tf.math.abs(wts[i])))
+        v_ar = (
+            tf.math.cos(els[i]) * tf.math.sin(azs[i]) * u
+            + tf.math.cos(els[i]) * tf.math.cos(azs[i]) * v
+            + tf.math.sin(els[i]) * (w - tf.math.abs(wts[i]))
+        )
         the_weight = weights[i]
         J_o += lambda_o * tf.reduce_sum(tf.math.square(vrs[i] - v_ar) * the_weight)
 
     return J_o
 
 
-def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
-                              wts, weights, rmsVr, coeff=1.0, upper_bc=True):
+def calculate_grad_radial_vel(
+    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
+):
     """
     Calculates the gradient of the cost function due to difference of wind
     field from radar radial velocities.
@@ -423,21 +623,24 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
         tape.watch(u)
         tape.watch(v)
         tape.watch(w)
-        loss = calculate_radial_vel_cost_function(vrs, azs, els,
-                                                  u, v, w, wts, rmsVr, weights, coeff)
-    vars = {'u': u, 'v': v, 'w': w}
+        loss = calculate_radial_vel_cost_function(
+            vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff
+        )
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
     p_z1 = tf.concat(
-        [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64), p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
+        [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64), p_z1[1:, :, :]],
+        axis=0,
+    )
+    if upper_bc is True:
         p_z1 = tf.concat(
-            [p_z1[:-1, :, :],
-             tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]))], axis=0
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -486,17 +689,27 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdy = _tf_gradient(w, dy, axis=1)
     dwdz = _tf_gradient(w, dz, axis=0)
 
-    x_term = Cx * (_tf_gradient(dudx, dx, axis=2) ** 2 + _tf_gradient(dvdx, dx, axis=1) ** 2 +
-                   _tf_gradient(dwdx, dx, axis=2) ** 2)
-    y_term = Cy * (_tf_gradient(dudy, dy, axis=2) ** 2 + _tf_gradient(dvdy, dy, axis=1) ** 2 +
-                   _tf_gradient(dwdy, dy, axis=2) ** 2)
-    z_term = Cz * (_tf_gradient(dudz, dz, axis=2) ** 2 + _tf_gradient(dvdz, dz, axis=1) ** 2 +
-                   _tf_gradient(dwdz, dz, axis=2) ** 2)
+    x_term = Cx * (
+        _tf_gradient(dudx, dx, axis=2) ** 2
+        + _tf_gradient(dvdx, dx, axis=1) ** 2
+        + _tf_gradient(dwdx, dx, axis=2) ** 2
+    )
+    y_term = Cy * (
+        _tf_gradient(dudy, dy, axis=2) ** 2
+        + _tf_gradient(dvdy, dy, axis=1) ** 2
+        + _tf_gradient(dwdy, dy, axis=2) ** 2
+    )
+    z_term = Cz * (
+        _tf_gradient(dudz, dz, axis=2) ** 2
+        + _tf_gradient(dvdz, dz, axis=1) ** 2
+        + _tf_gradient(dwdz, dz, axis=2) ** 2
+    )
     return tf.math.reduce_sum(x_term + y_term + z_term)
 
 
-def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
-                                  upper_bc=True):
+def calculate_smoothness_gradient(
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
+):
     """
     Calculates the gradient of the smoothness cost function
     by taking the Laplacian of the Laplacian of the wind field.
@@ -534,21 +747,21 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
         tape.watch(u)
         tape.watch(v)
         tape.watch(w)
-        loss = calculate_smoothness_cost(u, v, w,
-                                         dx, dy, dz, Cx=Cx, Cy=Cy, Cz=Cz)
+        loss = calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=Cx, Cy=Cy, Cz=Cz)
 
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
-    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])),
-                      p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
+    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
+    if upper_bc is True:
         p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64)], axis=0)
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -600,9 +813,16 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         up = tf.ones_like(u) * the_point["u"]
         vp = tf.ones_like(v) * the_point["v"]
 
-        the_box = tf.where(tf.math.logical_and(
-            tf.math.logical_and(tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi),
-            tf.math.abs(z - zp) < roi), 1., 0.)
+        the_box = tf.where(
+            tf.math.logical_and(
+                tf.math.logical_and(
+                    tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi
+                ),
+                tf.math.abs(z - zp) < roi,
+            ),
+            1.0,
+            0.0,
+        )
         J += tf.math.reduce_sum(((u - up) ** 2 + (v - vp) ** 2) * the_box)
 
     return J * Cp
@@ -649,10 +869,10 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         tape.watch(v)
         loss = calculate_point_cost(u, v, x, y, z, point_list)
 
-    vars = {'u': u, 'v': v}
+    vars = {"u": u, "v": v}
     grad = tape.gradient(loss, vars)
-    gradJ_u = grad['u']
-    gradJ_v = grad['v']
+    gradJ_u = grad["u"]
+    gradJ_v = grad["v"]
     gradJ_w = tf.zeros_like(gradJ_u)
     gradJ = tf.stack([gradJ_u, gradJ_v, gradJ_w], axis=0)
     gradJ = tf.reshape(gradJ, (3 * np.prod(u.shape),))
@@ -697,7 +917,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dvdy = _tf_gradient(v, dy, axis=1)
     dwdz = _tf_gradient(w, dz, axis=0)
 
-    if (anel == 1):
+    if anel == 1:
         rho = tf.math.exp(-z / 10000.0)
         drho_dz = _tf_gradient(rho, dz, axis=0)
         anel_term = w / rho * drho_dz
@@ -709,9 +929,9 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     return div
 
 
-def calculate_mass_continuity_gradient(u, v, w, z, dx,
-                                       dy, dz, coeff=1500.0, anel=1,
-                                       upper_bc=True):
+def calculate_mass_continuity_gradient(
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+):
     """
     Calculates the gradient of mass continuity cost function. This is done by
     taking the negative gradient of the divergence of the wind field.
@@ -751,22 +971,21 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
         tape.watch(w)
         loss = calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff)
 
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
-    p_z1 = tf.concat(
-        [tf.zeros((1, u.shape[1], u.shape[2])),
-         p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
-        p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64)], axis=0)
+    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
-
 
 
 def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
@@ -793,28 +1012,24 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     """
     # Parse names of velocity field
     if refl_field is None:
-        refl_field = pyart.config.get_field_name('reflectivity')
+        refl_field = pyart.config.get_field_name("reflectivity")
 
-    refl = grid.fields[refl_field]['data']
-    grid_z = grid.point_z['data']
+    refl = grid.fields[refl_field]["data"]
+    grid_z = grid.point_z["data"]
     term_vel = np.zeros(refl.shape)
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
     rho = np.exp(-grid_z / 10000.0)
     A[np.logical_and(grid_z < frz, refl < 55)] = -2.6
     B[np.logical_and(grid_z < frz, refl < 55)] = 0.0107
-    A[np.logical_and(grid_z < frz,
-                     np.logical_and(refl >= 55, refl < 60))] = -2.5
-    B[np.logical_and(grid_z < frz,
-                     np.logical_and(refl >= 55, refl < 60))] = 0.013
+    A[np.logical_and(grid_z < frz, np.logical_and(refl >= 55, refl < 60))] = -2.5
+    B[np.logical_and(grid_z < frz, np.logical_and(refl >= 55, refl < 60))] = 0.013
     A[np.logical_and(grid_z < frz, refl > 60)] = -3.95
     B[np.logical_and(grid_z < frz, refl > 60)] = 0.0148
     A[np.logical_and(grid_z >= frz, refl < 33)] = -0.817
     B[np.logical_and(grid_z >= frz, refl < 33)] = 0.0063
-    A[np.logical_and(grid_z >= frz,
-                     np.logical_and(refl >= 33, refl < 49))] = -2.5
-    B[np.logical_and(grid_z >= frz,
-                     np.logical_and(refl >= 33, refl < 49))] = 0.013
+    A[np.logical_and(grid_z >= frz, np.logical_and(refl >= 33, refl < 49))] = -2.5
+    B[np.logical_and(grid_z >= frz, np.logical_and(refl >= 33, refl < 49))] = 0.013
     A[np.logical_and(grid_z >= frz, refl > 49)] = -3.95
     B[np.logical_and(grid_z >= frz, refl > 49)] = 0.0148
 
@@ -854,8 +1069,10 @@ def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
     the_shape = u.shape
     cost = 0
     for i in range(the_shape[0]):
-        cost += (Cb * tf.reduce_sum(np.square(u[i] - u_back[i]) * (weights[i]) +
-                             tf.math.square(v[i] - v_back[i]) * (weights[i])))
+        cost += Cb * tf.reduce_sum(
+            np.square(u[i] - u_back[i]) * (weights[i])
+            + tf.math.square(v[i] - v_back[i]) * (weights[i])
+        )
     return cost
 
 
@@ -891,10 +1108,10 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
         tape.watch(v)
         loss = calculate_background_cost(u, v, weights, u_back, v_back, Cb=Cb)
 
-    vars = {'u': u, 'v': v}
+    vars = {"u": u, "v": v}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
     p_z1 = tf.zeros_like(p_x1)
 
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
@@ -957,14 +1174,17 @@ def calculate_vertical_vorticity(u, v, w, dx, dy, dz, Ut, Vt):
     dzeta_dx = _tf_gradient(zeta, dx, axis=2)
     dzeta_dy = _tf_gradient(zeta, dy, axis=1)
     dzeta_dz = _tf_gradient(zeta, dz, axis=0)
-    jv_array = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy +
-                w * dzeta_dz + (dvdz * dwdx - dudz * dwdy) +
-                zeta * (dudx + dvdy))
+    jv_array = (
+        (u - Ut) * dzeta_dx
+        + (v - Vt) * dzeta_dy
+        + w * dzeta_dz
+        + (dvdz * dwdx - dudz * dwdy)
+        + zeta * (dudx + dvdy)
+    )
     return jv_array
 
 
-def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
-                                      coeff=1e-5):
+def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     """
     Calculates the cost function due to deviance from vertical vorticity
     equation. For more information of the vertical vorticity cost function,
@@ -1022,14 +1242,19 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     dzeta_dx = _tf_gradient(zeta, dx, axis=2)
     dzeta_dy = _tf_gradient(zeta, dy, axis=1)
     dzeta_dz = _tf_gradient(zeta, dz, axis=0)
-    jv_array = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy +
-                w * dzeta_dz + (dvdz * dwdx - dudz * dwdy) +
-                zeta * (dudx + dvdy))
+    jv_array = (
+        (u - Ut) * dzeta_dx
+        + (v - Vt) * dzeta_dy
+        + w * dzeta_dz
+        + (dvdz * dwdx - dudz * dwdy)
+        + zeta * (dudx + dvdy)
+    )
     return tf.math.reduce_sum(coeff * tf.math.square(jv_array))
 
 
-def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5, upper_bc=True):
+def calculate_vertical_vorticity_gradient(
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
+):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -1081,24 +1306,23 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
         tape.watch(v)
         tape.watch(w)
         loss = calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff)
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
-    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])),
-                      p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
-        p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]))], axis=0
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
 
-def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
-                         coeff=1.0):
+def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as the sum of squares of the differences
@@ -1134,14 +1358,16 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
 
     cost = 0
     for i in range(len(u_model)):
-        cost += (coeff * tf.math.reduce_sum(
-            tf.math.square(u - u_model[i]) * weights[i] +
-            tf.math.square(v - v_model[i]) * weights[i]))
+        cost += coeff * tf.math.reduce_sum(
+            tf.math.square(u - u_model[i]) * weights[i]
+            + tf.math.square(v - v_model[i]) * weights[i]
+        )
     return cost
 
 
-def calculate_model_gradient(u, v, w, weights, u_model,
-                             v_model, w_model, coeff=1.0, upper_bc=True):
+def calculate_model_gradient(
+    u, v, w, weights, u_model, v_model, w_model, coeff=1.0, upper_bc=True
+):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as twice the differences
@@ -1176,25 +1402,26 @@ def calculate_model_gradient(u, v, w, weights, u_model,
     y: float array
         value of gradient of background cost function
     """
-    
+
     with tf.GradientTape() as tape:
         tape.watch(u)
         tape.watch(v)
         tape.watch(w)
         loss = calculate_model_cost(
-            u, v, w, weights, u_model, v_model, w_model, coeff=coeff)
+            u, v, w, weights, u_model, v_model, w_model, coeff=coeff
+        )
 
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
     p_z1 = tf.zeros(p_x1.shape)
 
     # Impermeability condition
-    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])),
-                      p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
-        p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]))], axis=0)
+    p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]))], axis=0
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))

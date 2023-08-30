@@ -16,7 +16,7 @@ Welcome to the PyDDA documentation!
    :target: https://doi.org/10.5281/zenodo.3942686
 
 This is the main page for the documentation of PyDDA. Below are links that
-provide documentation on the installation and use of PyDDA as well as 
+provide documentation on the installation and use of PyDDA as well as
 description of each of PyDDA's subroutines.
 
 =========================
@@ -118,7 +118,7 @@ Contents:
 Further support
 ===============
 
-We are now requesting that all questions related to PyDDA that are not potential software issues to be 
+We are now requesting that all questions related to PyDDA that are not potential software issues to be
 relegated to the `openradar Discourse group <openradar.discourse.group>` with a 'pydda' tag on it. This
 enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
 and users can answer questions people may have.
@@ -129,4 +129,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

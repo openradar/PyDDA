@@ -7,12 +7,15 @@ try:
 
     from jax import jit
     from jax import float0
+
     JAX_AVAILABLE = True
 except ImportError:
     JAX_AVAILABLE = False
 
-def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
-                                       w, wts, rmsVr, weights, coeff=1.0):
+
+def calculate_radial_vel_cost_function(
+    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
+):
     """
     Calculates the cost function due to difference of the wind field from
     radar radial velocities. For more information on this cost function, see
@@ -67,16 +70,19 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
     J_o = 0
     lambda_o = coeff / (rmsVr * rmsVr)
     for i in range(len(vrs)):
-        v_ar = (jnp.cos(els[i]) * jnp.sin(azs[i]) * u +
-                jnp.cos(els[i]) * jnp.cos(azs[i]) * v +
-                jnp.sin(els[i]) * (w - jnp.abs(wts[i])))
+        v_ar = (
+            jnp.cos(els[i]) * jnp.sin(azs[i]) * u
+            + jnp.cos(els[i]) * jnp.cos(azs[i]) * v
+            + jnp.sin(els[i]) * (w - jnp.abs(wts[i]))
+        )
         the_weight = jnp.asarray(weights[i])
         J_o += lambda_o * jnp.sum(jnp.square(vrs[i] - v_ar) * the_weight)
     return J_o
 
 
-def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
-                              wts, weights, rmsVr, coeff=1.0, upper_bc=True):
+def calculate_grad_radial_vel(
+    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
+):
     """
     Calculates the gradient of the cost function due to difference of wind
     field from radar radial velocities.
@@ -117,13 +123,24 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     # Use zero for all masked values since we don't want to add them into
     # the cost function
     """
-    primals, fun_vjp = jax.vjp(calculate_radial_vel_cost_function,
-            vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff)
+    primals, fun_vjp = jax.vjp(
+        calculate_radial_vel_cost_function,
+        vrs,
+        azs,
+        els,
+        u,
+        v,
+        w,
+        wts,
+        rmsVr,
+        weights,
+        coeff,
+    )
     _, _, _, p_x1, p_y1, p_z1, _, _, _, _ = fun_vjp(1.0)
 
     # Impermeability condition
     p_z1 = p_z1.at[0, :, :].set(0)
-    if (upper_bc is True):
+    if upper_bc is True:
         p_z1 = p_z1.at[-1, :, :].set(0)
     y = jnp.stack((p_x1, p_y1, p_z1), axis=0)
     return np.copy(y.flatten())
@@ -173,23 +190,39 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdy = jnp.gradient(w, dy, axis=1)
     dwdz = jnp.gradient(w, dz, axis=0)
 
-    x_term = Cx * (
-            jnp.gradient(dudx, dx, axis=2) + 
-            jnp.gradient(dvdx, dx, axis=1) +
-            jnp.gradient(dwdx, dx, axis=2)) ** 2
-    y_term = Cy * (
-            jnp.gradient(dudy, dy, axis=2) +
-            jnp.gradient(dvdy, dy, axis=1) +
-            jnp.gradient(dwdy, dy, axis=2)) ** 2
-    z_term = Cz * (
-            jnp.gradient(dudz, dz, axis=2) +
-            jnp.gradient(dvdz, dz, axis=1) +
-            jnp.gradient(dwdz, dz, axis=2)) ** 2
+    x_term = (
+        Cx
+        * (
+            jnp.gradient(dudx, dx, axis=2)
+            + jnp.gradient(dvdx, dx, axis=1)
+            + jnp.gradient(dwdx, dx, axis=2)
+        )
+        ** 2
+    )
+    y_term = (
+        Cy
+        * (
+            jnp.gradient(dudy, dy, axis=2)
+            + jnp.gradient(dvdy, dy, axis=1)
+            + jnp.gradient(dwdy, dy, axis=2)
+        )
+        ** 2
+    )
+    z_term = (
+        Cz
+        * (
+            jnp.gradient(dudz, dz, axis=2)
+            + jnp.gradient(dvdz, dz, axis=1)
+            + jnp.gradient(dwdz, dz, axis=2)
+        )
+        ** 2
+    )
     return np.asanyarray(jnp.sum(x_term + y_term + z_term))
 
 
-def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
-                                  upper_bc=True):
+def calculate_smoothness_gradient(
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
+):
     """
     Calculates the gradient of the smoothness cost function
     by taking the Laplacian of the Laplacian of the wind field.
@@ -229,22 +262,22 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode='wrap')
-    scipy.ndimage.laplace(v, dv, mode='wrap')
-    scipy.ndimage.laplace(w, dw, mode='wrap')
+    scipy.ndimage.laplace(u, du, mode="wrap")
+    scipy.ndimage.laplace(v, dv, mode="wrap")
+    scipy.ndimage.laplace(w, dw, mode="wrap")
     du = du / dx
     dv = dv / dy
     dw = dw / dz
-    scipy.ndimage.laplace(du, grad_u, mode='wrap')
-    scipy.ndimage.laplace(dv, grad_v, mode='wrap')
-    scipy.ndimage.laplace(dw, grad_w, mode='wrap')
-    
+    scipy.ndimage.laplace(du, grad_u, mode="wrap")
+    scipy.ndimage.laplace(dv, grad_v, mode="wrap")
+    scipy.ndimage.laplace(dw, grad_w, mode="wrap")
+
     grad_u = grad_u / du
     grad_v = grad_v / dy
     grad_w = grad_w / dw
     # Impermeability condition
     grad_w[0, :, :] = 0
-    if (upper_bc is True):
+    if upper_bc is True:
         grad_w[-1, :, :] = 0
     y = np.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
     y = np.nan_to_num(y)
@@ -284,17 +317,20 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     Returns
     -------
     J: float
-        The cost function related to the difference between 
+        The cost function related to the difference between
         wind field and points.
     """
     J = 0.0
     for the_point in point_list:
         the_box = jnp.logical_and(
-            jnp.logical_and(jnp.abs(x - the_point["x"]) < roi,
-            jnp.abs(y - the_point["y"]) < roi), jnp.abs(z - the_point["z"]) < roi)
+            jnp.logical_and(
+                jnp.abs(x - the_point["x"]) < roi, jnp.abs(y - the_point["y"]) < roi
+            ),
+            jnp.abs(z - the_point["z"]) < roi,
+        )
         J += jnp.sum(
-                ((u[the_box] - the_point["u"]) ** 2 + 
-                    (v[the_box] - the_point["v"]) ** 2))
+            ((u[the_box] - the_point["u"]) ** 2 + (v[the_box] - the_point["v"]) ** 2)
+        )
 
     return J * Cp
 
@@ -340,9 +376,16 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_w = jnp.zeros_like(u)
 
     for the_point in point_list:
-        the_box = jnp.where(jnp.logical_and(jnp.logical_and(
-            np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi),
-             np.abs(z - the_point["z"]) < roi), 1., 0.)
+        the_box = jnp.where(
+            jnp.logical_and(
+                jnp.logical_and(
+                    np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi
+                ),
+                np.abs(z - the_point["z"]) < roi,
+            ),
+            1.0,
+            0.0,
+        )
         gradJ_u += 2 * (u - the_point["u"]) * the_box
         gradJ_v += 2 * (v - the_point["v"]) * the_box
 
@@ -388,8 +431,8 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dudx = jnp.gradient(u, dx, axis=2)
     dvdy = jnp.gradient(v, dy, axis=1)
     dwdz = jnp.gradient(w, dz, axis=0)
-    
-    if (anel == 1):
+
+    if anel == 1:
         if not isinstance(z, np.ma.MaskedArray):
             rho = jnp.exp(-z / 10000.0)
         else:
@@ -398,13 +441,12 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         anel_term = w / rho * drho_dz
     else:
         anel_term = jnp.zeros(w.shape)
-    return coeff * jnp.sum(
-            jnp.square(dudx + dvdy + dwdz + anel_term)) / 2.0
+    return coeff * jnp.sum(jnp.square(dudx + dvdy + dwdz + anel_term)) / 2.0
 
 
-def calculate_mass_continuity_gradient(u, v, w, z, dx,
-                                       dy, dz, coeff=1500.0, anel=1,
-                                       upper_bc=True):
+def calculate_mass_continuity_gradient(
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+):
     """
     Calculates the gradient of mass continuity cost function. This is done by
     taking the negative gradient of the divergence of the wind field.
@@ -439,16 +481,17 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
     """
     # Z should not be masked, but just in case it is
     if isinstance(z, np.ma.MaskedArray):
-        z_in = z.filled(-9999.)
+        z_in = z.filled(-9999.0)
     else:
         z_in = z
     primals, fun_vjp = jax.vjp(
-            calculate_mass_continuity, u, v, w, z_in, dx, dy, dz, coeff, anel)
+        calculate_mass_continuity, u, v, w, z_in, dx, dy, dz, coeff, anel
+    )
     grad_u, grad_v, grad_w, _, _, _, _, _, _ = fun_vjp(1.0)
 
     # Impermeability condition
     grad_w = grad_w.at[0, :, :].set(0)
-    if (upper_bc is True):
+    if upper_bc is True:
         grad_w = grad_w.at[-1, :, :].set(0)
     y = jnp.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten().copy()
@@ -485,8 +528,10 @@ def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
     the_shape = u.shape
     cost = 0
     for i in range(the_shape[0]):
-        cost += (Cb * jnp.sum(jnp.square(u[i] - u_back[i]) * (weights[i]) +
-                              jnp.square(v[i] - v_back[i]) * (weights[i])))
+        cost += Cb * jnp.sum(
+            jnp.square(u[i] - u_back[i]) * (weights[i])
+            + jnp.square(v[i] - v_back[i]) * (weights[i])
+        )
     return cost
 
 
@@ -518,14 +563,14 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
         value of gradient of background cost function
     """
     primals, fun_vjp = jax.vjp(
-            calculate_background_cost, u, v, w, weights, u_back, v_back, Cb)
+        calculate_background_cost, u, v, w, weights, u_back, v_back, Cb
+    )
     u_grad, v_grad, w_grad, _, _, _, _ = fun_vjp(1.0)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
 
 
-def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
-                                      coeff=1e-5):
+def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     """
     Calculates the cost function due to deviance from vertical vorticity
     equation. For more information of the vertical vorticity cost function,
@@ -584,15 +629,20 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     dzeta_dx = jnp.gradient(zeta, dx, axis=2)
     dzeta_dy = jnp.gradient(zeta, dy, axis=1)
     dzeta_dz = jnp.gradient(zeta, dz, axis=0)
-    jv_array = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy +
-                w * dzeta_dz + (dvdz * dwdx - dudz * dwdy) +
-                zeta * (dudx + dvdy))
-    
-    return jnp.sum(coeff * jv_array ** 2)
+    jv_array = (
+        (u - Ut) * dzeta_dx
+        + (v - Vt) * dzeta_dy
+        + w * dzeta_dz
+        + (dvdz * dwdx - dudz * dwdy)
+        + zeta * (dudx + dvdy)
+    )
+
+    return jnp.sum(coeff * jv_array**2)
 
 
-def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5, upper_bc=True):
+def calculate_vertical_vorticity_gradient(
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
+):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -640,19 +690,18 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
     """
     # Jax version of the gradient cost function
     primals, fun_vjp = jax.vjp(
-            calculate_vertical_vorticity_cost, u, v, w, dx, dy,
-            dz, Ut, Vt, coeff)
+        calculate_vertical_vorticity_cost, u, v, w, dx, dy, dz, Ut, Vt, coeff
+    )
     u_grad, v_grad, w_grad, _, _, _, _, _, _ = fun_vjp(1.0)
     # Impermeability condition
     w_grad.at[0, :, :].set(0)
-    if(upper_bc is True):
-       w_grad.at[-1, :, :].set(0)
+    if upper_bc is True:
+        w_grad.at[-1, :, :].set(0)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
 
 
-def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
-                         coeff=1.0):
+def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as the sum of squares of the differences
@@ -688,13 +737,14 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
 
     cost = 0
     for i in range(len(u_model)):
-        cost += (coeff * jnp.sum(jnp.square(u - u_model[i]) * weights[i] +
-                                 jnp.square(v - v_model[i]) * weights[i]))
+        cost += coeff * jnp.sum(
+            jnp.square(u - u_model[i]) * weights[i]
+            + jnp.square(v - v_model[i]) * weights[i]
+        )
     return cost
 
 
-def calculate_model_gradient(u, v, w, weights, u_model,
-                             v_model, w_model, coeff=1.0):
+def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as twice the differences
@@ -728,7 +778,8 @@ def calculate_model_gradient(u, v, w, weights, u_model,
         value of gradient of model cost function
     """
     primals, fun_vjp = jax.vjp(
-            calculate_model_cost, u, v, w, weights, u_model, v_model, w_model, coeff)
+        calculate_model_cost, u, v, w, weights, u_model, v_model, w_model, coeff
+    )
     u_grad, v_grad, w_grad, _, _, _, _, _ = fun_vjp(1.0)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()

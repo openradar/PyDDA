@@ -15,17 +15,17 @@ to be distributed under the BSD 3-clause license, which is available in LICENSE
 in the main directory.
 
 One, we ask, that when on the GitHub forum or making contributions to PyDDA
-that all developers and users follow the PyDDA code of conduct. 
+that all developers and users follow the PyDDA code of conduct.
 
 
 Contributor Covenant Code of Conduct
 ------------------------------------
 **Our Pledge**
 
-In the interest of fostering an open and welcoming environment, we as 
+In the interest of fostering an open and welcoming environment, we as
 contributors and maintainers pledge to making participation in our project
 and our community a harassment-free experience for everyone, regardless of
-age, body size, disability, ethnicity, gender identity and expression, 
+age, body size, disability, ethnicity, gender identity and expression,
 level of experience, nationality, personal appearance, race, religion,
 or sexual identity and orientation.
 Our Standards
@@ -44,28 +44,28 @@ Examples of behavior that contributes to creating a positive environment include
 
 Examples of unacceptable behavior by participants include:
 
-    The use of sexualized language or imagery and unwelcome sexual attention or 
+    The use of sexualized language or imagery and unwelcome sexual attention or
     advances
 
     Trolling, insulting/derogatory comments, and personal or political attacks
     Public or private harassment
 
-    Publishing others' private information, such as a physical or electronic 
+    Publishing others' private information, such as a physical or electronic
     address, without explicit permission
 
-    Other conduct which could reasonably be considered inappropriate in a 
+    Other conduct which could reasonably be considered inappropriate in a
     professional setting
 
 *Our Responsibilities*
 
-Project maintainers are responsible for clarifying the standards of acceptable 
-behavior and are expected to take appropriate and fair corrective action in 
+Project maintainers are responsible for clarifying the standards of acceptable
+behavior and are expected to take appropriate and fair corrective action in
 response to any instances of unacceptable behavior.
 
-Project maintainers have the right and responsibility to remove, edit, or 
+Project maintainers have the right and responsibility to remove, edit, or
 reject comments, commits, code, wiki edits, issues, and other contributions
-that are not aligned to this Code of Conduct, or to ban temporarily or 
-permanently any contributor for other behaviors that they deem inappropriate, 
+that are not aligned to this Code of Conduct, or to ban temporarily or
+permanently any contributor for other behaviors that they deem inappropriate,
 threatening, offensive, or harmful.
 
 **Scope**
@@ -73,22 +73,22 @@ threatening, offensive, or harmful.
 This Code of Conduct applies both within project spaces and in public spaces
 when an individual is representing the project or its community. Examples of
 representing a project or community include using an official project e-mail
-address, posting via an official social media account, or acting as an 
+address, posting via an official social media account, or acting as an
 appointed representative at an online or offline event. Representation of a
 project may be further defined and clarified by project maintainers.
 
 **Enforcement**
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be 
-reported by contacting the project team at 
-`rjackson@anl.gov <mailto:rjackson@anl.gov>`_. The project team will review 
-and investigate all complaints, and will respond in a way that it deems 
+Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported by contacting the project team at
+`rjackson@anl.gov <mailto:rjackson@anl.gov>`_. The project team will review
+and investigate all complaints, and will respond in a way that it deems
 appropriate to the circumstances. The project team is obligated to maintain
 confidentiality with regard to the reporter of an incident. Further details
 of specific enforcement policies may be posted separately.
 
-Project maintainers who do not follow or enforce the Code of Conduct in 
-good faith may face temporary or permanent repercussions as determined 
+Project maintainers who do not follow or enforce the Code of Conduct in
+good faith may face temporary or permanent repercussions as determined
 by other members of the project's leadership.
 
 **Attribution**
@@ -120,12 +120,12 @@ Python File Setup
 -----------------
 
 In a new .py file, the top of the code should have the function, sphinx comments
-and the public and private functions within the .py file. Public fuunctions are 
+and the public and private functions within the .py file. Public fuunctions are
 listed first and then private functions and classes. Private functions should
 have an underscore in front of the name. A space is needed between the last
 function and the closing docstring quotation marks.
 
-Following the introduction code, modules are then added. To follow PEP8 
+Following the introduction code, modules are then added. To follow PEP8
 standards, modules should be added in the following order:
 
     1. Standard library imports
@@ -146,28 +146,28 @@ For an example format of the documentation, see this:
         """
         This function makes a constant wind field given a wind vector.
         This function is useful for specifying the intialization arrays
-        for get_dd_wind_field. 
-    
+        for get_dd_wind_field.
+
         Parameters
         ==========
         Grid: Py-ART Grid object
-            This is the Py-ART Grid containing the coordinates for the analysis 
+            This is the Py-ART Grid containing the coordinates for the analysis
             grid.
         wind: 3-tuple of floats
             The 3-tuple specifying the (u,v,w) of the wind field.
         vel_field: String
             The name of the velocity field. None will automatically
             try to detect this field.
-    
+
         Returns
         =======
-        u: 3D float array 
+        u: 3D float array
             Returns a 3D float array containing the u component of the wind field.
             The shape will be the same shape as the fields in Grid.
-        v: 3D float array 
+        v: 3D float array
             Returns a 3D float array containing the v component of the wind field.
             The shape will be the same shape as the fields in Grid.
-        w: 3D float array 
+        w: 3D float array
             Returns a 3D float array containing the u component of the wind field.
             The shape will be the same shape as the fields in Grid.
         """
@@ -178,8 +178,8 @@ For an example format of the documentation, see this:
 Testing
 -------
 
-When adding a new function to pyart it is important to add it to the __init__.py 
-under the corresponding folder. 
+When adding a new function to pyart it is important to add it to the __init__.py
+under the corresponding folder.
 
 Create a test function and use assert to test the calculated values against known
 values. For an example, see:
@@ -187,7 +187,7 @@ values. For an example, see:
 `<https://github.com/openradar/PyDDA/tests/test_retrieval.py>`_
 
 Pytest will run this test whenever a pull request is made to the master branch
-of the openradar/PyDDA repository. This will then allow the maintainers to 
+of the openradar/PyDDA repository. This will then allow the maintainers to
 determine how the pull request will affect the functionality of PyDDA.
 
 
@@ -201,9 +201,9 @@ determine how the pull request will affect the functionality of PyDDA.
         # a zero field
         fdata3 = np.zeros((20, 20, 20))
         Grid.add_field('zero_field', {'data': fdata3, '_FillValue': -9999.0})
-     
+
         vel_field = 'zero_field'
-    
+
         pydda.retrieval.angles.add_azimuth_as_field(Grid, dz_name='zero_field')
         pydda.retrieval.angles.add_elevation_as_field(Grid, dz_name='zero_field')
         vrs = [np.ma.array(Grid.fields[vel_field]['data'])]
@@ -219,7 +219,7 @@ determine how the pull request will affect the functionality of PyDDA.
             vrs, azs, els, u, v, w, wts, rmsVr, weights)
         grad = pydda.cost_functions.calculate_grad_radial_vel(
             vrs, azs, els, u, v, w, wts, weights, rmsVr)
-    
+
         assert cost == 0
         assert np.all(grad == 0)
 
@@ -245,5 +245,3 @@ Make your changes, commit, and then to push to that branch do:
 
 After that is done, make a pull request from that branch to the master branch
 on openradar/PyDDA where the maintainers will review your pull request.
-
-

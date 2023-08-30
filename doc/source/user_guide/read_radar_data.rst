@@ -58,7 +58,7 @@ Plot Reflectivity of Both Radars
 ++++++++++++++++++++++++++++++++
 
 .. code-block:: python
-    
+
     fig = plt.figure(figsize=(16, 6))
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 

@@ -3,8 +3,9 @@ import scipy
 import pyart
 
 
-def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
-                                       w, wts, rmsVr, weights, coeff=1.0):
+def calculate_radial_vel_cost_function(
+    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
+):
     """
     Calculates the cost function due to difference of the wind field from
     radar radial velocities. For more information on this cost function, see
@@ -52,17 +53,20 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
     J_o = 0
     lambda_o = coeff / (rmsVr * rmsVr)
     for i in range(len(vrs)):
-        v_ar = (np.cos(els[i]) * np.sin(azs[i]) * u +
-                np.cos(els[i]) * np.cos(azs[i]) * v +
-                np.sin(els[i]) * (w - np.abs(wts[i])))
+        v_ar = (
+            np.cos(els[i]) * np.sin(azs[i]) * u
+            + np.cos(els[i]) * np.cos(azs[i]) * v
+            + np.sin(els[i]) * (w - np.abs(wts[i]))
+        )
         the_weight = weights[i]
         J_o += lambda_o * np.sum(np.square(vrs[i] - v_ar) * the_weight)
 
     return J_o
 
 
-def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
-                              wts, weights, rmsVr, coeff=1.0, upper_bc=True):
+def calculate_grad_radial_vel(
+    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
+):
     """
     Calculates the gradient of the cost function due to difference of wind
     field from radar radial velocities.
@@ -110,14 +114,18 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     lambda_o = coeff / (rmsVr * rmsVr)
 
     for i in range(len(vrs)):
-        v_ar = (np.cos(els[i]) * np.sin(azs[i]) * u +
-                np.cos(els[i]) * np.cos(azs[i]) * v +
-                np.sin(els[i]) * (w - np.abs(wts[i])))
+        v_ar = (
+            np.cos(els[i]) * np.sin(azs[i]) * u
+            + np.cos(els[i]) * np.cos(azs[i]) * v
+            + np.sin(els[i]) * (w - np.abs(wts[i]))
+        )
 
-        x_grad = (2 * (v_ar - vrs[i]) * np.cos(els[i]) *
-                  np.sin(azs[i]) * weights[i]) * lambda_o
-        y_grad = (2 * (v_ar - vrs[i]) * np.cos(els[i]) *
-                  np.cos(azs[i]) * weights[i]) * lambda_o
+        x_grad = (
+            2 * (v_ar - vrs[i]) * np.cos(els[i]) * np.sin(azs[i]) * weights[i]
+        ) * lambda_o
+        y_grad = (
+            2 * (v_ar - vrs[i]) * np.cos(els[i]) * np.cos(azs[i]) * weights[i]
+        ) * lambda_o
         z_grad = (2 * (v_ar - vrs[i]) * np.sin(els[i]) * weights[i]) * lambda_o
 
         p_x1 += x_grad
@@ -126,7 +134,7 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
 
     # Impermeability condition
     p_z1[0, :, :] = 0
-    if (upper_bc is True):
+    if upper_bc is True:
         p_z1[-1, :, :] = 0
     y = np.stack((p_x1, p_y1, p_z1), axis=0)
     return y.flatten()
@@ -168,22 +176,26 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdz = np.gradient(w, dz, axis=0)
 
     x_term = Cx * (
-            np.gradient(dudx, dx, axis=2) ** 2 + 
-            np.gradient(dvdx, dx, axis=1) ** 2 +
-            np.gradient(dwdx, dx, axis=2) ** 2)
+        np.gradient(dudx, dx, axis=2) ** 2
+        + np.gradient(dvdx, dx, axis=1) ** 2
+        + np.gradient(dwdx, dx, axis=2) ** 2
+    )
     y_term = Cy * (
-            np.gradient(dudy, dy, axis=2) ** 2 +
-            np.gradient(dvdy, dy, axis=1) ** 2 +
-            np.gradient(dwdy, dy, axis=2) ** 2)
+        np.gradient(dudy, dy, axis=2) ** 2
+        + np.gradient(dvdy, dy, axis=1) ** 2
+        + np.gradient(dwdy, dy, axis=2) ** 2
+    )
     z_term = Cz * (
-            np.gradient(dudz, dz, axis=2) ** 2 +
-            np.gradient(dvdz, dz, axis=1) ** 2 +
-            np.gradient(dwdz, dz, axis=2) ** 2)
+        np.gradient(dudz, dz, axis=2) ** 2
+        + np.gradient(dvdz, dz, axis=1) ** 2
+        + np.gradient(dwdz, dz, axis=2) ** 2
+    )
     return np.sum(np.nan_to_num(x_term + y_term + z_term))
 
 
-def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
-                                  upper_bc=True):
+def calculate_smoothness_gradient(
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
+):
     """
     Calculates the gradient of the smoothness cost function
     by taking the Laplacian of the Laplacian of the wind field.
@@ -214,26 +226,26 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
     grad_u = np.zeros(w.shape)
     grad_v = np.zeros(w.shape)
     grad_w = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode='wrap')
-    scipy.ndimage.laplace(v, dv, mode='wrap')
-    scipy.ndimage.laplace(w, dw, mode='wrap')
+    scipy.ndimage.laplace(u, du, mode="wrap")
+    scipy.ndimage.laplace(v, dv, mode="wrap")
+    scipy.ndimage.laplace(w, dw, mode="wrap")
     du = du / dx
     dv = dv / dy
     dw = dw / dz
-    scipy.ndimage.laplace(du, grad_u, mode='wrap')
-    scipy.ndimage.laplace(dv, grad_v, mode='wrap')
-    scipy.ndimage.laplace(dw, grad_w, mode='wrap')
+    scipy.ndimage.laplace(du, grad_u, mode="wrap")
+    scipy.ndimage.laplace(dv, grad_v, mode="wrap")
+    scipy.ndimage.laplace(dw, grad_w, mode="wrap")
     grad_u = grad_u / dx
     grad_v = grad_v / dy
     grad_w = grad_w / dz
 
     # Impermeability condition
     grad_w[0, :, :] = 0
-    if (upper_bc is True):
+    if upper_bc is True:
         grad_w[-1, :, :] = 0
-    
+
     y = np.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
-    
+
     return y.flatten()
 
 
@@ -273,10 +285,18 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     for the_point in point_list:
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
-        the_box = np.where(np.logical_and.reduce(
-            (np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi,
-             np.abs(z - the_point["z"]) < roi)))
-        J += np.sum(((u[the_box] - the_point["u"]) ** 2 + (v[the_box] - the_point["v"]) ** 2))
+        the_box = np.where(
+            np.logical_and.reduce(
+                (
+                    np.abs(x - the_point["x"]) < roi,
+                    np.abs(y - the_point["y"]) < roi,
+                    np.abs(z - the_point["z"]) < roi,
+                )
+            )
+        )
+        J += np.sum(
+            ((u[the_box] - the_point["u"]) ** 2 + (v[the_box] - the_point["v"]) ** 2)
+        )
 
     return J * Cp
 
@@ -318,9 +338,15 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_w = np.zeros_like(u)
 
     for the_point in point_list:
-        the_box = np.where(np.logical_and.reduce(
-            (np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi,
-             np.abs(z - the_point["z"]) < roi)))
+        the_box = np.where(
+            np.logical_and.reduce(
+                (
+                    np.abs(x - the_point["x"]) < roi,
+                    np.abs(y - the_point["y"]) < roi,
+                    np.abs(z - the_point["z"]) < roi,
+                )
+            )
+        )
         gradJ_u[the_box] += 2 * (u[the_box] - the_point["u"])
         gradJ_v[the_box] += 2 * (v[the_box] - the_point["v"])
 
@@ -363,7 +389,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dvdy = np.gradient(v, dy, axis=1)
     dwdz = np.gradient(w, dz, axis=0)
 
-    if (anel == 1):
+    if anel == 1:
         rho = np.exp(-z / 10000.0)
         drho_dz = np.gradient(rho, dz, axis=0)
         anel_term = w / rho * drho_dz
@@ -374,9 +400,9 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     return coeff * np.sum(np.square(div)) / 2.0
 
 
-def calculate_mass_continuity_gradient(u, v, w, z, dx,
-                                       dy, dz, coeff=1500.0, anel=1,
-                                       upper_bc=True):
+def calculate_mass_continuity_gradient(
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+):
     """
     Calculates the gradient of mass continuity cost function. This is done by
     taking the negative gradient of the divergence of the wind field.
@@ -409,7 +435,7 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
     dudx = np.gradient(u, dx, axis=2)
     dvdy = np.gradient(v, dy, axis=1)
     dwdz = np.gradient(w, dz, axis=0)
-    if (anel == 1):
+    if anel == 1:
         rho = np.exp(-z / 10000.0)
         drho_dz = np.gradient(rho, dz, axis=0)
         anel_term = w / rho * drho_dz
@@ -424,8 +450,8 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
 
     # Impermeability condition
     grad_w[0, :, :] = 0
-    if(upper_bc is True):
-       grad_w[-1, :, :] = 0
+    if upper_bc is True:
+        grad_w[-1, :, :] = 0
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 
@@ -450,28 +476,24 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     """
     # Parse names of velocity field
     if refl_field is None:
-        refl_field = pyart.config.get_field_name('reflectivity')
+        refl_field = pyart.config.get_field_name("reflectivity")
 
-    refl = grid.fields[refl_field]['data']
-    grid_z = grid.point_z['data']
+    refl = grid.fields[refl_field]["data"]
+    grid_z = grid.point_z["data"]
     term_vel = np.zeros(refl.shape)
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
     rho = np.exp(-grid_z / 10000.0)
     A[np.logical_and(grid_z < frz, refl < 55)] = -2.6
     B[np.logical_and(grid_z < frz, refl < 55)] = 0.0107
-    A[np.logical_and(grid_z < frz,
-                     np.logical_and(refl >= 55, refl < 60))] = -2.5
-    B[np.logical_and(grid_z < frz,
-                     np.logical_and(refl >= 55, refl < 60))] = 0.013
+    A[np.logical_and(grid_z < frz, np.logical_and(refl >= 55, refl < 60))] = -2.5
+    B[np.logical_and(grid_z < frz, np.logical_and(refl >= 55, refl < 60))] = 0.013
     A[np.logical_and(grid_z < frz, refl > 60)] = -3.95
     B[np.logical_and(grid_z < frz, refl > 60)] = 0.0148
     A[np.logical_and(grid_z >= frz, refl < 33)] = -0.817
     B[np.logical_and(grid_z >= frz, refl < 33)] = 0.0063
-    A[np.logical_and(grid_z >= frz,
-                     np.logical_and(refl >= 33, refl < 49))] = -2.5
-    B[np.logical_and(grid_z >= frz,
-                     np.logical_and(refl >= 33, refl < 49))] = 0.013
+    A[np.logical_and(grid_z >= frz, np.logical_and(refl >= 33, refl < 49))] = -2.5
+    B[np.logical_and(grid_z >= frz, np.logical_and(refl >= 33, refl < 49))] = 0.013
     A[np.logical_and(grid_z >= frz, refl > 49)] = -3.95
     B[np.logical_and(grid_z >= frz, refl > 49)] = 0.0148
 
@@ -509,8 +531,10 @@ def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
     the_shape = u.shape
     cost = 0
     for i in range(the_shape[0]):
-        cost += (Cb * np.sum(np.square(u[i] - u_back[i]) * (weights[i]) +
-                             np.square(v[i] - v_back[i]) * (weights[i])))
+        cost += Cb * np.sum(
+            np.square(u[i] - u_back[i]) * (weights[i])
+            + np.square(v[i] - v_back[i]) * (weights[i])
+        )
     return cost
 
 
@@ -552,8 +576,7 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
     return y.flatten()
 
 
-def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
-                                      coeff=1e-5):
+def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     """
     Calculates the cost function due to deviance from vertical vorticity
     equation. For more information of the vertical vorticity cost function,
@@ -604,14 +627,19 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     dzeta_dx = np.gradient(zeta, dx, axis=2)
     dzeta_dy = np.gradient(zeta, dy, axis=1)
     dzeta_dz = np.gradient(zeta, dz, axis=0)
-    jv_array = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy +
-                w * dzeta_dz + (dvdz * dwdx - dudz * dwdy) +
-                zeta * (dudx + dvdy))
-    return np.sum(coeff * jv_array ** 2)
+    jv_array = (
+        (u - Ut) * dzeta_dx
+        + (v - Vt) * dzeta_dy
+        + w * dzeta_dz
+        + (dvdz * dwdx - dudz * dwdy)
+        + zeta * (dudx + dvdy)
+    )
+    return np.sum(coeff * jv_array**2)
 
 
-def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5, upper_bc=True):
+def calculate_vertical_vorticity_gradient(
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
+):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -676,8 +704,13 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
     dudxdz = np.gradient(dudx, dz, axis=0)
     dudy2 = np.gradient(dudx, dy, axis=1)
 
-    dzeta_dt = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy + w * dzeta_dz +
-                (dvdz * dwdx - dudz * dwdy) + zeta * (dudx + dvdy))
+    dzeta_dt = (
+        (u - Ut) * dzeta_dx
+        + (v - Vt) * dzeta_dy
+        + w * dzeta_dz
+        + (dvdz * dwdx - dudz * dwdy)
+        + zeta * (dudx + dvdy)
+    )
 
     # Now we intialize our gradient value
     u_grad = np.zeros(u.shape)
@@ -702,17 +735,16 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
     u_grad = u_grad * 2 * dzeta_dt * coeff
     v_grad = v_grad * 2 * dzeta_dt * coeff
     w_grad = w_grad * 2 * dzeta_dt * coeff
-    
+
     # Impermeability condition
     w_grad[0, :, :] = 0
-    if(upper_bc is True):
-       w_grad[-1, :, :] = 0
+    if upper_bc is True:
+        w_grad[-1, :, :] = 0
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
 
 
-def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
-                         coeff=1.0):
+def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as the sum of squares of the differences
@@ -746,13 +778,14 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
 
     cost = 0
     for i in range(len(u_model)):
-        cost += (coeff * np.sum(np.square(u - u_model[i]) * weights[i] +
-                                np.square(v - v_model[i]) * weights[i]))
+        cost += coeff * np.sum(
+            np.square(u - u_model[i]) * weights[i]
+            + np.square(v - v_model[i]) * weights[i]
+        )
     return cost
 
 
-def calculate_model_gradient(u, v, w, weights, u_model,
-                             v_model, w_model, coeff=1.0):
+def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as twice the differences
@@ -793,4 +826,3 @@ def calculate_model_gradient(u, v, w, weights, u_model,
 
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
-

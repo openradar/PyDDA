@@ -5,7 +5,7 @@ pydda.initialization (pydda.initialization)
 
 .. currentmodule:: pydda.initialization
 
-The module containing the core techniques for the multiple doppler 
+The module containing the core techniques for the multiple doppler
 wind retrieval. All of these techniques take in data from
 a desired format and will return a 3-tuple of numpy arrays that
 are in the same shape as the input Py-ART Grid object used

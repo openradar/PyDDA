@@ -18,7 +18,7 @@ You can add subsections like this:
 Section 1
 -------------
 
-Or like this 
+Or like this
 
 ++++++++++++
 Subsection 1
