@@ -7,16 +7,18 @@ import tempfile
 # We want cfgrib to be an optional dependency to ensure Windows compatibility
 try:
     import cfgrib
+
     CFGRIB_AVAILABLE = True
-except:
+except ImportError:
     CFGRIB_AVAILABLE = False
 
 # We really only need the API to download the data, make ECMWF API an
 # optional dependency since not everyone will have a login from the start.
 try:
     from ecmwfapi import ECMWFDataServer
+
     ECMWF_AVAILABLE = True
-except:
+except ImportError:
     ECMWF_AVAILABLE = False
 
 from netCDF4 import Dataset
@@ -26,9 +28,9 @@ from scipy.interpolate import NearestNDInterpolator
 from copy import deepcopy
 
 
-
-def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
-                                         dest_era_file=None):
+def make_initialization_from_era_interim(
+    Grid, file_name=None, vel_field=None, dest_era_file=None
+):
     """
     This function will read ERA Interim in NetCDF format and add it
     to the Py-ART grid specified by Grid. PyDDA will automatically download
@@ -65,29 +67,43 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
 
     """
     if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
+        vel_field = pyart.config.get_field_name("corrected_velocity")
 
     if ECMWF_AVAILABLE is False and file_name is None:
-        raise (ModuleNotFoundError,
-               ("The ECMWF API is not installed. Go to" +
-                "https://confluence.ecmwf.int/display/WEBAPI" +
-                "/Access+ECMWF+Public+Datasets" +
-                " in order to use the auto download feature."))
+        raise (
+            ModuleNotFoundError,
+            (
+                "The ECMWF API is not installed. Go to"
+                + "https://confluence.ecmwf.int/display/WEBAPI"
+                + "/Access+ECMWF+Public+Datasets"
+                + " in order to use the auto download feature."
+            ),
+        )
 
-    grid_time = datetime.strptime(Grid.time["units"],
-                                  "seconds since %Y-%m-%dT%H:%M:%SZ")
-    hour_rounded_to_nearest_3 = int(3 * round(float(grid_time.hour)/3))
+    grid_time = datetime.strptime(
+        Grid.time["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
+    )
+    hour_rounded_to_nearest_3 = int(3 * round(float(grid_time.hour) / 3))
 
     if hour_rounded_to_nearest_3 == 24:
         grid_time = grid_time + timedelta(days=1)
-        grid_time = datetime(grid_time.year, grid_time.month,
-                             grid_time.day, 0, grid_time.minute,
-                             grid_time.second)
+        grid_time = datetime(
+            grid_time.year,
+            grid_time.month,
+            grid_time.day,
+            0,
+            grid_time.minute,
+            grid_time.second,
+        )
     else:
-        grid_time = datetime(grid_time.year, grid_time.month,
-                             grid_time.day,
-                             hour_rounded_to_nearest_3,
-                             grid_time.minute, grid_time.second)
+        grid_time = datetime(
+            grid_time.year,
+            grid_time.month,
+            grid_time.day,
+            hour_rounded_to_nearest_3,
+            grid_time.minute,
+            grid_time.second,
+        )
 
     if file_name is not None:
         if not os.path.isfile(file_name):
@@ -100,43 +116,46 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
         # Geopotential is needed to convert into height coordinates
 
         retrieve_dict = {}
-        retrieve_dict['stream'] = "oper"
-        retrieve_dict['levtype'] = "pl"
-        retrieve_dict['param'] = "131.128/132.128/135.128/129.128"
-        retrieve_dict['dataset'] = "interim"
-        retrieve_dict['levelist'] = ("1/2/3/5/7/10/20/30/50/70/100/125/150/" +
-                                     "175/200/225/250/300/350/400/450/500/" +
-                                     "550/600/650/700/750/775/800/825/850/" +
-                                     "875/900/925/950/975/1000")
-        retrieve_dict['step'] = "%d" % grid_time.hour
-        retrieve_dict['date'] = grid_time.strftime("%Y-%m-%d")
-        retrieve_dict['class'] = "ei"
-        retrieve_dict['grid'] = "0.75/0.75"
+        retrieve_dict["stream"] = "oper"
+        retrieve_dict["levtype"] = "pl"
+        retrieve_dict["param"] = "131.128/132.128/135.128/129.128"
+        retrieve_dict["dataset"] = "interim"
+        retrieve_dict["levelist"] = (
+            "1/2/3/5/7/10/20/30/50/70/100/125/150/"
+            + "175/200/225/250/300/350/400/450/500/"
+            + "550/600/650/700/750/775/800/825/850/"
+            + "875/900/925/950/975/1000"
+        )
+        retrieve_dict["step"] = "%d" % grid_time.hour
+        retrieve_dict["date"] = grid_time.strftime("%Y-%m-%d")
+        retrieve_dict["class"] = "ei"
+        retrieve_dict["grid"] = "0.75/0.75"
         N = "%4.1f" % Grid.point_latitude["data"].max()
         S = "%4.1f" % Grid.point_latitude["data"].min()
         E = "%4.1f" % Grid.point_longitude["data"].max()
         W = "%4.1f" % Grid.point_longitude["data"].min()
 
-        retrieve_dict['area'] = N + "/" + W + "/" + S + "/" + E
-        retrieve_dict['format'] = "netcdf"
+        retrieve_dict["area"] = N + "/" + W + "/" + S + "/" + E
+        retrieve_dict["format"] = "netcdf"
         if dest_era_file is not None:
-            retrieve_dict['target'] = dest_era_file
+            retrieve_dict["target"] = dest_era_file
             file_name = dest_era_file
         else:
             tfile = tempfile.NamedTemporaryFile()
-            retrieve_dict['target'] = tfile.name
+            retrieve_dict["target"] = tfile.name
             file_name = tfile.name
         server = ECMWFDataServer()
         server.retrieve(retrieve_dict)
 
-    ERA_grid = Dataset(file_name, mode='r')
-    base_time = datetime.strptime(ERA_grid.variables["time"].units,
-                                  "hours since %Y-%m-%d %H:%M:%S.%f")
+    ERA_grid = Dataset(file_name, mode="r")
+    base_time = datetime.strptime(
+        ERA_grid.variables["time"].units, "hours since %Y-%m-%d %H:%M:%S.%f"
+    )
     time_seconds = ERA_grid.variables["time"][:]
     our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
     time_step = np.argmin(np.abs(base_time - grid_time))
 
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
+    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
 
     height_ERA = ERA_grid.variables["z"][:]
     u_ERA = ERA_grid.variables["u"][:]
@@ -144,9 +163,9 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
     w_ERA = ERA_grid.variables["w"][:]
     lon_ERA = ERA_grid.variables["longitude"][:]
     lat_ERA = ERA_grid.variables["latitude"][:]
-    radar_grid_lat = Grid.point_latitude['data']
-    radar_grid_lon = Grid.point_longitude['data']
-    radar_grid_alt = Grid.point_z['data']
+    radar_grid_lat = Grid.point_latitude["data"]
+    radar_grid_lon = Grid.point_longitude["data"]
+    radar_grid_alt = Grid.point_z["data"]
     u_flattened = u_ERA[time_step].flatten()
     v_flattened = v_ERA[time_step].flatten()
     w_flattened = w_ERA[time_step].flatten()
@@ -162,14 +181,14 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
     height_flattened -= Grid.radar_altitude["data"]
 
     u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened),
-        u_flattened, rescale=True)
+        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+    )
     v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened),
-        v_flattened, rescale=True)
+        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+    )
     w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened),
-        w_flattened, rescale=True)
+        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+    )
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
@@ -177,7 +196,7 @@ def make_initialization_from_era_interim(Grid, file_name=None, vel_field=None,
     # Free up memory
     ERA_grid.close()
 
-    if 'tfile' in locals():
+    if "tfile" in locals():
         tfile.close()
 
     return u_new, v_new, w_new
@@ -212,32 +231,32 @@ def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
 
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
+        vel_field = pyart.config.get_field_name("corrected_velocity")
+    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
 
-    u = wind[0]*np.ones(analysis_grid_shape)
-    v = wind[1]*np.ones(analysis_grid_shape)
-    w = wind[2]*np.ones(analysis_grid_shape)
+    u = wind[0] * np.ones(analysis_grid_shape)
+    v = wind[1] * np.ones(analysis_grid_shape)
+    w = wind[2] * np.ones(analysis_grid_shape)
     u = np.ma.filled(u, 0)
     v = np.ma.filled(v, 0)
     w = np.ma.filled(w, 0)
     u_field = {}
-    u_field['data'] = u
-    u_field['standard_name'] = 'u_wind'
-    u_field['long_name'] = 'meridional component of wind velocity'
+    u_field["data"] = u
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field['data'] = v
-    v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity'
+    v_field["data"] = v
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field['data'] = w
-    w_field['standard_name'] = 'w_wind'
-    w_field['long_name'] = 'vertical component of wind velocity'
-   
+    w_field["data"] = w
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
+
     temp_grid = deepcopy(Grid)
-    temp_grid.add_field('u', u_field, replace_existing=True)
-    temp_grid.add_field('v', v_field, replace_existing=True)
-    temp_grid.add_field('w', w_field, replace_existing=True)
+    temp_grid.add_field("u", u_field, replace_existing=True)
+    temp_grid.add_field("v", v_field, replace_existing=True)
+    temp_grid.add_field("w", w_field, replace_existing=True)
     return temp_grid
 
 
@@ -270,20 +289,18 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     """
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
+        vel_field = pyart.config.get_field_name("corrected_velocity")
+    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
     u = np.ones(analysis_grid_shape)
     v = np.ones(analysis_grid_shape)
     w = np.zeros(analysis_grid_shape)
     u_back = profile.u_wind
     v_back = profile.v_wind
     z_back = profile.height
-    u_interp = interp1d(
-        z_back, u_back, bounds_error=False, fill_value='extrapolate')
-    v_interp = interp1d(
-        z_back, v_back, bounds_error=False, fill_value='extrapolate')
-    u_back2 = u_interp(np.asarray(Grid.z['data']))
-    v_back2 = v_interp(np.asarray(Grid.z['data']))
+    u_interp = interp1d(z_back, u_back, bounds_error=False, fill_value="extrapolate")
+    v_interp = interp1d(z_back, v_back, bounds_error=False, fill_value="extrapolate")
+    u_back2 = u_interp(np.asarray(Grid.z["data"]))
+    v_back2 = v_interp(np.asarray(Grid.z["data"]))
     for i in range(analysis_grid_shape[0]):
         u[i] = u_back2[i]
         v[i] = v_back2[i]
@@ -291,27 +308,26 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     v = np.ma.filled(v, 0)
     w = np.ma.filled(w, 0)
     u_field = {}
-    u_field['data'] = u
-    u_field['standard_name'] = 'u_wind'
-    u_field['long_name'] = 'meridional component of wind velocity'
+    u_field["data"] = u
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field['data'] = v
-    v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity'
+    v_field["data"] = v
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field['data'] = w
-    w_field['standard_name'] = 'w_wind'
-    w_field['long_name'] = 'vertical component of wind velocity'
-   
+    w_field["data"] = w
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
+
     temp_grid = deepcopy(Grid)
-    temp_grid.add_field('u', u_field, replace_existing=True)
-    temp_grid.add_field('v', v_field, replace_existing=True)
-    temp_grid.add_field('w', w_field, replace_existing=True)
+    temp_grid.add_field("u", u_field, replace_existing=True)
+    temp_grid.add_field("v", v_field, replace_existing=True)
+    temp_grid.add_field("w", w_field, replace_existing=True)
     return temp_grid
 
 
-def make_background_from_wrf(Grid, file_path, wrf_time,
-                             radar_loc, vel_field=None):
+def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=None):
     """
     This function makes an initalization field based off of the u and w
     from a WRF run. Only u and v are used from the WRF file.
@@ -342,80 +358,83 @@ def make_background_from_wrf(Grid, file_path, wrf_time,
     """
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name('corrected_velocity')
+        vel_field = pyart.config.get_field_name("corrected_velocity")
 
-    analysis_grid_shape = Grid.fields[vel_field]['data'].shape
+    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
     u = np.ones(analysis_grid_shape)
     v = np.ones(analysis_grid_shape)
     w = np.zeros(analysis_grid_shape)
 
     # Load WRF grid
-    wrf_cdf = Dataset(file_path, mode='r')
-    W_wrf = wrf_cdf.variables['W'][:]
-    V_wrf = wrf_cdf.variables['V'][:]
-    U_wrf = wrf_cdf.variables['U'][:]
-    PH_wrf = wrf_cdf.variables['PH'][:]
-    PHB_wrf = wrf_cdf.variables['PHB'][:]
-    alt_wrf = (PH_wrf+PHB_wrf)/9.81
+    wrf_cdf = Dataset(file_path, mode="r")
+    W_wrf = wrf_cdf.variables["W"][:]
+    V_wrf = wrf_cdf.variables["V"][:]
+    U_wrf = wrf_cdf.variables["U"][:]
+    PH_wrf = wrf_cdf.variables["PH"][:]
+    PHB_wrf = wrf_cdf.variables["PHB"][:]
+    alt_wrf = (PH_wrf + PHB_wrf) / 9.81
 
-    new_grid_x = Grid.point_x['data']
-    new_grid_y = Grid.point_y['data']
-    new_grid_z = Grid.point_z['data']
+    new_grid_x = Grid.point_x["data"]
+    new_grid_y = Grid.point_y["data"]
+    new_grid_z = Grid.point_z["data"]
 
     # Find timestep from datetime
-    time_wrf = wrf_cdf.variables['Times']
+    time_wrf = wrf_cdf.variables["Times"]
     ntimes = time_wrf.shape[0]
     dts_wrf = []
     for i in range(ntimes):
-        x = ''.join([x.decode() for x in time_wrf[i]])
-        dts_wrf.append(datetime.strptime(x, '%Y-%m-%d_%H:%M:%S'))
+        x = "".join([x.decode() for x in time_wrf[i]])
+        dts_wrf.append(datetime.strptime(x, "%Y-%m-%d_%H:%M:%S"))
 
     dts_wrf = np.array(dts_wrf)
     timestep = np.where(dts_wrf == wrf_time)
-    if(len(timestep[0]) == 0):
+    if len(timestep[0]) == 0:
         raise ValueError(("Time " + str(wrf_time) + " not found in WRF file!"))
 
-    x_len = wrf_cdf.__getattribute__('WEST-EAST_GRID_DIMENSION')
-    y_len = wrf_cdf.__getattribute__('SOUTH-NORTH_GRID_DIMENSION')
+    x_len = wrf_cdf.__getattribute__("WEST-EAST_GRID_DIMENSION")
+    y_len = wrf_cdf.__getattribute__("SOUTH-NORTH_GRID_DIMENSION")
     dx = wrf_cdf.DX
     dy = wrf_cdf.DY
-    x = np.arange(0, x_len)*dx-radar_loc[0]*1e3
-    y = np.arange(0, y_len)*dy-radar_loc[1]*1e3
+    x = np.arange(0, x_len) * dx - radar_loc[0] * 1e3
+    y = np.arange(0, y_len) * dy - radar_loc[1] * 1e3
     z = np.mean(alt_wrf[timestep[0], :, :, :], axis=(0, 2, 3))
     x, y, z = np.meshgrid(x, y, z)
     z = np.squeeze(alt_wrf[timestep[0], :, :, :])
 
-    z_stag = (z[1:, :, :]+z[:-1, :, :])/2.0
-    x_stag = (x[:, :, 1:]+x[:, :, :-1])/2.0
-    y_stag = (y[:, 1:, :]+y[:, :-1, :])/2.0
+    z_stag = (z[1:, :, :] + z[:-1, :, :]) / 2.0
+    x_stag = (x[:, :, 1:] + x[:, :, :-1]) / 2.0
+    y_stag = (y[:, 1:, :] + y[:, :-1, :]) / 2.0
 
     W_wrf = np.squeeze(W_wrf[timestep[0], :, :, :])
     V_wrf = np.squeeze(V_wrf[timestep[0], :, :, :])
     U_wrf = np.squeeze(U_wrf[timestep[0], :, :, :])
 
-    w = griddata((z_stag, y, x), W_wrf,
-                 (new_grid_z, new_grid_y, new_grid_x), fill_value=0.)
-    v = griddata((z, y_stag, x), V_wrf,
-                 (new_grid_z, new_grid_y, new_grid_x), fill_value=0.)
-    u = griddata((z, y, x_stag), U_wrf,
-                 (new_grid_z, new_grid_y, new_grid_x), fill_value=0.)
+    w = griddata(
+        (z_stag, y, x), W_wrf, (new_grid_z, new_grid_y, new_grid_x), fill_value=0.0
+    )
+    v = griddata(
+        (z, y_stag, x), V_wrf, (new_grid_z, new_grid_y, new_grid_x), fill_value=0.0
+    )
+    u = griddata(
+        (z, y, x_stag), U_wrf, (new_grid_z, new_grid_y, new_grid_x), fill_value=0.0
+    )
 
     u_field = {}
-    u_field['data'] = u
-    u_field['standard_name'] = 'u_wind'
-    u_field['long_name'] = 'meridional component of wind velocity'
+    u_field["data"] = u
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field['data'] = v
-    v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity'
+    v_field["data"] = v
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field['data'] = w
-    w_field['standard_name'] = 'w_wind'
-    w_field['long_name'] = 'vertical component of wind velocity' 
+    w_field["data"] = w
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
     temp_grid = deepcopy(Grid)
-    temp_grid.add_field('u', u_field, replace_existing=True)
-    temp_grid.add_field('v', v_field, replace_existing=True)
-    temp_grid.add_field('w', w_field, replace_existing=True)
+    temp_grid.add_field("u", u_field, replace_existing=True)
+    temp_grid.add_field("v", v_field, replace_existing=True)
+    temp_grid.add_field("w", w_field, replace_existing=True)
     return temp_grid
 
 
@@ -440,32 +459,37 @@ def make_intialization_from_hrrr(Grid, file_path):
         correspond to the same x, y, and z locations as in Grid.
     """
 
-    if(CFGRIB_AVAILABLE is False):
-        raise RuntimeError(("The cfgrib optional dependency needs to be " +
-                            "installed for the HRRR integration feature."))
+    if CFGRIB_AVAILABLE is False:
+        raise RuntimeError(
+            (
+                "The cfgrib optional dependency needs to be "
+                + "installed for the HRRR integration feature."
+            )
+        )
 
     the_grib = cfgrib.open_file(
-        file_path, filter_by_keys={'typeOfLevel': 'isobaricInhPa'})
+        file_path, filter_by_keys={"typeOfLevel": "isobaricInhPa"}
+    )
 
     # Load the HRR data and tranform longitude coordinates
-    grb_u = the_grib.variables['u']
-    grb_v = the_grib.variables['v']
-    grb_w = the_grib.variables['w']
-    gh = the_grib.variables['gh']
+    grb_u = the_grib.variables["u"]
+    grb_v = the_grib.variables["v"]
+    grb_w = the_grib.variables["w"]
+    gh = the_grib.variables["gh"]
 
-    lat = the_grib.variables['latitude'].data[:, :]
-    lon = the_grib.variables['longitude'].data[:, :]
+    lat = the_grib.variables["latitude"].data[:, :]
+    lon = the_grib.variables["longitude"].data[:, :]
     lon[lon > 180] = lon[lon > 180] - 360
 
     # Convert geometric height to geopotential height
     EARTH_MEAN_RADIUS = 6.3781e6
     gh = gh.data[:, :, :]
-    height = (EARTH_MEAN_RADIUS*gh)/(EARTH_MEAN_RADIUS-gh)
-    height = height - Grid.radar_altitude['data']
+    height = (EARTH_MEAN_RADIUS * gh) / (EARTH_MEAN_RADIUS - gh)
+    height = height - Grid.radar_altitude["data"]
 
-    radar_grid_lat = Grid.point_latitude['data']
-    radar_grid_lon = Grid.point_longitude['data']
-    radar_grid_alt = Grid.point_z['data']
+    radar_grid_lat = Grid.point_latitude["data"]
+    radar_grid_lon = Grid.point_longitude["data"]
+    radar_grid_alt = Grid.point_z["data"]
     lat_min = radar_grid_lat.min()
     lat_max = radar_grid_lat.max()
     lon_min = radar_grid_lon.min()
@@ -475,11 +499,16 @@ def make_intialization_from_hrrr(Grid, file_path):
     lon_flattened = lon_r.flatten()
     lat_flattened = lat_r.flatten()
     height_flattened = gh.flatten()
-    the_box = np.where(np.logical_and.reduce(
-                       (lon_flattened >= lon_min,
-                        lat_flattened >= lat_min,
-                        lon_flattened <= lon_max,
-                        lat_flattened <= lat_max)))[0]
+    the_box = np.where(
+        np.logical_and.reduce(
+            (
+                lon_flattened >= lon_min,
+                lat_flattened >= lat_min,
+                lon_flattened <= lon_max,
+                lat_flattened <= lat_max,
+            )
+        )
+    )[0]
 
     lon_flattened = lon_flattened[the_box]
     lat_flattened = lat_flattened[the_box]
@@ -488,22 +517,22 @@ def make_intialization_from_hrrr(Grid, file_path):
     u_flattened = grb_u.data[:, :, :].flatten()
     u_flattened = u_flattened[the_box]
     u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened),
-        u_flattened, rescale=True)
+        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+    )
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
     v_flattened = grb_v.data[:, :, :].flatten()
     v_flattened = v_flattened[the_box]
     v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened),
-        v_flattened, rescale=True)
+        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+    )
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
     w_flattened = grb_v.data[:, :, :].flatten()
     w_flattened = w_flattened[the_box]
     w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened),
-        w_flattened, rescale=True)
+        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+    )
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
     del grb_u, grb_v, grb_w, lat, lon
@@ -511,19 +540,19 @@ def make_intialization_from_hrrr(Grid, file_path):
     gc.collect()
 
     u_field = {}
-    u_field['data'] = u_new
-    u_field['standard_name'] = 'u_wind'
-    u_field['long_name'] = 'meridional component of wind velocity'
+    u_field["data"] = u_new
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field['data'] = v_new
-    v_field['standard_name'] = 'v_wind'
-    v_field['long_name'] = 'zonal component of wind velocity'
+    v_field["data"] = v_new
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field['data'] = w_new
-    w_field['standard_name'] = 'w_wind'
-    w_field['long_name'] = 'vertical component of wind velocity'
+    w_field["data"] = w_new
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
     temp_grid = deepcopy(Grid)
-    temp_grid.add_field('u', u_field, replace_existing=True)
-    temp_grid.add_field('v', v_field, replace_existing=True)
-    temp_grid.add_field('w', w_field, replace_existing=True)
+    temp_grid.add_field("u", u_field, replace_existing=True)
+    temp_grid.add_field("v", v_field, replace_existing=True)
+    temp_grid.add_field("w", w_field, replace_existing=True)
     return temp_grid

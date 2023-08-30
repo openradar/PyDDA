@@ -3,7 +3,7 @@
 
 [<img src="https://anaconda.org/conda-forge/pydda/badges/version.svg">](https://anaconda.org/conda-forge/pydda)
 [<img src="https://anaconda.org/conda-forge/pydda/badges/downloads.svg">](https://anaconda.org/conda-forge/pydda/files)
-[<img src="https://img.shields.io/travis/openradar/PyDDA.svg">](https://travis-ci.org/openradar/PyDDA) 
+[<img src="https://img.shields.io/travis/openradar/PyDDA.svg">](https://travis-ci.org/openradar/PyDDA)
 [<img src="https://img.shields.io/badge/docs-here-green">](https://openradarscience.org/PyDDA)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg)](https://doi.org/10.5281/zenodo.3942686)
@@ -11,38 +11,38 @@
 ### A Pythonic Multiple Doppler Radar Wind Retrieval Package
 
 This software is designed to retrieve wind kinematics (u,v,w) in precipitation storm systems from
- one or more Doppler weather radars using three dimensional data assimilation. Other constraints, including 
- background fields (eg reanalysis) can be added. 
+ one or more Doppler weather radars using three dimensional data assimilation. Other constraints, including
+ background fields (eg reanalysis) can be added.
 
 This package is a rewrite of the Potvin et al. (2012) and Shapiro et al (2009) wind retrieval techniques into a purely
  Pythonic package for easier integration with Py-ART and Python. This allows for easy installation using pip and anaconda.
- This new package also uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus 
- using the predecessor code, [NASA-Multidop](https://github.com/nasa/MultiDop), as well as a more elegant syntax 
- as well as support for an arbitrary number of radars. The code is also threadsafe and has been tested using 
- HPC tools such as Dask on large (100+ core) clusers. 
+ This new package also uses a faster minimization technique, L-BFGS-B, which provides a factor of 2 to 5 speedup versus
+ using the predecessor code, [NASA-Multidop](https://github.com/nasa/MultiDop), as well as a more elegant syntax
+ as well as support for an arbitrary number of radars. The code is also threadsafe and has been tested using
+ HPC tools such as Dask on large (100+ core) clusers.
 
 
-The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter. 
-This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background 
-field from a grid. 
+The user has an option to adjust strength of data, mass continuity constraints as well as implement a low pass filter.
+This new version now also has an option to plot a horizontal cross section of a wind barb plot overlaid on a background
+field from a grid.
 
 Angles.py is from Multidop and was written by Timothy Lang of NASA.
 
 We recommend using Python 3.8+ or better and using anaconda or pip to install
 the required dependencies of PyDDA.
-    
+
 In addition, in order to use the capability to load HRRR data as a constraint, the [cfgrib](https://github.com/ecmwf/cfgrib) package is needed. Since this does not work on Windows, this is an optional depdenency for those who wish to use HRRR data. To install cfgrib, simply do:
 
     pip install cfgrib
-    
+
 Finally, PyDDA now supports Jax and TensorFlow as optional dependencies. PyDDA can be configured to use these two packages to perform the cost function minimization. We highly encourage users to take advantage of these two new engines, as they offer advantages such as better calculation of gradients and faster convergence. In addition, GPUs and TPUs are supported by these packages that can help drastically accelerate the calculations. For Tensorflow type:
 
     conda install -c conda-forge tensorflow=2.6 tensorflow-probability
-    
+
 For Jax, type:
 
     conda install -c conda-forge jax
-    
+
 =======
 ## Links to important documentation
 
@@ -52,7 +52,7 @@ For Jax, type:
 
 
 ## Installation instructions
-The best way to install PyDDA is by using pip.  
+The best way to install PyDDA is by using pip.
 If you are using PyDDA as an end user, type the following in a bash shell:
 
 ```
@@ -65,7 +65,7 @@ Or, if you have Anaconda, you can install using:
 conda install -c conda-forge pydda
 ```
 
-Installing from source is recommended if you want to use the latest features and want to make contributions to PyDDA. In 
+Installing from source is recommended if you want to use the latest features and want to make contributions to PyDDA. In
 order to install from source, in a bash shell or the Anaconda prompt if you are in Windows, type the following:
 ```
 git clone https://github.com/openradar/PyDDA
@@ -75,7 +75,7 @@ python setup.py install
 
 =======
 ## Acknowledgments
-Core components of the software are adopted from the [Multidop](https://github.com/nasa/MultiDop) package by converting the C code to Python. 
+Core components of the software are adopted from the [Multidop](https://github.com/nasa/MultiDop) package by converting the C code to Python.
 
 The development of this software is supported by the Climate Model Development and Validation (CMDV) activity which is funded by the Office of Biological and Environmental Research in the US Department of Energy Office of Science.
 

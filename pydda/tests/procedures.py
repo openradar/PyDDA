@@ -1,8 +1,10 @@
 import numpy as np
 import pyart
 
-def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
-                               back_u, back_v, x_center, y_center):
+
+def make_test_divergence_field(
+    Grid, wind_vel, z_ground, z_top, radius, back_u, back_v, x_center, y_center
+):
     """
     This function makes a test field with wind convergence at the surface
     and divergence aloft.
@@ -34,16 +36,16 @@ def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
          Initial U, V, W field
     """
 
-    x = Grid.point_x['data']
-    y = Grid.point_y['data']
-    z = Grid.point_z['data']
+    x = Grid.point_x["data"]
+    y = Grid.point_y["data"]
+    z = Grid.point_z["data"]
 
     theta = np.arctan2(x - x_center, y - y_center)
-    phi = np.pi*((z - z_ground)/(z_top - z_ground))
+    phi = np.pi * ((z - z_ground) / (z_top - z_ground))
     r = np.sqrt(np.square(x - x_center) + np.square(y - y_center))
 
-    u = wind_vel*(r/radius)**2*np.cos(phi)*np.sin(theta)*np.ones(x.shape)
-    v = wind_vel*(r/radius)**2*np.cos(phi)*np.cos(theta)*np.ones(x.shape)
+    u = wind_vel * (r / radius) ** 2 * np.cos(phi) * np.sin(theta) * np.ones(x.shape)
+    v = wind_vel * (r / radius) ** 2 * np.cos(phi) * np.cos(theta) * np.ones(x.shape)
     w = np.zeros(x.shape)
     u[r > radius] = back_u
     v[r > radius] = back_v
@@ -52,4 +54,3 @@ def make_test_divergence_field(Grid, wind_vel, z_ground, z_top, radius,
     v = np.ma.array(v)
     w = np.ma.array(w)
     return u, v, w
-

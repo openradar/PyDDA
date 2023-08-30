@@ -9,6 +9,3 @@ make clean
 make html
 cd ..
 doctr deploy .
-
-
-

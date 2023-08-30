@@ -36,5 +36,5 @@ from .streamline_plot import plot_xz_xsection_streamlines
 from .streamline_plot import plot_yz_xsection_streamlines
 from .quiver_plot import plot_horiz_xsection_quiver
 from .quiver_plot import plot_horiz_xsection_quiver_map
-from .quiver_plot import plot_horiz_xsection_quiver, plot_xz_xsection_quiver
+from .quiver_plot import plot_xz_xsection_quiver
 from .quiver_plot import plot_yz_xsection_quiver

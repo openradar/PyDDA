@@ -3,7 +3,7 @@
 Radar Data Quality Control - Dealiasing
 =======================================
 
-In this notebook, we will showcase how to preform quality control of your 
+In this notebook, we will showcase how to preform quality control of your
 radar files, specifically dealiasing velocities. By doing this we can provide
 PyDDA with quality controlled doppler velocities for dual doppler analysis.
 
@@ -135,9 +135,9 @@ Plot Velocity of Both Radars
 Determining Artifacts within Doppler Velocities
 -----------------------------------------------
 
-Before dealiasing the radar velocities, we need to remove noise and clutter 
-from the radar objects. Utilizing Py-ART, we will accomplish this by 
-calculating the velocity texture, or the standard deviation of velocity 
+Before dealiasing the radar velocities, we need to remove noise and clutter
+from the radar objects. Utilizing Py-ART, we will accomplish this by
+calculating the velocity texture, or the standard deviation of velocity
 surrounding a gate.
 
 Py-ART's calculate_velocity_texture function::
@@ -163,10 +163,10 @@ Py-ART's calculate_velocity_texture function::
 Velocity Texture Displays
 +++++++++++++++++++++++++
 
-Let's see what this velocity texture looks like. 
+Let's see what this velocity texture looks like.
 Additionally, a histogram of velocity texture values will allow for
 the determination of a threshold to distingiush the hydrometeor signal
-from artifacts. 
+from artifacts.
 
 .. code-block:: python
 
@@ -235,7 +235,7 @@ from artifacts.
     display.plot_ppi('velocity_texture',
                          sweep=0,
                          vmin=0,
-                         vmax=10, 
+                         vmax=10,
                          cmap=plt.get_cmap('twilight_shifted')
                          )
 
@@ -260,7 +260,7 @@ from artifacts.
 Filter Doppler Velocity Artifacts
 +++++++++++++++++++++++++++++++++
 
-Now that we have determined which velocity texture values correspond to 
+Now that we have determined which velocity texture values correspond to
 artifacts within the doppler velocity data, we utilize Py-ART's GateFilter
 to filter out these artifacts
 
@@ -276,12 +276,12 @@ Py-ART's GateFilter function::
     gatefilter_se.exclude_above('velocity_texture', 3)
 
 ----------------
-Apply Dealiasing 
+Apply Dealiasing
 ----------------
 
 Now that we have removed artifacts, we can proceed with dealiasing
 the doppler velocity data with Py-ART's Region-Based Dealiasing
-Algorithm. 
+Algorithm.
 
 The Region-Based Dealiasing finds regions of similar velocities and
 unfolds and merges these pairs of regions until all data are unfolded.
@@ -337,7 +337,7 @@ Let's check on our corrected velocity fields!
                        lon_lines=np.arange(-98, -96.75, 0.25),
                        cmap=plt.get_cmap('twilight_shifted')
     )
-    
+
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
     disp2 = pyart.graph.RadarMapDisplay(radar_se)
@@ -432,7 +432,7 @@ Let's check on our corrected velocity fields!
                        lon_lines=np.arange(-98, -96.75, 0.25),
                        cmap=plt.get_cmap('twilight_shifted')
     )
-    
+
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
     disp2 = pyart.graph.RadarMapDisplay(radar_se)
@@ -459,5 +459,5 @@ We then corrected the radar doppler velocities to remove artifacts and clutter.
 Finally, utilizing Py-ART, we applied a region-based dealiasing alogrithm to
 unfold the doppler velocities
 
-Now that we have corrected velocities, incorporating these radars into PyDDA 
-will be shown in the next notebook. 
+Now that we have corrected velocities, incorporating these radars into PyDDA
+will be shown in the next notebook.

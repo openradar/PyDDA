@@ -1,12 +1,16 @@
 import numpy as np
+
 try:
     import tensorflow as tf
+
     TENSORFLOW_AVAILABLE = True
 except ImportError:
     TENSORFLOW_AVAILABLE = False
 
-def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
-                                       w, wts, rmsVr, weights, coeff=1.0):
+
+def calculate_radial_vel_cost_function(
+    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
+):
     """
     Calculates the cost function due to difference of the wind field from
     radar radial velocities. For more information on this cost function, see
@@ -61,17 +65,20 @@ def calculate_radial_vel_cost_function(vrs, azs, els, u, v,
     lambda_o = coeff / (rmsVr * rmsVr)
 
     for i in range(len(vrs)):
-        v_ar = (tf.math.cos(els[i]) * tf.math.sin(azs[i]) * u +
-                tf.math.cos(els[i]) * tf.math.cos(azs[i]) * v +
-                tf.math.sin(els[i]) * (w - tf.math.abs(wts[i])))
-        J_o.assign_add(lambda_o * tf.reduce_sum(
-            tf.math.square(vrs[i] - v_ar) * weights[i]))
+        v_ar = (
+            tf.math.cos(els[i]) * tf.math.sin(azs[i]) * u
+            + tf.math.cos(els[i]) * tf.math.cos(azs[i]) * v
+            + tf.math.sin(els[i]) * (w - tf.math.abs(wts[i]))
+        )
+        J_o.assign_add(
+            lambda_o * tf.reduce_sum(tf.math.square(vrs[i] - v_ar) * weights[i])
+        )
     return J_o
 
 
-def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
-                              wts, weights, rmsVr, coeff=1.0, upper_bc=True,
-                              lower_bc=True):
+def calculate_grad_radial_vel(
+    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True, lower_bc=True
+):
     """
     Calculates the gradient of the cost function due to difference of wind
     field from radar radial velocities.
@@ -123,29 +130,35 @@ def calculate_grad_radial_vel(vrs, els, azs, u, v, w,
     lambda_o = coeff / (rmsVr * rmsVr)
 
     for i in range(len(vrs)):
-        v_ar = (tf.math.cos(els[i]) * tf.math.sin(azs[i]) * u +
-                tf.math.cos(els[i]) * tf.math.cos(azs[i]) * v +
-                tf.math.sin(els[i]) * (w - tf.math.abs(wts[i])))
+        v_ar = (
+            tf.math.cos(els[i]) * tf.math.sin(azs[i]) * u
+            + tf.math.cos(els[i]) * tf.math.cos(azs[i]) * v
+            + tf.math.sin(els[i]) * (w - tf.math.abs(wts[i]))
+        )
 
-        x_grad = (2 * (v_ar - vrs[i]) * tf.math.cos(els[i]) *
-                  tf.math.sin(azs[i]) * weights[i]) * lambda_o
-        y_grad = (2 * (v_ar - vrs[i]) * tf.math.cos(els[i]) *
-                  tf.math.cos(azs[i]) * weights[i]) * lambda_o
+        x_grad = (
+            2 * (v_ar - vrs[i]) * tf.math.cos(els[i]) * tf.math.sin(azs[i]) * weights[i]
+        ) * lambda_o
+        y_grad = (
+            2 * (v_ar - vrs[i]) * tf.math.cos(els[i]) * tf.math.cos(azs[i]) * weights[i]
+        ) * lambda_o
         z_grad = (2 * (v_ar - vrs[i]) * tf.math.sin(els[i]) * weights[i]) * lambda_o
 
         p_x1.assign_add(x_grad)
         p_y1.assign_add(y_grad)
         p_z1.assign_add(z_grad)
 
-
     # Impermeability condition
     if lower_bc is True:
         p_z1 = tf.concat(
-            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]],
+            axis=0,
+        )
+    if upper_bc is True:
         p_z1 = tf.concat(
-            [p_z1[:-1, :, :],
-             tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -188,17 +201,39 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdy = _tf_gradient(w, dy, axis=1)
     dwdz = _tf_gradient(w, dz, axis=0)
 
-    x_term = Cx * (_tf_gradient(dudx, dx, axis=2) + _tf_gradient(dvdx, dx, axis=2) +
-                   _tf_gradient(dwdx, dx, axis=2)) ** 2
-    y_term = Cy * (_tf_gradient(dudy, dy, axis=1) + _tf_gradient(dvdy, dy, axis=1) +
-                   _tf_gradient(dwdy, dy, axis=1)) ** 2
-    z_term = Cz * (_tf_gradient(dudz, dz, axis=0) + _tf_gradient(dvdz, dz, axis=0) +
-                   _tf_gradient(dwdz, dz, axis=0)) ** 2
+    x_term = (
+        Cx
+        * (
+            _tf_gradient(dudx, dx, axis=2)
+            + _tf_gradient(dvdx, dx, axis=2)
+            + _tf_gradient(dwdx, dx, axis=2)
+        )
+        ** 2
+    )
+    y_term = (
+        Cy
+        * (
+            _tf_gradient(dudy, dy, axis=1)
+            + _tf_gradient(dvdy, dy, axis=1)
+            + _tf_gradient(dwdy, dy, axis=1)
+        )
+        ** 2
+    )
+    z_term = (
+        Cz
+        * (
+            _tf_gradient(dudz, dz, axis=0)
+            + _tf_gradient(dvdz, dz, axis=0)
+            + _tf_gradient(dwdz, dz, axis=0)
+        )
+        ** 2
+    )
     return tf.math.reduce_sum(x_term + y_term + z_term)
 
 
-def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5,
-                                  upper_bc=True, lower_bc=True):
+def calculate_smoothness_gradient(
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True, lower_bc=True
+):
     """
     Calculates the gradient of the smoothness cost function
     by taking the Laplacian of the Laplacian of the wind field.
@@ -234,22 +269,25 @@ def calculate_smoothness_gradient(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5
         tape.watch(u)
         tape.watch(v)
         tape.watch(w)
-        loss = calculate_smoothness_cost(u, v, w,
-                                         dx, dy, dz, Cx=Cx, Cy=Cy, Cz=Cz)
+        loss = calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=Cx, Cy=Cy, Cz=Cz)
 
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
     if lower_bc is True:
-        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
-                          p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
         p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]],
+            axis=0,
+        )
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -301,9 +339,16 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         up = tf.ones_like(u) * the_point["u"]
         vp = tf.ones_like(v) * the_point["v"]
 
-        the_box = tf.where(tf.math.logical_and(
-            tf.math.logical_and(tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi),
-            tf.math.abs(z - zp) < roi), 1., 0.)
+        the_box = tf.where(
+            tf.math.logical_and(
+                tf.math.logical_and(
+                    tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi
+                ),
+                tf.math.abs(z - zp) < roi,
+            ),
+            1.0,
+            0.0,
+        )
         J.assign_add(tf.math.reduce_sum(((u - up) ** 2 + (v - vp) ** 2) * the_box))
 
     return J * Cp
@@ -355,14 +400,22 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         up = tf.ones_like(u, dtype=tf.float32) * the_point["u"]
         vp = tf.ones_like(v, dtype=tf.float32) * the_point["v"]
 
-        the_box = tf.where(tf.math.logical_and(
-            tf.math.logical_and(tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi),
-            tf.math.abs(z - zp) < roi), 1., 0.)
+        the_box = tf.where(
+            tf.math.logical_and(
+                tf.math.logical_and(
+                    tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi
+                ),
+                tf.math.abs(z - zp) < roi,
+            ),
+            1.0,
+            0.0,
+        )
         gradJ_u.assign_add((2 * (u - up) * the_box))
-        gradJ_v.assign_add((2 * (v - vp) * the_box))                  
+        gradJ_v.assign_add((2 * (v - vp) * the_box))
     gradJ = tf.stack([gradJ_u, gradJ_v, gradJ_w], axis=0)
     gradJ = tf.reshape(gradJ, (3 * np.prod(u.shape),))
     return gradJ * Cp
+
 
 def _tf_diff(x, axis):
     if axis == 0:
@@ -371,36 +424,64 @@ def _tf_diff(x, axis):
         return x[:, 1:, :] - x[:, :-1, :]
     elif axis == 2:
         return x[:, :, 1:] - x[:, :, :-1]
-    
+
+
 def _tf_gradient(x, dx, axis):
     if axis == 0:
-        fd = _tf_diff(
-            tf.concat([x, tf.expand_dims(x[-1, :, :], 0)], axis=0), axis=0) / dx
-        bd = _tf_diff(
-            tf.concat([tf.expand_dims(x[0, :, :], 0), x], axis=0), axis=0) / dx
+        fd = (
+            _tf_diff(tf.concat([x, tf.expand_dims(x[-1, :, :], 0)], axis=0), axis=0)
+            / dx
+        )
+        bd = (
+            _tf_diff(tf.concat([tf.expand_dims(x[0, :, :], 0), x], axis=0), axis=0) / dx
+        )
     elif axis == 1:
-        fd = _tf_diff(
-            tf.concat([x, tf.expand_dims(x[:, -1, :], 1)], axis=1), axis=1) / dx
-        bd = _tf_diff(
-            tf.concat([tf.expand_dims(x[:, 0, :], 1), x], axis=1), axis=1) / dx
+        fd = (
+            _tf_diff(tf.concat([x, tf.expand_dims(x[:, -1, :], 1)], axis=1), axis=1)
+            / dx
+        )
+        bd = (
+            _tf_diff(tf.concat([tf.expand_dims(x[:, 0, :], 1), x], axis=1), axis=1) / dx
+        )
     elif axis == 2:
-        fd = _tf_diff(
-            tf.concat([x, tf.expand_dims(x[:, :, -1], 2)], axis=2), axis=2) / dx
-        bd = _tf_diff(
-            tf.concat([tf.expand_dims(x[:, :, 0], 2), x], axis=2), axis=2) / dx
+        fd = (
+            _tf_diff(tf.concat([x, tf.expand_dims(x[:, :, -1], 2)], axis=2), axis=2)
+            / dx
+        )
+        bd = (
+            _tf_diff(tf.concat([tf.expand_dims(x[:, :, 0], 2), x], axis=2), axis=2) / dx
+        )
 
     cd = (fd + bd) / 2
-    
+
     if axis == 0:
         return tf.concat(
-            [tf.expand_dims(fd[0, :, :], 0), cd[1:-1, :, :], tf.expand_dims(bd[-1, :, :], 0)], axis=0)
+            [
+                tf.expand_dims(fd[0, :, :], 0),
+                cd[1:-1, :, :],
+                tf.expand_dims(bd[-1, :, :], 0),
+            ],
+            axis=0,
+        )
     elif axis == 1:
         return tf.concat(
-            [tf.expand_dims(fd[:, 0, :], 1), cd[:, 1:-1, :], tf.expand_dims(bd[:, -1, :], 1)], axis=1)
+            [
+                tf.expand_dims(fd[:, 0, :], 1),
+                cd[:, 1:-1, :],
+                tf.expand_dims(bd[:, -1, :], 1),
+            ],
+            axis=1,
+        )
     elif axis == 2:
         return tf.concat(
-            [tf.expand_dims(fd[:, :, 0], 2), cd[:, :, 1:-1], tf.expand_dims(bd[:, :, -1], 2)], axis=2)
-    
+            [
+                tf.expand_dims(fd[:, :, 0], 2),
+                cd[:, :, 1:-1],
+                tf.expand_dims(bd[:, :, -1], 2),
+            ],
+            axis=2,
+        )
+
 
 def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     """
@@ -443,19 +524,20 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dvdy = _tf_gradient(v, dy, axis=1)
     dwdz = _tf_gradient(w, dz, axis=0)
 
-    if (anel == 1):
+    if anel == 1:
         drho_dz = _tf_gradient(rho, dz, axis=0)
-        anel_term = w / rho * drho_dz   
+        anel_term = w / rho * drho_dz
     else:
         anel_term = tf.ones(w.shape)
-        
-    return coeff * tf.math.reduce_sum(
-        tf.math.square(dudx + dvdy + dwdz*anel_term)) / 2.0
+
+    return (
+        coeff * tf.math.reduce_sum(tf.math.square(dudx + dvdy + dwdz * anel_term)) / 2.0
+    )
 
 
-def calculate_mass_continuity_gradient(u, v, w, z, dx,
-                                       dy, dz, coeff=1500.0, anel=1,
-                                       upper_bc=True, lower_bc=True):
+def calculate_mass_continuity_gradient(
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True, lower_bc=True
+):
     """
     Calculates the gradient of mass continuity cost function. This is done by
     taking the negative gradient of the divergence of the wind field.
@@ -498,20 +580,23 @@ def calculate_mass_continuity_gradient(u, v, w, z, dx,
         tape.watch(w)
         loss = calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff)
 
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
     if lower_bc is True:
         p_z1 = tf.concat(
-            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
-            p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
-        p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]],
+            axis=0,
+        )
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -545,12 +630,18 @@ def calculate_background_cost(u, v, weights, u_back, v_back, Cb=0.01):
         value of background cost function
     """
     the_shape = u.shape
-    cost = tf.Variable(0., dtype=tf.float32)
+    cost = tf.Variable(0.0, dtype=tf.float32)
 
     for i in range(the_shape[0]):
-        cost.assign_add(tf.math.reduce_sum(
-            Cb * (tf.math.square(u[i] - u_back[i]) * weights[i] + \
-            tf.math.square(v[i] - v_back[i]) * weights[i])))
+        cost.assign_add(
+            tf.math.reduce_sum(
+                Cb
+                * (
+                    tf.math.square(u[i] - u_back[i]) * weights[i]
+                    + tf.math.square(v[i] - v_back[i]) * weights[i]
+                )
+            )
+        )
 
     return cost
 
@@ -592,27 +683,38 @@ def calculate_background_gradient(u, v, weights, u_back, v_back, Cb=0.01):
 
     for i in range(the_shape[0]):
         add_array = tf.Variable(
-            Cb * 2 * (u[i] - u_back[i]) * (weights[i]), dtype=tf.float32)
-        add_array = tf.concat([
-            tf.zeros((i, the_shape[1], the_shape[2]), dtype=tf.float32),
-            tf.expand_dims(add_array, 0),
-            tf.zeros((the_shape[0] - i - 1, the_shape[1], the_shape[2]), dtype=tf.float32)],
-            axis=0)
+            Cb * 2 * (u[i] - u_back[i]) * (weights[i]), dtype=tf.float32
+        )
+        add_array = tf.concat(
+            [
+                tf.zeros((i, the_shape[1], the_shape[2]), dtype=tf.float32),
+                tf.expand_dims(add_array, 0),
+                tf.zeros(
+                    (the_shape[0] - i - 1, the_shape[1], the_shape[2]), dtype=tf.float32
+                ),
+            ],
+            axis=0,
+        )
         u_grad.assign_add(add_array)
-        add_array = tf.Variable(Cb * 2 * (v[i] - v_back[i]) * (weights[i]), 
-                                dtype=tf.float32)
-        add_array = tf.concat([
-            tf.zeros((i, the_shape[1], the_shape[2]), dtype=tf.float32),
-            tf.expand_dims(add_array, 0),
-            tf.zeros((the_shape[0] - i - 1, the_shape[1], the_shape[2]), dtype=tf.float32)],
-            axis=0)        
+        add_array = tf.Variable(
+            Cb * 2 * (v[i] - v_back[i]) * (weights[i]), dtype=tf.float32
+        )
+        add_array = tf.concat(
+            [
+                tf.zeros((i, the_shape[1], the_shape[2]), dtype=tf.float32),
+                tf.expand_dims(add_array, 0),
+                tf.zeros(
+                    (the_shape[0] - i - 1, the_shape[1], the_shape[2]), dtype=tf.float32
+                ),
+            ],
+            axis=0,
+        )
         v_grad.assign_add(add_array)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
 
-def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
-                                      coeff=1):
+def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1):
     """
     Calculates the cost function due to deviance from vertical vorticity
     equation. For more information of the vertical vorticity cost function,
@@ -657,7 +759,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1
 
     """
-    
+
     dvdz = _tf_gradient(v, dz, axis=0)
     dudz = _tf_gradient(u, dz, axis=0)
     dvdx = _tf_gradient(v, dx, axis=2)
@@ -666,23 +768,28 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt,
     dudx = _tf_gradient(u, dx, axis=2)
     dvdy = _tf_gradient(v, dy, axis=1)
     dudy = _tf_gradient(u, dy, axis=1)
-    #print(dvdx, np.gradient(v.numpy(), dx, axis=2))   
+    # print(dvdx, np.gradient(v.numpy(), dx, axis=2))
     zeta = dvdx - dudy
 
     dzeta_dx = _tf_gradient(zeta, dx, axis=2)
     dzeta_dy = _tf_gradient(zeta, dy, axis=1)
     dzeta_dz = _tf_gradient(zeta, dz, axis=0)
-  
-    jv_array = ((u - Ut) * dzeta_dx + (v - Vt) * dzeta_dy +
-                w * dzeta_dz + (dvdz * dwdx - dudz * dwdy) +
-                zeta * (dudx + dvdy))
-    
+
+    jv_array = (
+        (u - Ut) * dzeta_dx
+        + (v - Vt) * dzeta_dy
+        + w * dzeta_dz
+        + (dvdz * dwdx - dudz * dwdy)
+        + zeta * (dudx + dvdy)
+    )
+
     return tf.math.reduce_sum(coeff * tf.math.square(jv_array))
 
 
 # Using Jax version of function
-def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
-                                          coeff=1e-5, upper_bc=True, lower_bc=True):
+def calculate_vertical_vorticity_gradient(
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True, lower_bc=True
+):
     """
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
@@ -735,25 +842,28 @@ def calculate_vertical_vorticity_gradient(u, v, w, dx, dy, dz, Ut, Vt,
         tape.watch(v)
         tape.watch(w)
         loss = calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff)
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
-    p_z1 = grad['w']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
+    p_z1 = grad["w"]
 
     # Impermeability condition
     if lower_bc is True:
-        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
-                          p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
-        p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
+        p_z1 = tf.concat(
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]],
+            axis=0,
+        )
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
 
-def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
-                         coeff=1.0):
+def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as the sum of squares of the differences
@@ -789,14 +899,16 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model,
 
     cost = 0
     for i in range(len(u_model)):
-        cost += (coeff * tf.math.reduce_sum(tf.math.square(u - u_model[i]) * weights[i] +
-                                            tf.math.square(v - v_model[i]) * weights[i]))
+        cost += coeff * tf.math.reduce_sum(
+            tf.math.square(u - u_model[i]) * weights[i]
+            + tf.math.square(v - v_model[i]) * weights[i]
+        )
     return cost
 
 
-def calculate_model_gradient(u, v, w, weights, u_model,
-                             v_model, w_model, coeff=1.0, upper_bc=True,
-                             lower_bc=True):
+def calculate_model_gradient(
+    u, v, w, weights, u_model, v_model, w_model, coeff=1.0, upper_bc=True, lower_bc=True
+):
     """
     Calculates the cost function for the model constraint.
     This is calculated simply as twice the differences
@@ -835,20 +947,25 @@ def calculate_model_gradient(u, v, w, weights, u_model,
         tape.watch(v)
         tape.watch(w)
         loss = calculate_model_cost(
-            u, v, w, weights, u_model, v_model, w_model, coeff=coeff)
+            u, v, w, weights, u_model, v_model, w_model, coeff=coeff
+        )
 
-    vars = {'u': u, 'v': v, 'w': w}
+    vars = {"u": u, "v": v, "w": w}
     grad = tape.gradient(loss, vars)
-    p_x1 = grad['u']
-    p_y1 = grad['v']
+    p_x1 = grad["u"]
+    p_y1 = grad["v"]
     p_z1 = tf.zeros(p_x1.shape)
 
     # Impermeability condition
     if lower_bc is True:
-        p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32),
-                          p_z1[1:, :, :]], axis=0)
-    if (upper_bc is True):
-        p_z1 = tf.concat([p_z1[:-1, :, :],
-                          tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)], axis=0)
+        p_z1 = tf.concat(
+            [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32), p_z1[1:, :, :]],
+            axis=0,
+        )
+    if upper_bc is True:
+        p_z1 = tf.concat(
+            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float32)],
+            axis=0,
+        )
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
