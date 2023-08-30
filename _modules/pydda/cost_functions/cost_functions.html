@@ -149,18 +149,22 @@
                 
   <h1>Source code for pydda.cost_functions.cost_functions</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="c1">#Adding jax inport statements</span>
+
+<span class="c1"># Adding jax inport statements</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+
     <span class="n">TENSORFLOW_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">TENSORFLOW_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">jax.config</span> <span class="kn">import</span> <span class="n">config</span>
+
     <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">float0</span>
     <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+
     <span class="n">JAX_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">JAX_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
@@ -168,10 +172,11 @@
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">import</span> <span class="nn">scipy.ndimage.filters</span>
 
-<span class="c1">#Added to incorpeate JAX within the cost functions</span>
+<span class="c1"># Added to incorpeate JAX within the cost functions</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cost_functions_jax</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cost_functions_numpy</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_cost_functions_tensorflow</span>
+
 
 <div class="viewcode-block" id="J_function"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function">[docs]</a><span class="k">def</span> <span class="nf">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -197,193 +202,375 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensorflow&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">TENSORFLOW_AVAILABLE</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!&quot;</span><span class="p">)</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="c1">#Had to change to float because Jax returns device array (use np.float_())</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!&quot;</span>
+            <span class="p">)</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
         <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
-             <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>  <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-             <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">)</span>
-        <span class="c1">#print(&quot;apples Jvel&quot;, Jvel)</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="c1">#Had to change to float because Jax returns device array (use np.float_())</span>
-            <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
+            <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jsmooth</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_smoothness_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+                <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+                <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jsmooth</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jbackground</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_background_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jbackground</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="c1">#Had to change to float because Jax returns device array (use np.float_())</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
             <span class="n">Jvorticity</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_vertical_vorticity_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jvorticity</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jmod</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_model_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
                 <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jmod</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_point_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
+                <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
+                <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
         <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-            <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                                                    <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-                                                                    <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">)</span>
+            <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jsmooth</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_smoothness_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+                <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+                <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jsmooth</span> <span class="o">=</span> <span class="mi">0</span>
-     
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jbackground</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_background_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jbackground</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
             <span class="n">Jvorticity</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_vertical_vorticity_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jvorticity</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jmod</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_model_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jmod</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_point_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
+                <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
+                <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">JAX_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Jax is needed in order to use the Jax-based PyDDA!&quot;</span><span class="p">)</span>
 
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
         <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-            <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                                                 <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-                                                                 <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">)</span>
+            <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jsmooth</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_smoothness_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+                <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+                <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jsmooth</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jbackground</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_background_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jbackground</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
             <span class="n">Jvorticity</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_vertical_vorticity_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jvorticity</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jmod</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_model_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jmod</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_point_cost</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
+                <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
+                <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="mi">0</span>
-            
-    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">((</span><span class="s1">&#39;Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |&#39;</span> <span class="o">+</span>
-                <span class="s1">&#39; Max w  &#39;</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">((</span> <span class="s2">&quot;</span><span class="si">{:7d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jvel</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jmass</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jsmooth</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jbackground</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jvorticity</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jmod</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jpoint</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;|&#39;</span> <span class="o">+</span>
-                <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">])))))</span>
+
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot; Max w  &quot;</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{:7d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jvel</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jmass</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jsmooth</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jbackground</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jvorticity</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jmod</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">Jpoint</span><span class="p">))</span>
+                <span class="o">+</span> <span class="s2">&quot;|&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:9.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="c1">#print(&quot;The cost functions print&quot;, Jvel + Jmass)</span>
+    <span class="c1"># print(&quot;The cost functions print&quot;, Jvel + Jmass)</span>
 
     <span class="k">return</span> <span class="n">Jvel</span> <span class="o">+</span> <span class="n">Jmass</span> <span class="o">+</span> <span class="n">Jsmooth</span> <span class="o">+</span> <span class="n">Jbackground</span> <span class="o">+</span> <span class="n">Jvorticity</span> <span class="o">+</span> <span class="n">Jmod</span> <span class="o">+</span> <span class="n">Jpoint</span></div>
 
@@ -411,137 +598,312 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;tensorflow&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">TENSORFLOW_AVAILABLE</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!&quot;</span><span class="p">)</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!&quot;</span>
+            <span class="p">)</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-            <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">)</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+            <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
                 <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-                <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">)</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_smoothness_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+                <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+                <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_background_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-                <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
-        <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_model_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_point_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
                 <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
+                <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
+                <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+            <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_smoothness_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>  <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+                <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+                <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_background_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_model_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_point_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span><span class="p">:</span>
-        <span class="n">winds</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span>
-                           <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
                 <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
+                <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
+                <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span><span class="p">:</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+            <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_smoothness_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+                <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+                <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_background_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+            <span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Ut</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_model_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_jax</span><span class="o">.</span><span class="n">calculate_point_gradient</span><span class="p">(</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">)</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
+                <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
+                <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
-    <span class="k">if</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Nfeval</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The gradient of the cost functions is&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">grad</span></div>
 
@@ -570,28 +932,24 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
 
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">term_vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">grid_z</span><span class="o">/</span><span class="mf">10000.0</span><span class="p">)</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">grid_z</span> <span class="o">/</span> <span class="mf">10000.0</span><span class="p">)</span>
     <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">55</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.6</span>
     <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">55</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0107</span>
-    <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span>
-                     <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">55</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">))]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.5</span>
-    <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span>
-                     <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">55</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">))]</span> <span class="o">=</span> <span class="mf">0.013</span>
+    <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">55</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">))]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.5</span>
+    <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">55</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">))]</span> <span class="o">=</span> <span class="mf">0.013</span>
     <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.95</span>
     <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&lt;</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&gt;</span> <span class="mi">60</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0148</span>
     <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">33</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.817</span>
     <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">33</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0063</span>
-    <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span>
-                     <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">33</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">49</span><span class="p">))]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.5</span>
-    <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span>
-                     <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">33</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">49</span><span class="p">))]</span> <span class="o">=</span> <span class="mf">0.013</span>
+    <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">33</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">49</span><span class="p">))]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.5</span>
+    <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">refl</span> <span class="o">&gt;=</span> <span class="mi">33</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&lt;</span> <span class="mi">49</span><span class="p">))]</span> <span class="o">=</span> <span class="mf">0.013</span>
     <span class="n">A</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&gt;</span> <span class="mi">49</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.95</span>
     <span class="n">B</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">grid_z</span> <span class="o">&gt;=</span> <span class="n">frz</span><span class="p">,</span> <span class="n">refl</span> <span class="o">&gt;</span> <span class="mi">49</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">0.0148</span>
 

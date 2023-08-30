@@ -35,7 +35,7 @@ This example uses pooch to download the data files.
 
 .. image:: ../../sydney_tornado.png
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-68
+.. GENERATED FROM PYTHON SOURCE LINES 21-88
 
 
 
@@ -157,7 +157,7 @@ This example uses pooch to download the data files.
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         260|  25.2462|   6.3516|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|1083.9890
     Applying low pass filter to wind field...
-    Done! Time = 760.0
+    Done! Time = 540.2
 
 
 
@@ -177,38 +177,59 @@ This example uses pooch to download the data files.
 
     grid1_path = pooch.retrieve(
         url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid1_sydney.nc",
-        known_hash=None)
+        known_hash=None,
+    )
     grid2_path = pooch.retrieve(
         url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid2_sydney.nc",
-        known_hash=None)
+        known_hash=None,
+    )
     grid3_path = pooch.retrieve(
         url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid3_sydney.nc",
-        known_hash=None)
+        known_hash=None,
+    )
     grid4_path = pooch.retrieve(
         url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid4_sydney.nc",
-        known_hash=None)
+        known_hash=None,
+    )
     grid1 = pyart.io.read_grid(grid1_path)
     grid2 = pyart.io.read_grid(grid2_path)
     grid3 = pyart.io.read_grid(grid3_path)
     grid4 = pyart.io.read_grid(grid4_path)
 
     # Set initialization and do retrieval
-    grid1 = pydda.initialization.make_constant_wind_field(grid1, vel_field='VRADH_corr')
-    new_grids, _ = pydda.retrieval.get_dd_wind_field([grid1, grid2, grid3, grid4],
-                                                     Co=1e-2, Cm=256.0, Cx=1e-4, Cy=1e-4,
-                                                     Cz=1e-4,
-                                                     vel_name='VRADH_corr', refl_field='DBZH', 
-                                                     mask_outside_opt=True, wind_tol=0.1,
-                                                     max_iterations=200,
-                                                     engine='tensorflow')
+    grid1 = pydda.initialization.make_constant_wind_field(grid1, vel_field="VRADH_corr")
+    new_grids, _ = pydda.retrieval.get_dd_wind_field(
+        [grid1, grid2, grid3, grid4],
+        Co=1e-2,
+        Cm=256.0,
+        Cx=1e-4,
+        Cy=1e-4,
+        Cz=1e-4,
+        vel_name="VRADH_corr",
+        refl_field="DBZH",
+        mask_outside_opt=True,
+        wind_tol=0.1,
+        max_iterations=200,
+        engine="tensorflow",
+    )
     # Make a neat plot
-    fig = plt.figure(figsize=(10,7))
-    ax = pydda.vis.plot_horiz_xsection_quiver_map(new_grids, background_field='DBZH', level=3,
-                                                  show_lobes=False, bg_grid_no=3, vmin=0, vmax=60,
-                                                  quiverkey_len=20.0, w_vel_contours=[5., 10., 20, 30., 40.],
-                                                  quiver_spacing_x_km=2.0, quiver_spacing_y_km=2.0,
-                                                  quiverkey_loc='top', colorbar_contour_flag=True,
-                                                  cmap='pyart_HomeyerRainbow')
+    fig = plt.figure(figsize=(10, 7))
+    ax = pydda.vis.plot_horiz_xsection_quiver_map(
+        new_grids,
+        background_field="DBZH",
+        level=3,
+        show_lobes=False,
+        bg_grid_no=3,
+        vmin=0,
+        vmax=60,
+        quiverkey_len=20.0,
+        w_vel_contours=[5.0, 10.0, 20, 30.0, 40.0],
+        quiver_spacing_x_km=2.0,
+        quiver_spacing_y_km=2.0,
+        quiverkey_loc="top",
+        colorbar_contour_flag=True,
+        cmap="pyart_HomeyerRainbow",
+    )
     ax.set_xticks(np.arange(150.5, 153, 0.1))
     ax.set_yticks(np.arange(-36, -32.0, 0.1))
     ax.set_xlim([151.0, 151.35])
@@ -216,10 +237,9 @@ This example uses pooch to download the data files.
     plt.show()
 
 
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (13 minutes 4.751 seconds)
+   **Total running time of the script:** (9 minutes 13.888 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_sydney_tornado.py:
