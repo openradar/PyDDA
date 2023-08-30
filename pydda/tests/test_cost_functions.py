@@ -222,7 +222,7 @@ def test_calculate_smoothness_cost():
     dx = 100.0
     dy = 100.0
     dz = 100.0
-    z = np.arange(0, 1000.0, 100)
+    np.arange(0, 1000.0, 100)
 
     cost = pydda.cost_functions.calculate_smoothness_cost(u, v, w, dx, dy, dz)
     cost_grad = pydda.cost_functions.calculate_smoothness_gradient(
@@ -248,7 +248,7 @@ def test_calculate_smoothness_cost_jax():
     dx = 100.0
     dy = 100.0
     dz = 100.0
-    z = np.arange(0, 1000.0, 100)
+    np.arange(0, 1000.0, 100)
 
     cost = pydda.cost_functions.jax.calculate_smoothness_cost(u, v, w, dx, dy, dz)
     cost_grad = pydda.cost_functions.jax.calculate_smoothness_gradient(
@@ -274,7 +274,7 @@ def test_calculate_smoothness_cost_tensorflow():
     dx = 100.0
     dy = 100.0
     dz = 100.0
-    z = tf.range(0, 1000.0, 100)
+    tf.range(0, 1000.0, 100)
 
     cost = pydda.cost_functions.tf.calculate_smoothness_cost(u, v, w, dx, dy, dz)
     cost_grad = pydda.cost_functions.tf.calculate_smoothness_gradient(
@@ -364,7 +364,7 @@ def test_background_cost_tensorflow():
     """Zero cost when background matches wind field, nonzero otherwise"""
     u = 10 * tf.ones((10, 10, 10), dtype=tf.float32)
     v = 10 * tf.ones((10, 10, 10), dtype=tf.float32)
-    w = 0 * tf.ones((10, 10, 10), dtype=tf.float32)
+    0 * tf.ones((10, 10, 10), dtype=tf.float32)
     weights = tf.ones((10, 10, 10), dtype=tf.float32)
 
     u_back = 10 * tf.ones(10, dtype=tf.float32)
@@ -434,7 +434,7 @@ def test_vert_vorticity_jax():
     dy = 100.0
     dz = 100.0
 
-    z = np.arange(0, 1000.0, 100)
+    np.arange(0, 1000.0, 100)
     cost = pydda.cost_functions.jax.calculate_vertical_vorticity_cost(
         u, v, w, dx, dy, dz, 10, 10
     )
@@ -468,7 +468,7 @@ def test_vert_vorticity_tf():
     dy = 100.0
     dz = 100.0
 
-    z = tf.range(0, 1000.0, 100, dtype=tf.float32)
+    tf.range(0, 1000.0, 100, dtype=tf.float32)
     cost = pydda.cost_functions.tf.calculate_vertical_vorticity_cost(
         u, v, w, dx, dy, dz, 10, 10
     )
@@ -501,7 +501,7 @@ def test_vert_vorticity_tf():
 def test_point_cost():
     u = 1 * np.ones((10, 10, 10))
     v = 1 * np.ones((10, 10, 10))
-    w = 0 * np.ones((10, 10, 10))
+    0 * np.ones((10, 10, 10))
 
     x = np.linspace(-10, 10, 10)
     y = np.linspace(-10, 10, 10)
@@ -556,7 +556,7 @@ def test_point_cost():
 def test_point_cost_jax():
     u = 1 * np.ones((10, 10, 10))
     v = 1 * np.ones((10, 10, 10))
-    w = 0 * np.ones((10, 10, 10))
+    0 * np.ones((10, 10, 10))
 
     x = np.linspace(-10, 10, 10)
     y = np.linspace(-10, 10, 10)
@@ -611,7 +611,7 @@ def test_point_cost_jax():
 def test_point_cost_tf():
     u = 1 * tf.ones((10, 10, 10), dtype=tf.float32)
     v = 1 * tf.ones((10, 10, 10), dtype=tf.float32)
-    w = 0 * tf.ones((10, 10, 10), dtype=tf.float32)
+    0 * tf.ones((10, 10, 10), dtype=tf.float32)
 
     x = tf.constant(np.linspace(-10, 10, 10), dtype=tf.float32)
     y = tf.constant(np.linspace(-10, 10, 10), dtype=tf.float32)

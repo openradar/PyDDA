@@ -1016,7 +1016,6 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
     refl = grid.fields[refl_field]["data"]
     grid_z = grid.point_z["data"]
-    term_vel = np.zeros(refl.shape)
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
     rho = np.exp(-grid_z / 10000.0)
@@ -1230,7 +1229,6 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     """
     dvdz = _tf_gradient(v, dz, axis=0)
     dudz = _tf_gradient(u, dz, axis=0)
-    dwdz = _tf_gradient(w, dz, axis=0)
     dvdx = _tf_gradient(v, dx, axis=2)
     dwdy = _tf_gradient(w, dy, axis=1)
     dwdx = _tf_gradient(w, dx, axis=2)

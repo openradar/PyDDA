@@ -11,7 +11,7 @@ try:
     import cartopy.crs as ccrs
 
     CARTOPY_AVAILABLE = True
-except:
+except ImportError:
     CARTOPY_AVAILABLE = False
 
 

@@ -618,7 +618,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     # Jax version of the cost function
     dvdz = jnp.gradient(v, dz, axis=0)
     dudz = jnp.gradient(u, dz, axis=0)
-    dwdz = jnp.gradient(w, dz, axis=0)
+    jnp.gradient(w, dz, axis=0)
     dvdx = jnp.gradient(v, dx, axis=2)
     dwdy = jnp.gradient(w, dy, axis=1)
     dwdx = jnp.gradient(w, dx, axis=2)

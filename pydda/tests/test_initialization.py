@@ -21,8 +21,6 @@ def test_make_const_wind_field():
     fdata3 = np.zeros((20, 20, 20))
     Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
 
-    vel_field = "zero_field"
-
     Grid = pydda.initialization.make_constant_wind_field(
         Grid, wind=(2.0, 3.0, 4.0), vel_field="zero_field"
     )
@@ -41,7 +39,6 @@ def test_make_wind_field_from_profile():
     fdata3 = np.zeros((20, 20, 20))
     Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
 
-    vel_field = "zero_field"
     height = np.arange(0, 10000, 100)
     u_sound = np.ones(height.shape)
     v_sound = np.ones(height.shape)

@@ -9,7 +9,7 @@ try:
     import cfgrib
 
     CFGRIB_AVAILABLE = True
-except:
+except ImportError:
     CFGRIB_AVAILABLE = False
 
 # We really only need the API to download the data, make ECMWF API an
@@ -18,7 +18,7 @@ try:
     from ecmwfapi import ECMWFDataServer
 
     ECMWF_AVAILABLE = True
-except:
+except ImportError:
     ECMWF_AVAILABLE = False
 
 from netCDF4 import Dataset

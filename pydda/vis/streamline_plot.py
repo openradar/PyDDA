@@ -123,8 +123,8 @@ def plot_horiz_xsection_streamlines(
     grid_h = Grids[0].point_altitude["data"] / 1e3
     grid_x = Grids[0].point_x["data"] / 1e3
     grid_y = Grids[0].point_y["data"] / 1e3
-    dx = np.diff(grid_x, axis=2)[0, 0, 0]
-    dy = np.diff(grid_y, axis=1)[0, 0, 0]
+    np.diff(grid_x, axis=2)[0, 0, 0]
+    np.diff(grid_y, axis=1)[0, 0, 0]
     u = Grids[0].fields[u_field]["data"]
     v = Grids[0].fields[v_field]["data"]
     w = Grids[0].fields[w_field]["data"]
@@ -150,7 +150,7 @@ def plot_horiz_xsection_streamlines(
         vmax=vmax,
     )
 
-    horiz_wind_speed = np.ma.sqrt(u**2 + v**2)
+    np.ma.sqrt(u**2 + v**2)
     ax.streamplot(
         grid_x[level, :, :],
         grid_y[level, :, :],
@@ -382,8 +382,8 @@ def plot_horiz_xsection_streamlines_map(
     grid_lat = Grids[0].point_latitude["data"][level]
     grid_lon = Grids[0].point_longitude["data"][level]
 
-    dx = np.diff(grid_x, axis=2)[0, 0, 0]
-    dy = np.diff(grid_y, axis=1)[0, 0, 0]
+    np.diff(grid_x, axis=2)[0, 0, 0]
+    np.diff(grid_y, axis=1)[0, 0, 0]
     u = Grids[0].fields[u_field]["data"]
     v = Grids[0].fields[v_field]["data"]
     w = Grids[0].fields[w_field]["data"]
@@ -412,7 +412,7 @@ def plot_horiz_xsection_streamlines_map(
         vmax=vmax,
     )
 
-    horiz_wind_speed = np.ma.sqrt(u**2 + v**2)
+    np.ma.sqrt(u**2 + v**2)
     ax.streamplot(
         grid_lon,
         grid_lat,
@@ -453,7 +453,7 @@ def plot_horiz_xsection_streamlines_map(
             cs.cmap.set_bad(color="white", alpha=0)
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs, ax=ax, label="U [m/s]", extend="both", spacing="proportional"
                 )
         except ValueError:
@@ -485,7 +485,7 @@ def plot_horiz_xsection_streamlines_map(
             cs.cmap.set_bad(color="white", alpha=0)
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs, ax=ax, label="V [m/s]", extend="both", spacing="proportional"
                 )
         except ValueError:
@@ -517,7 +517,7 @@ def plot_horiz_xsection_streamlines_map(
             cs.cmap.set_bad(color="white", alpha=0)
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs,
                     ax=ax,
                     label="W [m/s]",
@@ -550,7 +550,7 @@ def plot_horiz_xsection_streamlines_map(
 
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs,
                     ax=ax,
                     label="|V\ [m/s]",
@@ -719,8 +719,8 @@ def plot_xz_xsection_streamlines(
     grid_h = Grids[0].point_altitude["data"] / 1e3
     grid_x = Grids[0].point_x["data"] / 1e3
     grid_y = Grids[0].point_y["data"] / 1e3
-    dx = np.diff(grid_x, axis=2)[0, 0, 0]
-    dz = np.diff(grid_y, axis=1)[0, 0, 0]
+    np.diff(grid_x, axis=2)[0, 0, 0]
+    np.diff(grid_y, axis=1)[0, 0, 0]
     u = Grids[0].fields[u_field]["data"]
     v = Grids[0].fields[v_field]["data"]
     w = Grids[0].fields[w_field]["data"]
@@ -745,7 +745,7 @@ def plot_xz_xsection_streamlines(
         vmin=vmin,
         vmax=vmax,
     )
-    horiz_wind_speed = np.ma.sqrt(u**2 + w**2)
+    np.ma.sqrt(u**2 + w**2)
     ax.streamplot(
         grid_x[:, level, :],
         grid_h[:, level, :],
@@ -948,8 +948,8 @@ def plot_yz_xsection_streamlines(
     grid_h = Grids[0].point_altitude["data"] / 1e3
     grid_x = Grids[0].point_x["data"] / 1e3
     grid_y = Grids[0].point_y["data"] / 1e3
-    dx = np.diff(grid_x, axis=2)[0, 0, 0]
-    dz = np.diff(grid_y, axis=1)[0, 0, 0]
+    np.diff(grid_x, axis=2)[0, 0, 0]
+    np.diff(grid_y, axis=1)[0, 0, 0]
     u = Grids[0].fields[u_field]["data"]
     v = Grids[0].fields[v_field]["data"]
     w = Grids[0].fields[w_field]["data"]
@@ -974,7 +974,7 @@ def plot_yz_xsection_streamlines(
         vmin=vmin,
         vmax=vmax,
     )
-    horiz_wind_speed = np.ma.sqrt(v**2 + w**2)
+    np.ma.sqrt(v**2 + w**2)
     ax.streamplot(
         grid_y[:, :, level],
         grid_h[:, :, level],

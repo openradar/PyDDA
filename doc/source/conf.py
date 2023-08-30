@@ -23,7 +23,6 @@ use("agg")
 import os
 import sys
 import sphinx
-import sphinx_gallery
 
 sys.path.insert(0, os.path.abspath("../../pydda"))
 

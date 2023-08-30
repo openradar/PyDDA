@@ -446,7 +446,7 @@ def plot_horiz_xsection_barbs_map(
             cs.cmap.set_bad(color="white", alpha=0)
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs, ax=ax, label="U [m/s]", extend="both", spacing="proportional"
                 )
         except ValueError:
@@ -477,7 +477,7 @@ def plot_horiz_xsection_barbs_map(
             cs.cmap.set_bad(color="white", alpha=0)
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs, ax=ax, label="V [m/s]", extend="both", spacing="proportional"
                 )
         except ValueError:
@@ -508,7 +508,7 @@ def plot_horiz_xsection_barbs_map(
             cs.cmap.set_bad(color="white", alpha=0)
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs,
                     ax=ax,
                     label="W [m/s]",
@@ -541,7 +541,7 @@ def plot_horiz_xsection_barbs_map(
 
             ax.clabel(cs)
             if colorbar_contour_flag is True:
-                ax2 = plt.colorbar(
+                plt.colorbar(
                     cs,
                     ax=ax,
                     label="|V\ [m/s]",

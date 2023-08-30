@@ -118,7 +118,7 @@ def test_twpice_case_tensorflow():
     Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    Grid = pydda.initialization.make_wind_field_from_profile(
+    pydda.initialization.make_wind_field_from_profile(
         Grid1, sounding[1], vel_field="corrected_velocity"
     )
     Grids, _ = pydda.retrieval.get_dd_wind_field(
@@ -154,7 +154,7 @@ def test_twpice_case():
     Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    Grid = pydda.initialization.make_wind_field_from_profile(
+    pydda.initialization.make_wind_field_from_profile(
         Grid1, sounding[1], vel_field="corrected_velocity"
     )
     Grids, _ = pydda.retrieval.get_dd_wind_field(

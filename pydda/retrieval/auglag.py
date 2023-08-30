@@ -9,7 +9,11 @@ try:
 except ImportError:
     TENSORFLOW_AVAILABLE = False
 
-from ..cost_functions._cost_functions_auglag import *
+from ..cost_functions._cost_functions_auglag import radial_velocity_function
+from ..cost_functions._cost_functions_auglag import al_mass_cont_function
+from ..cost_functions._cost_functions_auglag import al_vert_vort_function
+from ..cost_functions._cost_functions_auglag import calculate_mass_continuity
+from ..cost_functions._cost_functions_auglag import calculate_vertical_vorticity
 
 
 def auglag_function(winds, parameters, mult, mu, resto):
@@ -121,7 +125,7 @@ class Callback:
         edge_boolean[2, 0, :, :] = True
         al_grad = tf.where(edge_boolean, 0.0, al_grad)
         gnew = tf.norm(tf.reshape(al_grad, (np.prod(al_grad.shape),)))
-        infnorm = tf.norm(tf.reshape(al_grad, (np.prod(al_grad.shape),)), np.Inf)
+        tf.norm(tf.reshape(al_grad, (np.prod(al_grad.shape),)), np.Inf)
         self.g_mu = gnew
         self.alnew = alnew
         alnewzero, al_grad_zero = self.obj_func_zero(xk, self.parameters)
@@ -162,7 +166,7 @@ class Callback:
                     tf.reshape(
                         div,
                         np.prod(
-                            dif.shape,
+                            div.shape,
                         ),
                     )
                 )
@@ -184,7 +188,7 @@ class Callback:
                     tf.reshape(
                         vort,
                         np.prod(
-                            dif.shape,
+                            vort.shape,
                         ),
                     )
                 )
@@ -291,7 +295,7 @@ def auglag(winds, parameters, bounds):
     gtol = parameters.gtol  # Augmented Lagrangian norm must be less than this number
     Jveltol = parameters.Jveltol  # acceptable terminating value of Jvel
 
-    n = len(winds)
+    len(winds)
 
     # generate a random initial point
     winds = np.reshape(
@@ -592,7 +596,7 @@ def auglag(winds, parameters, bounds):
                 try:
                     cv = resto_cb.cv
                     g = resto_cb.g
-                except:
+                except ValueError:
                     print("Can't make progress in restoration, ending prematurely")
                     return winds, mults, AL_Filter, funcalls
             else:

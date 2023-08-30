@@ -175,20 +175,32 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     dwdy = np.gradient(w, dy, axis=1)
     dwdz = np.gradient(w, dz, axis=0)
 
-    x_term = Cx * (
-        np.gradient(dudx, dx, axis=2) ** 2
-        + np.gradient(dvdx, dx, axis=1) ** 2
-        + np.gradient(dwdx, dx, axis=2) ** 2
+    x_term = (
+        Cx
+        * (
+            np.gradient(dudx, dx, axis=2)
+            + np.gradient(dvdx, dx, axis=1)
+            + np.gradient(dwdx, dx, axis=2)
+        )
+        ** 2
     )
-    y_term = Cy * (
-        np.gradient(dudy, dy, axis=2) ** 2
-        + np.gradient(dvdy, dy, axis=1) ** 2
-        + np.gradient(dwdy, dy, axis=2) ** 2
+    y_term = (
+        Cy
+        * (
+            np.gradient(dudy, dy, axis=2)
+            + np.gradient(dvdy, dy, axis=1)
+            + np.gradient(dwdy, dy, axis=2)
+        )
+        ** 2
     )
-    z_term = Cz * (
-        np.gradient(dudz, dz, axis=2) ** 2
-        + np.gradient(dvdz, dz, axis=1) ** 2
-        + np.gradient(dwdz, dz, axis=2) ** 2
+    z_term = (
+        Cz
+        * (
+            np.gradient(dudz, dz, axis=2)
+            + np.gradient(dvdz, dz, axis=1)
+            + np.gradient(dwdz, dz, axis=2)
+        )
+        ** 2
     )
     return np.sum(np.nan_to_num(x_term + y_term + z_term))
 
@@ -480,7 +492,6 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
     refl = grid.fields[refl_field]["data"]
     grid_z = grid.point_z["data"]
-    term_vel = np.zeros(refl.shape)
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
     rho = np.exp(-grid_z / 10000.0)

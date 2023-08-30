@@ -786,7 +786,7 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
     refl = grid.fields[refl_field]["data"]
     grid_z = grid.point_z["data"]
-    term_vel = np.zeros(refl.shape)
+    np.zeros(refl.shape)
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
     rho = np.exp(-grid_z / 10000.0)

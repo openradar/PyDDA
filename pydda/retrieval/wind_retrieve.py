@@ -515,7 +515,6 @@ def _get_dd_wind_field_scipy(
     bt = time.time()
 
     # First pass - no filter
-    wprevmax = 99
     wcurrmax = w_init.max()
     print("The max of w_init is", wcurrmax)
     iterations = 0
@@ -632,7 +631,7 @@ def _get_dd_wind_field_scipy(
         # """
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
-    if low_pass_filter == True:
+    if low_pass_filter is True:
         print("Applying low pass filter to wind field...")
         winds = np.reshape(
             winds,
@@ -1087,8 +1086,7 @@ def _get_dd_wind_field_tensorflow(
     # First pass - no filter
     wcurrmax = w_init.max()
     print("The max of w_init is", wcurrmax)
-    iterations = 0
-    bounds = [(-x, x) for x in 100.0 * np.ones(winds.shape)]
+    [(-x, x) for x in 100.0 * np.ones(winds.shape)]
 
     if model_fields is not None:
         for the_field in model_fields:
@@ -1443,11 +1441,11 @@ def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
     inp_array1 = x / a
     inp_array1 = np.where(inp_array1 < -1, -1, inp_array1)
     inp_array1 = np.where(inp_array1 > 1, 1, inp_array1)
-    theta_1 = np.arccos(inp_array1)
+    np.arccos(inp_array1)
     inp_array2 = (x - rad2[1]) / b
     inp_array2 = np.where(inp_array2 < -1, -1, inp_array2)
     inp_array2 = np.where(inp_array2 > 1, 1, inp_array2)
-    theta_2 = np.arccos(inp_array2)
+    np.arccos(inp_array2)
     inp_array3 = (a * a + b * b - c * c) / (2 * a * b)
     inp_array3 = np.where(inp_array3 < -1, -1, inp_array3)
     inp_array3 = np.where(inp_array3 > 1, 1, inp_array3)
