@@ -154,7 +154,7 @@ at the edges of data coverage.
         130|   0.0598|   3.2439|   0.0094|   4.3475|   0.0000|   0.0000|   0.0000|  23.3502
     The gradient of the cost functions is 0.0137825
     Applying low pass filter to wind field...
-    Done! Time = 191.7
+    Done! Time = 235.7
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -245,7 +245,7 @@ at the edges of data coverage.
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         170|   0.0857|   3.7469|   0.0094|   4.5192|   0.0000|   0.0000|   0.0000|  17.1091
     Applying low pass filter to wind field...
-    Done! Time = 248.2
+    Done! Time = 304.2
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -306,7 +306,7 @@ at the edges of data coverage.
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          70|   0.0240|   8.1106|   0.0093|   3.2093|   0.0000|   0.0000|   0.0000|  14.5778
     Applying low pass filter to wind field...
-    Done! Time = 109.5
+    Done! Time = 135.3
 
 
 
@@ -418,7 +418,7 @@ at the edges of data coverage.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (9 minutes 12.909 seconds)
+   **Total running time of the script:** (11 minutes 18.896 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:

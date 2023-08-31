@@ -83,7 +83,7 @@ Author: Robert C. Jackson
          10|   7.4545|  24.7059|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5157
     The gradient of the cost functions is 0.15156189
     Applying low pass filter to wind field...
-    Done! Time = 6.8
+    Done! Time = 8.3
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: 'color'
@@ -169,7 +169,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 8.693 seconds)
+   **Total running time of the script:** (0 minutes 10.233 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
