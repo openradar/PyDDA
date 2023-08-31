@@ -6,7 +6,7 @@ Converting the radar data to Cartesian coordinates with Py-ART
 PyDDA expects radar data to be in Cartesian coordinates before it retrieves
 the wind fields. Most radar data, however, is in the radar's native antenna
 coordinates. Therefore, the radar data needs to be converted to Cartesian
-coordinates. Py-ART's mapping toolbox contains the necessary utilties 
+coordinates. Py-ART's mapping toolbox contains the necessary utilties
 
 We will assume that you have followed the steps outlined in :ref:`reading-radar-data`
 for reading the radar data in its native coordinates.  PyDDA requires dealiased velocities
@@ -45,14 +45,14 @@ limits of the grid in meters. The :code:`grid_shape` specifies the shape of the 
 points. We then use PyART's `grid_from_radars <https://arm-doe.github.io/pyart/API/generated/pyart.map.grid_from_radars.html>`_
 function to create the grids :code:`grid_sw` and :code:`grid_se`.
 
-.. code-block:: python 
+.. code-block:: python
 
-    grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits, 
+    grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits,
                                      grid_shape=grid_shape, gatefilter=gatefilter_sw)
-    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits, 
+    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits,
                                      grid_shape=grid_shape, gatefilter=gatefilter_se)
 
-Finally, we should visualize the output grids using Py-ART's 
+Finally, we should visualize the output grids using Py-ART's
 `GridMapDisplay <https://arm-doe.github.io/pyart/API/generated/pyart.graph.GridMapDisplay.html>`_.
 
 .. code-block:: python
@@ -60,11 +60,11 @@ Finally, we should visualize the output grids using Py-ART's
     fig = plt.figure(figsize=(8, 12))
     ax1 = plt.subplot(211)
     display1 = pyart.graph.GridMapDisplay(grid_sw)
-    display1.plot_latitude_slice('corrected_velocity', lat=36.5, 
+    display1.plot_latitude_slice('corrected_velocity', lat=36.5,
                                  ax=ax1, fig=fig, vmin=-30, vmax=30)
     ax2 = plt.subplot(212)
     display2 = pyart.graph.GridMapDisplay(grid_se)
-    display2.plot_latitude_slice('corrected_velocity', lat=36.5, 
+    display2.plot_latitude_slice('corrected_velocity', lat=36.5,
                                  ax=ax2, fig=fig, vmin=-30, vmax=30)
 
 .. plot::
@@ -129,9 +129,9 @@ Finally, we should visualize the output grids using Py-ART's
     grid_limits = ((0., 15000.), (-50000., 50000.), (-50000., 50000.))
     grid_shape = (31, 201, 201)
 
-    grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits, 
+    grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits,
                                      grid_shape=grid_shape, gatefilter=gatefilter_sw)
-    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits, 
+    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits,
                                      grid_shape=grid_shape, gatefilter=gatefilter_se)
 
     fig = plt.figure(figsize=(8, 12))
@@ -141,7 +141,7 @@ Finally, we should visualize the output grids using Py-ART's
     ax2 = plt.subplot(212)
     display2 = pyart.graph.GridMapDisplay(grid_se)
     display2.plot_latitude_slice('corrected_velocity', lat=36.5, ax=ax2, fig=fig, vmin=-30, vmax=30)
-  
+
 
 Note that, as the spacing between the sweeps increases with
 altitude that there can be gridding artifacts that can produce spurious air motion in the
@@ -149,7 +149,7 @@ retrievals (Collis et al. 2010). To reduce these artifacts it's important that t
 field at higher altitudes be as continuous as possible. This requires a grid resolution that
 will you will need to balance with keeping important details of the feature of interest that
 you are trying to grid. You may have to adjust your grid resolution to balance these two
-concerns in order to properly retrieve wind velocities. With the current grid spacing, 
+concerns in order to properly retrieve wind velocities. With the current grid spacing,
 it is apparent that there are discontinuities in the radial velocity field above 7.5 km
 altitude that could cause spurious noise in the retrieved vertical velocity field.
 Vertical velocities are likely to be most reliable about 20-40 km from either radar.
@@ -163,13 +163,8 @@ https://doi.org/10.1175/2010JTECHA1402.1.
 
 Koch, S. E., M. desJardins, and P. J. Kocin, 1983: An Interactive Barnes Objective Map Analysis
 Scheme for Use with Satellite and Conventional Data. J. Appl. Meteor. Climatol., 22, 1487–1503,
-https://doi.org/10.1175/1520-0450(1983)022<1487:AIBOMA>2.0.CO;2. 
+https://doi.org/10.1175/1520-0450(1983)022<1487:AIBOMA>2.0.CO;2.
 
-Kosiba, K., J. Wurman, Y. Richardson, P. Markowski, P. Robinson, and J. Marquis, 2013: 
-Genesis of the Goshen County, Wyoming, Tornado on 5 June 2009 during VORTEX2. 
+Kosiba, K., J. Wurman, Y. Richardson, P. Markowski, P. Robinson, and J. Marquis, 2013:
+Genesis of the Goshen County, Wyoming, Tornado on 5 June 2009 during VORTEX2.
 Mon. Wea. Rev., 141, 1157–1181, https://doi.org/10.1175/MWR-D-12-00056.1.
-
-
-
-
-
