@@ -400,9 +400,9 @@ def make_constraint_from_era5(Grid, file_name=None, vel_field=None, dest_era_fil
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
     temp_grid = deepcopy(Grid)
-    temp_grid.add_field("u", u_field, replace_existing=True)
-    temp_grid.add_field("v", v_field, replace_existing=True)
-    temp_grid.add_field("w", w_field, replace_existing=True)
+    temp_grid.add_field("U_era5", u_field, replace_existing=True)
+    temp_grid.add_field("V_era5", v_field, replace_existing=True)
+    temp_grid.add_field("W_era5", w_field, replace_existing=True)
     return temp_grid
 
 

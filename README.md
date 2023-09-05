@@ -91,7 +91,7 @@ would be useful to acheiving these goals, see the [PyDDA Roadmap](https://github
 ## Further support
 
 We are now requesting that all questions related to PyDDA that are not potential software issues to be
-relegated to the [openradar Discourse group](openradar.discourse.group) with a 'pydda' tag on your post. This
+relegated to the [openradar Discourse group](https://openradar.discourse.group) with a 'pydda' tag on your post. This
 enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
 and users can answer questions people may have.
 
