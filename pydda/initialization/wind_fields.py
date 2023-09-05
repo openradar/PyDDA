@@ -214,7 +214,23 @@ def make_initialization_from_era5(
     if "tfile" in locals():
         tfile.close()
 
-    return u_new, v_new, w_new
+    u_field = {}
+    u_field["data"] = u_new
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
+    v_field = {}
+    v_field["data"] = v_new
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
+    w_field = {}
+    w_field["data"] = w_new
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
+    temp_grid = deepcopy(Grid)
+    temp_grid.add_field("u", u_field, replace_existing=True)
+    temp_grid.add_field("v", v_field, replace_existing=True)
+    temp_grid.add_field("w", w_field, replace_existing=True)
+    return temp_grid
 
 
 def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
