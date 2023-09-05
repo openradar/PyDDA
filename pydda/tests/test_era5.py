@@ -7,9 +7,9 @@ from scipy.interpolate import interp1d
 from datetime import datetime
 
 
-def test_add_era_interim_field():
+def test_add_era_5_field():
     Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    Grid0 = pydda.constraints.make_constraint_from_era_interim(
+    Grid0 = pydda.constraints.make_constraint_from_era5(
         Grid0, pydda.tests.sample_files.ERA_PATH, vel_field="corrected_velocity"
     )
     grid_time = datetime.strptime(
@@ -60,10 +60,10 @@ def test_add_era_interim_field():
 
 def test_era_initialization():
     Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    Grid0 = pydda.constraints.make_constraint_from_era_interim(
+    Grid0 = pydda.constraints.make_constraint_from_era5(
         Grid0, pydda.tests.sample_files.ERA_PATH, vel_field="corrected_velocity"
     )
-    u, v, w = pydda.initialization.make_initialization_from_era_interim(
+    u, v, w = pydda.initialization.make_initialization_from_era5(
         Grid0, pydda.tests.sample_files.ERA_PATH, vel_field="corrected_velocity"
     )
     np.testing.assert_allclose(u, Grid0.fields["U_erainterim"]["data"], atol=1e-2)

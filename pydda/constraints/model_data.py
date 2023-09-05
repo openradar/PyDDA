@@ -14,12 +14,13 @@ except ImportError:
 
 # We really only need the API to download the data, make ECMWF API an
 # optional dependency since not everyone will have a login from the start.
-try:
-    from ecmwfapi import ECMWFDataServer
 
-    ECMWF_AVAILABLE = True
+try:
+    import cdsapi
+
+    ERA5_AVAILABLE = True
 except ImportError:
-    ECMWF_AVAILABLE = False
+    ERA5_AVAILABLE = False
 
 from netCDF4 import Dataset
 from datetime import datetime, timedelta
@@ -29,139 +30,212 @@ from copy import deepcopy
 
 def download_needed_era_data(Grid, start_date, end_date, file_name):
     """
-    This function will download the ERA interim data in the region
+    Written by: Hamid Ali Syed (@syedhamidali), and Bobby Jackson.
+    This function will download the ERA-5 data in the region
     specified by the input Py-ART Grid within the interval specified by
     start_date and end_date. This is useful for the batch processing of
-    files since the ECMWF API is limited to 20 queued requests at a time.
-    This is also useful if you want to store ERA interim data for future
+    files since the CDS-API is limited to 20 queued requests at a time.
+    This is also useful if you want to store ERA5 data for future
     use without having to download it again.
 
-    You need to have the ECMWF API and an ECMWF account set up in order to
-    use this feature. Go to this website for instructions on installing the
-    API and setting up your account:
+    You need to have the ERA5 CDSAPI and an CDS Copernicus
+    account set up in order to use this feature. Go to this
+    website for instructions on installing the API and
+    setting up your account:
 
-    https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
+    https://cds.climate.copernicus.eu/api-how-to
 
-    Parameters
-    ----------
-    Grid: Py-ART Grid
-        The input Py-ART Grid to modify.
-    start_date: datetime
-        The start date of the file to download.
-    end_date: datetime
-        The end date of the file to download.
-    file_name:
-        The name of the destination file.
+
+    Parameters:
+        Grid: Py-ART Grid
+            The input Py-ART Grid to modify.
+        start_date: datetime.datetime
+            The start date of the data to download.
+        end_date: datetime.datetime
+            The end date of the data to download.
+        file_name: str
+            The name of the destination file.
+
+    Returns:
+        None
     """
-
-    if ECMWF_AVAILABLE is False and file_name is None:
+    if ERA5_AVAILABLE is False and file_name is None:
         raise (
             ModuleNotFoundError,
             (
-                "The ECMWF API is not installed. Go to"
-                + "https://confluence.ecmwf.int/display/WEBAPI"
-                + "/Access+ECMWF+Public+Datasets"
-                + " in order to use the auto download feature."
+                "The CDSAPI is not installed. Please go to"
+                + "https://cds.climate.copernicus.eu/api-how-to"
+                + "in order to use the auto download feature."
             ),
         )
 
-    print("Download ERA Interim data...")
-    # ERA interim data is in pressure coordinates
-    # Retrieve u, v, w, and geopotential
-    # Geopotential is needed to convert into height coordinates
+    # Round the latitude and longitude values to 2 decimal places
+    N = round(Grid.point_latitude["data"].max(), 2)
+    S = round(Grid.point_latitude["data"].min(), 2)
+    E = round(Grid.point_longitude["data"].max(), 2)
+    W = round(Grid.point_longitude["data"].min(), 2)
 
-    retrieve_dict = {}
-    retrieve_dict["stream"] = "oper"
-    retrieve_dict["levtype"] = "pl"
-    retrieve_dict["param"] = "131.128/132.128/135.128/129.128"
-    retrieve_dict["dataset"] = "interim"
-    retrieve_dict["levelist"] = (
-        "1/2/3/5/7/10/20/30/50/70/100/125/150/"
-        + "175/200/225/250/300/350/400/450/500/"
-        + "550/600/650/700/750/775/800/825/850/"
-        + "875/900/925/950/975/1000"
-    )
-    retrieve_dict["step"] = "0"
-    retrieve_dict["time"] = "00/06/12/18"
-    retrieve_dict["date"] = (
-        start_date.strftime("%Y-%m-%d") + "/to/" + end_date.strftime("%Y-%m-%d")
-    )
-    retrieve_dict["class"] = "ei"
-    retrieve_dict["grid"] = "0.75/0.75"
-    N = "%4.1f" % Grid.point_latitude["data"].max()
-    S = "%4.1f" % Grid.point_latitude["data"].min()
-    E = "%4.1f" % Grid.point_longitude["data"].max()
-    W = "%4.1f" % Grid.point_longitude["data"].min()
+    # Generate a list of years within the date range
+    years = [str(year) for year in range(start_date.year, end_date.year + 1)]
 
-    retrieve_dict["area"] = N + "/" + W + "/" + S + "/" + E
-    retrieve_dict["format"] = "netcdf"
-    retrieve_dict["target"] = file_name
-    server = ECMWFDataServer()
-    server.retrieve(retrieve_dict)
+    # Define the retrieval parameters
+    retrieve_dict = {
+        "product_type": "reanalysis",
+        "format": "netcdf",
+        "variable": [
+            "geopotential",
+            "u_component_of_wind",
+            "v_component_of_wind",
+            "vertical_velocity",
+        ],
+        "pressure_level": [
+            "1",
+            "2",
+            "3",
+            "5",
+            "7",
+            "10",
+            "20",
+            "30",
+            "50",
+            "70",
+            "100",
+            "125",
+            "150",
+            "175",
+            "200",
+            "225",
+            "250",
+            "300",
+            "350",
+            "400",
+            "450",
+            "500",
+            "550",
+            "600",
+            "650",
+            "700",
+            "750",
+            "775",
+            "800",
+            "825",
+            "850",
+            "875",
+            "900",
+            "925",
+            "950",
+            "975",
+            "1000",
+        ],
+        "year": years,
+        "month": [str(start_date.month).zfill(2), str(end_date.month).zfill(2)],
+        "day": [str(start_date.day).zfill(2), str(end_date.day).zfill(2)],
+        "time": [
+            "00:00",
+            "01:00",
+            "02:00",
+            "03:00",
+            "04:00",
+            "05:00",
+            "06:00",
+            "07:00",
+            "08:00",
+            "09:00",
+            "10:00",
+            "11:00",
+            "12:00",
+            "13:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00",
+            "19:00",
+            "20:00",
+            "21:00",
+            "22:00",
+            "23:00",
+        ],
+        "area": [N, W, S, E],
+    }
+
+    # Create a temporary file if the destination file is not specified
+    if file_name is None:
+        tfile = tempfile.NamedTemporaryFile()
+        retrieve_dict["target"] = tfile.name
+        file_name = tfile.name
+    else:
+        retrieve_dict["target"] = file_name
+
+    # Initialize the CDS API client
+    server = cdsapi.Client()
+
+    # Retrieve ERA5 data
+    server.retrieve("reanalysis-era5-pressure-levels", retrieve_dict, file_name)
 
 
-def make_constraint_from_era_interim(Grid, file_name=None, vel_field=None):
+def make_constraint_from_era5(Grid, file_name=None, vel_field=None, dest_era_file=None):
     """
-    This function will read ERA Interim in NetCDF format and add it
-    to the Py-ART grid specified by Grid. PyDDA will automatically download
-    the ERA Interim data that you need for the scan. It will chose the domain
-    that is enclosed by the analysis grid and the time period that is closest
-    to the scan. It will then do a Nearest Neighbor interpolation of the
-    ERA-Interim u and v winds to the analysis grid.
+    Written by: Hamid Ali Syed (@syedhamidali), and Bobby Jackson
+    This function will read ERA 5 in NetCDF format
+    and add it to the Py-ART grid specified by Grid.
+    PyDDA will automatically download the ERA 5 data
+    that you need for the scan. It will chose the
+    domain that is enclosed by the analysis grid and
+    the time period that is closest to the scan.
+    It will then do a Nearest Neighbor interpolation of the
+    ERA-5 u and v winds to the analysis grid.
 
-    You need to have the ECMWF API and an ECMWF account set up in order to
-    use this feature. Go to this website for instructions on installing the
-    API and setting up your account:
+    You need to have the ERA5 CDSAPI and an CDS Copernicus
+    account set up in order to use this feature. Go to this
+    website for instructions on installing the API and
+    setting up your account:
 
-    https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets
+    https://cds.climate.copernicus.eu/api-how-to
 
     Parameters
     ----------
     Grid: Py-ART Grid
         The input Py-ART Grid to modify.
     file_name: str or None
-        The netCDF file containing the ERA Interim data. Setting to None will
+        The netCDF file containing the ERA 5 data. Setting to None will
         invoke the API in order to attempt to download the data. If the web
         API is experiencing delays, it is better to use it to download the
         file and then refer to it here. If this file does not exist
         PyDDA will use the API to create the file.
-    dest_era_file: str or None
-        If this is not None, then the ERA file that is saved using the
-        automatic download feature will be saved
-        to this file for future reading. This is useful in case the
-        web API is experiencing delays. This is not used if file_name
-        is specified.
     vel_field: str or None
         The name of the velocity field in the Py-ART grid. Set to None to
         have Py-DDA attempt to automatically detect it.
+    dest_era_file:
+        If this is not None, PyDDA will save the interpolated grid
+        into this file.
 
     Returns
     -------
     new_Grid: Py-ART Grid
-        The Py-ART Grid with the ERA Interim data added into the "u_erainterim",
-        "v_erainterim", and "w_erainterim" fields.
+        The Py-ART Grid with the ERA-5 data added into the "u_era5",
+        "v_era5", and "w_era5" fields.
 
     """
     if vel_field is None:
         vel_field = pyart.config.get_field_name("corrected_velocity")
 
-    if ECMWF_AVAILABLE is False and file_name is None:
+    if ERA5_AVAILABLE is False and file_name is None:
         raise (
             ModuleNotFoundError,
             (
-                "The ECMWF API is not installed. Go to"
-                + "https://confluence.ecmwf.int/display/WEBAPI"
-                + "/Access+ECMWF+Public+Datasets"
-                + " in order to use the auto download feature."
+                "The CDSAPI is not installed. Please go to"
+                + "https://cds.climate.copernicus.eu/api-how-to"
+                + "in order to use the auto download feature."
             ),
         )
 
     grid_time = datetime.strptime(
         Grid.time["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
     )
-    hour_rounded_to_nearest_6 = int(6 * round(float(grid_time.hour) / 6))
+    hour_rounded_to_nearest_1 = int(round(float(grid_time.hour)))
 
-    if hour_rounded_to_nearest_6 == 24:
+    if hour_rounded_to_nearest_1 == 24:
         grid_time = grid_time + timedelta(days=1)
         grid_time = datetime(
             grid_time.year,
@@ -176,7 +250,7 @@ def make_constraint_from_era_interim(Grid, file_name=None, vel_field=None):
             grid_time.year,
             grid_time.month,
             grid_time.day,
-            hour_rounded_to_nearest_6,
+            hour_rounded_to_nearest_1,
             grid_time.minute,
             grid_time.second,
         )
@@ -186,45 +260,85 @@ def make_constraint_from_era_interim(Grid, file_name=None, vel_field=None):
             raise FileNotFoundError(file_name + " not found!")
 
     if file_name is None:
-        print("Download ERA Interim data...")
-        # ERA interim data is in pressure coordinates
+        print("Downloading ERA5 data...")
+        # ERA5 data is in pressure coordinates
         # Retrieve u, v, w, and geopotential
         # Geopotential is needed to convert into height coordinates
 
-        retrieve_dict = {}
-        retrieve_dict["stream"] = "oper"
-        retrieve_dict["levtype"] = "pl"
-        retrieve_dict["param"] = "131.128/132.128/135.128/129.128"
-        retrieve_dict["dataset"] = "interim"
-        retrieve_dict["levelist"] = (
-            "1/2/3/5/7/10/20/30/50/70/100/125/150/"
-            + "175/200/225/250/300/350/400/450/500/"
-            + "550/600/650/700/750/775/800/825/850/"
-            + "875/900/925/950/975/1000"
-        )
-        retrieve_dict["step"] = "0"
-        retrieve_dict["time"] = "%02d" % hour_rounded_to_nearest_6
-        retrieve_dict["date"] = grid_time.strftime("%Y-%m-%d")
-        retrieve_dict["class"] = "ei"
-        retrieve_dict["grid"] = "0.75/0.75"
-        N = "%4.1f" % Grid.point_latitude["data"].max()
-        S = "%4.1f" % Grid.point_latitude["data"].min()
-        E = "%4.1f" % Grid.point_longitude["data"].max()
-        W = "%4.1f" % Grid.point_longitude["data"].min()
+        N = round(Grid.point_latitude["data"].max(), 2)
+        S = round(Grid.point_latitude["data"].min(), 2)
+        E = round(Grid.point_longitude["data"].max(), 2)
+        W = round(Grid.point_longitude["data"].min(), 2)
 
-        retrieve_dict["area"] = N + "/" + W + "/" + S + "/" + E
+        retrieve_dict = {}
+        pname = "reanalysis-era5-pressure-levels"
+        retrieve_dict["product_type"] = "reanalysis"
         retrieve_dict["format"] = "netcdf"
-        tfile = tempfile.NamedTemporaryFile()
-        retrieve_dict["target"] = tfile.name
-        file_name = tfile.name
-        server = ECMWFDataServer()
-        server.retrieve(retrieve_dict)
-        time_step = 0
+        retrieve_dict["variable"] = [
+            "u_component_of_wind",
+            "v_component_of_wind",
+            "vertical_velocity",
+            "geopotential",
+        ]
+        retrieve_dict["pressure_level"] = [
+            "1",
+            "2",
+            "3",
+            "5",
+            "7",
+            "10",
+            "20",
+            "30",
+            "50",
+            "70",
+            "100",
+            "125",
+            "150",
+            "175",
+            "200",
+            "225",
+            "250",
+            "300",
+            "350",
+            "400",
+            "450",
+            "500",
+            "550",
+            "600",
+            "650",
+            "700",
+            "750",
+            "775",
+            "800",
+            "825",
+            "850",
+            "875",
+            "900",
+            "925",
+            "950",
+            "975",
+            "1000",
+        ]
+        retrieve_dict["year"] = grid_time.strftime("%Y")
+        retrieve_dict["month"] = grid_time.strftime("%m")
+        retrieve_dict["day"] = grid_time.strftime("%d")
+        retrieve_dict["time"] = grid_time.strftime("%H:00")
+        retrieve_dict["area"] = [N, W, S, E]
+        if dest_era_file is not None:
+            retrieve_dict["target"] = dest_era_file
+            file_name = dest_era_file
+        else:
+            tfile = tempfile.NamedTemporaryFile()
+            retrieve_dict["target"] = tfile.name
+            file_name = tfile.name
+        server = cdsapi.Client()
+        server.retrieve(name=pname, request=retrieve_dict, target=file_name)
 
     ERA_grid = Dataset(file_name, mode="r")
     base_time = datetime.strptime(
         ERA_grid.variables["time"].units, "hours since %Y-%m-%d %H:%M:%S.%f"
     )
+
     time_seconds = ERA_grid.variables["time"][:]
     our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
     time_step = np.argmin(np.abs(base_time - grid_time))
@@ -267,24 +381,29 @@ def make_constraint_from_era_interim(Grid, file_name=None, vel_field=None):
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
-    new_grid = deepcopy(Grid)
-
-    u_dict = {"data": u_new, "long_name": "U from ERA-Interim", "units": "m/s"}
-    v_dict = {"data": v_new, "long_name": "V from ERA-Interim", "units": "m/s"}
-    w_dict = {"data": w_new, "long_name": "W from ERA-Interim", "units": "m/s"}
-
-    new_grid.add_field("U_erainterim", u_dict, replace_existing=True)
-    new_grid.add_field("V_erainterim", v_dict, replace_existing=True)
-    new_grid.add_field("W_erainterim", w_dict, replace_existing=True)
-
     # Free up memory
-
     ERA_grid.close()
 
     if "tfile" in locals():
         tfile.close()
 
-    return new_grid
+    u_field = {}
+    u_field["data"] = u_new
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
+    v_field = {}
+    v_field["data"] = v_new
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
+    w_field = {}
+    w_field["data"] = w_new
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
+    temp_grid = deepcopy(Grid)
+    temp_grid.add_field("u", u_field, replace_existing=True)
+    temp_grid.add_field("v", v_field, replace_existing=True)
+    temp_grid.add_field("w", w_field, replace_existing=True)
+    return temp_grid
 
 
 def make_constraint_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=None):
