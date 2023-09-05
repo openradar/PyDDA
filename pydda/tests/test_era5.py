@@ -53,7 +53,7 @@ def test_add_era_5_field():
         np.asarray(Grid0.point_z["data"] + Grid0.radar_altitude["data"])
     )
     u_vertical = np.mean(u_new_gridded, axis=1).mean(axis=1)
-    u_grid = np.mean(Grid0.fields["U_erainterim"]["data"], axis=1).mean(axis=1)
+    u_grid = np.mean(Grid0.fields["u"]["data"], axis=1).mean(axis=1)
 
     np.testing.assert_allclose(u_grid, u_vertical, atol=0.5)
 
@@ -63,9 +63,12 @@ def test_era_initialization():
     Grid0 = pydda.constraints.make_constraint_from_era5(
         Grid0, pydda.tests.sample_files.ERA_PATH, vel_field="corrected_velocity"
     )
-    u, v, w = pydda.initialization.make_initialization_from_era5(
+    igrid = pydda.initialization.make_initialization_from_era5(
         Grid0, pydda.tests.sample_files.ERA_PATH, vel_field="corrected_velocity"
     )
-    np.testing.assert_allclose(u, Grid0.fields["U_erainterim"]["data"], atol=1e-2)
-    np.testing.assert_allclose(v, Grid0.fields["V_erainterim"]["data"], atol=1e-2)
-    np.testing.assert_allclose(w, Grid0.fields["W_erainterim"]["data"], atol=1e-2)
+    u = igrid.fields["u"]["data"]
+    v = igrid.fields["v"]["data"]
+    w = igrid.fields["w"]["data"]
+    np.testing.assert_allclose(u, Grid0.fields["u"]["data"], atol=1e-2)
+    np.testing.assert_allclose(v, Grid0.fields["v"]["data"], atol=1e-2)
+    np.testing.assert_allclose(w, Grid0.fields["w"]["data"], atol=1e-2)
