@@ -21,13 +21,15 @@ from copy import deepcopy
 
 try:
     import cdsapi
+
     ERA5_AVAILABLE = True
 except ImportError:
     ERA5_AVAILABLE = False
 
 
 def make_initialization_from_era5(
-        Grid, file_name=None, vel_field=None, dest_era_file=None):
+    Grid, file_name=None, vel_field=None, dest_era_file=None
+):
     """
     Written by: Hamid Ali Syed and Bobby Jackson
     This function will read ERA 5 in NetCDF format
@@ -122,30 +124,58 @@ def make_initialization_from_era5(
         W = round(Grid.point_longitude["data"].min(), 2)
 
         retrieve_dict = {}
-        pname = 'reanalysis-era5-pressure-levels'
-        retrieve_dict['product_type'] = 'reanalysis'
-        retrieve_dict['format'] = 'netcdf'
-        retrieve_dict['variable'] = ['u_component_of_wind',
-                                     'v_component_of_wind',
-                                     'vertical_velocity',
-                                     'geopotential']
-        retrieve_dict['pressure_level'] = ['1', '2', '3',
-                                           '5', '7', '10',
-                                           '20', '30', '50',
-                                           '70', '100', '125',
-                                           '150', '175', '200',
-                                           '225', '250', '300',
-                                           '350', '400', '450',
-                                           '500', '550', '600',
-                                           '650', '700', '750',
-                                           '775', '800', '825',
-                                           '850', '875', '900',
-                                           '925', '950', '975',
-                                           '1000']
-        retrieve_dict['year'] = grid_time.strftime("%Y")
-        retrieve_dict['month'] = grid_time.strftime("%m")
-        retrieve_dict['day'] = grid_time.strftime("%d")
-        retrieve_dict['time'] = grid_time.strftime("%H:00")
+        pname = "reanalysis-era5-pressure-levels"
+        retrieve_dict["product_type"] = "reanalysis"
+        retrieve_dict["format"] = "netcdf"
+        retrieve_dict["variable"] = [
+            "u_component_of_wind",
+            "v_component_of_wind",
+            "vertical_velocity",
+            "geopotential",
+        ]
+        retrieve_dict["pressure_level"] = [
+            "1",
+            "2",
+            "3",
+            "5",
+            "7",
+            "10",
+            "20",
+            "30",
+            "50",
+            "70",
+            "100",
+            "125",
+            "150",
+            "175",
+            "200",
+            "225",
+            "250",
+            "300",
+            "350",
+            "400",
+            "450",
+            "500",
+            "550",
+            "600",
+            "650",
+            "700",
+            "750",
+            "775",
+            "800",
+            "825",
+            "850",
+            "875",
+            "900",
+            "925",
+            "950",
+            "975",
+            "1000",
+        ]
+        retrieve_dict["year"] = grid_time.strftime("%Y")
+        retrieve_dict["month"] = grid_time.strftime("%m")
+        retrieve_dict["day"] = grid_time.strftime("%d")
+        retrieve_dict["time"] = grid_time.strftime("%H:00")
         retrieve_dict["area"] = [N, W, S, E]
         if dest_era_file is not None:
             retrieve_dict["target"] = dest_era_file
@@ -163,8 +193,7 @@ def make_initialization_from_era5(
     )
 
     time_seconds = ERA_grid.variables["time"][:]
-    our_time = np.array([base_time + timedelta(seconds=int(x)
-                                               ) for x in time_seconds])
+    our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
     time_step = np.argmin(np.abs(base_time - grid_time))
 
     analysis_grid_shape = Grid.fields[vel_field]["data"].shape
@@ -193,17 +222,14 @@ def make_initialization_from_era5(
     height_flattened -= Grid.radar_altitude["data"]
 
     u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened,
-         lon_flattened), u_flattened, rescale=True
-         )
+        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+    )
     v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened,
-         lon_flattened), v_flattened, rescale=True
-         )
+        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+    )
     w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened,
-         lon_flattened), w_flattened, rescale=True
-         )
+        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+    )
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
@@ -328,10 +354,8 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     u_back = profile.u_wind
     v_back = profile.v_wind
     z_back = profile.height
-    u_interp = interp1d(z_back, u_back,
-                        bounds_error=False, fill_value="extrapolate")
-    v_interp = interp1d(z_back, v_back,
-                        bounds_error=False, fill_value="extrapolate")
+    u_interp = interp1d(z_back, u_back, bounds_error=False, fill_value="extrapolate")
+    v_interp = interp1d(z_back, v_back, bounds_error=False, fill_value="extrapolate")
     u_back2 = u_interp(np.asarray(Grid.z["data"]))
     v_back2 = v_interp(np.asarray(Grid.z["data"]))
     for i in range(analysis_grid_shape[0]):
@@ -360,8 +384,7 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     return temp_grid
 
 
-def make_background_from_wrf(
-        Grid, file_path, wrf_time, radar_loc, vel_field=None):
+def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=None):
     """
     This function makes an initalization field based off of the u and w
     from a WRF run. Only u and v are used from the WRF file.
