@@ -164,12 +164,13 @@
 
 <span class="c1"># We really only need the API to download the data, make ECMWF API an</span>
 <span class="c1"># optional dependency since not everyone will have a login from the start.</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">ecmwfapi</span> <span class="kn">import</span> <span class="n">ECMWFDataServer</span>
 
-    <span class="n">ECMWF_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cdsapi</span>
+
+    <span class="n">ERA5_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">ECMWF_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">ERA5_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
@@ -179,139 +180,212 @@
 
 <div class="viewcode-block" id="download_needed_era_data"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data">[docs]</a><span class="k">def</span> <span class="nf">download_needed_era_data</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function will download the ERA interim data in the region</span>
+<span class="sd">    Written by: Hamid Ali Syed (@syedhamidali), and Bobby Jackson.</span>
+<span class="sd">    This function will download the ERA-5 data in the region</span>
 <span class="sd">    specified by the input Py-ART Grid within the interval specified by</span>
 <span class="sd">    start_date and end_date. This is useful for the batch processing of</span>
-<span class="sd">    files since the ECMWF API is limited to 20 queued requests at a time.</span>
-<span class="sd">    This is also useful if you want to store ERA interim data for future</span>
+<span class="sd">    files since the CDS-API is limited to 20 queued requests at a time.</span>
+<span class="sd">    This is also useful if you want to store ERA5 data for future</span>
 <span class="sd">    use without having to download it again.</span>
 
-<span class="sd">    You need to have the ECMWF API and an ECMWF account set up in order to</span>
-<span class="sd">    use this feature. Go to this website for instructions on installing the</span>
-<span class="sd">    API and setting up your account:</span>
+<span class="sd">    You need to have the ERA5 CDSAPI and an CDS Copernicus</span>
+<span class="sd">    account set up in order to use this feature. Go to this</span>
+<span class="sd">    website for instructions on installing the API and</span>
+<span class="sd">    setting up your account:</span>
 
-<span class="sd">    https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets</span>
+<span class="sd">    https://cds.climate.copernicus.eu/api-how-to</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    Grid: Py-ART Grid</span>
-<span class="sd">        The input Py-ART Grid to modify.</span>
-<span class="sd">    start_date: datetime</span>
-<span class="sd">        The start date of the file to download.</span>
-<span class="sd">    end_date: datetime</span>
-<span class="sd">        The end date of the file to download.</span>
-<span class="sd">    file_name:</span>
-<span class="sd">        The name of the destination file.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">        Grid: Py-ART Grid</span>
+<span class="sd">            The input Py-ART Grid to modify.</span>
+<span class="sd">        start_date: datetime.datetime</span>
+<span class="sd">            The start date of the data to download.</span>
+<span class="sd">        end_date: datetime.datetime</span>
+<span class="sd">            The end date of the data to download.</span>
+<span class="sd">        file_name: str</span>
+<span class="sd">            The name of the destination file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">ECMWF_AVAILABLE</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ERA5_AVAILABLE</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="p">(</span>
             <span class="ne">ModuleNotFoundError</span><span class="p">,</span>
             <span class="p">(</span>
-                <span class="s2">&quot;The ECMWF API is not installed. Go to&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;https://confluence.ecmwf.int/display/WEBAPI&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;/Access+ECMWF+Public+Datasets&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; in order to use the auto download feature.&quot;</span>
+                <span class="s2">&quot;The CDSAPI is not installed. Please go to&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;https://cds.climate.copernicus.eu/api-how-to&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;in order to use the auto download feature.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Download ERA Interim data...&quot;</span><span class="p">)</span>
-    <span class="c1"># ERA interim data is in pressure coordinates</span>
-    <span class="c1"># Retrieve u, v, w, and geopotential</span>
-    <span class="c1"># Geopotential is needed to convert into height coordinates</span>
+    <span class="c1"># Round the latitude and longitude values to 2 decimal places</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
 
-    <span class="n">retrieve_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;oper&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;levtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pl&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;param&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;131.128/132.128/135.128/129.128&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;interim&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;levelist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;1/2/3/5/7/10/20/30/50/70/100/125/150/&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;175/200/225/250/300/350/400/450/500/&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;550/600/650/700/750/775/800/825/850/&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;875/900/925/950/975/1000&quot;</span>
-    <span class="p">)</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;00/06/12/18&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">start_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/to/&quot;</span> <span class="o">+</span> <span class="n">end_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="p">)</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ei&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0.75/0.75&quot;</span>
-    <span class="n">N</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">S</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">E</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">W</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="c1"># Generate a list of years within the date range</span>
+    <span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_date</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">end_date</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
 
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">W</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">S</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">E</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;netcdf&quot;</span>
-    <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_name</span>
-    <span class="n">server</span> <span class="o">=</span> <span class="n">ECMWFDataServer</span><span class="p">()</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">retrieve_dict</span><span class="p">)</span></div>
+    <span class="c1"># Define the retrieval parameters</span>
+    <span class="n">retrieve_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;product_type&quot;</span><span class="p">:</span> <span class="s2">&quot;reanalysis&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;netcdf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;geopotential&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;u_component_of_wind&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;v_component_of_wind&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vertical_velocity&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;pressure_level&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;10&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;20&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;30&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;50&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;70&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;100&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;125&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;150&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;175&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;200&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;225&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;250&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;300&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;350&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;400&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;450&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;500&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;550&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;600&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;650&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;700&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;750&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;775&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;800&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;825&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;850&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;875&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;900&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;925&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;950&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;975&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;1000&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">years</span><span class="p">,</span>
+        <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">start_date</span><span class="o">.</span><span class="n">month</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_date</span><span class="o">.</span><span class="n">month</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span>
+        <span class="s2">&quot;day&quot;</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">start_date</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">end_date</span><span class="o">.</span><span class="n">day</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)],</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;00:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;01:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;02:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;03:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;04:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;05:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;06:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;07:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;08:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;09:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;10:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;11:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;12:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;13:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;14:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;15:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;16:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;17:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;18:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;19:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;20:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;21:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;22:00&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;23:00&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">E</span><span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Create a temporary file if the destination file is not specified</span>
+    <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">tfile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfile</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">tfile</span><span class="o">.</span><span class="n">name</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_name</span>
+
+    <span class="c1"># Initialize the CDS API client</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">cdsapi</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+
+    <span class="c1"># Retrieve ERA5 data</span>
+    <span class="n">server</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="s2">&quot;reanalysis-era5-pressure-levels&quot;</span><span class="p">,</span> <span class="n">retrieve_dict</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="make_constraint_from_era_interim"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.make_constraint_from_era_interim.html#pydda.constraints.make_constraint_from_era_interim">[docs]</a><span class="k">def</span> <span class="nf">make_constraint_from_era_interim</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">make_constraint_from_era5</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest_era_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function will read ERA Interim in NetCDF format and add it</span>
-<span class="sd">    to the Py-ART grid specified by Grid. PyDDA will automatically download</span>
-<span class="sd">    the ERA Interim data that you need for the scan. It will chose the domain</span>
-<span class="sd">    that is enclosed by the analysis grid and the time period that is closest</span>
-<span class="sd">    to the scan. It will then do a Nearest Neighbor interpolation of the</span>
-<span class="sd">    ERA-Interim u and v winds to the analysis grid.</span>
+<span class="sd">    Written by: Hamid Ali Syed (@syedhamidali), and Bobby Jackson</span>
+<span class="sd">    This function will read ERA 5 in NetCDF format</span>
+<span class="sd">    and add it to the Py-ART grid specified by Grid.</span>
+<span class="sd">    PyDDA will automatically download the ERA 5 data</span>
+<span class="sd">    that you need for the scan. It will chose the</span>
+<span class="sd">    domain that is enclosed by the analysis grid and</span>
+<span class="sd">    the time period that is closest to the scan.</span>
+<span class="sd">    It will then do a Nearest Neighbor interpolation of the</span>
+<span class="sd">    ERA-5 u and v winds to the analysis grid.</span>
 
-<span class="sd">    You need to have the ECMWF API and an ECMWF account set up in order to</span>
-<span class="sd">    use this feature. Go to this website for instructions on installing the</span>
-<span class="sd">    API and setting up your account:</span>
+<span class="sd">    You need to have the ERA5 CDSAPI and an CDS Copernicus</span>
+<span class="sd">    account set up in order to use this feature. Go to this</span>
+<span class="sd">    website for instructions on installing the API and</span>
+<span class="sd">    setting up your account:</span>
 
-<span class="sd">    https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets</span>
+<span class="sd">    https://cds.climate.copernicus.eu/api-how-to</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Grid: Py-ART Grid</span>
 <span class="sd">        The input Py-ART Grid to modify.</span>
 <span class="sd">    file_name: str or None</span>
-<span class="sd">        The netCDF file containing the ERA Interim data. Setting to None will</span>
+<span class="sd">        The netCDF file containing the ERA 5 data. Setting to None will</span>
 <span class="sd">        invoke the API in order to attempt to download the data. If the web</span>
 <span class="sd">        API is experiencing delays, it is better to use it to download the</span>
 <span class="sd">        file and then refer to it here. If this file does not exist</span>
 <span class="sd">        PyDDA will use the API to create the file.</span>
-<span class="sd">    dest_era_file: str or None</span>
-<span class="sd">        If this is not None, then the ERA file that is saved using the</span>
-<span class="sd">        automatic download feature will be saved</span>
-<span class="sd">        to this file for future reading. This is useful in case the</span>
-<span class="sd">        web API is experiencing delays. This is not used if file_name</span>
-<span class="sd">        is specified.</span>
 <span class="sd">    vel_field: str or None</span>
 <span class="sd">        The name of the velocity field in the Py-ART grid. Set to None to</span>
 <span class="sd">        have Py-DDA attempt to automatically detect it.</span>
+<span class="sd">    dest_era_file:</span>
+<span class="sd">        If this is not None, PyDDA will save the interpolated grid</span>
+<span class="sd">        into this file.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_Grid: Py-ART Grid</span>
-<span class="sd">        The Py-ART Grid with the ERA Interim data added into the &quot;u_erainterim&quot;,</span>
-<span class="sd">        &quot;v_erainterim&quot;, and &quot;w_erainterim&quot; fields.</span>
+<span class="sd">        The Py-ART Grid with the ERA-5 data added into the &quot;u_era5&quot;,</span>
+<span class="sd">        &quot;v_era5&quot;, and &quot;w_era5&quot; fields.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vel_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">ECMWF_AVAILABLE</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ERA5_AVAILABLE</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="p">(</span>
             <span class="ne">ModuleNotFoundError</span><span class="p">,</span>
             <span class="p">(</span>
-                <span class="s2">&quot;The ECMWF API is not installed. Go to&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;https://confluence.ecmwf.int/display/WEBAPI&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;/Access+ECMWF+Public+Datasets&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; in order to use the auto download feature.&quot;</span>
+                <span class="s2">&quot;The CDSAPI is not installed. Please go to&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;https://cds.climate.copernicus.eu/api-how-to&quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;in order to use the auto download feature.&quot;</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
     <span class="n">grid_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
         <span class="n">Grid</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="s2">&quot;seconds since %Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
     <span class="p">)</span>
-    <span class="n">hour_rounded_to_nearest_6</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">6</span> <span class="o">*</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">grid_time</span><span class="o">.</span><span class="n">hour</span><span class="p">)</span> <span class="o">/</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">hour_rounded_to_nearest_1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">grid_time</span><span class="o">.</span><span class="n">hour</span><span class="p">)))</span>
 
-    <span class="k">if</span> <span class="n">hour_rounded_to_nearest_6</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">hour_rounded_to_nearest_1</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
         <span class="n">grid_time</span> <span class="o">=</span> <span class="n">grid_time</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">grid_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span>
             <span class="n">grid_time</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
@@ -326,7 +400,7 @@
             <span class="n">grid_time</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
             <span class="n">grid_time</span><span class="o">.</span><span class="n">month</span><span class="p">,</span>
             <span class="n">grid_time</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
-            <span class="n">hour_rounded_to_nearest_6</span><span class="p">,</span>
+            <span class="n">hour_rounded_to_nearest_1</span><span class="p">,</span>
             <span class="n">grid_time</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span>
             <span class="n">grid_time</span><span class="o">.</span><span class="n">second</span><span class="p">,</span>
         <span class="p">)</span>
@@ -336,45 +410,85 @@
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="s2">&quot; not found!&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Download ERA Interim data...&quot;</span><span class="p">)</span>
-        <span class="c1"># ERA interim data is in pressure coordinates</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading ERA5 data...&quot;</span><span class="p">)</span>
+        <span class="c1"># ERA5 data is in pressure coordinates</span>
         <span class="c1"># Retrieve u, v, w, and geopotential</span>
         <span class="c1"># Geopotential is needed to convert into height coordinates</span>
 
-        <span class="n">retrieve_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;stream&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;oper&quot;</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;levtype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;pl&quot;</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;param&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;131.128/132.128/135.128/129.128&quot;</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;interim&quot;</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;levelist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;1/2/3/5/7/10/20/30/50/70/100/125/150/&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;175/200/225/250/300/350/400/450/500/&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;550/600/650/700/750/775/800/825/850/&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;875/900/925/950/975/1000&quot;</span>
-        <span class="p">)</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%02d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">hour_rounded_to_nearest_6</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ei&quot;</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;grid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0.75/0.75&quot;</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-        <span class="n">S</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%4.1f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
 
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">W</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">S</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">E</span>
+        <span class="n">retrieve_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">pname</span> <span class="o">=</span> <span class="s2">&quot;reanalysis-era5-pressure-levels&quot;</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;product_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;reanalysis&quot;</span>
         <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;netcdf&quot;</span>
-        <span class="n">tfile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span>
-        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfile</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">file_name</span> <span class="o">=</span> <span class="n">tfile</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">server</span> <span class="o">=</span> <span class="n">ECMWFDataServer</span><span class="p">()</span>
-        <span class="n">server</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">retrieve_dict</span><span class="p">)</span>
-        <span class="n">time_step</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;variable&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;u_component_of_wind&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;v_component_of_wind&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;vertical_velocity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;geopotential&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;pressure_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;10&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;20&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;30&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;50&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;70&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;100&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;125&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;150&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;175&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;200&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;225&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;250&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;300&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;350&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;400&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;450&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;500&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;550&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;600&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;650&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;700&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;750&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;775&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;800&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;825&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;850&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;875&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;900&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;925&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;950&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;975&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;1000&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y&quot;</span><span class="p">)</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m&quot;</span><span class="p">)</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:00&quot;</span><span class="p">)</span>
+        <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">N</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">E</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dest_era_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dest_era_file</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">dest_era_file</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tfile</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span>
+            <span class="n">retrieve_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tfile</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">tfile</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">server</span> <span class="o">=</span> <span class="n">cdsapi</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">pname</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">retrieve_dict</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">file_name</span><span class="p">)</span>
 
     <span class="n">ERA_grid</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
     <span class="n">base_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
         <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">,</span> <span class="s2">&quot;hours since %Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
     <span class="p">)</span>
+
     <span class="n">time_seconds</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][:]</span>
     <span class="n">our_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">base_time</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">time_seconds</span><span class="p">])</span>
     <span class="n">time_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">base_time</span> <span class="o">-</span> <span class="n">grid_time</span><span class="p">))</span>
@@ -417,24 +531,29 @@
     <span class="n">v_new</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span><span class="n">radar_grid_alt</span><span class="p">,</span> <span class="n">radar_grid_lat</span><span class="p">,</span> <span class="n">radar_grid_lon</span><span class="p">)</span>
     <span class="n">w_new</span> <span class="o">=</span> <span class="n">w_interp</span><span class="p">(</span><span class="n">radar_grid_alt</span><span class="p">,</span> <span class="n">radar_grid_lat</span><span class="p">,</span> <span class="n">radar_grid_lon</span><span class="p">)</span>
 
-    <span class="n">new_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
-
-    <span class="n">u_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">u_new</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;U from ERA-Interim&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;m/s&quot;</span><span class="p">}</span>
-    <span class="n">v_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">v_new</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;V from ERA-Interim&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;m/s&quot;</span><span class="p">}</span>
-    <span class="n">w_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">w_new</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;W from ERA-Interim&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;m/s&quot;</span><span class="p">}</span>
-
-    <span class="n">new_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;U_erainterim&quot;</span><span class="p">,</span> <span class="n">u_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">new_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;V_erainterim&quot;</span><span class="p">,</span> <span class="n">v_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">new_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;W_erainterim&quot;</span><span class="p">,</span> <span class="n">w_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
     <span class="c1"># Free up memory</span>
-
     <span class="n">ERA_grid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="s2">&quot;tfile&quot;</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
         <span class="n">tfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">new_grid</span></div>
+    <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_new</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
+    <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_new</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
+    <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w_new</span>
+    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
+    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
+    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
+    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;U_era5&quot;</span><span class="p">,</span> <span class="n">u_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;V_era5&quot;</span><span class="p">,</span> <span class="n">v_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;W_era5&quot;</span><span class="p">,</span> <span class="n">w_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">temp_grid</span>
 
 
 <div class="viewcode-block" id="make_constraint_from_wrf"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.make_constraint_from_wrf.html#pydda.constraints.make_constraint_from_wrf">[docs]</a><span class="k">def</span> <span class="nf">make_constraint_from_wrf</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">wrf_time</span><span class="p">,</span> <span class="n">radar_loc</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

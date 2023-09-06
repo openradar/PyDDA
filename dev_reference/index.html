@@ -310,8 +310,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era_interim.html">
-   pydda.initialization.make_initialization_from_era_interim
+  <a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era5.html">
+   pydda.initialization.make_initialization_from_era5
   </a>
  </li>
 </ul>
@@ -324,11 +324,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="generated/pydda.constraints.add_hrrr_constraint_to_grid.html">
    pydda.constraints.add_hrrr_constraint_to_grid
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="generated/pydda.constraints.make_constraint_from_era_interim.html">
-   pydda.constraints.make_constraint_from_era_interim
   </a>
  </li>
  <li class="toctree-l1">
@@ -477,7 +472,7 @@
 <dd class="field-odd"><p>1.4.0</p>
 </dd>
 <dt class="field-even">Date</dt>
-<dd class="field-even"><p>Aug 31, 2023</p>
+<dd class="field-even"><p>Sep 06, 2023</p>
 </dd>
 </dl>
 <p>This is the developer reference guide for PyDDA which covers most of the
@@ -695,8 +690,8 @@ of numpy arrays with the same shape as the fields in Grid.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf" title="pydda.initialization.make_background_from_wrf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_background_from_wrf</span></code></a>(Grid, file_path, ...)</p></td>
 <td><p>This function makes an initalization field based off of the u and w from a WRF run.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era_interim.html#pydda.initialization.make_initialization_from_era_interim" title="pydda.initialization.make_initialization_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_initialization_from_era_interim</span></code></a>(Grid[, ...])</p></td>
-<td><p>This function will read ERA Interim in NetCDF format and add it to the Py-ART grid specified by Grid.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.initialization.make_initialization_from_era5.html#pydda.initialization.make_initialization_from_era5" title="pydda.initialization.make_initialization_from_era5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_initialization_from_era5</span></code></a>(Grid[, ...])</p></td>
+<td><p>Written by: Hamid Ali Syed and Bobby Jackson This function will read ERA 5 in NetCDF format and add it to the Py-ART grid specified by Grid.</p></td>
 </tr>
 </tbody>
 </table>
@@ -728,13 +723,10 @@ simply add (name) into the model_fields option of
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.add_hrrr_constraint_to_grid.html#pydda.constraints.add_hrrr_constraint_to_grid" title="pydda.constraints.add_hrrr_constraint_to_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_hrrr_constraint_to_grid</span></code></a>(Grid, file_path)</p></td>
 <td><p>This function will read an HRRR GRIB2 file and create the constraining u, v, and w fields for the model constraint</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.make_constraint_from_era_interim.html#pydda.constraints.make_constraint_from_era_interim" title="pydda.constraints.make_constraint_from_era_interim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_constraint_from_era_interim</span></code></a>(Grid[, ...])</p></td>
-<td><p>This function will read ERA Interim in NetCDF format and add it to the Py-ART grid specified by Grid.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data" title="pydda.constraints.download_needed_era_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_needed_era_data</span></code></a>(Grid, start_date, ...)</p></td>
+<td><p>Written by: Hamid Ali Syed (&#64;syedhamidali), and Bobby Jackson.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.download_needed_era_data.html#pydda.constraints.download_needed_era_data" title="pydda.constraints.download_needed_era_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download_needed_era_data</span></code></a>(Grid, start_date, ...)</p></td>
-<td><p>This function will download the ERA interim data in the region specified by the input Py-ART Grid within the interval specified by start_date and end_date.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_iem_obs</span></code></a>(Grid[, window])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_iem_obs</span></code></a>(Grid[, window])</p></td>
 <td><p>Returns all of the station observations from the Iowa Mesonet for a given Grid in the format needed for PyDDA.</p></td>
 </tr>
 </tbody>

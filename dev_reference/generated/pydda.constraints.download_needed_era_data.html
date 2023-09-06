@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pydda.constraints.get_iem_obs" href="pydda.constraints.get_iem_obs.html" />
-    <link rel="prev" title="pydda.constraints.make_constraint_from_era_interim" href="pydda.constraints.make_constraint_from_era_interim.html" />
+    <link rel="prev" title="pydda.constraints.add_hrrr_constraint_to_grid" href="pydda.constraints.add_hrrr_constraint_to_grid.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -309,8 +309,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="pydda.initialization.make_initialization_from_era_interim.html">
-   pydda.initialization.make_initialization_from_era_interim
+  <a class="reference internal" href="pydda.initialization.make_initialization_from_era5.html">
+   pydda.initialization.make_initialization_from_era5
   </a>
  </li>
 </ul>
@@ -323,11 +323,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="pydda.constraints.add_hrrr_constraint_to_grid.html">
    pydda.constraints.add_hrrr_constraint_to_grid
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="pydda.constraints.make_constraint_from_era_interim.html">
-   pydda.constraints.make_constraint_from_era_interim
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -384,24 +379,33 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pydda.constraints.download_needed_era_data">
 <span class="sig-prename descclassname"><span class="pre">pydda.constraints.</span></span><span class="sig-name descname"><span class="pre">download_needed_era_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pydda/constraints/model_data.html#download_needed_era_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydda.constraints.download_needed_era_data" title="Permalink to this definition">#</a></dt>
-<dd><p>This function will download the ERA interim data in the region
+<dd><p>Written by: Hamid Ali Syed (&#64;syedhamidali), and Bobby Jackson.
+This function will download the ERA-5 data in the region
 specified by the input Py-ART Grid within the interval specified by
 start_date and end_date. This is useful for the batch processing of
-files since the ECMWF API is limited to 20 queued requests at a time.
-This is also useful if you want to store ERA interim data for future
+files since the CDS-API is limited to 20 queued requests at a time.
+This is also useful if you want to store ERA5 data for future
 use without having to download it again.</p>
-<p>You need to have the ECMWF API and an ECMWF account set up in order to
-use this feature. Go to this website for instructions on installing the
-API and setting up your account:</p>
-<p><a class="reference external" href="https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets">https://confluence.ecmwf.int/display/WEBAPI/Access+ECMWF+Public+Datasets</a></p>
+<p>You need to have the ERA5 CDSAPI and an CDS Copernicus
+account set up in order to use this feature. Go to this
+website for instructions on installing the API and
+setting up your account:</p>
+<p><a class="reference external" href="https://cds.climate.copernicus.eu/api-how-to">https://cds.climate.copernicus.eu/api-how-to</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Grid</strong> (<em>Py-ART Grid</em>) – The input Py-ART Grid to modify.</p></li>
-<li><p><strong>start_date</strong> (<em>datetime</em>) – The start date of the file to download.</p></li>
-<li><p><strong>end_date</strong> (<em>datetime</em>) – The end date of the file to download.</p></li>
-<li><p><strong>file_name</strong> – The name of the destination file.</p></li>
+<li><p><strong>Grid</strong> – Py-ART Grid
+The input Py-ART Grid to modify.</p></li>
+<li><p><strong>start_date</strong> – datetime.datetime
+The start date of the data to download.</p></li>
+<li><p><strong>end_date</strong> – datetime.datetime
+The end date of the data to download.</p></li>
+<li><p><strong>file_name</strong> – str
+The name of the destination file.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -414,11 +418,11 @@ API and setting up your account:</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="pydda.constraints.make_constraint_from_era_interim.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="pydda.constraints.add_hrrr_constraint_to_grid.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">pydda.constraints.make_constraint_from_era_interim</p>
+            <p class="prev-next-title">pydda.constraints.add_hrrr_constraint_to_grid</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="pydda.constraints.get_iem_obs.html" title="next page">
