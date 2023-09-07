@@ -1115,7 +1115,6 @@ def _get_dd_wind_field_tensorflow(
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient,
         initial_position=winds,
-        f_relative_tolerance=1e-3,
         tolerance=1e-3,
         x_tolerance=wind_tol,
         max_iterations=max_iterations,
