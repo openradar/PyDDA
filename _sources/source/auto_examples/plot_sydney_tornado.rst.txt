@@ -78,17 +78,17 @@ This example uses pooch to download the data files.
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|2864.7900|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 1.796964
+    The gradient of the cost functions is 1.796951
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          10| 430.7701| 584.1953|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0327
-    The gradient of the cost functions is 0.61515087
+    The gradient of the cost functions is 0.6151475
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          20| 213.7147| 393.5728|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.1716
-    The gradient of the cost functions is 0.6162523
+    The gradient of the cost functions is 0.6162488
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          30| 213.9968| 394.0116|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.1842
     Applying low pass filter to wind field...
-    Done! Time = 68.6
+    Done! Time = 93.2
 
 
 
@@ -170,7 +170,7 @@ This example uses pooch to download the data files.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 22.162 seconds)
+   **Total running time of the script:** (1 minutes 43.287 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_sydney_tornado.py:
