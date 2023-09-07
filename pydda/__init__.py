@@ -11,7 +11,7 @@ from . import initialization
 from . import tests
 from . import constraints
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 print("Welcome to PyDDA %s" % __version__)
 print("If you are using PyDDA in your publications, please cite:")
