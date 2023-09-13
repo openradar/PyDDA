@@ -531,7 +531,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         anel_term = tf.ones(w.shape)
 
     return (
-        coeff * tf.math.reduce_sum(tf.math.square(dudx + dvdy + dwdz * anel_term)) / 2.0
+        coeff * tf.math.reduce_sum(tf.math.square(dudx + dvdy + dwdz + anel_term)) / 2.0
     )
 
 
