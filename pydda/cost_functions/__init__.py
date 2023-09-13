@@ -76,6 +76,8 @@ procedures in Python, they then need to be added to
     calculate_point_gradient
 """
 
+import cmweather
+
 from . import _cost_functions_tensorflow as tf
 from . import _cost_functions_numpy as np
 from . import _cost_functions_jax as jax

@@ -25,22 +25,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pooch
 
-grid1_path = pooch.retrieve(
-    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid1_sydney.nc",
-    known_hash=None,
-)
-grid2_path = pooch.retrieve(
-    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid2_sydney.nc",
-    known_hash=None,
-)
-grid3_path = pooch.retrieve(
-    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid3_sydney.nc",
-    known_hash=None,
-)
-grid4_path = pooch.retrieve(
-    url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid4_sydney.nc",
-    known_hash=None,
-)
+grid1_path = pydda.tests.get_sample_file("grid1_sydney.nc")
+grid2_path = pydda.tests.get_sample_file("grid2_sydney.nc")
+grid3_path = pydda.tests.get_sample_file("grid3_sydney.nc")
+grid4_path = pydda.tests.get_sample_file("grid4_sydney.nc")
 grid1 = pyart.io.read_grid(grid1_path)
 grid2 = pyart.io.read_grid(grid2_path)
 grid3 = pyart.io.read_grid(grid3_path)

@@ -4,5 +4,6 @@ arm_pyart
 cartopy
 wheels
 pandas
-dask
 six
+pooch
+cmweather
