@@ -18,6 +18,7 @@ dependencies:
   - eccodes
   - dask
   - distributed
+  - cmweather
   - jax
   - tensorflow>=2.6
   - tensorflow-probability

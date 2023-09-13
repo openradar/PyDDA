@@ -20,7 +20,6 @@ except ImportError:
     JAX_AVAILABLE = False
 
 import pyart
-import scipy.ndimage.filters
 
 # Added to incorpeate JAX within the cost functions
 from . import _cost_functions_jax

@@ -7,6 +7,7 @@ dependencies:
   - pip
   - arm_pyart
   - cython
+  - cmweather
   - pytest
   - pytest-mpl
   - pytest-cov
