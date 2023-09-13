@@ -574,17 +574,21 @@ def calculate_mass_continuity_gradient(
 
     """
 
-    with tf.GradientTape() as tape:
-        tape.watch(u)
-        tape.watch(v)
-        tape.watch(w)
-        loss = calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff)
+    rho = tf.math.exp(-z / 10000.0)
+    dudx = _tf_gradient(u, dx, axis=2)
+    dvdy = _tf_gradient(v, dy, axis=1)
+    dwdz = _tf_gradient(w, dz, axis=0)
 
-    vars = {"u": u, "v": v, "w": w}
-    grad = tape.gradient(loss, vars)
-    p_x1 = grad["u"]
-    p_y1 = grad["v"]
-    p_z1 = grad["w"]
+    if anel == 1:
+        drho_dz = _tf_gradient(rho, dz, axis=0)
+        anel_term = w / rho * drho_dz
+    else:
+        anel_term = tf.ones(w.shape)
+    div = dudx + dvdy + dwdz + anel_term
+
+    p_x1 = _tf_gradient(div, dx, axis=2) * coeff
+    p_y1 = _tf_gradient(div, dy, axis=1) * coeff
+    p_z1 = _tf_gradient(div, dz, axis=0) * coeff
 
     # Impermeability condition
     if lower_bc is True:
