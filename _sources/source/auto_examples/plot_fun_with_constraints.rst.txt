@@ -129,7 +129,7 @@ at the edges of data coverage.
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          50|   0.1741|  13.9024|   0.0093|   3.2020|   0.0000|   0.0000|   0.0000|  14.6888
     Applying low pass filter to wind field...
-    Done! Time = 70.8
+    Done! Time = 82.4
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -190,7 +190,7 @@ at the edges of data coverage.
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          70| 498.5184| 424.4102|   0.0089| 100.4319|   0.0000|   0.0000|   0.0000|  60.1511
     Applying low pass filter to wind field...
-    Done! Time = 89.7
+    Done! Time = 104.5
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -251,7 +251,7 @@ at the edges of data coverage.
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
          70|   0.2298|  12.7692|   0.0093|   3.2056|   0.0000|   0.0000|   0.0000|  14.5750
     Applying low pass filter to wind field...
-    Done! Time = 91.2
+    Done! Time = 106.8
 
 
 
@@ -363,7 +363,7 @@ at the edges of data coverage.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (4 minutes 15.020 seconds)
+   **Total running time of the script:** (4 minutes 57.106 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:
