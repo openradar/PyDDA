@@ -586,9 +586,9 @@ def calculate_mass_continuity_gradient(
         anel_term = tf.ones(w.shape)
     div = dudx + dvdy + dwdz + anel_term
 
-    p_x1 = _tf_gradient(div, dx, axis=2) * coeff
-    p_y1 = _tf_gradient(div, dy, axis=1) * coeff
-    p_z1 = _tf_gradient(div, dz, axis=0) * coeff
+    p_x1 = -_tf_gradient(div, dx, axis=2) * coeff
+    p_y1 = -_tf_gradient(div, dy, axis=1) * coeff
+    p_z1 = -_tf_gradient(div, dz, axis=0) * coeff
 
     # Impermeability condition
     if lower_bc is True:
