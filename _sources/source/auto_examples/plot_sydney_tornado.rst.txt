@@ -35,7 +35,7 @@ This example uses pooch to download the data files.
 
 .. image:: ../../sydney_tornado.png
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-88
+.. GENERATED FROM PYTHON SOURCE LINES 21-76
 
 
 
@@ -78,17 +78,17 @@ This example uses pooch to download the data files.
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|2864.7900|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 1.796951
+    The gradient of the cost functions is 1.796964
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10| 430.7701| 584.1953|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0327
-    The gradient of the cost functions is 0.6151475
+         10| 430.7701| 812.2366|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0327
+    The gradient of the cost functions is 0.55652
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20| 213.7147| 393.5728|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.1716
-    The gradient of the cost functions is 0.6162488
+         20| 187.2330| 420.7121|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1477
+    The gradient of the cost functions is 0.557171
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         30| 213.9968| 394.0116|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.1842
+         30| 187.2800| 421.2845|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1599
     Applying low pass filter to wind field...
-    Done! Time = 93.2
+    Done! Time = 62.8
 
 
 
@@ -106,22 +106,10 @@ This example uses pooch to download the data files.
     import numpy as np
     import pooch
 
-    grid1_path = pooch.retrieve(
-        url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid1_sydney.nc",
-        known_hash=None,
-    )
-    grid2_path = pooch.retrieve(
-        url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid2_sydney.nc",
-        known_hash=None,
-    )
-    grid3_path = pooch.retrieve(
-        url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid3_sydney.nc",
-        known_hash=None,
-    )
-    grid4_path = pooch.retrieve(
-        url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid4_sydney.nc",
-        known_hash=None,
-    )
+    grid1_path = pydda.tests.get_sample_file("grid1_sydney.nc")
+    grid2_path = pydda.tests.get_sample_file("grid2_sydney.nc")
+    grid3_path = pydda.tests.get_sample_file("grid3_sydney.nc")
+    grid4_path = pydda.tests.get_sample_file("grid4_sydney.nc")
     grid1 = pyart.io.read_grid(grid1_path)
     grid2 = pyart.io.read_grid(grid2_path)
     grid3 = pyart.io.read_grid(grid3_path)
@@ -170,7 +158,7 @@ This example uses pooch to download the data files.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 43.287 seconds)
+   **Total running time of the script:** (1 minutes 11.359 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_sydney_tornado.py:

@@ -35,7 +35,7 @@ Herbie is not required to run PyDDA, but must be installed to run this example.
 
 Author: Robert C. Jackson
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-77
+.. GENERATED FROM PYTHON SOURCE LINES 19-71
 
 .. code-block:: default
 
@@ -53,14 +53,8 @@ Author: Robert C. Jackson
     H = Herbie("2018-09-14 06:00", model="hrrr", product="prs", fxx=0)
     H.download()
 
-    grid_mhx_path = pooch.retrieve(
-        url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid_mhx.nc",
-        known_hash=None,
-    )
-    grid_ltx_path = pooch.retrieve(
-        url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid_ltx.nc",
-        known_hash=None,
-    )
+    grid_mhx_path = pydda.tests.get_sample_file("grid_mhx.nc")
+    grid_ltx_path = pydda.tests.get_sample_file("grid_ltx.nc")
 
     grid_mhx = pyart.io.read_grid(grid_mhx_path)
     grid_ltx = pyart.io.read_grid(grid_ltx_path)

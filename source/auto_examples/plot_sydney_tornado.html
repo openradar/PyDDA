@@ -36,8 +36,8 @@
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Example on geographic plotting and constraint variation" href="plot_fun_with_constraints.html" />
-    <link rel="prev" title="Example on retrieving and plotting winds" href="plot_examples.html" />
+    <link rel="next" title="Example on retrieving and plotting winds" href="plot_examples.html" />
+    <link rel="prev" title="Example on integrating radar and HRRR data" href="hurricane_florence.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -132,14 +132,14 @@
    Example on integrating radar and HRRR data
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="plot_examples.html">
-   Example on retrieving and plotting winds
-  </a>
- </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Example of a wind retrieval in a tornado over Sydney
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="plot_examples.html">
+   Example on retrieving and plotting winds
   </a>
  </li>
  <li class="toctree-l1">
@@ -231,17 +231,17 @@ Total points: 281276
 The max of w_init is 0.0
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
       0|2864.7900|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-The gradient of the cost functions is 1.796951
+The gradient of the cost functions is 1.796964
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     10| 430.7701| 584.1953|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0327
-The gradient of the cost functions is 0.6151475
+     10| 430.7701| 812.2366|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0327
+The gradient of the cost functions is 0.55652
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     20| 213.7147| 393.5728|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.1716
-The gradient of the cost functions is 0.6162488
+     20| 187.2330| 420.7121|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1477
+The gradient of the cost functions is 0.557171
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     30| 213.9968| 394.0116|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  24.1842
+     30| 187.2800| 421.2845|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1599
 Applying low pass filter to wind field...
-Done! Time = 93.2
+Done! Time = 62.8
 </pre></div>
 </div>
 <div class="line-block">
@@ -253,22 +253,10 @@ Done! Time = 93.2
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pooch</span>
 
-<span class="n">grid1_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid1_sydney.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">grid2_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid2_sydney.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">grid3_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid3_sydney.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">grid4_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid4_sydney.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="n">grid1_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid1_sydney.nc&quot;</span><span class="p">)</span>
+<span class="n">grid2_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid2_sydney.nc&quot;</span><span class="p">)</span>
+<span class="n">grid3_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid3_sydney.nc&quot;</span><span class="p">)</span>
+<span class="n">grid4_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid4_sydney.nc&quot;</span><span class="p">)</span>
 <span class="n">grid1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid1_path</span><span class="p">)</span>
 <span class="n">grid2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid2_path</span><span class="p">)</span>
 <span class="n">grid3</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid3_path</span><span class="p">)</span>
@@ -315,7 +303,7 @@ Done! Time = 93.2
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 43.287 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 11.359 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-sydney-tornado-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e723312fcafc897d55179a96edaf58b4/plot_sydney_tornado.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_sydney_tornado.py</span></code></a></p>
@@ -333,17 +321,17 @@ Done! Time = 93.2
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_examples.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="hurricane_florence.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Example on retrieving and plotting winds</p>
+            <p class="prev-next-title">Example on integrating radar and HRRR data</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_fun_with_constraints.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_examples.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Example on geographic plotting and constraint variation</p>
+        <p class="prev-next-title">Example on retrieving and plotting winds</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

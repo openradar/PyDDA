@@ -36,7 +36,7 @@
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Example on retrieving and plotting winds" href="plot_examples.html" />
+    <link rel="next" title="Example of a wind retrieval in a tornado over Sydney" href="plot_sydney_tornado.html" />
     <link rel="prev" title="PyDDA Example Gallery" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -133,13 +133,13 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="plot_examples.html">
-   Example on retrieving and plotting winds
+  <a class="reference internal" href="plot_sydney_tornado.html">
+   Example of a wind retrieval in a tornado over Sydney
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="plot_sydney_tornado.html">
-   Example of a wind retrieval in a tornado over Sydney
+  <a class="reference internal" href="plot_examples.html">
+   Example on retrieving and plotting winds
   </a>
  </li>
  <li class="toctree-l1">
@@ -214,14 +214,8 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
 <span class="n">H</span> <span class="o">=</span> <span class="n">Herbie</span><span class="p">(</span><span class="s2">&quot;2018-09-14 06:00&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;hrrr&quot;</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="s2">&quot;prs&quot;</span><span class="p">,</span> <span class="n">fxx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">H</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
 
-<span class="n">grid_mhx_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid_mhx.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">grid_ltx_path</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span>
-    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/grid_ltx.nc&quot;</span><span class="p">,</span>
-    <span class="n">known_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="n">grid_mhx_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid_mhx.nc&quot;</span><span class="p">)</span>
+<span class="n">grid_ltx_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid_ltx.nc&quot;</span><span class="p">)</span>
 
 <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid_mhx_path</span><span class="p">)</span>
 <span class="n">grid_ltx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid_ltx_path</span><span class="p">)</span>
@@ -285,10 +279,10 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
             <p class="prev-next-title">PyDDA Example Gallery</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_examples.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_sydney_tornado.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Example on retrieving and plotting winds</p>
+        <p class="prev-next-title">Example of a wind retrieval in a tornado over Sydney</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

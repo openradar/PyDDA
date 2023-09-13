@@ -36,8 +36,8 @@
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Example of a wind retrieval in a tornado over Sydney" href="plot_sydney_tornado.html" />
-    <link rel="prev" title="Example on integrating radar and HRRR data" href="hurricane_florence.html" />
+    <link rel="next" title="Example on geographic plotting and constraint variation" href="plot_fun_with_constraints.html" />
+    <link rel="prev" title="Example of a wind retrieval in a tornado over Sydney" href="plot_sydney_tornado.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -132,14 +132,14 @@
    Example on integrating radar and HRRR data
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Example on retrieving and plotting winds
-  </a>
- </li>
  <li class="toctree-l1">
   <a class="reference internal" href="plot_sydney_tornado.html">
    Example of a wind retrieval in a tornado over Sydney
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Example on retrieving and plotting winds
   </a>
  </li>
  <li class="toctree-l1">
@@ -219,21 +219,21 @@ rmsVR = 6.827304
 Total points: 81194
 The max of w_init is 18.516070425591412
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-      0| 194.0315|  22.8134|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5161
-The gradient of the cost functions is 3.3530052
+      0| 194.0315|   8.7130|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5161
+The gradient of the cost functions is 3.3530226
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     10|   7.2219|  25.6808|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5305
-The gradient of the cost functions is 0.27907845
+     10|   7.2219|  12.7600|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5305
+The gradient of the cost functions is 0.20959435
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     20|   0.7615|  26.8414|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.6581
-The gradient of the cost functions is 0.26164228
+     20|   0.7832|  15.4989|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5547
+The gradient of the cost functions is 0.22645763
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     30|   0.9730|  26.9042|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.7008
-The gradient of the cost functions is 0.26174098
+     30|   0.8354|  15.4125|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5539
+The gradient of the cost functions is 0.22646445
 Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     40|   0.9732|  26.9042|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.7008
+     40|   0.8354|  15.4125|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5539
 Applying low pass filter to wind field...
-Done! Time = 14.0
+Done! Time = 8.6
 /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
   ax.contour(
 /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
@@ -311,7 +311,7 @@ Done! Time = 14.0
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;Darwin.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 16.739 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.236 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
@@ -329,17 +329,17 @@ Done! Time = 14.0
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="hurricane_florence.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_sydney_tornado.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Example on integrating radar and HRRR data</p>
+            <p class="prev-next-title">Example of a wind retrieval in a tornado over Sydney</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_sydney_tornado.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_fun_with_constraints.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Example of a wind retrieval in a tornado over Sydney</p>
+        <p class="prev-next-title">Example on geographic plotting and constraint variation</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
