@@ -50,6 +50,8 @@ def J_function(winds, parameters):
         The value of the cost function
     """
     if parameters.engine == "tensorflow":
+        # Implement bounding box constraints (-100, 100)
+
         if not TENSORFLOW_AVAILABLE:
             raise ImportError(
                 "Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"
@@ -63,6 +65,8 @@ def J_function(winds, parameters):
                 parameters.grid_shape[2],
             ),
         )
+        winds = tf.math.maximum(winds, tf.constant([-100.0]))
+        winds = tf.math.minimum(winds, tf.constant([100.0]))
         # Had to change to float because Jax returns device array (use np.float_())
         Jvel = _cost_functions_tensorflow.calculate_radial_vel_cost_function(
             parameters.vrs,
@@ -446,6 +450,7 @@ def grad_J(winds, parameters):
         Gradient vector of cost function
     """
     if parameters.engine == "tensorflow":
+
         if not TENSORFLOW_AVAILABLE:
             raise ImportError(
                 "Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"
@@ -459,6 +464,9 @@ def grad_J(winds, parameters):
                 parameters.grid_shape[2],
             ),
         )
+
+        winds = tf.math.maximum(winds, tf.constant([-100.0]))
+        winds = tf.math.minimum(winds, tf.constant([100.0]))
         grad = _cost_functions_tensorflow.calculate_grad_radial_vel(
             parameters.vrs,
             parameters.els,

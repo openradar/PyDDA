@@ -2,6 +2,10 @@ import numpy as np
 import scipy
 import pyart
 
+from scipy.ndimage import _nd_image
+
+laplace_filter = np.asarray([1, -2, 1], dtype=np.float64)
+
 
 def calculate_radial_vel_cost_function(
     vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0

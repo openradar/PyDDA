@@ -219,6 +219,7 @@ def _get_dd_wind_field_scipy(
     output_cost_functions=True,
     roi=1000.0,
     wind_tol=0.1,
+    tolerance=1e-8,
 ):
     global _wcurrmax
     global _wprevmax
@@ -521,13 +522,29 @@ def _get_dd_wind_field_scipy(
     bounds = [(-x, x) for x in 100 * np.ones(winds.shape)]
 
     if model_fields is not None:
-        for the_field in model_fields:
+        for i, the_field in enumerate(model_fields):
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            parameters.u_model.append(Grids[0].fields[u_field]["data"])
-            parameters.v_model.append(Grids[0].fields[v_field]["data"])
-            parameters.w_model.append(Grids[0].fields[w_field]["data"])
+            model_finite = np.logical_and.reduce(
+                (
+                    np.isfinite(Grids[0].fields[u_field]["data"]),
+                    np.isfinite(Grids[0].fields[w_field]["data"]),
+                    np.isfinite(Grids[0].fields[v_field]["data"]),
+                )
+            )
+            parameters.model_weights[i] = np.where(
+                model_finite, parameters.model_weights[i], 0
+            )
+            parameters.u_model.append(
+                np.nan_to_num(Grids[0].fields[u_field]["data"], 0)
+            )
+            parameters.v_model.append(
+                np.nan_to_num(Grids[0].fields[v_field]["data"], 0)
+            )
+            parameters.w_model.append(
+                np.nan_to_num(Grids[0].fields[w_field]["data"], 0)
+            )
 
     parameters.Co = Co
     parameters.Cm = Cm
@@ -586,7 +603,7 @@ def _get_dd_wind_field_scipy(
             winds,
             args=(parameters,),
             maxiter=max_iterations,
-            pgtol=1e-8,
+            pgtol=tolerance,
             bounds=bounds,
             fprime=grad_J,
             disp=0,
@@ -757,6 +774,7 @@ def _get_dd_wind_field_tensorflow(
     lower_bc=True,
     parallel_iterations=1,
     wind_tol=0.1,
+    tolerance=1e-8,
 ):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError(
@@ -1024,6 +1042,7 @@ def _get_dd_wind_field_tensorflow(
                     parameters.model_weights[i] = 1 - (
                         coverage_grade / (len(Grids) + 1)
                     )
+
             else:
                 for i in range(len(model_fields)):
                     parameters.model_weights[i] = weights_model[i]
@@ -1089,13 +1108,29 @@ def _get_dd_wind_field_tensorflow(
     [(-x, x) for x in 100.0 * np.ones(winds.shape)]
 
     if model_fields is not None:
-        for the_field in model_fields:
+        for i, the_field in enumerate(model_fields):
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            parameters.u_model.append(tf.constant(Grids[0].fields[u_field]["data"]))
-            parameters.v_model.append(tf.constant(Grids[0].fields[v_field]["data"]))
-            parameters.w_model.append(tf.constant(Grids[0].fields[w_field]["data"]))
+            model_finite = np.logical_and.reduce(
+                (
+                    np.isfinite(Grids[0].fields[u_field]["data"]),
+                    np.isfinite(Grids[0].fields[w_field]["data"]),
+                    np.isfinite(Grids[0].fields[v_field]["data"]),
+                )
+            )
+            parameters.model_weights[i] = np.where(
+                model_finite, parameters.model_weights[i], 0
+            )
+            parameters.u_model.append(
+                tf.constant(np.nan_to_num(Grids[0].fields[u_field]["data"], 0))
+            )
+            parameters.v_model.append(
+                tf.constant(np.nan_to_num(Grids[0].fields[v_field]["data"], 0))
+            )
+            parameters.w_model.append(
+                tf.constant(np.nan_to_num(Grids[0].fields[w_field]["data"], 0))
+            )
 
     parameters.Co = Co
     parameters.Cm = Cm
@@ -1115,10 +1150,11 @@ def _get_dd_wind_field_tensorflow(
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient,
         initial_position=winds,
-        tolerance=1e-3,
+        tolerance=tolerance,
         x_tolerance=wind_tol,
         max_iterations=max_iterations,
         parallel_iterations=parallel_iterations,
+        max_line_search_iterations=20,
     )
     winds = np.reshape(
         winds.position.numpy(),
@@ -1363,6 +1399,8 @@ def get_dd_wind_field(
         This is only for the TensorFlow-based engine.
     wind_tol: float
         Stop iterations after maximum change in winds is less than this value.
+    tolerance: float
+        Tolerance for L2 norm of gradient before stopping.
 
     Returns
     =======
