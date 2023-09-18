@@ -12,14 +12,18 @@ dependencies:
   - pytest-mpl
   - pytest-cov
   - cartopy
+  - pyproj=3.3
   - cfgrib
   - eccodes
   - sphinx
   - tensorflow
   - tensorflow-probability
   - herbie-data
-  - pip:
-    - sphinx_gallery
-    - sphinx-copybutton
-    - pydata-sphinx-theme<0.9.0
-    - sphinx_design
+  - nbsphinx
+  - pydata-sphinx-theme
+  - pooch
+  - cmweather
+  - myst-nb
+  - sphinx-gallery
+  - sphinx-copybutton
+  - sphinx-design

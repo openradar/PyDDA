@@ -48,6 +48,8 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
+    "sphinx_design",
+    "myst_nb",
 ]
 
 sphinx_gallery_conf = {

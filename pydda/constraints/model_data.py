@@ -24,7 +24,7 @@ except ImportError:
 
 from netCDF4 import Dataset
 from datetime import datetime, timedelta
-from scipy.interpolate import griddata, NearestNDInterpolator
+from scipy.interpolate import griddata, NearestNDInterpolator, LinearNDInterpolator
 from copy import deepcopy
 
 
@@ -174,7 +174,9 @@ def download_needed_era_data(Grid, start_date, end_date, file_name):
     server.retrieve("reanalysis-era5-pressure-levels", retrieve_dict, file_name)
 
 
-def make_constraint_from_era5(Grid, file_name=None, vel_field=None, dest_era_file=None):
+def make_constraint_from_era5(
+    Grid, file_name=None, vel_field=None, dest_era_file=None, method="nearest"
+):
     """
     Written by: Hamid Ali Syed (@syedhamidali), and Bobby Jackson
     This function will read ERA 5 in NetCDF format
@@ -209,6 +211,9 @@ def make_constraint_from_era5(Grid, file_name=None, vel_field=None, dest_era_fil
     dest_era_file:
         If this is not None, PyDDA will save the interpolated grid
         into this file.
+    method: str
+            Interpolation method: 'nearest' for nearest neighbor,
+            'linear' for linear.
 
     Returns
     -------
@@ -367,16 +372,29 @@ def make_constraint_from_era5(Grid, file_name=None, vel_field=None, dest_era_fil
     lat_flattened = lat_mgrid.flatten()
     height_flattened = height_ERA[time_step].flatten()
     height_flattened -= Grid.radar_altitude["data"]
+    if method == "nearest":
+        u_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+        v_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+        w_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    elif method == "linear":
+        u_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+        v_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+        w_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    else:
+        raise NotImplementedError("%s interpolation method not implemented!" % method)
 
-    u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
-    )
-    v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
-    )
-    w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
-    )
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
@@ -509,7 +527,7 @@ def make_constraint_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     return Grid
 
 
-def add_hrrr_constraint_to_grid(Grid, file_path):
+def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
     """
     This function will read an HRRR GRIB2 file and create the constraining
     u, v, and w fields for the model constraint
@@ -521,6 +539,9 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
     will be interpolated to the Grid's specficiation and added as a field.
     file_path: string
         The path to the GRIB2 file to load.
+    method: str
+            Interpolation method: 'nearest' for nearest neighbor,
+            'linear' for linear.
 
     Returns
     -------
@@ -559,10 +580,10 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
     radar_grid_lat = Grid.point_latitude["data"]
     radar_grid_lon = Grid.point_longitude["data"]
     radar_grid_alt = Grid.point_z["data"]
-    lat_min = radar_grid_lat.min()
-    lat_max = radar_grid_lat.max()
-    lon_min = radar_grid_lon.min()
-    lon_max = radar_grid_lon.max()
+    lat_min = radar_grid_lat.min() - 1
+    lat_max = radar_grid_lat.max() + 1
+    lon_min = radar_grid_lon.min() - 1
+    lon_max = radar_grid_lon.max() + 1
     lon_r = np.tile(lon, (height.shape[0], 1, 1))
     lat_r = np.tile(lat, (height.shape[0], 1, 1))
     lon_flattened = lon_r.flatten()
@@ -585,23 +606,43 @@ def add_hrrr_constraint_to_grid(Grid, file_path):
 
     u_flattened = grb_u.data[:, :, :].flatten()
     u_flattened = u_flattened[the_box]
-    u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
-    )
+    if method == "nearest":
+        u_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+    elif method == "linear":
+        u_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened),
+            u_flattened,
+            rescale=True,
+        )
+    else:
+        raise NotImplementedError("%s interpolation not implemented!" % method)
+
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
     v_flattened = grb_v.data[:, :, :].flatten()
     v_flattened = v_flattened[the_box]
-    v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
-    )
+    if method == "nearest":
+        v_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+    elif method == "linear":
+        v_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
     w_flattened = grb_w.data[:, :, :].flatten()
     w_flattened = w_flattened[the_box]
-    w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
-    )
+    if method == "nearest":
+        w_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    elif method == "linear":
+        w_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
     new_grid = deepcopy(Grid)
