@@ -5,23 +5,25 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyart
+import pydda
 from pyart.testing import get_test_data
 
 warnings.filterwarnings("ignore")
 
 # read in the data from both XSAPR radars
-xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-radar_se = pyart.io.read_cfradial(xsapr_se_file)
+ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+radar_kict = pyart.io.read_cfradial(kict_file)
+
 
 fig = plt.figure(figsize=(16, 6))
 ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
 # Plot the southwestern radar
-disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
 disp1.plot_ppi_map(
-    "reflectivity_horizontal",
+    "DBZ",
     sweep=1,
     ax=ax,
     vmin=-20,
@@ -35,9 +37,9 @@ disp1.plot_ppi_map(
 )
 # Plot the southeastern radar
 ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-disp2 = pyart.graph.RadarMapDisplay(radar_se)
+disp2 = pyart.graph.RadarMapDisplay(radar_kict)
 disp2.plot_ppi_map(
-    "reflectivity_horizontal",
+    "DBZ",
     sweep=1,
     ax=ax2,
     vmin=-20,

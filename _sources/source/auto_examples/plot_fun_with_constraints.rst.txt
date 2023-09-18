@@ -69,10 +69,10 @@ at the edges of data coverage.
 
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     Interpolating sounding to radar grid
@@ -113,23 +113,77 @@ at the edges of data coverage.
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|55964.2227|   0.0000|   0.0091|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 28.303705
+    The gradient of the cost functions is 28.291126
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10| 432.8462|  11.1627|   0.0092|   3.1005|   0.0000|   0.0000|   0.0000|  14.7407
-    The gradient of the cost functions is 0.9376439
+         10| 433.0520|  10.8643|   0.0092|   3.0986|   0.0000|   0.0000|   0.0000|  14.6602
+    The gradient of the cost functions is 0.9322654
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20|   7.6007|  13.1735|   0.0093|   3.1935|   0.0000|   0.0000|   0.0000|  14.5022
-    The gradient of the cost functions is 0.11323309
+         20|   7.5696|  11.9199|   0.0093|   3.1923|   0.0000|   0.0000|   0.0000|  14.3516
+    The gradient of the cost functions is 0.108117804
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         30|   4.6622|  14.1369|   0.0093|   3.1998|   0.0000|   0.0000|   0.0000|  14.5800
-    The gradient of the cost functions is 0.09369536
+         30|   4.4797|  11.2506|   0.0093|   3.2007|   0.0000|   0.0000|   0.0000|  14.2950
+    The gradient of the cost functions is 0.24360316
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         40|   0.1739|  13.9019|   0.0093|   3.2020|   0.0000|   0.0000|   0.0000|  14.6887
-    The gradient of the cost functions is 0.094281875
+         40|   0.2664|  10.8315|   0.0093|   3.2033|   0.0000|   0.0000|   0.0000|  14.3531
+    The gradient of the cost functions is 0.258406
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         50|   0.1741|  13.9024|   0.0093|   3.2020|   0.0000|   0.0000|   0.0000|  14.6888
+         50|   1.1081|   5.6735|   0.0093|   3.2813|   0.0000|   0.0000|   0.0000|  14.6250
+    The gradient of the cost functions is 0.061305936
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         60|   1.6095|   4.4080|   0.0093|   3.4170|   0.0000|   0.0000|   0.0000|  15.2762
+    The gradient of the cost functions is 0.12218659
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         70|   0.0535|   4.3390|   0.0093|   3.3971|   0.0000|   0.0000|   0.0000|  15.1830
+    The gradient of the cost functions is 0.112230875
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         80|   0.2807|   3.3781|   0.0093|   3.4398|   0.0000|   0.0000|   0.0000|  15.5190
+    The gradient of the cost functions is 0.051758513
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         90|   1.0581|   2.4080|   0.0093|   3.6301|   0.0000|   0.0000|   0.0000|  16.3007
+    The gradient of the cost functions is 0.10457411
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        100|   0.0483|   2.4010|   0.0093|   3.5898|   0.0000|   0.0000|   0.0000|  16.2115
+    The gradient of the cost functions is 0.049456704
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        110|   0.0814|   2.2034|   0.0093|   3.6100|   0.0000|   0.0000|   0.0000|  16.3215
+    The gradient of the cost functions is 0.049815755
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        120|   0.6869|   1.5476|   0.0093|   3.7707|   0.0000|   0.0000|   0.0000|  17.0703
+    The gradient of the cost functions is 0.10846455
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        130|   0.0268|   1.5556|   0.0093|   3.7333|   0.0000|   0.0000|   0.0000|  16.9280
+    The gradient of the cost functions is 0.027292885
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        140|   0.0306|   1.4981|   0.0093|   3.7383|   0.0000|   0.0000|   0.0000|  16.9617
+    The gradient of the cost functions is 0.042717613
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        150|   0.4080|   1.1065|   0.0093|   3.7895|   0.0000|   0.0000|   0.0000|  17.2925
+    The gradient of the cost functions is 0.10312765
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        160|   0.0236|   1.1075|   0.0093|   3.7809|   0.0000|   0.0000|   0.0000|  17.2615
+    The gradient of the cost functions is 0.01871165
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        170|   0.0207|   1.0828|   0.0093|   3.7814|   0.0000|   0.0000|   0.0000|  17.2774
+    The gradient of the cost functions is 0.031389352
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        180|   0.2004|   0.8937|   0.0093|   3.7681|   0.0000|   0.0000|   0.0000|  17.8297
+    The gradient of the cost functions is 0.114162244
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        190|   0.0271|   0.8746|   0.0093|   3.7660|   0.0000|   0.0000|   0.0000|  18.4548
+    The gradient of the cost functions is 0.014707348
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        200|   0.0090|   0.8632|   0.0093|   3.7637|   0.0000|   0.0000|   0.0000|  18.8838
+    The gradient of the cost functions is 0.01655056
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        210|   0.0497|   0.8166|   0.0093|   3.7508|   0.0000|   0.0000|   0.0000|  19.4606
+    The gradient of the cost functions is 0.1292962
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        220|   0.0408|   0.7467|   0.0093|   3.7189|   0.0000|   0.0000|   0.0000|  20.9271
+    The gradient of the cost functions is 0.014018058
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        230|   0.0077|   0.7449|   0.0093|   3.7053|   0.0000|   0.0000|   0.0000|  21.6975
     Applying low pass filter to wind field...
-    Done! Time = 82.4
+    Done! Time = 313.2
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -168,29 +222,68 @@ at the edges of data coverage.
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|83859.8125|   0.0000|   0.0000|1274.4282|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 31.810278
+    The gradient of the cost functions is 31.80247
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10| 704.6689|  11.4735|   0.0003|1271.5618|   0.0000|   0.0000|   0.0000|  11.8528
-    The gradient of the cost functions is 1.1951996
+         10| 704.3429|  11.2237|   0.0003|1271.5498|   0.0000|   0.0000|   0.0000|  11.7762
+    The gradient of the cost functions is 1.1914004
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20|  11.2450|  13.2237|   0.0003|1262.6641|   0.0000|   0.0000|   0.0000|  11.6571
-    The gradient of the cost functions is 0.3364081
+         20|  11.1114|  12.1835|   0.0003|1262.6161|   0.0000|   0.0000|   0.0000|  11.4604
+    The gradient of the cost functions is 0.33650497
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         30|  20.1776|  14.2810|   0.0004|1241.5120|   0.0000|   0.0000|   0.0000|  11.4477
-    The gradient of the cost functions is 2.3294988
+         30|  20.0218|  11.3132|   0.0003|1241.3234|   0.0000|   0.0000|   0.0000|  11.2256
+    The gradient of the cost functions is 2.3322194
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         40|  68.8079|  22.5259|   0.0004|1116.9188|   0.0000|   0.0000|   0.0000|  12.9644
-    The gradient of the cost functions is 5.0930557
+         40|  64.0980|   7.4645|   0.0004|1118.9155|   0.0000|   0.0000|   0.0000|  11.0131
+    The gradient of the cost functions is 3.1738365
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         50| 444.8738| 371.8791|   0.0077| 139.0789|   0.0000|   0.0000|   0.0000|  55.7124
-    The gradient of the cost functions is 4.2041383
+         50| 133.2814| 101.4496|   0.0048| 190.4297|   0.0000|   0.0000|   0.0000|  40.1330
+    The gradient of the cost functions is 0.575966
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         60| 498.5228| 424.4142|   0.0089| 100.4293|   0.0000|   0.0000|   0.0000|  60.1515
-    The gradient of the cost functions is 4.205406
+         60| 116.2430| 163.7324|   0.0076|  59.7310|   0.0000|   0.0000|   0.0000|  49.3056
+    The gradient of the cost functions is 1.4573013
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         70| 498.5184| 424.4102|   0.0089| 100.4319|   0.0000|   0.0000|   0.0000|  60.1511
+         70|   9.4493| 152.7098|   0.0077|  54.8049|   0.0000|   0.0000|   0.0000|  48.0482
+    The gradient of the cost functions is 1.1319462
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         80|  23.7043|  66.5472|   0.0086|  14.8136|   0.0000|   0.0000|   0.0000|  36.1306
+    The gradient of the cost functions is 1.6997486
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         90|   5.6146|  27.0551|   0.0091|   7.3213|   0.0000|   0.0000|   0.0000|  24.3880
+    The gradient of the cost functions is 0.19911101
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        100|   0.4343|  24.8763|   0.0090|   7.3544|   0.0000|   0.0000|   0.0000|  23.9773
+    The gradient of the cost functions is 0.20724337
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        110|   9.3379|  13.8839|   0.0086|   8.3275|   0.0000|   0.0000|   0.0000|  22.6053
+    The gradient of the cost functions is 1.2827213
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        120|   2.0562|   7.7675|   0.0084|   9.2695|   0.0000|   0.0000|   0.0000|  20.3768
+    The gradient of the cost functions is 0.10957267
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        130|   0.2903|   6.4048|   0.0083|   9.6173|   0.0000|   0.0000|   0.0000|  19.3785
+    The gradient of the cost functions is 0.08271687
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        140|   1.2587|   5.3632|   0.0083|   9.1258|   0.0000|   0.0000|   0.0000|  18.9749
+    The gradient of the cost functions is 0.5516492
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        150|   1.6371|   3.2382|   0.0084|   7.6998|   0.0000|   0.0000|   0.0000|  19.2732
+    The gradient of the cost functions is 0.1383003
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        160|   0.4293|   2.4377|   0.0086|   6.1152|   0.0000|   0.0000|   0.0000|  20.2584
+    The gradient of the cost functions is 0.038444586
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        170|   0.5616|   2.4281|   0.0087|   5.8257|   0.0000|   0.0000|   0.0000|  20.4413
+    The gradient of the cost functions is 0.18903205
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        180|   0.4030|   2.1688|   0.0087|   5.5776|   0.0000|   0.0000|   0.0000|  20.5341
+    The gradient of the cost functions is 0.108853504
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        190|   0.2012|   1.7315|   0.0089|   4.7043|   0.0000|   0.0000|   0.0000|  20.9312
+    The gradient of the cost functions is 0.025811834
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        200|   0.2664|   1.7224|   0.0089|   4.5391|   0.0000|   0.0000|   0.0000|  20.9959
     Applying low pass filter to wind field...
-    Done! Time = 104.5
+    Done! Time = 267.0
     Interpolating sounding to radar grid
     Interpolated U field:
     tf.Tensor(
@@ -229,29 +322,44 @@ at the edges of data coverage.
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|559642.2500|   0.0000|   0.0091|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 43.09404
+    The gradient of the cost functions is 43.085587
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10|1749.6165|  11.6008|   0.0093|   3.1307|   0.0000|   0.0000|   0.0000|  14.5148
-    The gradient of the cost functions is 4.6926384
+         10|1749.9775|  11.5556|   0.0093|   3.1306|   0.0000|   0.0000|   0.0000|  14.5070
+    The gradient of the cost functions is 4.6896577
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20|1139.2798|  13.0755|   0.0093|   3.2927|   0.0000|   0.0000|   0.0000|  14.2558
-    The gradient of the cost functions is 6.3104076
+         20|1137.2308|  12.8649|   0.0093|   3.2926|   0.0000|   0.0000|   0.0000|  14.2361
+    The gradient of the cost functions is 6.3044558
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         30|   2.9948|  12.6783|   0.0093|   3.2075|   0.0000|   0.0000|   0.0000|  14.5561
-    The gradient of the cost functions is 0.23219287
+         30|   2.9881|  12.4682|   0.0093|   3.2075|   0.0000|   0.0000|   0.0000|  14.5336
+    The gradient of the cost functions is 0.23147261
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         40|   0.2801|  12.7296|   0.0093|   3.2055|   0.0000|   0.0000|   0.0000|  14.5717
-    The gradient of the cost functions is 0.13308749
+         40|   0.2791|  12.4197|   0.0093|   3.2057|   0.0000|   0.0000|   0.0000|  14.5405
+    The gradient of the cost functions is 0.102958694
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         50|   0.2299|  12.7749|   0.0093|   3.2056|   0.0000|   0.0000|   0.0000|  14.5745
-    The gradient of the cost functions is 0.09270921
+         50|   0.3197|  12.2683|   0.0093|   3.2062|   0.0000|   0.0000|   0.0000|  14.5278
+    The gradient of the cost functions is 0.8344458
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         60|   0.2298|  12.7692|   0.0093|   3.2056|   0.0000|   0.0000|   0.0000|  14.5750
-    The gradient of the cost functions is 0.09270603
+         60|   0.3998|  11.4562|   0.0093|   3.2103|   0.0000|   0.0000|   0.0000|  14.4570
+    The gradient of the cost functions is 0.22998074
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         70|   0.2298|  12.7692|   0.0093|   3.2056|   0.0000|   0.0000|   0.0000|  14.5750
+         70|   0.5988|  10.1893|   0.0093|   3.2253|   0.0000|   0.0000|   0.0000|  14.3264
+    The gradient of the cost functions is 0.13649559
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         80|   0.9579|   9.6588|   0.0093|   3.2293|   0.0000|   0.0000|   0.0000|  14.2695
+    The gradient of the cost functions is 1.1096873
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         90|   1.4194|   7.8094|   0.0093|   3.2453|   0.0000|   0.0000|   0.0000|  14.1845
+    The gradient of the cost functions is 0.5622433
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        100|   0.4597|   4.6916|   0.0093|   3.3586|   0.0000|   0.0000|   0.0000|  14.9792
+    The gradient of the cost functions is 0.09190905
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        110|   0.3639|   4.5901|   0.0093|   3.3930|   0.0000|   0.0000|   0.0000|  15.1395
+    The gradient of the cost functions is 0.15870957
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+        120|   0.0040|   4.5883|   0.0093|   3.3888|   0.0000|   0.0000|   0.0000|  15.1114
     Applying low pass filter to wind field...
-    Done! Time = 106.8
+    Done! Time = 160.7
 
 
 
@@ -363,7 +471,7 @@ at the edges of data coverage.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (4 minutes 57.106 seconds)
+   **Total running time of the script:** (12 minutes 24.447 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_fun_with_constraints.py:

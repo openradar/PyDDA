@@ -7,9 +7,9 @@ Welcome to the PyDDA documentation!
 ===================================
 
 .. image:: logo.png
-    :width: 400px
+    :width: 200px
     :align: center
-    :height: 200px
+    :height: 100px
     :alt: alternate text
 
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg
@@ -18,6 +18,55 @@ Welcome to the PyDDA documentation!
 This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as
 description of each of PyDDA's subroutines.
+
+.. grid:: 1 2 2 2
+    :gutter: 2
+
+    .. grid-item-card:: :octicon:`book;10em`
+        :link: user_guide/index
+        :link-type: doc
+        :text-align: center
+
+        **User Guide**
+
+        The cookbook provides in-depth information on how
+        to use PyDDA, including how to get started.
+        This is where to look for general conceptual descriptions on how
+        to use parts of PyDDA, including how to make your first wind retrieval and
+        the required data preprocessing to do so.
+
+    .. grid-item-card:: :octicon:`list-unordered;10em`
+        :link: dev_reference/index
+        :link-type: doc
+        :text-align: center
+
+        **Reference Guide**
+
+        The reference guide contains detailed descriptions on
+        every function and class within PyDDA. This is where to turn to understand
+        how to use a particular feature or where to search for a specific tool
+
+    .. grid-item-card:: :octicon:`terminal;10em`
+        :link: contributors_guide/index
+        :link-type: doc
+        :text-align: center
+
+        **Developer Guide**
+
+        Want to help make PyDDA better? Found something
+        that's not working quite right? You can find instructions on how to
+        contribute to PyDDA here. You can also find detailed descriptions on
+        tools useful for developing PyDDA.
+
+    .. grid-item-card:: :octicon:`graph;10em`
+        :link: source/auto_examples/index
+        :link-type: doc
+        :text-align: center
+
+        **Example Gallery**
+
+        Check out PyDDA's gallery of examples which contains
+        sample code demonstrating various parts of PyDDA's functionality.
 
 =========================
 System Requirements
@@ -33,9 +82,9 @@ of parallelism we recommend:
 ::
 
 While PyDDA will work on less than this, you may run into performance issues.
-In addition, we do not support Python versions less than 3.6.
+In addition, we do not support Python versions less than 3.9.
 If you have an older version installed, PyDDA may work just fine but we will
-not provide support for any issues unless you are using at least Python 3.6.
+not provide support for any issues unless you are using at least Python 3.9.
 
 =========================
 Installation instructions
@@ -45,16 +94,8 @@ The GitHub repository for PyDDA is available at:
 
 `<https://github.com/openradar/PyDDA>`_
 
-Before you install PyDDA, ensure that the following dependencies are installed:
-::
-
-    Python 3.6+
-    Py-ART 1.9.0+
-    scipy 1.0.1+
-    numpy 1.13.1+
-    matplotlib 1.5.3+
-    cartopy 0.16.0+
-::
+We do not support Python versions less than 3.9. If you use earlier Python versions,
+be aware, there is no testing done for these versions so problems may arise!
 
 In order to use the HRRR data constraint, cfgrib needs to be installed. `cfgrib
 <http://github.com/ecmwf/cfgrib>`_ currently only works on Mac OS and Linux, so

@@ -3,7 +3,7 @@
 Radar Data Quality Control - Dealiasing
 =======================================
 
-In this notebook, we will showcase how to preform quality control of your
+In this notebook, we will showcase how to perform quality control of your
 radar files, specifically dealiasing velocities. By doing this we can provide
 PyDDA with quality controlled doppler velocities for dual doppler analysis.
 
@@ -11,9 +11,8 @@ PyDDA with quality controlled doppler velocities for dual doppler analysis.
 Read the Data
 -------------
 
-For this example, we use test data found in Py-ART for two X-Band Scanning ARM
-Precipitation Radars (X-SAPR) found at the Atmospheric Radiation Measurment
-(ARM) Southern Great Plains (SGP) site in Oklahoma. For more information on
+For this example, we use test data for two NEXRAD radars in
+northern Oklahoma. For more information on
 reading the radar data, consult :ref:`reading-radar-data`.
 
 Get test data::
@@ -25,10 +24,10 @@ Reading CF-Radial::
 .. code-block:: python
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
 
 ++++++++++++++++++++++++++++
 Plot Velocity of Both Radars
@@ -40,9 +39,9 @@ Plot Velocity of Both Radars
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
     # Plot the southwestern radar
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax,
         vmin=-32,
@@ -58,9 +57,9 @@ Plot Velocity of Both Radars
 
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax2,
         vmin=-32,
@@ -83,23 +82,25 @@ Plot Velocity of Both Radars
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
+
 
     fig = plt.figure(figsize=(16, 6))
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
     # Plot the southwestern radar
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax,
         vmin=-32,
@@ -115,9 +116,9 @@ Plot Velocity of Both Radars
 
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax2,
         vmin=-32,
@@ -145,19 +146,17 @@ Py-ART's calculate_velocity_texture function::
 
 .. code-block:: python
 
-    # Calculate the Velocity Texture and apply the PyART GateFilter Utilityx
-    vel_tex_sw = pyart.retrieve.calculate_velocity_texture(radar_sw,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+    # Calculate the Velocity Texture and apply the PyART GateFilter Utility
+    vel_tex_ktlx = pyart.retrieve.calculate_velocity_texture(radar_ktlx,
+                                                           vel_field='VEL',
                                                            )
-    vel_tex_se = pyart.retrieve.calculate_velocity_texture(radar_se,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+    vel_tex_kict = pyart.retrieve.calculate_velocity_texture(radar_kict,
+                                                           vel_field='VEL',
                                                            )
 
     ## Add velocity texture to the radar objects
-    radar_sw.add_field('velocity_texture', vel_tex_sw, replace_existing=True)
-    radar_se.add_field('velocity_texture', vel_tex_se, replace_existing=True)
+    radar_ktlx.add_field('velocity_texture', vel_tex_ktlx, replace_existing=True)
+    radar_kict.add_field('velocity_texture', vel_tex_kict, replace_existing=True)
 
 +++++++++++++++++++++++++
 Velocity Texture Displays
@@ -172,7 +171,7 @@ from artifacts.
 
     # Display the calculated velocity texture
     fig = plt.figure(figsize=[8, 6])
-    display = pyart.graph.RadarDisplay(radar_sw)
+    display = pyart.graph.RadarDisplay(radar_ktlx)
     display.plot_ppi('velocity_texture',
                          sweep=0,
                          vmin=0,
@@ -182,8 +181,8 @@ from artifacts.
 
     # Plot a histogram of the velocity textures
     fig = plt.figure(figsize=[8, 8])
-    hist, bins = np.histogram(radar_sw.fields['velocity_texture']['data'],
-                              bins=150)
+    hist, bins = np.histogram(radar_ktlx.fields['velocity_texture']['data'],
+                              bins=np.linspace(0, 20, 150))
     bins = (bins[1:]+bins[:-1])/2.0
     plt.plot(bins,
              hist,
@@ -206,32 +205,32 @@ from artifacts.
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
 
-    # Calculate the Velocity Texture and apply the PyART GateFilter Utilityx
-    vel_tex_sw = pyart.retrieve.calculate_velocity_texture(radar_sw,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+    # Calculate the Velocity Texture and apply the PyART GateFilter Utility
+    vel_tex_ktlx = pyart.retrieve.calculate_velocity_texture(radar_ktlx,
+                                                           vel_field='VEL',
+
                                                            )
-    vel_tex_se = pyart.retrieve.calculate_velocity_texture(radar_se,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+    vel_tex_kict = pyart.retrieve.calculate_velocity_texture(radar_kict,
+                                                           vel_field='VEL',
                                                            )
 
     ## Add velocity texture to the radar objects
-    radar_sw.add_field('velocity_texture', vel_tex_sw, replace_existing=True)
-    radar_se.add_field('velocity_texture', vel_tex_se, replace_existing=True)
+    radar_ktlx.add_field('velocity_texture', vel_tex_ktlx, replace_existing=True)
+    radar_kict.add_field('velocity_texture', vel_tex_kict, replace_existing=True)
 
     fig = plt.figure(figsize=(8, 6))
-    display = pyart.graph.RadarDisplay(radar_sw)
+    display = pyart.graph.RadarDisplay(radar_ktlx)
     display.plot_ppi('velocity_texture',
                          sweep=0,
                          vmin=0,
@@ -241,8 +240,8 @@ from artifacts.
 
     # Plot a histogram of the velocity textures
     fig = plt.figure(figsize=[8, 8])
-    hist, bins = np.histogram(radar_sw.fields['velocity_texture']['data'],
-                              bins=150)
+    hist, bins = np.histogram(radar_ktlx.fields['velocity_texture']['data'],
+                              bins=np.linspace(0, 20, 150))
     bins = (bins[1:]+bins[:-1])/2.0
     plt.plot(bins,
              hist,
@@ -270,10 +269,10 @@ Py-ART's GateFilter function::
 .. code-block:: python
 
     # Apply a GateFilter
-    gatefilter_sw = pyart.filters.GateFilter(radar_sw)
-    gatefilter_sw.exclude_above('velocity_texture', 3)
-    gatefilter_se = pyart.filters.GateFilter(radar_se)
-    gatefilter_se.exclude_above('velocity_texture', 3)
+    gatefilter_ktlx = pyart.filters.GateFilter(radar_ktlx)
+    gatefilter_ktlx.exclude_above('velocity_texture', 3)
+    gatefilter_kict = pyart.filters.GateFilter(radar_kict)
+    gatefilter_kict.exclude_above('velocity_texture', 3)
 
 ----------------
 Apply Dealiasing
@@ -292,24 +291,22 @@ Py-ART's Region Based Dealiasing Correction::
 .. code-block:: python
 
     # Apply Region Based DeAlising Utiltiy
-    vel_dealias_sw = pyart.correct.dealias_region_based(radar_sw,
-                                                        vel_field='mean_doppler_velocity',
-                                                        nyquist_vel=19,
+    vel_dealias_ktlx = pyart.correct.dealias_region_based(radar_ktlx,
+                                                        vel_field='VEL',
                                                         centered=True,
-                                                        gatefilter=gatefilter_sw
+                                                        gatefilter=gatefilter_ktlx
                                                         )
 
     # Apply Region Based DeAlising Utiltiy
-    vel_dealias_se = pyart.correct.dealias_region_based(radar_se,
-                                                        vel_field='mean_doppler_velocity',
-                                                        nyquist_vel=19,
+    vel_dealias_kict = pyart.correct.dealias_region_based(radar_kict,
+                                                        vel_field='VEL',
                                                         centered=True,
-                                                        gatefilter=gatefilter_se
+                                                        gatefilter=gatefilter_kict
                                                         )
 
     # Add our data dictionary to the radar object
-    radar_se.add_field('corrected_velocity', vel_dealias_se, replace_existing=True)
-    radar_sw.add_field('corrected_velocity', vel_dealias_sw, replace_existing=True)
+    radar_kict.add_field('corrected_velocity', vel_dealias_kict, replace_existing=True)
+    radar_ktlx.add_field('corrected_velocity', vel_dealias_ktlx, replace_existing=True)
 
 +++++++++++++++++++++++++++++++++
 Display Corrected Velocity Fields
@@ -323,7 +320,7 @@ Let's check on our corrected velocity fields!
 
     # Plot the southwestern radar
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map("corrected_velocity",
                        sweep=1,
                        ax=ax,
@@ -340,7 +337,7 @@ Let's check on our corrected velocity fields!
 
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map("corrected_velocity",
                        sweep=1,
                        ax=ax2,
@@ -364,61 +361,58 @@ Let's check on our corrected velocity fields!
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
 
-    # Calculate the Velocity Texture and apply the PyART GateFilter Utilityx
-    vel_tex_sw = pyart.retrieve.calculate_velocity_texture(radar_sw,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+    # Calculate the Velocity Texture and apply the PyART GateFilter Utility
+    vel_tex_ktlx = pyart.retrieve.calculate_velocity_texture(radar_ktlx,
+                                                           vel_field='VEL',
                                                            )
-    vel_tex_se = pyart.retrieve.calculate_velocity_texture(radar_se,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
-                                                           )
+    vel_tex_kict = pyart.retrieve.calculate_velocity_texture(radar_kict,
+                                                           vel_field='VEL',
+                                                          )
 
     ## Add velocity texture to the radar objects
-    radar_sw.add_field('velocity_texture', vel_tex_sw, replace_existing=True)
-    radar_se.add_field('velocity_texture', vel_tex_se, replace_existing=True)
+    radar_ktlx.add_field('velocity_texture', vel_tex_ktlx, replace_existing=True)
+    radar_kict.add_field('velocity_texture', vel_tex_kict, replace_existing=True)
 
     # Apply a GateFilter
-    gatefilter_sw = pyart.filters.GateFilter(radar_sw)
-    gatefilter_sw.exclude_above('velocity_texture', 3)
-    gatefilter_se = pyart.filters.GateFilter(radar_se)
-    gatefilter_se.exclude_above('velocity_texture', 3)
+    gatefilter_ktlx = pyart.filters.GateFilter(radar_ktlx)
+    gatefilter_ktlx.exclude_above('velocity_texture', 3)
+    gatefilter_kict = pyart.filters.GateFilter(radar_kict)
+    gatefilter_kict.exclude_above('velocity_texture', 3)
 
     # Apply Region Based DeAlising Utiltiy
-    vel_dealias_sw = pyart.correct.dealias_region_based(radar_sw,
-                                                        vel_field='mean_doppler_velocity',
-                                                        nyquist_vel=19,
+    vel_dealias_ktlx = pyart.correct.dealias_region_based(radar_ktlx,
+                                                        vel_field='VEL',
                                                         centered=True,
-                                                        gatefilter=gatefilter_sw
+                                                        gatefilter=gatefilter_ktlx
                                                         )
 
     # Apply Region Based DeAlising Utiltiy
-    vel_dealias_se = pyart.correct.dealias_region_based(radar_se,
-                                                        vel_field='mean_doppler_velocity',
-                                                        nyquist_vel=19,
+    vel_dealias_kict = pyart.correct.dealias_region_based(radar_kict,
+                                                        vel_field='VEL',
                                                         centered=True,
-                                                        gatefilter=gatefilter_se
+                                                        gatefilter=gatefilter_kict
                                                         )
 
     # Add our data dictionary to the radar object
-    radar_se.add_field('corrected_velocity', vel_dealias_se, replace_existing=True)
-    radar_sw.add_field('corrected_velocity', vel_dealias_sw, replace_existing=True)
+    radar_kict.add_field('corrected_velocity', vel_dealias_kict, replace_existing=True)
+    radar_ktlx.add_field('corrected_velocity', vel_dealias_ktlx, replace_existing=True)
 
     fig = plt.figure(figsize=(16, 6))
 
     # Plot the southwestern radar
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map("corrected_velocity",
                        sweep=1,
                        ax=ax,
@@ -435,7 +429,7 @@ Let's check on our corrected velocity fields!
 
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map("corrected_velocity",
                        sweep=1,
                        ax=ax2,
@@ -457,7 +451,7 @@ Summary
 Utilizing Py-ART, we read in two radar files within close proximity to each other.
 We then corrected the radar doppler velocities to remove artifacts and clutter.
 Finally, utilizing Py-ART, we applied a region-based dealiasing alogrithm to
-unfold the doppler velocities
+unfold the doppler velocities.
 
 Now that we have corrected velocities, incorporating these radars into PyDDA
 will be shown in the next notebook.

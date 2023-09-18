@@ -59,10 +59,10 @@ Author: Robert C. Jackson
 
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     /home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
@@ -78,20 +78,20 @@ Author: Robert C. Jackson
     The max of w_init is 18.516070425591412
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0| 194.0315|   8.7130|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5161
-    The gradient of the cost functions is 3.3530226
+    The gradient of the cost functions is 3.2743614
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10|   7.2219|  12.7600|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5305
-    The gradient of the cost functions is 0.20959435
+         10|   7.1439|  10.1199|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5031
+    The gradient of the cost functions is 0.18499963
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20|   0.7832|  15.4989|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5547
-    The gradient of the cost functions is 0.22645763
+         20|   0.2319|   8.5465|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.4743
+    The gradient of the cost functions is 0.14579923
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         30|   0.8354|  15.4125|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5539
-    The gradient of the cost functions is 0.22646445
+         30|   3.8489|   4.0954|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.3460
+    The gradient of the cost functions is 0.42263347
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         40|   0.8354|  15.4125|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5539
+         40|   0.1788|   3.8822|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.3338
     Applying low pass filter to wind field...
-    Done! Time = 10.1
+    Done! Time = 10.9
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: 'color'
@@ -177,7 +177,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 11.768 seconds)
+   **Total running time of the script:** (0 minutes 12.710 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:

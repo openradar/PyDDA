@@ -16,6 +16,7 @@ there is convection as well as velocity values for dual doppler analysis.
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
@@ -37,10 +38,10 @@ Reading CF-Radial::
 .. code-block:: python
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
 
 -------------
 Plot the data
@@ -56,7 +57,7 @@ Plotting a PPI map::
     https://arm-doe.github.io/pyart/API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map
 
 ++++++++++++++++++++++++++++++++
-Plot Reflectivity of Both Radars
+Plot reflectivity of Both Radars
 ++++++++++++++++++++++++++++++++
 
 .. code-block:: python
@@ -64,10 +65,10 @@ Plot Reflectivity of Both Radars
     fig = plt.figure(figsize=(16, 6))
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
-    # Plot the southwestern radar
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    # Plot KTLX
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map(
-        "reflectivity_horizontal",
+        "DBZ",
         sweep=1,
         ax=ax,
         vmin=-20,
@@ -79,11 +80,11 @@ Plot Reflectivity of Both Radars
         lat_lines=np.arange(36, 37.25, 0.25),
         lon_lines=np.arange(-98, -96.75, 0.25),
     )
-    # Plot the southeastern radar
+    # Plot KICT
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map(
-        "reflectivity_horizontal",
+        "DBZ",
         sweep=1,
         ax=ax2,
         vmin=-20,
@@ -105,23 +106,25 @@ Plot Reflectivity of Both Radars
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
+
 
     fig = plt.figure(figsize=(16, 6))
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
     # Plot the southwestern radar
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map(
-        "reflectivity_horizontal",
+        "DBZ",
         sweep=1,
         ax=ax,
         vmin=-20,
@@ -135,9 +138,9 @@ Plot Reflectivity of Both Radars
     )
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map(
-        "reflectivity_horizontal",
+        "DBZ",
         sweep=1,
         ax=ax2,
         vmin=-20,
@@ -162,9 +165,9 @@ Plot Velocity of Both Radars
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
     # Plot the southwestern radar
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax,
         vmin=-32,
@@ -180,9 +183,9 @@ Plot Velocity of Both Radars
 
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax2,
         vmin=-32,
@@ -205,23 +208,25 @@ Plot Velocity of Both Radars
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
+
 
     fig = plt.figure(figsize=(16, 6))
     ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
     # Plot the southwestern radar
-    disp1 = pyart.graph.RadarMapDisplay(radar_sw)
+    disp1 = pyart.graph.RadarMapDisplay(radar_ktlx)
     disp1.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax,
         vmin=-32,
@@ -237,9 +242,9 @@ Plot Velocity of Both Radars
 
     # Plot the southeastern radar
     ax2 = plt.subplot(122, projection=ccrs.PlateCarree())
-    disp2 = pyart.graph.RadarMapDisplay(radar_se)
+    disp2 = pyart.graph.RadarMapDisplay(radar_kict)
     disp2.plot_ppi_map(
-        "mean_doppler_velocity",
+        "VEL",
         sweep=1,
         ax=ax2,
         vmin=-32,

@@ -49,10 +49,10 @@ This example uses pooch to download the data files.
 
  .. code-block:: none
 
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
-    /usr/share/miniconda3/envs/pydda-docs/lib/python3.11/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
+    /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
     cannot be safely cast to variable data type
       data = self.ncvar[:]
     Calculating weights for radars 0 and 1
@@ -78,17 +78,23 @@ This example uses pooch to download the data files.
     The max of w_init is 0.0
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
           0|2864.7900|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
-    The gradient of the cost functions is 1.796964
+    The gradient of the cost functions is 1.5746189
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         10| 430.7701| 812.2366|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  29.0327
-    The gradient of the cost functions is 0.55652
+         10| 159.4549|  65.6967|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.0298
+    The gradient of the cost functions is 0.11761383
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         20| 187.2330| 420.7121|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1477
-    The gradient of the cost functions is 0.557171
+         20|  61.3592|  19.7197|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  34.5949
+    The gradient of the cost functions is 0.09018106
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-         30| 187.2800| 421.2845|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.1599
+         30|  57.5989|  20.7034|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  65.2621
+    The gradient of the cost functions is 0.098623164
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         40|  57.6175|  20.7305|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  65.3525
+    The gradient of the cost functions is 0.098622665
+    Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+         50|  57.6180|  20.7313|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  65.3551
     Applying low pass filter to wind field...
-    Done! Time = 69.9
+    Done! Time = 98.7
 
 
 
@@ -158,7 +164,7 @@ This example uses pooch to download the data files.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 18.099 seconds)
+   **Total running time of the script:** (1 minutes 47.237 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_sydney_tornado.py:

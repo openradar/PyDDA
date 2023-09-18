@@ -31,7 +31,9 @@ retrieval to have artificial noise, especially in updraft velocity. Therefore,
 you will need to choose a grid spacing that is coarse enough to have a continuous
 input radial velocity field at all altitudes. For example, Kosiba et al. (2013)
 chose their grid spacing such that it is about 1/2.5 the data spacing at the feature
-of interest. In this example, we will elect for a 500 m grid spacing.
+of interest. In this example, we will elect for a 500 m grid spacing. In addition,
+for the interest of having a wind retrieval done in a reasonable time frame for this
+example, we will limit the domain to the updrafts of interest.
 
 
 .. code-block:: python
@@ -43,14 +45,20 @@ of interest. In this example, we will elect for a 500 m grid spacing.
 The :code:`grid_limits` is a 3-tuple of 2-tuples specifying the :math:`z`, :math:`y`, and :math:`x`
 limits of the grid in meters. The :code:`grid_shape` specifies the shape of the grid in number of
 points. We then use PyART's `grid_from_radars <https://arm-doe.github.io/pyart/API/generated/pyart.map.grid_from_radars.html>`_
-function to create the grids :code:`grid_sw` and :code:`grid_se`.
+function to create the grids :code:`grid_ktlx` and :code:`grid_kict`. PyDDA requires that both grids have the same
+shape and origin, so we explictly set those in the options for both grids.
 
 .. code-block:: python
 
-    grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits,
-                                     grid_shape=grid_shape, gatefilter=gatefilter_sw)
-    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits,
-                                     grid_shape=grid_shape, gatefilter=gatefilter_se)
+    grid_ktlx = pyart.map.grid_from_radars([radar_ktlx], grid_limits=grid_limits,
+                                    grid_shape=grid_shape, gatefilter=gatefilter_ktlx,
+                                    grid_origin=(radar_kict.latitude['data'].filled(),
+                                                 radar_kict.longitude['data'].filled()))
+    grid_kict = pyart.map.grid_from_radars([radar_kict], grid_limits=grid_limits,
+                                    grid_shape=grid_shape, gatefilter=gatefilter_kict,
+                                    grid_origin=(radar_kict.latitude['data'].filled(),
+                                                 radar_kict.longitude['data'].filled()))
+
 
 Finally, we should visualize the output grids using Py-ART's
 `GridMapDisplay <https://arm-doe.github.io/pyart/API/generated/pyart.graph.GridMapDisplay.html>`_.
@@ -59,11 +67,11 @@ Finally, we should visualize the output grids using Py-ART's
 
     fig = plt.figure(figsize=(8, 12))
     ax1 = plt.subplot(211)
-    display1 = pyart.graph.GridMapDisplay(grid_sw)
+    display1 = pyart.graph.GridMapDisplay(grid_ktlx)
     display1.plot_latitude_slice('corrected_velocity', lat=36.5,
                                  ax=ax1, fig=fig, vmin=-30, vmax=30)
     ax2 = plt.subplot(212)
-    display2 = pyart.graph.GridMapDisplay(grid_se)
+    display2 = pyart.graph.GridMapDisplay(grid_kict)
     display2.plot_latitude_slice('corrected_velocity', lat=36.5,
                                  ax=ax2, fig=fig, vmin=-30, vmax=30)
 
@@ -76,70 +84,73 @@ Finally, we should visualize the output grids using Py-ART's
     import numpy as np
 
     import pyart
+    import pydda
     from pyart.testing import get_test_data
 
     warnings.filterwarnings("ignore")
 
     # read in the data from both XSAPR radars
-    xsapr_sw_file = get_test_data("swx_20120520_0641.nc")
-    xsapr_se_file = get_test_data("sex_20120520_0641.nc")
-    radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
-    radar_se = pyart.io.read_cfradial(xsapr_se_file)
+    ktlx_file = pydda.tests.get_sample_file("cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc")
+    kict_file = pydda.tests.get_sample_file("cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc")
+    radar_ktlx = pyart.io.read_cfradial(ktlx_file)
+    radar_kict = pyart.io.read_cfradial(kict_file)
 
-    # Calculate the Velocity Texture and apply the PyART GateFilter Utilityx
-    vel_tex_sw = pyart.retrieve.calculate_velocity_texture(radar_sw,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+
+    # Calculate the Velocity Texture and apply the PyART GateFilter Utility
+    vel_tex_ktlx = pyart.retrieve.calculate_velocity_texture(radar_ktlx,
+                                                           vel_field='VEL',
                                                            )
-    vel_tex_se = pyart.retrieve.calculate_velocity_texture(radar_se,
-                                                           vel_field='mean_doppler_velocity',
-                                                           nyq=19
+    vel_tex_kict = pyart.retrieve.calculate_velocity_texture(radar_kict,
+                                                           vel_field='VEL',
                                                            )
 
     ## Add velocity texture to the radar objects
-    radar_sw.add_field('velocity_texture', vel_tex_sw, replace_existing=True)
-    radar_se.add_field('velocity_texture', vel_tex_se, replace_existing=True)
+    radar_ktlx.add_field('velocity_texture', vel_tex_ktlx, replace_existing=True)
+    radar_kict.add_field('velocity_texture', vel_tex_kict, replace_existing=True)
 
     # Apply a GateFilter
-    gatefilter_sw = pyart.filters.GateFilter(radar_sw)
-    gatefilter_sw.exclude_above('velocity_texture', 3)
-    gatefilter_se = pyart.filters.GateFilter(radar_se)
-    gatefilter_se.exclude_above('velocity_texture', 3)
+    gatefilter_ktlx = pyart.filters.GateFilter(radar_ktlx)
+    gatefilter_ktlx.exclude_above('velocity_texture', 3)
+    gatefilter_kict = pyart.filters.GateFilter(radar_kict)
+    gatefilter_kict.exclude_above('velocity_texture', 3)
 
     # Apply Region Based DeAlising Utiltiy
-    vel_dealias_sw = pyart.correct.dealias_region_based(radar_sw,
-                                                        vel_field='mean_doppler_velocity',
-                                                        nyquist_vel=19,
+    vel_dealias_ktlx = pyart.correct.dealias_region_based(radar_ktlx,
+                                                        vel_field='VEL',
                                                         centered=True,
-                                                        gatefilter=gatefilter_sw
+                                                        gatefilter=gatefilter_ktlx
                                                         )
 
     # Apply Region Based DeAlising Utiltiy
-    vel_dealias_se = pyart.correct.dealias_region_based(radar_se,
-                                                        vel_field='mean_doppler_velocity',
-                                                        nyquist_vel=19,
+    vel_dealias_kict = pyart.correct.dealias_region_based(radar_kict,
+                                                        vel_field='VEL',
                                                         centered=True,
-                                                        gatefilter=gatefilter_se
+                                                        gatefilter=gatefilter_kict
                                                         )
 
     # Add our data dictionary to the radar object
-    radar_se.add_field('corrected_velocity', vel_dealias_se, replace_existing=True)
-    radar_sw.add_field('corrected_velocity', vel_dealias_sw, replace_existing=True)
+    radar_kict.add_field('corrected_velocity', vel_dealias_kict, replace_existing=True)
+    radar_ktlx.add_field('corrected_velocity', vel_dealias_ktlx, replace_existing=True)
 
-    grid_limits = ((0., 15000.), (-50000., 50000.), (-50000., 50000.))
-    grid_shape = (31, 201, 201)
+    grid_limits = ((0., 15000.), (-300000., -100000.), (-250000., 0.))
+    grid_shape = (31, 201, 251)
 
-    grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits,
-                                     grid_shape=grid_shape, gatefilter=gatefilter_sw)
-    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits,
-                                     grid_shape=grid_shape, gatefilter=gatefilter_se)
+
+    grid_ktlx = pyart.map.grid_from_radars([radar_ktlx], grid_limits=grid_limits,
+                                 grid_shape=grid_shape, gatefilter=gatefilter_ktlx,
+                                    grid_origin=(radar_kict.latitude['data'].filled(),
+                                                 radar_kict.longitude['data'].filled()))
+    grid_kict = pyart.map.grid_from_radars([radar_kict], grid_limits=grid_limits,
+                                 grid_shape=grid_shape, gatefilter=gatefilter_kict,
+                                    grid_origin=(radar_kict.latitude['data'].filled(),
+                                                 radar_kict.longitude['data'].filled()))
 
     fig = plt.figure(figsize=(8, 12))
     ax1 = plt.subplot(211)
-    display1 = pyart.graph.GridMapDisplay(grid_sw)
+    display1 = pyart.graph.GridMapDisplay(grid_ktlx)
     display1.plot_latitude_slice('corrected_velocity', lat=36.5, ax=ax1, fig=fig, vmin=-30, vmax=30)
     ax2 = plt.subplot(212)
-    display2 = pyart.graph.GridMapDisplay(grid_se)
+    display2 = pyart.graph.GridMapDisplay(grid_kict)
     display2.plot_latitude_slice('corrected_velocity', lat=36.5, ax=ax2, fig=fig, vmin=-30, vmax=30)
 
 
