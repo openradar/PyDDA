@@ -12,6 +12,7 @@ dependencies:
   - pytest-mpl
   - pytest-cov
   - cartopy
+  - pyproj=3.3
   - cfgrib
   - eccodes
   - sphinx
