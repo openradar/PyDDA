@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Optimizing your wind retrieval &#8212; PyDDA 1.5.0 documentation</title>
+    <title>Optimizing your wind retrieval &#8212; PyDDA 1.5.1 documentation</title>
   
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 1.5.0 documentation</p>
+    <p class="title logo__title">PyDDA 1.5.1 documentation</p>
   
 </a></div>
     
@@ -375,6 +375,103 @@ document.write(`
                   
   <section id="optimizing-your-wind-retrieval">
 <span id="optimizing-wind-retrieval"></span><h1>Optimizing your wind retrieval<a class="headerlink" href="#optimizing-your-wind-retrieval" title="Permalink to this heading">#</a></h1>
+<p>In the <a class="reference internal" href="retrieving_winds.html#retrieving-winds"><span class="std std-ref">Retrieving your first wind field</span></a> section, we showed how to perform an example wind retrieval
+with PyDDA. However, there were some issues to be resolved in the wind retrieval, including
+artificial updrafts at the boundaries of the Dual Doppler lobes caused by discontinuities
+in the horizontal winds from changing data sources from the radar network to the
+model constraint. In this section, we will show how to adjust the parameters of your
+wind retrieval in order to minimize such artifacts. First, we will show the wind retrieval
+that we did in <a class="reference internal" href="retrieving_winds.html#retrieving-winds"><span class="std std-ref">Retrieving your first wind field</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grids_out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">grid_kict</span><span class="p">,</span> <span class="n">grid_ktlx</span><span class="p">],</span>
+                                            <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                            <span class="n">Cz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">],</span>
+                                            <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                            <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">filter_window</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                                            <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">)</span>
+
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span><span class="n">grids_out</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;ChaseSpectral&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                                 <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                 <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/b3813ec10d066addc90e478e331ecdf6/optimizing_wind_retrieval-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/805acbf880e49d87429e463c5a0de377/optimizing_wind_retrieval-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/1d272791652fa96a9f6572f19ca8d608/optimizing_wind_retrieval-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/f122ac7606749b4dc94f169b1e763fc0/optimizing_wind_retrieval-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/optimizing_wind_retrieval-1.png" class="plot-directive" src="../_images/optimizing_wind_retrieval-1.png" />
+</figure>
+<p>We can see several potential issues with the wind retrieval. First, there are artifacts at the
+Dual Doppler lobe edges where updrafts are being produced by the optimization code simply
+because of a discontinuity in the horizontal winds at the edges of the lobes. In addition,
+there are other discontinuities in the horizontal winds that should be addressed. One thing
+we can do to mitigate these discontunities is to increase the weight of the horizontal
+smoothnes constraints. Therefore, let’s prescribe <code class="code docutils literal notranslate"><span class="pre">Cx</span> <span class="pre">=</span> <span class="pre">100.</span></code> and <code class="code docutils literal notranslate"><span class="pre">Cy</span> <span class="pre">=</span> <span class="pre">100</span></code>
+to the above retrieval.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grids_out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">grid_kict</span><span class="p">,</span> <span class="n">grid_ktlx</span><span class="p">],</span>
+                                            <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                                            <span class="n">Cz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">],</span>
+                                            <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                            <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">filter_window</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                                            <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">)</span>
+
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span><span class="n">grids_out</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;ChaseSpectral&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                                 <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                 <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/7bcf14a70b1f39d9cf42fe1e3ad4c64b/optimizing_wind_retrieval-2.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/1438eb2cb80414aa8189132d90ce614d/optimizing_wind_retrieval-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/9bce76058a289d00e10f8fd05bec3b23/optimizing_wind_retrieval-2.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/72122bafdd2e3388cab0c7e2fe704e1e/optimizing_wind_retrieval-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/optimizing_wind_retrieval-2.png" class="plot-directive" src="../_images/optimizing_wind_retrieval-2.png" />
+</figure>
+<p>As we can see, the artifact at the edge of the Dual Doppler lobe has reduced in size. However, we
+also have lost some detail on the updraft structure at this level because the wind field
+has been smoothed out. This therefore coarsens the effective resolution of the retrieval.
+Let’s see what happens when we increase the level of smoothing.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grids_out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">grid_kict</span><span class="p">,</span> <span class="n">grid_ktlx</span><span class="p">],</span>
+                                            <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">250.</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">250.</span><span class="p">,</span>
+                                            <span class="n">Cz</span><span class="o">=</span><span class="mf">250.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">],</span>
+                                            <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                            <span class="n">max_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">filter_window</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                                            <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">)</span>
+
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span><span class="n">grids_out</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;ChaseSpectral&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                                 <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                 <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/d216378631b69b3153a35e2f668f0635/optimizing_wind_retrieval-3.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/938de705b5b681440b54003dd1ec6c73/optimizing_wind_retrieval-3.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fb6d9e5cab7236d2a44d0d91365cec50/optimizing_wind_retrieval-3.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/ccefe8fc63d225757d1f372879e25ac6/optimizing_wind_retrieval-3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/optimizing_wind_retrieval-3.png" class="plot-directive" src="../_images/optimizing_wind_retrieval-3.png" />
+</figure>
+<p>In the above retrieval, the updrafts appear to be smoothed out. To help the optimization loop
+resolve the updrafts, we recommend, from here, decreasing the tolerance required for the
+optimization loop to converge. In addition, decreasing the smoothness will allow more details
+of the resolved wind field to appear. In the below example, we observe this, though part of the
+artifact near the edge of the Dual Doppler lobe re-appears.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grids_out</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">([</span><span class="n">grid_kict</span><span class="p">,</span> <span class="n">grid_ktlx</span><span class="p">],</span>
+                                            <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span> <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">150.</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">150.</span><span class="p">,</span>
+                                            <span class="n">Cz</span><span class="o">=</span><span class="mf">150.0</span><span class="p">,</span> <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">],</span>
+                                            <span class="n">refl_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                                            <span class="n">max_iterations</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">filter_window</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                                            <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;scipy&#39;</span><span class="p">)</span>
+
+<span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span><span class="n">grids_out</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;ChaseSpectral&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                                 <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">background_field</span><span class="o">=</span><span class="s1">&#39;DBZ&#39;</span><span class="p">,</span> <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                 <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s1">&#39;bottom_right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/55f064850a4f3435e219f7c6a38e0ef8/optimizing_wind_retrieval-4.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fb3efecdceb702fab748391bbc58d2e9/optimizing_wind_retrieval-4.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/94c8602a32d67fec5b576ad71c5ae870/optimizing_wind_retrieval-4.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/490e476c274bad9aa0e49896272953c6/optimizing_wind_retrieval-4.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/optimizing_wind_retrieval-4.png" class="plot-directive" src="../_images/optimizing_wind_retrieval-4.png" />
+</figure>
+<p>Generally, these parameters need to be tuned for your particular radar configuration in
+order to obtain the most optimal wind retrieval for your situation. If you are placing
+more importance on horizontal winds compared to updraft velocities, then you may be willing
+to tolerate more errors in the vertical velocity field so that finer details of the horizontal
+wind field can be generated. The above parameters are examples that apply to a 1 km
+resolution grid from two NEXRADs and vary for given radar configurations and storm coverages.</p>
 </section>
 
 

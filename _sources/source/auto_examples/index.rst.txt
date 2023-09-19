@@ -18,23 +18,6 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to retrieve winds in Hurricane Florence. In this example, we use data...">
-
-.. only:: html
-
-  .. image:: /source/auto_examples/images/thumb/sphx_glr_hurricane_florence_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_source_auto_examples_hurricane_florence.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Example on integrating radar and HRRR data</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This shows an example of how to retrieve winds from 4 radars over Sydney.">
 
 .. only:: html
@@ -92,7 +75,6 @@ https://drive.google.com/drive/folders/1pcQxWRJV78xuJePTZnlXPPpMe1qut0ie
 .. toctree::
    :hidden:
 
-   /source/auto_examples/hurricane_florence
    /source/auto_examples/plot_sydney_tornado
    /source/auto_examples/plot_examples
    /source/auto_examples/plot_fun_with_constraints

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 1.5.0 documentation</title>
+    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 1.5.1 documentation</title>
   
   
   
@@ -123,7 +123,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 1.5.0 documentation</p>
+    <p class="title logo__title">PyDDA 1.5.1 documentation</p>
   
 </a></div>
     
@@ -950,6 +950,7 @@ document.write(`
             <span class="k">return</span> <span class="kc">False</span>
 
         <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
             <span class="n">J_function</span><span class="p">,</span>
             <span class="n">winds</span><span class="p">,</span>
@@ -962,6 +963,7 @@ document.write(`
             <span class="n">iprint</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">callback</span><span class="o">=</span><span class="n">_vert_velocity_callback</span><span class="p">,</span>
         <span class="p">)</span>
+
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="p">(</span>
@@ -1421,7 +1423,7 @@ document.write(`
     <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="o">-</span><span class="mi">9999</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span>
     <span class="p">]</span>
-    <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
     <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
@@ -1475,15 +1477,21 @@ document.write(`
                 <span class="n">model_finite</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span>
             <span class="p">)</span>
             <span class="n">parameters</span><span class="o">.</span><span class="n">u_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span>
+                <span class="p">)</span>
             <span class="p">)</span>
             <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span>
+                <span class="p">)</span>
             <span class="p">)</span>
             <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span>
+                <span class="p">)</span>
             <span class="p">)</span>
-
+    <span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">model_weights</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">Co</span> <span class="o">=</span> <span class="n">Co</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">=</span> <span class="n">Cm</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">=</span> <span class="n">Cx</span>
