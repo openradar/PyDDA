@@ -39,7 +39,7 @@ Grids, _ = pydda.retrieval.get_dd_wind_field(
     mask_outside_opt=True,
     upper_bc=1,
     wind_tol=0.5,
-    engine="tensorflow",
+    engine="scipy",
 )
 # Plot a horizontal cross section
 plt.figure(figsize=(9, 9))

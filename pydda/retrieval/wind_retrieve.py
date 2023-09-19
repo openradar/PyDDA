@@ -598,6 +598,7 @@ def _get_dd_wind_field_scipy(
             return False
 
         parameters.print_out = False
+
         winds = fmin_l_bfgs_b(
             J_function,
             winds,
@@ -610,6 +611,7 @@ def _get_dd_wind_field_scipy(
             iprint=-1,
             callback=_vert_velocity_callback,
         )
+
         winds = np.reshape(
             winds[0],
             (
@@ -1069,7 +1071,7 @@ def _get_dd_wind_field_tensorflow(
     parameters.wts = [
         tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.wts
     ]
-    parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float32)
+
     parameters.weights[~np.isfinite(parameters.weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     for i in range(len(Grids)):
@@ -1123,15 +1125,21 @@ def _get_dd_wind_field_tensorflow(
                 model_finite, parameters.model_weights[i], 0
             )
             parameters.u_model.append(
-                tf.constant(np.nan_to_num(Grids[0].fields[u_field]["data"], 0))
+                tf.constant(
+                    np.nan_to_num(Grids[0].fields[u_field]["data"], 0), dtype=tf.float32
+                )
             )
             parameters.v_model.append(
-                tf.constant(np.nan_to_num(Grids[0].fields[v_field]["data"], 0))
+                tf.constant(
+                    np.nan_to_num(Grids[0].fields[v_field]["data"], 0), dtype=tf.float32
+                )
             )
             parameters.w_model.append(
-                tf.constant(np.nan_to_num(Grids[0].fields[w_field]["data"], 0))
+                tf.constant(
+                    np.nan_to_num(Grids[0].fields[w_field]["data"], 0), dtype=tf.float32
+                )
             )
-
+    parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float32)
     parameters.Co = Co
     parameters.Cm = Cm
     parameters.Cx = Cx

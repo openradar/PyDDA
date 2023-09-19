@@ -81,7 +81,7 @@ new_grids, _ = pydda.retrieval.get_dd_wind_field(
     Cz=1e2,
     mask_outside_opt=False,
     wind_tol=0.5,
-    engine="tensorflow",
+    engine="scipy",
 )
 
 fig = plt.figure(figsize=(7, 7))
@@ -107,7 +107,7 @@ new_grids, _ = pydda.retrieval.get_dd_wind_field(
     Cz=1e2,
     mask_outside_opt=False,
     wind_tol=0.1,
-    engine="tensorflow",
+    engine="scipy",
 )
 fig = plt.figure(figsize=(7, 7))
 
