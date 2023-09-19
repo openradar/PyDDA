@@ -48,7 +48,7 @@ new_grids, _ = pydda.retrieval.get_dd_wind_field(
     mask_outside_opt=True,
     wind_tol=0.1,
     max_iterations=200,
-    engine="tensorflow",
+    engine="scipy",
 )
 # Make a neat plot
 fig = plt.figure(figsize=(10, 7))
@@ -61,12 +61,12 @@ ax = pydda.vis.plot_horiz_xsection_quiver_map(
     vmin=0,
     vmax=60,
     quiverkey_len=20.0,
-    w_vel_contours=[5.0, 10.0, 20, 30.0, 40.0],
+    w_vel_contours=[1.0, 3.0, 5.0, 10.0, 20.0],
     quiver_spacing_x_km=2.0,
     quiver_spacing_y_km=2.0,
     quiverkey_loc="top",
     colorbar_contour_flag=True,
-    cmap="pyart_HomeyerRainbow",
+    cmap="ChaseSpectral",
 )
 ax.set_xticks(np.arange(150.5, 153, 0.1))
 ax.set_yticks(np.arange(-36, -32.0, 0.1))
