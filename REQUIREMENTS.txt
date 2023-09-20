@@ -7,3 +7,4 @@ pandas
 six
 pooch
 cmweather
+cdsapi
