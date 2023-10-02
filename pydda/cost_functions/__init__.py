@@ -95,4 +95,4 @@ from ._cost_functions_numpy import calculate_vertical_vorticity_gradient
 from ._cost_functions_numpy import calculate_model_cost
 from ._cost_functions_numpy import calculate_model_gradient
 from ._cost_functions_numpy import calculate_point_cost, calculate_point_gradient
-from .cost_functions import J_function, grad_J
+from .cost_functions import J_function, grad_J, grad_jax, J_function_jax

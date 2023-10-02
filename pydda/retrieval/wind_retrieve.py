@@ -26,13 +26,21 @@ except (ImportError, AttributeError):
 
 try:
     import jax.numpy as jnp
+    import jax
+    import jaxopt
 
     JAX_AVAILABLE = True
 except ImportError:
     JAX_AVAILABLE = False
 
 # imports changed to local import path to run on computer
-from ..cost_functions import J_function, grad_J, calculate_fall_speed
+from ..cost_functions import (
+    J_function,
+    grad_J,
+    calculate_fall_speed,
+    grad_jax,
+    J_function_jax,
+)
 from copy import deepcopy
 from .angles import add_azimuth_as_field, add_elevation_as_field
 
@@ -598,19 +606,46 @@ def _get_dd_wind_field_scipy(
             return False
 
         parameters.print_out = False
+        if engine.lower() == "scipy":
+            winds = fmin_l_bfgs_b(
+                J_function,
+                winds,
+                args=(parameters,),
+                maxiter=max_iterations,
+                pgtol=tolerance,
+                bounds=bounds,
+                fprime=grad_J,
+                disp=0,
+                iprint=-1,
+                callback=_vert_velocity_callback,
+            )
+        else:
 
-        winds = fmin_l_bfgs_b(
-            J_function,
-            winds,
-            args=(parameters,),
-            maxiter=max_iterations,
-            pgtol=tolerance,
-            bounds=bounds,
-            fprime=grad_J,
-            disp=0,
-            iprint=-1,
-            callback=_vert_velocity_callback,
-        )
+            def loss_and_gradient(x):
+                x_loss = J_function_jax(x["winds"], vars(parameters))
+                x_grad = {}
+                x_grad["winds"] = grad_jax(x["winds"], vars(parameters))
+                return x_loss, x_grad
+
+            bounds = (
+                {"winds": -100 * jnp.ones(winds.shape)},
+                {"winds": 100 * jnp.ones(winds.shape)},
+            )
+            winds = jnp.array(winds)
+            solver = jaxopt.LBFGSB(
+                loss_and_gradient,
+                True,
+                has_aux=False,
+                maxiter=max_iterations,
+                tol=tolerance,
+                jit=True,
+                implicit_diff=False,
+            )
+            winds = {"winds": winds}
+            winds, state = solver.run(winds, bounds=bounds)
+            print("Cost function: %4.3f" % winds.theta)
+            print("L^2 norm of gradient: %4.3f" % jnp.linalg.norm(state.grad["winds"]))
+            winds = [np.asanyarray(winds["winds"])]
 
         winds = np.reshape(
             winds[0],

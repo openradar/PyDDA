@@ -19,10 +19,11 @@ print("Jackson et al. (2020) Journal of Open Research Science")
 print("Detecting Jax...")
 try:
     import jax
+    import jaxopt
 
     print("Jax engine enabled!")
 except ImportError:
-    print("Jax is not installed on your system, unable to use Jax engine.")
+    print("Jax/JaxOpt are not installed on your system, unable to use Jax engine.")
 
 print("Detecting TensorFlow...")
 try:
