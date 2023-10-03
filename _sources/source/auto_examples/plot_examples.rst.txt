@@ -320,7 +320,7 @@ Author: Robert C. Jackson
     Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
         760|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1903
     Applying low pass filter to wind field...
-    Done! Time = 370.6
+    Done! Time = 435.1
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: 'color'
       ax.contour(
     /home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: 'color'
@@ -406,7 +406,7 @@ Author: Robert C. Jackson
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (6 minutes 12.427 seconds)
+   **Total running time of the script:** (7 minutes 17.236 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plot_examples.py:
