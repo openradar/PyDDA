@@ -643,8 +643,6 @@ def _get_dd_wind_field_scipy(
             )
             winds = {"winds": winds}
             winds, state = solver.run(winds, bounds=bounds)
-            print("Cost function: %4.3f" % winds.theta)
-            print("L^2 norm of gradient: %4.3f" % jnp.linalg.norm(state.grad["winds"]))
             winds = [np.asanyarray(winds["winds"])]
 
         winds = np.reshape(
