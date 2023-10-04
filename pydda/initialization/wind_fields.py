@@ -16,7 +16,8 @@ except ImportError:
 from netCDF4 import Dataset
 from datetime import datetime, timedelta
 from scipy.interpolate import interp1d, griddata
-from scipy.interpolate import NearestNDInterpolator
+from scipy.interpolate import NearestNDInterpolator, LinearNDInterpolator
+from scipy.interpolate import RegularGridInterpolator
 from copy import deepcopy
 
 try:
@@ -613,3 +614,76 @@ def make_intialization_from_hrrr(Grid, file_path):
     temp_grid.add_field("v", v_field, replace_existing=True)
     temp_grid.add_field("w", w_field, replace_existing=True)
     return temp_grid
+
+
+def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
+    """
+    This function will create an initaliation by interpolating a wind field
+    from a grid with a different specification than the analysis grid. This
+    allows, for example, for interpolating a coarser grid onto a finer grid
+    for further refinement of the retrieval. The source and destination grid
+    must have the same origin point.
+
+    Parameters
+    ----------
+    grid_src: Grid
+        The grid to interpolate.
+    grid_dst: Grid
+        The destination analysis grid to interpolate the source grid on.
+    method: str
+        Interpolation method to use
+    Returns
+    -------
+    grid: Grid
+        The grid with the u, v, and w from the source grid interpolated.
+    """
+    if not grid_src.origin_latitude["data"] == grid_dest.origin_latitude["data"]:
+        raise ValueError("Source and destination grid must have same lat/lon origin!")
+
+    if not grid_src.origin_longitude["data"] == grid_dest.origin_longitude["data"]:
+        raise ValueError("Source and destination grid must have same lat/lon origin!")
+
+    if not grid_src.origin_altitude["data"] == grid_dest.origin_altitude["data"]:
+        correction_factor = (
+            grid_dest.origin_altitude["data"] - grid_src.origin_altitude["data"]
+        )
+    else:
+        correction_factor = 0
+
+    u_src = grid_src.fields["u"]["data"]
+    v_src = grid_src.fields["v"]["data"]
+    w_src = grid_src.fields["w"]["data"]
+    x_src = grid_src.x["data"]
+    y_src = grid_src.y["data"]
+    z_src = grid_src.z["data"]
+
+    x_dst = grid_dest.point_x["data"]
+    y_dst = grid_dest.point_y["data"]
+    z_dst = grid_dest.point_z["data"] - correction_factor
+
+    u_interp = RegularGridInterpolator((z_src, y_src, x_src), u_src, method=method)
+    v_interp = RegularGridInterpolator((z_src, y_src, x_src), v_src, method=method)
+    w_interp = RegularGridInterpolator((z_src, y_src, x_src), w_src, method=method)
+    u_dest = u_interp((z_dst, y_dst, x_dst))
+    v_dest = v_interp((z_dst, y_dst, x_dst))
+    w_dest = w_interp((z_dst, y_dst, x_dst))
+
+    u_field = {}
+    u_field["data"] = u_dest
+    u_field["standard_name"] = "u_wind"
+    u_field["long_name"] = "meridional component of wind velocity"
+
+    v_field = {}
+    v_field["data"] = v_dest
+    v_field["standard_name"] = "v_wind"
+    v_field["long_name"] = "zonal component of wind velocity"
+
+    w_field = {}
+    w_field["data"] = w_dest
+    w_field["standard_name"] = "w_wind"
+    w_field["long_name"] = "vertical component of wind velocity"
+
+    grid_dest.add_field("u", u_field, replace_existing=True)
+    grid_dest.add_field("v", v_field, replace_existing=True)
+    grid_dest.add_field("w", w_field, replace_existing=True)
+    return grid_dest

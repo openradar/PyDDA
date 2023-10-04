@@ -61,3 +61,19 @@ def test_get_iem_data():
     station_obs = pydda.constraints.get_iem_obs(Grid)
     names = [x["site_id"] for x in station_obs]
     assert names == ["P28", "WLD", "WDG", "SWO", "END"]
+
+
+def test_make_initalization_from_other_grid():
+    Grid = pyart.testing.make_empty_grid(
+        (20, 20, 20), ((0, 10000), (-10000, 10000), (-10000, 10000))
+    )
+    Grid2 = pyart.testing.make_empty_grid(
+        (20, 40, 40), ((0, 10000), (-10000, 10000), (-10000, 10000))
+    )
+    # a zero field
+    fdata3 = 2 * np.ones((20, 20, 20))
+    Grid.add_field("u", {"data": fdata3, "_FillValue": -9999.0})
+    Grid.add_field("v", {"data": fdata3, "_FillValue": -9999.0})
+    Grid.add_field("w", {"data": fdata3, "_FillValue": -9999.0})
+    Grid2 = pydda.initialization.make_initialization_from_other_grid(Grid, Grid2)
+    assert np.all(np.isclose(Grid2.fields["u"]["data"], 2.0))

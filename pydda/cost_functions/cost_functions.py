@@ -547,8 +547,40 @@ def grad_J(winds, parameters):
                 roi=parameters.roi,
                 upper_bc=parameters.upper_bc,
             )
+        # Let's see if we need to enforce strong boundary conditions
+        if parameters.const_boundary_cond is True:
+            grad = np.reshape(
+                grad,
+                (
+                    3,
+                    parameters.grid_shape[0],
+                    parameters.grid_shape[1],
+                    parameters.grid_shape[2],
+                ),
+            )
+            grad[:, :, 0, :] = 0
+            grad[:, :, -1, :] = 0
+            grad[:, :, :, 0] = 0
+            grad[:, :, :, -1] = 0
+            grad = grad.flatten()
     elif parameters.engine == "jax":
-        return grad_jax(winds, parameters)
+        grad = grad_jax(winds, parameters)
+        if parameters.const_boundary_cond is True:
+            grad = jnp.reshape(
+                grad,
+                (
+                    3,
+                    parameters.grid_shape[0],
+                    parameters.grid_shape[1],
+                    parameters.grid_shape[2],
+                ),
+            )
+            grad.at[:, :, 0, :].set(0)
+            grad.at[:, :, -1, :].set(0)
+            grad.at[:, :, :, 0].set(0)
+            grad.at[:, :, :, -1].set(0)
+            grad = grad.flatten()
+        return grad
 
     if parameters.Nfeval % 10 == 0:
         print("The gradient of the cost functions is", str(np.linalg.norm(grad, 2)))

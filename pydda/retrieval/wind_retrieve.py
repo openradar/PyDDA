@@ -129,6 +129,10 @@ class DDParameters(object):
         to correspond to each component of the wind field and "x", "y", "z"
         to correspond to the location of the point observation in the Grid's
         Cartesian coordinates.
+    const_boundary_cond: bool
+        Set to true to fix the x-y boundary conditions to be equal to the initialization
+        wind values. This is useful for doing retrievals on nested grids where the finer
+        grid boundary conditions are prescribed by the coarse grid.
     roi: float
         The radius of influence of each point observation in m.
     upper_bc: bool
@@ -182,6 +186,7 @@ class DDParameters(object):
         self.cvtol = 1e-2
         self.gtol = 1e-2
         self.Jveltol = 100.0
+        self.const_boundary_cond = False
 
 
 def _get_dd_wind_field_scipy(
@@ -228,6 +233,7 @@ def _get_dd_wind_field_scipy(
     roi=1000.0,
     wind_tol=0.1,
     tolerance=1e-8,
+    const_boundary_cond=False,
 ):
     global _wcurrmax
     global _wprevmax
@@ -250,6 +256,7 @@ def _get_dd_wind_field_scipy(
     parameters.Ut = Ut
     parameters.Vt = Vt
     parameters.engine = engine
+    parameters.const_boundary_cond = const_boundary_cond
 
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
@@ -810,6 +817,7 @@ def _get_dd_wind_field_tensorflow(
     parallel_iterations=1,
     wind_tol=0.1,
     tolerance=1e-8,
+    const_boundary_cond=False,
 ):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError(
@@ -834,6 +842,7 @@ def _get_dd_wind_field_tensorflow(
     parameters.Vt = Vt
     parameters.upper_bc = upper_bc
     parameters.lower_bc = lower_bc
+    parameters.const_boundary_cond = const_boundary_cond
     parameters.engine = "tensorflow"
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
@@ -1391,7 +1400,7 @@ def get_dd_wind_field(
     Vt: float
         Prescribed storm motion in meridional direction.
         This is only needed if Cv is not zero.
-    filter_winds: bool
+    low_pass_filter: bool
         If this is True, PyDDA will run a low pass filter on
         the retrieved wind field. Set to False to disable the low pass filter.
     mask_outside_opt: bool
