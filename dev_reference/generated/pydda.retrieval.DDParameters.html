@@ -434,20 +434,20 @@ framework can add any parameters they may need.</p>
 <li><p><strong>wts</strong> (<em>List</em><em> of </em><em>float arrays</em>) – Float array containing fall speed from radar.</p></li>
 <li><p><strong>u_back</strong> (<em>1D float array</em><em> (</em><em>number</em><em> of </em><em>vertical levels</em><em>)</em>) – Background u wind</p></li>
 <li><p><strong>v_back</strong> (<em>1D float array</em><em> (</em><em>number</em><em> of </em><em>vertical levels</em><em>)</em>) – Background u wind</p></li>
-<li><p><strong>u_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>3D float arrays</em>) – U from each model integrated into the retrieval</p></li>
-<li><p><strong>v_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>3D float arrays</em>) – V from each model integrated into the retrieval</p></li>
+<li><p><strong>u_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><em>3D float arrays</em>) – U from each model integrated into the retrieval</p></li>
+<li><p><strong>v_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> of </em><em>3D float arrays</em>) – V from each model integrated into the retrieval</p></li>
 <li><p><strong>w_model</strong> – W from each model integrated into the retrieval</p></li>
-<li><p><strong>Co</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Weighting coefficient for data constraint.</p></li>
-<li><p><strong>Cm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Weighting coefficient for mass continuity constraint.</p></li>
-<li><p><strong>Cx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Smoothing coefficient for x-direction</p></li>
-<li><p><strong>Cy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Smoothing coefficient for y-direction</p></li>
-<li><p><strong>Cz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Smoothing coefficient for z-direction</p></li>
-<li><p><strong>Cb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Coefficient for sounding constraint</p></li>
-<li><p><strong>Cv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Weight for cost function related to vertical vorticity equation.</p></li>
-<li><p><strong>Cmod</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Coefficient for model constraint</p></li>
-<li><p><strong>Cpoint</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Coefficient for point constraint</p></li>
-<li><p><strong>Ut</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Prescribed storm motion. This is only needed if Cv is not zero.</p></li>
-<li><p><strong>Vt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Prescribed storm motion. This is only needed if Cv is not zero.</p></li>
+<li><p><strong>Co</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Weighting coefficient for data constraint.</p></li>
+<li><p><strong>Cm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Weighting coefficient for mass continuity constraint.</p></li>
+<li><p><strong>Cx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Smoothing coefficient for x-direction</p></li>
+<li><p><strong>Cy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Smoothing coefficient for y-direction</p></li>
+<li><p><strong>Cz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Smoothing coefficient for z-direction</p></li>
+<li><p><strong>Cb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Coefficient for sounding constraint</p></li>
+<li><p><strong>Cv</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Weight for cost function related to vertical vorticity equation.</p></li>
+<li><p><strong>Cmod</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Coefficient for model constraint</p></li>
+<li><p><strong>Cpoint</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Coefficient for point constraint</p></li>
+<li><p><strong>Ut</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Prescribed storm motion. This is only needed if Cv is not zero.</p></li>
+<li><p><strong>Vt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – Prescribed storm motion. This is only needed if Cv is not zero.</p></li>
 <li><p><strong>grid_shape</strong> – Shape of wind grid</p></li>
 <li><p><strong>dx</strong> – Spacing of grid in x direction</p></li>
 <li><p><strong>dy</strong> – Spacing of grid in y direction</p></li>
@@ -455,18 +455,18 @@ framework can add any parameters they may need.</p>
 <li><p><strong>x</strong> – E-W grid levels in m</p></li>
 <li><p><strong>y</strong> – N-S grid levels in m</p></li>
 <li><p><strong>z</strong> – Grid vertical levels in m</p></li>
-<li><p><strong>rmsVr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The sum of squares of velocity/num_points. Use for normalization
+<li><p><strong>rmsVr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The sum of squares of velocity/num_points. Use for normalization
 of data weighting coefficient</p></li>
 <li><p><strong>weights</strong> (<em>n_radars by z_bins by y_bins x x_bins float array</em>) – Data weights for each pair of radars</p></li>
 <li><p><strong>bg_weights</strong> (<em>z_bins by y_bins x x_bins float array</em>) – Data weights for sounding constraint</p></li>
 <li><p><strong>model_weights</strong> (<em>n_models by z_bins by y_bins by x_bins float array</em>) – Data weights for each model.</p></li>
-<li><p><strong>point_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> or </em><em>None</em>) – point_list: list of dicts
+<li><p><strong>point_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a><em> or </em><em>None</em>) – point_list: list of dicts
 List of point constraints. Each member is a dict with keys of “u”, “v”,
 to correspond to each component of the wind field and “x”, “y”, “z”
 to correspond to the location of the point observation in the Grid’s
 Cartesian coordinates.</p></li>
-<li><p><strong>roi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – The radius of influence of each point observation in m.</p></li>
-<li><p><strong>upper_bc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True to enforce w=0 at top of domain (impermeability condition),
+<li><p><strong>roi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The radius of influence of each point observation in m.</p></li>
+<li><p><strong>upper_bc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – True to enforce w=0 at top of domain (impermeability condition),
 False to not enforce impermeability at top of domain</p></li>
 </ul>
 </dd>
