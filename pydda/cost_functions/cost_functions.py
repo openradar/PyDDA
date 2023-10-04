@@ -12,8 +12,8 @@ try:
     from jax.config import config
 
     config.update("jax_enable_x64", True)
-    from jax import float0
     import jax.numpy as jnp
+    import jax
 
     JAX_AVAILABLE = True
 except ImportError:
@@ -279,119 +279,7 @@ def J_function(winds, parameters):
         else:
             Jpoint = 0
     elif parameters.engine == "jax":
-        if not JAX_AVAILABLE:
-            raise ImportError("Jax is needed in order to use the Jax-based PyDDA!")
-
-        winds = np.reshape(
-            winds,
-            (
-                3,
-                parameters.grid_shape[0],
-                parameters.grid_shape[1],
-                parameters.grid_shape[2],
-            ),
-        )
-        # Had to change to float because Jax returns device array (use np.float_())
-        Jvel = _cost_functions_jax.calculate_radial_vel_cost_function(
-            parameters.vrs,
-            parameters.azs,
-            parameters.els,
-            winds[0],
-            winds[1],
-            winds[2],
-            parameters.wts,
-            rmsVr=parameters.rmsVr,
-            weights=parameters.weights,
-            coeff=parameters.Co,
-        )
-        # print("apples Jvel", Jvel)
-
-        if parameters.Cm > 0:
-            # Had to change to float because Jax returns device array (use np.float_())
-            Jmass = _cost_functions_jax.calculate_mass_continuity(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.z,
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                coeff=parameters.Cm,
-            )
-        else:
-            Jmass = 0
-
-        if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
-            Jsmooth = _cost_functions_jax.calculate_smoothness_cost(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                Cx=parameters.Cx,
-                Cy=parameters.Cy,
-                Cz=parameters.Cz,
-            )
-        else:
-            Jsmooth = 0
-
-        if parameters.Cb > 0:
-            Jbackground = _cost_functions_jax.calculate_background_cost(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.bg_weights,
-                parameters.u_back,
-                parameters.v_back,
-                parameters.Cb,
-            )
-        else:
-            Jbackground = 0
-
-        if parameters.Cv > 0:
-            # Had to change to float because Jax returns device array (use np.float_())
-            Jvorticity = _cost_functions_jax.calculate_vertical_vorticity_cost(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                parameters.Ut,
-                parameters.Vt,
-                coeff=parameters.Cv,
-            )
-        else:
-            Jvorticity = 0
-
-        if parameters.Cmod > 0:
-            Jmod = _cost_functions_jax.calculate_model_cost(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.model_weights,
-                parameters.u_model,
-                parameters.v_model,
-                parameters.w_model,
-                coeff=parameters.Cmod,
-            )
-        else:
-            Jmod = 0
-
-        if parameters.Cpoint > 0:
-            Jpoint = _cost_functions_jax.calculate_point_cost(
-                winds[0],
-                winds[1],
-                parameters.x,
-                parameters.y,
-                parameters.z,
-                parameters.point_list,
-                Cp=parameters.Cpoint,
-                roi=parameters.roi,
-            )
-        else:
-            Jpoint = 0
+        return J_function_jax(winds, parameters)
 
     if parameters.Nfeval % 10 == 0:
         print(
@@ -660,105 +548,7 @@ def grad_J(winds, parameters):
                 upper_bc=parameters.upper_bc,
             )
     elif parameters.engine == "jax":
-        winds = jnp.reshape(
-            winds,
-            (
-                3,
-                parameters.grid_shape[0],
-                parameters.grid_shape[1],
-                parameters.grid_shape[2],
-            ),
-        )
-        grad = _cost_functions_jax.calculate_grad_radial_vel(
-            parameters.vrs,
-            parameters.els,
-            parameters.azs,
-            winds[0],
-            winds[1],
-            winds[2],
-            parameters.wts,
-            parameters.weights,
-            parameters.rmsVr,
-            coeff=parameters.Co,
-            upper_bc=parameters.upper_bc,
-        )
-
-        if parameters.Cm > 0:
-            grad += _cost_functions_jax.calculate_mass_continuity_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.z,
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                coeff=parameters.Cm,
-                upper_bc=parameters.upper_bc,
-            )
-
-        if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
-            grad += _cost_functions_jax.calculate_smoothness_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                Cx=parameters.Cx,
-                Cy=parameters.Cy,
-                Cz=parameters.Cz,
-                upper_bc=parameters.upper_bc,
-            )
-
-        if parameters.Cb > 0:
-            grad += _cost_functions_jax.calculate_background_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.bg_weights,
-                parameters.u_back,
-                parameters.v_back,
-                parameters.Cb,
-            )
-
-        if parameters.Cv > 0:
-            grad += _cost_functions_jax.calculate_vertical_vorticity_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                parameters.Ut,
-                parameters.Vt,
-                coeff=parameters.Cv,
-                upper_bc=parameters.upper_bc,
-            ).numpy()
-
-        if parameters.Cmod > 0:
-            grad += _cost_functions_jax.calculate_model_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.model_weights,
-                parameters.u_model,
-                parameters.v_model,
-                parameters.w_model,
-                coeff=parameters.Cmod,
-            )
-
-        if parameters.Cpoint > 0:
-            grad += _cost_functions_jax.calculate_point_gradient(
-                winds[0],
-                winds[1],
-                parameters.x,
-                parameters.y,
-                parameters.z,
-                parameters.point_list,
-                Cp=parameters.Cpoint,
-                roi=parameters.roi,
-                upper_bc=parameters.upper_bc,
-            )
+        return grad_jax(winds, parameters)
 
     if parameters.Nfeval % 10 == 0:
         print("The gradient of the cost functions is", str(np.linalg.norm(grad, 2)))
@@ -814,3 +604,223 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     print(fallspeed.max())
     del A, B, rho
     return np.ma.masked_invalid(fallspeed)
+
+
+def J_function_jax(winds, parameters):
+    if not JAX_AVAILABLE:
+        raise ImportError("Jax is needed in order to use the Jax-based PyDDA!")
+
+    winds = jnp.reshape(
+        winds,
+        (
+            3,
+            parameters["grid_shape"][0],
+            parameters["grid_shape"][1],
+            parameters["grid_shape"][2],
+        ),
+    )
+    # Had to change to float because Jax returns device array (use np.float_())
+    Jvel = _cost_functions_jax.calculate_radial_vel_cost_function(
+        parameters["vrs"],
+        parameters["azs"],
+        parameters["els"],
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters["wts"],
+        rmsVr=parameters["rmsVr"],
+        weights=parameters["weights"],
+        coeff=parameters["Co"],
+    )
+
+    if parameters["Cm"] > 0:
+        # Had to change to float because Jax returns device array (use np.float_())
+        Jmass = _cost_functions_jax.calculate_mass_continuity(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["z"],
+            parameters["dx"],
+            parameters["dy"],
+            parameters["dz"],
+            coeff=parameters["Cm"],
+        )
+    else:
+        Jmass = 0
+
+    if parameters["Cx"] > 0 or parameters["Cy"] > 0 or parameters["Cz"] > 0:
+        Jsmooth = _cost_functions_jax.calculate_smoothness_cost(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["dx"],
+            parameters["dy"],
+            parameters["dz"],
+            Cx=parameters["Cx"],
+            Cy=parameters["Cy"],
+            Cz=parameters["Cz"],
+        )
+    else:
+        Jsmooth = 0
+
+    if parameters["Cb"] > 0:
+        Jbackground = _cost_functions_jax.calculate_background_cost(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["bg_weights"],
+            parameters["u_back"],
+            parameters["v_back"],
+            parameters["Cb"],
+        )
+    else:
+        Jbackground = 0
+
+    if parameters["Cv"] > 0:
+        # Had to change to float because Jax returns device array (use np.float_())
+        Jvorticity = _cost_functions_jax.calculate_vertical_vorticity_cost(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["dx"],
+            parameters["dy"],
+            parameters["dz"],
+            parameters["Ut"],
+            parameters["Vt"],
+            coeff=parameters["Cv"],
+        )
+    else:
+        Jvorticity = 0
+
+    if parameters["Cmod"] > 0:
+        Jmod = _cost_functions_jax.calculate_model_cost(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["model_weights"],
+            parameters["u_model"],
+            parameters["v_model"],
+            parameters["w_model"],
+            coeff=parameters["Cmod"],
+        )
+    else:
+        Jmod = 0
+
+    if parameters["Cpoint"] > 0:
+        Jpoint = _cost_functions_jax.calculate_point_cost(
+            winds[0],
+            winds[1],
+            parameters["x"],
+            parameters["y"],
+            parameters["z"],
+            parameters["point_list"],
+            Cp=parameters["Cpoint"],
+            roi=parameters["roi"],
+        )
+    else:
+        Jpoint = 0
+
+    return Jvel + Jsmooth + Jmass + Jmod + Jpoint + Jvorticity + Jbackground
+
+
+def grad_jax(winds, parameters):
+    winds = jnp.reshape(
+        winds,
+        (
+            3,
+            parameters["grid_shape"][0],
+            parameters["grid_shape"][1],
+            parameters["grid_shape"][2],
+        ),
+    )
+    grad = _cost_functions_jax.calculate_grad_radial_vel(
+        parameters["vrs"],
+        parameters["els"],
+        parameters["azs"],
+        winds[0],
+        winds[1],
+        winds[2],
+        parameters["wts"],
+        parameters["weights"],
+        parameters["rmsVr"],
+        coeff=parameters["Co"],
+        upper_bc=parameters["upper_bc"],
+    )
+
+    if parameters["Cm"] > 0:
+        grad += _cost_functions_jax.calculate_mass_continuity_gradient(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["z"],
+            parameters["dx"],
+            parameters["dy"],
+            parameters["dz"],
+            coeff=parameters["Cm"],
+            upper_bc=parameters["upper_bc"],
+        )
+
+    if parameters["Cx"] > 0 or parameters["Cy"] > 0 or parameters["Cz"] > 0:
+        grad += _cost_functions_jax.calculate_smoothness_gradient(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["dx"],
+            parameters["dy"],
+            parameters["dz"],
+            Cx=parameters["Cx"],
+            Cy=parameters["Cy"],
+            Cz=parameters["Cz"],
+            upper_bc=parameters["upper_bc"],
+        )
+
+    if parameters["Cb"] > 0:
+        grad += _cost_functions_jax.calculate_background_gradient(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["bg_weights"],
+            parameters["u_back"],
+            parameters["v_back"],
+            parameters["Cb"],
+        )
+
+    if parameters["Cv"] > 0:
+        grad += _cost_functions_jax.calculate_vertical_vorticity_gradient(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["dx"],
+            parameters["dy"],
+            parameters["dz"],
+            parameters["Ut"],
+            parameters["Vt"],
+            coeff=parameters["Cv"],
+            upper_bc=parameters["upper_bc"],
+        ).numpy()
+
+    if parameters["Cmod"] > 0:
+        grad += _cost_functions_jax.calculate_model_gradient(
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters["model_weights"],
+            parameters["u_model"],
+            parameters["v_model"],
+            parameters["w_model"],
+            coeff=parameters["Cmod"],
+        )
+
+    if parameters["Cpoint"] > 0:
+        grad += _cost_functions_jax.calculate_point_gradient(
+            winds[0],
+            winds[1],
+            parameters["x"],
+            parameters["y"],
+            parameters["z"],
+            parameters["point_list"],
+            Cp=parameters["Cpoint"],
+            roi=parameters["roi"],
+            upper_bc=parameters["upper_bc"],
+        )
+    return grad
