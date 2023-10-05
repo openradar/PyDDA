@@ -599,11 +599,11 @@ def make_intialization_from_hrrr(Grid, file_path):
     u_field = {}
     u_field["data"] = u_new
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
     v_field = {}
     v_field["data"] = v_new
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridonial component of wind velocity"
     w_field = {}
     w_field["data"] = w_new
     w_field["standard_name"] = "w_wind"
