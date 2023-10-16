@@ -10,6 +10,7 @@ import pydda
 import pyart
 import pytest
 import numpy as np
+import matplotlib.pyplot as plt
 
 try:
     import tensorflow as tf
@@ -269,3 +270,70 @@ def test_model_constraint():
     np.testing.assert_allclose(
         new_grids[0].fields["w"]["data"], Grid0.fields["W_fakemodel"]["data"], atol=1e-2
     )
+
+
+@pytest.mark.mpl_image_compare(tolerance=50)
+def test_nested_retrieval():
+    grid_sw_coarse = pyart.io.read_grid(pydda.tests.get_sample_file("test_coarse0.nc"))
+    grid_se_coarse = pyart.io.read_grid(pydda.tests.get_sample_file("test_coarse1.nc"))
+    grid_sw_fine = pyart.io.read_grid(pydda.tests.get_sample_file("test_fine0.nc"))
+    grid_se_fine = pyart.io.read_grid(pydda.tests.get_sample_file("test_fine1.nc"))
+
+    grid_sw_coarse = pydda.initialization.make_constant_wind_field(
+        grid_sw_coarse, (0.0, 0.0, 0.0)
+    )
+
+    grid_tree = {}
+    grid_tree["input_grids"] = [grid_sw_coarse, grid_se_coarse]
+    grid_tree["kwargs"] = dict(
+        Cm=256.0,
+        Co=1e-2,
+        Cx=1,
+        Cy=1,
+        Cz=1,
+        Cmod=1e-5,
+        model_fields=["hrrr"],
+        refl_field="DBZ",
+        wind_tol=0.5,
+        max_iterations=100,
+        low_pass_filter=False,
+        engine="scipy",
+    )
+    grid_tree_nest_1 = {}
+
+    grid_tree_nest_1["input_grids"] = [grid_sw_fine, grid_se_fine]
+    grid_tree_nest_1["kwargs"] = grid_tree["kwargs"]
+    grid_tree["children"] = {"nest_1": grid_tree_nest_1}
+    grid_tree = pydda.retrieval.get_dd_wind_field_nested(grid_tree)
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    pydda.vis.plot_horiz_xsection_quiver(
+        grid_tree["output_grids"],
+        ax=ax[0],
+        level=5,
+        cmap="ChaseSpectral",
+        vmin=-10,
+        vmax=80,
+        quiverkey_len=10.0,
+        background_field="DBZ",
+        bg_grid_no=1,
+        w_vel_contours=[1, 2, 5, 10],
+        quiver_spacing_x_km=50.0,
+        quiver_spacing_y_km=50.0,
+        quiverkey_loc="bottom_right",
+    )
+    pydda.vis.plot_horiz_xsection_quiver(
+        grid_tree["children"]["nest_1"]["output_grids"],
+        ax=ax[1],
+        level=5,
+        cmap="ChaseSpectral",
+        vmin=-10,
+        vmax=80,
+        quiverkey_len=10.0,
+        background_field="DBZ",
+        bg_grid_no=1,
+        w_vel_contours=[1, 2, 5, 10],
+        quiver_spacing_x_km=50.0,
+        quiver_spacing_y_km=50.0,
+        quiverkey_loc="bottom_right",
+    )
+    return fig
