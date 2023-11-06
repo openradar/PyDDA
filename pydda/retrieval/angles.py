@@ -1,4 +1,5 @@
 import numpy as np
+import xarray as xr
 
 
 def rsl_get_slantr_and_elev(gr, h):
@@ -72,30 +73,29 @@ def _add_field_to_object(
     units="degrees from north",
     long_name="Azimuth",
     standard_name="Azimuth",
-    dz_name="DT",
 ):
     """
     Adds an unmasked field to the Py-ART radar object.
     """
-    field_dict = {
-        "data": np.ma.asanyarray(field),
+    attr_dict = {
         "units": units,
         "long_name": long_name,
         "standard_name": standard_name,
-        "missing_value": 1.0 * radar.fields[dz_name]["_FillValue"],
     }
-    radar.add_field(field_name, field_dict, replace_existing=True)
+    radar[field_name] = xr.DataArray(
+        np.expand_dims(field, 0), dims=("time", "z", "y", "x"), attrs=attr_dict
+    )
     return radar
 
 
-def add_azimuth_as_field(grid, dz_name="DT", az_name="AZ", bad=-32768):
+def add_azimuth_as_field(grid, az_name="AZ", bad=-32768):
     """
-    Add azimuth field to a Py-ART Grid object. The bearing to each gridpoint
+    Add azimuth field to an xarray Dataset. The bearing to each gridpoint
     is computed using the Haversine method and Great Circle approximation.
 
     Parameters
     ----------
-    grid : Py-ART Grid object
+    grid : xarray Dataset
         Input Grid object for modification.
     dz_name : str
         Name of the reflectivity field in the Grid.
@@ -106,22 +106,22 @@ def add_azimuth_as_field(grid, dz_name="DT", az_name="AZ", bad=-32768):
 
     Returns
     -------
-    grid : Py-ART Grid object
+    grid : xarray Dataset
         Output Grid object with azimuth field added.
     """
     az = gc_bear_array(
-        grid.radar_latitude["data"][0],
-        grid.radar_longitude["data"][0],
-        grid.point_latitude["data"],
-        grid.point_longitude["data"],
+        grid["radar_latitude"].values[0],
+        grid["radar_longitude"].values[0],
+        grid["point_latitude"].values,
+        grid["radar_longitude"].values,
     )
-    np.isfinite(az)
+
     az = np.ma.masked_invalid(az)
-    grid = _add_field_to_object(grid, az, dz_name=dz_name, field_name=az_name)
+    grid = _add_field_to_object(grid, az, field_name=az_name)
     return grid
 
 
-def add_elevation_as_field(grid, dz_name="DT", el_name="EL", bad=-32768):
+def add_elevation_as_field(grid, el_name="EL"):
     """
     Add elevation field to a Py-ART Grid object. The elevation to each
     gridpoint is computed using the standard radar beam propagation
@@ -130,7 +130,7 @@ def add_elevation_as_field(grid, dz_name="DT", el_name="EL", bad=-32768):
 
     Parameters
     ----------
-    grid : Py-ART Grid object
+    grid : xarray Dataset
         Input Grid object for modification.
     dz_name : str
         Name of the reflectivity field in the Grid.
@@ -141,20 +141,19 @@ def add_elevation_as_field(grid, dz_name="DT", el_name="EL", bad=-32768):
 
     Returns
     -------
-    grid : Py-ART Grid object
+    grid : xarray Dataset
         Output Grid object with elevation field added.
     """
     gr = gc_dist(
-        grid.radar_latitude["data"][0],
-        grid.radar_longitude["data"][0],
-        grid.point_latitude["data"],
-        grid.point_longitude["data"],
+        grid["radar_latitude"].values[0],
+        grid["radar_longitude"].values[0],
+        grid["point_latitude"].values,
+        grid["radar_longitude"].values,
     )
     h3 = 0.0 * gr
-    for i in range(len(grid.z["data"])):
-        h3[i, :, :] = grid.z["data"][i] - grid.radar_altitude["data"][0]
+    for i in range(len(grid.z.values)):
+        h3[i, :, :] = grid.z.values[i] - grid.radar_altitude.values[0]
     sr, el = rsl_get_slantr_and_elev(gr, h3 / 1000.0)
-    np.isfinite(el)
     el = np.ma.masked_invalid(el)
-    grid = _add_field_to_object(grid, el, dz_name=dz_name, field_name=el_name)
+    grid = _add_field_to_object(grid, el, field_name=el_name)
     return grid

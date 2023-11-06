@@ -2,7 +2,6 @@ import math
 import warnings
 
 import cartopy.crs as ccrs
-import cartopy
 import matplotlib.pyplot as plt
 import numpy as np
 import pyart
@@ -112,7 +111,7 @@ def plot_horiz_xsection_streamlines(
         Axis handle to output axis
     """
 
-    grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+    grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
 
     if vmin is None:
         vmin = grid_bg.min()
@@ -120,14 +119,14 @@ def plot_horiz_xsection_streamlines(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
+    grid_h = Grids[0]["point_altitude"].values / 1e3
+    grid_x = Grids[0]["point_x"].values / 1e3
+    grid_y = Grids[0]["point_y"].values / 1e3
     np.diff(grid_x, axis=2)[0, 0, 0]
     np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    u = Grids[0][u_field].values.squeeze()
+    v = Grids[0][v_field].values.squeeze()
+    w = Grids[0][w_field].values.squeeze()
 
     if isinstance(u, np.ma.MaskedArray):
         u = u.filled(np.nan)
@@ -162,9 +161,9 @@ def plot_horiz_xsection_streamlines(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -224,21 +223,16 @@ def plot_horiz_xsection_streamlines(
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")
 
-    bca_min = math.radians(Grids[0].fields[u_field]["min_bca"])
-    bca_max = math.radians(Grids[0].fields[u_field]["max_bca"])
+    bca_min = math.radians(Grids[0][u_field].attrs["min_bca"])
+    bca_max = math.radians(Grids[0][u_field].attrs["max_bca"])
 
     if show_lobes is True:
         for i in range(len(Grids)):
             for j in range(len(Grids)):
                 if i != j:
                     bca = retrieval.get_bca(
-                        Grids[j].radar_longitude["data"],
-                        Grids[j].radar_latitude["data"],
-                        Grids[i].radar_longitude["data"],
-                        Grids[i].radar_latitude["data"],
-                        Grids[j].point_x["data"][0],
-                        Grids[j].point_y["data"][0],
-                        Grids[j].get_projparams(),
+                        Grids[i],
+                        Grids[j],
                     )
 
                     ax.contour(
@@ -365,9 +359,9 @@ def plot_horiz_xsection_streamlines_map(
         )
 
     if bg_grid_no > -1:
-        grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+        grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
     else:
-        grid_array = np.ma.stack([x.fields[background_field]["data"] for x in Grids])
+        grid_array = np.ma.stack([x[background_field].values.squeeze() for x in Grids])
         grid_bg = grid_array.max(axis=0)
 
     if vmin is None:
@@ -376,17 +370,17 @@ def plot_horiz_xsection_streamlines_map(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
+    grid_h = Grids[0]["point_altitude"].values / 1e3
+    grid_x = Grids[0]["point_x"].values / 1e3
+    grid_y = Grids[0]["point_y"].values / 1e3
     grid_lat = Grids[0].point_latitude["data"][level]
     grid_lon = Grids[0].point_longitude["data"][level]
 
     np.diff(grid_x, axis=2)[0, 0, 0]
     np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    u = Grids[0][u_field].values.squeeze()
+    v = Grids[0][v_field].values.squeeze()
+    w = Grids[0][w_field].values.squeeze()
 
     if isinstance(u, np.ma.MaskedArray):
         u = u.filled(np.nan)
@@ -426,9 +420,9 @@ def plot_horiz_xsection_streamlines_map(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -567,22 +561,14 @@ def plot_horiz_xsection_streamlines_map(
                 RuntimeWarning,
             )
 
-    bca_min = math.radians(Grids[0].fields[u_field]["min_bca"])
-    bca_max = math.radians(Grids[0].fields[u_field]["max_bca"])
+    bca_min = math.radians(Grids[0][u_field].attrs["min_bca"])
+    bca_max = math.radians(Grids[0][u_field].attrs["max_bca"])
 
     if show_lobes is True:
         for i in range(len(Grids)):
             for j in range(len(Grids)):
                 if i != j:
-                    bca = retrieval.get_bca(
-                        Grids[j].radar_longitude["data"],
-                        Grids[j].radar_latitude["data"],
-                        Grids[i].radar_longitude["data"],
-                        Grids[i].radar_latitude["data"],
-                        Grids[j].point_x["data"][0],
-                        Grids[j].point_y["data"][0],
-                        Grids[j].get_projparams(),
-                    )
+                    bca = retrieval.get_bca(Grids[i], Grids[j])
 
                     ax.contour(
                         grid_lon[:, :],
@@ -708,7 +694,7 @@ def plot_xz_xsection_streamlines(
         Axis handle to output axis
     """
 
-    grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+    grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
 
     if vmin is None:
         vmin = grid_bg.min()
@@ -716,14 +702,12 @@ def plot_xz_xsection_streamlines(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
-    np.diff(grid_x, axis=2)[0, 0, 0]
-    np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    grid_h = Grids[0]["point_altitude"].values / 1e3
+    grid_x = Grids[0]["point_x"].values / 1e3
+    grid_y = Grids[0]["point_y"].values / 1e3
+    u = Grids[0][u_field].values.squeeze()
+    v = Grids[0][v_field].values.squeeze()
+    w = Grids[0][w_field].values.squeeze()
 
     if isinstance(u, np.ma.MaskedArray):
         u = u.filled(np.nan)
@@ -745,7 +729,7 @@ def plot_xz_xsection_streamlines(
         vmin=vmin,
         vmax=vmax,
     )
-    np.ma.sqrt(u**2 + w**2)
+
     ax.streamplot(
         grid_x[:, level, :],
         grid_h[:, level, :],
@@ -757,9 +741,9 @@ def plot_xz_xsection_streamlines(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -938,21 +922,21 @@ def plot_yz_xsection_streamlines(
         The matplotlib axis handle corresponding to the plot
     """
 
-    grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+    grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
     if vmin is None:
         vmin = grid_bg.min()
 
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
+    grid_h = Grids[0]["point_altitude"].values / 1e3
+    grid_x = Grids[0]["point_x"].values / 1e3
+    grid_y = Grids[0]["point_y"].values / 1e3
     np.diff(grid_x, axis=2)[0, 0, 0]
     np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    u = Grids[0][u_field].values.squeeze()
+    v = Grids[0][v_field].values.squeeze()
+    w = Grids[0][w_field].values.squeeze()
 
     if isinstance(u, np.ma.MaskedArray):
         u = u.filled(np.nan)
@@ -974,7 +958,7 @@ def plot_yz_xsection_streamlines(
         vmin=vmin,
         vmax=vmax,
     )
-    np.ma.sqrt(v**2 + w**2)
+
     ax.streamplot(
         grid_y[:, :, level],
         grid_h[:, :, level],
@@ -987,9 +971,9 @@ def plot_yz_xsection_streamlines(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 

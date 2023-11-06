@@ -3,7 +3,6 @@ from matplotlib import use
 
 use("agg")
 import pydda
-import pyart
 import pytest
 import matplotlib.pyplot as plt
 
@@ -18,8 +17,8 @@ except ImportError:
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_barbs():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(7, 7))
     pydda.vis.plot_horiz_xsection_barbs(
@@ -30,6 +29,8 @@ def test_plot_horiz_xsection_barbs():
         w_vel_contours=[3, 6, 9],
         barb_spacing_x_km=5.0,
         barb_spacing_y_km=15.0,
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -37,8 +38,8 @@ def test_plot_horiz_xsection_barbs():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_barbs():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(9, 5))
     pydda.vis.plot_xz_xsection_barbs(
@@ -49,6 +50,8 @@ def test_plot_horiz_xz_xsection_barbs():
         w_vel_contours=[3, 6, 9],
         barb_spacing_x_km=10.0,
         barb_spacing_z_km=2.0,
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -56,8 +59,8 @@ def test_plot_horiz_xz_xsection_barbs():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_barbs():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(9, 5))
     pydda.vis.plot_yz_xsection_barbs(
@@ -68,6 +71,8 @@ def test_plot_horiz_yz_xsection_barbs():
         w_vel_contours=[1, 3, 5, 7],
         barb_spacing_y_km=10.0,
         barb_spacing_z_km=2.0,
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -75,8 +80,8 @@ def test_plot_horiz_yz_xsection_barbs():
 @pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_barbs_map():
-    berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    berr_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    cpol_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     fig = plt.figure(figsize=(9, 9))
     ax = plt.axes(projection=ccrs.PlateCarree())
 
@@ -87,6 +92,8 @@ def test_plot_horiz_xsection_barbs_map():
         bg_grid_no=-1,
         level=7,
         w_vel_contours=[3, 5, 8],
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -94,12 +101,18 @@ def test_plot_horiz_xsection_barbs_map():
 @pytest.mark.mpl_image_compare(tolerance=60)
 def test_plot_horiz_xsection_streamlines():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(7, 7))
     pydda.vis.plot_horiz_xsection_streamlines(
-        Grids, None, "reflectivity", level=6, w_vel_contours=[3, 6, 9]
+        Grids,
+        None,
+        "reflectivity",
+        level=6,
+        w_vel_contours=[3, 6, 9],
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -107,13 +120,19 @@ def test_plot_horiz_xsection_streamlines():
 @pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=60)
 def test_plot_horiz_xsection_streamlines_map():
-    berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    berr_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    cpol_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     fig = plt.figure(figsize=(9, 9))
     ax = plt.axes(projection=ccrs.PlateCarree())
 
     pydda.vis.plot_horiz_xsection_streamlines_map(
-        [cpol_grid, berr_grid], ax=ax, bg_grid_no=-1, level=7, w_vel_contours=[3, 5, 8]
+        [cpol_grid, berr_grid],
+        ax=ax,
+        bg_grid_no=-1,
+        level=7,
+        w_vel_contours=[3, 5, 8],
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -121,12 +140,18 @@ def test_plot_horiz_xsection_streamlines_map():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_streamlines():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(9, 5))
     pydda.vis.plot_xz_xsection_streamlines(
-        Grids, None, "reflectivity", level=40, w_vel_contours=[3, 6, 9]
+        Grids,
+        None,
+        "reflectivity",
+        level=40,
+        w_vel_contours=[3, 6, 9],
+        vmin=0,
+        vmax=70,
     )
     plt.ylim([0, 15])
     return fig
@@ -135,12 +160,18 @@ def test_plot_horiz_xz_xsection_streamlines():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_streamlines():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(9, 5))
     pydda.vis.plot_yz_xsection_streamlines(
-        Grids, None, "reflectivity", level=40, w_vel_contours=[1, 3, 5, 7]
+        Grids,
+        None,
+        "reflectivity",
+        level=40,
+        w_vel_contours=[1, 3, 5, 7],
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -148,8 +179,8 @@ def test_plot_horiz_yz_xsection_streamlines():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_quiver():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(7, 7))
     pydda.vis.plot_horiz_xsection_quiver(
@@ -162,6 +193,8 @@ def test_plot_horiz_xsection_quiver():
         quiver_spacing_y_km=5.0,
         quiver_width=0.005,
         quiverkey_len=10.0,
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -169,8 +202,8 @@ def test_plot_horiz_xsection_quiver():
 @pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_quiver_map():
-    berr_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    cpol_grid = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    berr_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    cpol_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     fig = plt.figure(figsize=(9, 9))
     ax = plt.axes(projection=ccrs.PlateCarree())
 
@@ -182,6 +215,8 @@ def test_plot_horiz_xsection_quiver_map():
         w_vel_contours=[3, 5, 8],
         quiver_width=0.005,
         quiverkey_len=10.0,
+        vmin=0,
+        vmax=70,
     )
     return fig
 
@@ -189,8 +224,8 @@ def test_plot_horiz_xsection_quiver_map():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xz_xsection_quiver():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(9, 5))
     pydda.vis.plot_xz_xsection_quiver(
@@ -203,6 +238,8 @@ def test_plot_horiz_xz_xsection_quiver():
         quiver_spacing_z_km=1.0,
         quiver_width=0.005,
         quiverkey_len=10.0,
+        vmin=0,
+        vmax=70,
     )
     plt.ylim([0, 15])
     return fig
@@ -211,8 +248,8 @@ def test_plot_horiz_xz_xsection_quiver():
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_yz_xsection_quiver():
     Grids = [
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
-        pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0),
+        pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1),
     ]
     fig = plt.figure(figsize=(9, 5))
     pydda.vis.plot_yz_xsection_quiver(
@@ -225,5 +262,7 @@ def test_plot_horiz_yz_xsection_quiver():
         quiver_spacing_z_km=1.0,
         quiver_width=0.005,
         quiverkey_len=10.0,
+        vmin=0,
+        vmax=70,
     )
     return fig

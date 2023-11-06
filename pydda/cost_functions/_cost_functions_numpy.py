@@ -494,8 +494,8 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     if refl_field is None:
         refl_field = pyart.config.get_field_name("reflectivity")
 
-    refl = grid.fields[refl_field]["data"]
-    grid_z = grid.point_z["data"]
+    refl = grid[refl_field].values
+    grid_z = grid["point_z"].values
     A = np.zeros(refl.shape)
     B = np.zeros(refl.shape)
     rho = np.exp(-grid_z / 10000.0)

@@ -14,7 +14,7 @@ are incomplete, they should only be used for testing, not production.
     LTX_GRID
     MHX_GRID
 """
-import os
+
 import pooch
 
 
@@ -40,6 +40,7 @@ sha256_hashes = {
     "twpsondewnpnC3.b1.20060119.112000.cdf": "102b5bf7221a5b80a102803f5a4339ca1614d23e6daf8180c064e134f3aa0830",
     "twpsondewnpnC3.b1.20060119.163300.cdf": "8343687d880fec71a4ad4f07bc56a6dce433ad38885fd91266868fd069f1eaa5",
 }
+
 fido = pooch.create(
     path=pooch.os_cache("pydda"),
     base_url="https://github.com/rcjackson/pydda-sample-data/raw/main/pydda-sample-data/",

@@ -10,6 +10,7 @@ import pydda
 import pyart
 import pytest
 import numpy as np
+import xarray as xr
 
 try:
     import tensorflow as tf
@@ -50,6 +51,7 @@ def test_make_updraft_from_convergence_field():
     back_v = 10.0
     x_center = 0.0
     y_center = 0.0
+    Grid = pydda.io.read_from_pyart_grid(Grid)
     u, v, w = pydda.tests.make_test_divergence_field(
         Grid, wind_vel, z_ground, z_top, radius, back_u, back_v, x_center, y_center
     )
@@ -67,7 +69,7 @@ def test_make_updraft_from_convergence_field():
         vel_name="one_field",
         refl_field="one_field",
     )
-    new_w = new_grids[0].fields["w"]["data"]
+    new_w = new_grids[0]["w"].values
 
     # We should have a pretty strong updraft in the retrieval!
     assert np.ma.max(new_w > 3)
@@ -76,12 +78,12 @@ def test_make_updraft_from_convergence_field():
 @pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
 def test_twpice_case_jax():
     """Use a test case from TWP-ICE"""
-    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    Grid0 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    Grid1 = pydda.initialization.make_wind_field_from_profile(
-        Grid1, sounding[1], vel_field="corrected_velocity"
+    Grid0 = pydda.initialization.make_wind_field_from_profile(
+        Grid0, sounding[1], vel_field="corrected_velocity"
     )
 
     Grids, _ = pydda.retrieval.get_dd_wind_field(
@@ -102,9 +104,9 @@ def test_twpice_case_jax():
 
     # In this test grid, we expect the mean flow to be to the southeast
     # Maximum updrafts should be at least 10 m/s
-    u_mean = np.nanmean(Grids[0].fields["u"]["data"])
-    v_mean = np.nanmean(Grids[0].fields["v"]["data"])
-    w_max = np.max(Grids[0].fields["v"]["data"])
+    u_mean = np.nanmean(Grids[0]["u"].values)
+    v_mean = np.nanmean(Grids[0]["v"].values)
+    w_max = np.nanmax(Grids[0]["w"].values)
 
     assert u_mean > 0
     assert v_mean < 0
@@ -114,12 +116,12 @@ def test_twpice_case_jax():
 @pytest.mark.skipif(not TF_AVAILABLE, reason="TensorFlow not installed")
 def test_twpice_case_tensorflow():
     """Use a test case from TWP-ICE"""
-    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    Grid0 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    pydda.initialization.make_wind_field_from_profile(
-        Grid1, sounding[1], vel_field="corrected_velocity"
+    Grid0 = pydda.initialization.make_wind_field_from_profile(
+        Grid0, sounding[1], vel_field="corrected_velocity"
     )
     Grids, _ = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1],
@@ -139,9 +141,9 @@ def test_twpice_case_tensorflow():
 
     # In this test grid, we expect the mean flow to be to the southeast
     # Maximum updrafts should be at least 10 m/s
-    u_mean = np.nanmean(Grids[0].fields["u"]["data"])
-    v_mean = np.nanmean(Grids[0].fields["v"]["data"])
-    w_max = np.max(Grids[0].fields["v"]["data"])
+    u_mean = np.nanmean(Grids[0]["u"].values)
+    v_mean = np.nanmean(Grids[0]["v"].values)
+    w_max = np.nanmax(Grids[0]["w"].values)
 
     assert u_mean > 0
     assert v_mean < 0
@@ -150,12 +152,12 @@ def test_twpice_case_tensorflow():
 
 def test_twpice_case():
     """Use a test case from TWP-ICE"""
-    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
-    Grid1 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    Grid0 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
     sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
 
-    pydda.initialization.make_wind_field_from_profile(
-        Grid1, sounding[1], vel_field="corrected_velocity"
+    Grid0 = pydda.initialization.make_wind_field_from_profile(
+        Grid0, sounding[1], vel_field="corrected_velocity"
     )
     Grids, _ = pydda.retrieval.get_dd_wind_field(
         [Grid0, Grid1],
@@ -175,9 +177,9 @@ def test_twpice_case():
 
     # In this test grid, we expect the mean flow to be to the southeast
     # Maximum updrafts should be at least 10 m/s
-    u_mean = np.nanmean(Grids[0].fields["u"]["data"])
-    v_mean = np.nanmean(Grids[0].fields["v"]["data"])
-    w_max = np.max(Grids[0].fields["v"]["data"])
+    u_mean = np.nanmean(Grids[0]["u"].values)
+    v_mean = np.nanmean(Grids[0]["v"].values)
+    w_max = np.nanmax(Grids[0]["w"].values)
 
     assert u_mean > 0
     assert v_mean < 0
@@ -196,7 +198,7 @@ def test_smoothing():
     Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
     odata3 = np.ma.ones((20, 40, 40))
     Grid.add_field("one_field", {"data": odata3, "_FillValue": -9999.0})
-
+    Grid = pydda.io.read_from_pyart_grid(Grid)
     u = np.random.random((20, 40, 40))
     v = np.random.random((20, 40, 40))
     w = np.zeros((20, 40, 40))
@@ -214,8 +216,8 @@ def test_smoothing():
         vel_name="one_field",
         refl_field="one_field",
     )
-    new_u = new_grids[0].fields["u"]["data"]
-    new_v = new_grids[0].fields["v"]["data"]
+    new_u = new_grids[0]["u"].values
+    new_v = new_grids[0]["v"].values
     assert new_u.std() < u.std()
     assert new_v.std() < v.std()
 
@@ -223,26 +225,16 @@ def test_smoothing():
 def test_model_constraint():
     """A retrieval with just the model constraint should converge
     to the model constraint."""
-    Grid0 = pyart.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid0 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
 
     """ Make fake model grid of just U = 1 m/s everywhere"""
-    Grid0.fields["U_fakemodel"] = deepcopy(Grid0.fields["corrected_velocity"])
-    Grid0.fields["V_fakemodel"] = deepcopy(Grid0.fields["corrected_velocity"])
-    Grid0.fields["W_fakemodel"] = deepcopy(Grid0.fields["corrected_velocity"])
+    Grid0["U_fakemodel"] = xr.ones_like(Grid0["corrected_velocity"])
+    Grid0["V_fakemodel"] = xr.ones_like(Grid0["corrected_velocity"])
+    Grid0["W_fakemodel"] = xr.ones_like(Grid0["corrected_velocity"])
 
-    Grid0.fields["U_fakemodel"]["data"] = np.ones(
-        Grid0.fields["U_fakemodel"]["data"].shape
-    )
-    Grid0.fields["V_fakemodel"]["data"] = np.zeros(
-        Grid0.fields["V_fakemodel"]["data"].shape
-    )
-    Grid0.fields["W_fakemodel"]["data"] = np.zeros(
-        Grid0.fields["W_fakemodel"]["data"].shape
-    )
-
-    u_init = np.zeros(Grid0.fields["U_fakemodel"]["data"].shape)
-    v_init = np.zeros(Grid0.fields["V_fakemodel"]["data"].shape)
-    w_init = np.zeros(Grid0.fields["W_fakemodel"]["data"].shape)
+    u_init = np.zeros_like(Grid0["U_fakemodel"].values).squeeze()
+    v_init = np.zeros_like(Grid0["U_fakemodel"].values).squeeze()
+    w_init = np.zeros_like(Grid0["U_fakemodel"].values).squeeze()
 
     new_grids, _ = pydda.retrieval.get_dd_wind_field(
         [Grid0],
@@ -261,11 +253,11 @@ def test_model_constraint():
     )
 
     np.testing.assert_allclose(
-        new_grids[0].fields["u"]["data"], Grid0.fields["U_fakemodel"]["data"], atol=1e-2
+        new_grids[0]["u"].values, Grid0["U_fakemodel"].values, atol=1e-2
     )
     np.testing.assert_allclose(
-        new_grids[0].fields["v"]["data"], Grid0.fields["V_fakemodel"]["data"], atol=1e-2
+        new_grids[0]["v"].values, Grid0["V_fakemodel"].values, atol=1e-2
     )
     np.testing.assert_allclose(
-        new_grids[0].fields["w"]["data"], Grid0.fields["W_fakemodel"]["data"], atol=1e-2
+        new_grids[0]["w"].values, Grid0["W_fakemodel"].values, atol=1e-2
     )

@@ -16,8 +16,8 @@ except ImportError:
 
 def get_iem_obs(Grid, window=60.0):
     """
-    Returns all of the station observations from the Iowa Mesonet for a given Grid in the format
-    needed for PyDDA.
+    Returns all of the station observations from the Iowa Mesonet for a given
+    Grid in the format needed for PyDDA.
 
     Parameters
     ----------
@@ -64,10 +64,10 @@ def get_iem_obs(Grid, window=60.0):
          WA WI WV WY"""
 
     networks = ["AWOS"]
-    grid_lon_min = Grid.point_longitude["data"].min()
-    grid_lon_max = Grid.point_longitude["data"].max()
-    grid_lat_min = Grid.point_latitude["data"].min()
-    grid_lat_max = Grid.point_latitude["data"].max()
+    grid_lon_min = Grid["point_longitude"].values.min()
+    grid_lon_max = Grid["point_longitude"].values.max()
+    grid_lat_min = Grid["point_latitude"].values.min()
+    grid_lat_max = Grid["point_latitude"].values.max()
     for region in regions.split():
         networks.append("%s_ASOS" % (region,))
 
@@ -95,7 +95,7 @@ def get_iem_obs(Grid, window=60.0):
 
     # Get the timestamp for each request
     grid_time = datetime.strptime(
-        Grid.time["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
+        Grid["time"].attrs["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
     )
     start_time = grid_time - timedelta(minutes=window / 2.0)
     end_time = grid_time + timedelta(minutes=window / 2.0)
@@ -128,12 +128,15 @@ def get_iem_obs(Grid, window=60.0):
         else:
             stat_dict["lat"] = my_df["lat"].values[0]
             stat_dict["lon"] = my_df["lon"].values[0]
+            projparams = Grid["projection"].attrs
+
             stat_dict["x"], stat_dict["y"] = pyart.core.geographic_to_cartesian(
-                stat_dict["lon"], stat_dict["lat"], Grid.get_projparams()
+                stat_dict["lon"], stat_dict["lat"], projparams
             )
+
             stat_dict["x"] = stat_dict["x"][0]
             stat_dict["y"] = stat_dict["y"][0]
-            stat_dict["z"] = elevations - Grid.origin_altitude["data"][0]
+            stat_dict["z"] = elevations - Grid["origin_altitude"].values[0]
             if my_df["drct"].values[0] == "M":
                 continue
             drct = float(my_df["drct"].values[0])

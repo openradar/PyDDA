@@ -3,6 +3,7 @@ import pyart
 import gc
 import os
 import tempfile
+import xarray as xr
 
 # We want cfgrib to be an optional dependency to ensure Windows compatibility
 try:
@@ -71,7 +72,7 @@ def make_initialization_from_era5(
 
     """
     if vel_field is None:
-        vel_field = pyart.config.get_field_name("corrected_velocity")
+        vel_field = Grid.attrs["first_grid_name"]
 
     if ERA5_AVAILABLE is False and file_name is None:
         raise (
@@ -84,7 +85,7 @@ def make_initialization_from_era5(
         )
 
     grid_time = datetime.strptime(
-        Grid.time["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
+        Grid["time"].attrs["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
     )
     hour_rounded_to_nearest_1 = int(round(float(grid_time.hour)))
 
@@ -118,10 +119,10 @@ def make_initialization_from_era5(
         # Retrieve u, v, w, and geopotential
         # Geopotential is needed to convert into height coordinates
 
-        N = round(Grid.point_latitude["data"].max(), 2)
-        S = round(Grid.point_latitude["data"].min(), 2)
-        E = round(Grid.point_longitude["data"].max(), 2)
-        W = round(Grid.point_longitude["data"].min(), 2)
+        N = round(Grid["point_latitude"].values.max(), 2)
+        S = round(Grid["point_latitude"].values.min(), 2)
+        E = round(Grid["point_longitude"].values.max(), 2)
+        W = round(Grid["point_longitude"].values.min(), 2)
 
         retrieve_dict = {}
         pname = "reanalysis-era5-pressure-levels"
@@ -192,21 +193,16 @@ def make_initialization_from_era5(
         ERA_grid.variables["time"].units, "hours since %Y-%m-%d %H:%M:%S.%f"
     )
 
-    time_seconds = ERA_grid.variables["time"][:]
-    our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
     time_step = np.argmin(np.abs(base_time - grid_time))
-
-    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
-
     height_ERA = ERA_grid.variables["z"][:]
     u_ERA = ERA_grid.variables["u"][:]
     v_ERA = ERA_grid.variables["v"][:]
     w_ERA = ERA_grid.variables["w"][:]
     lon_ERA = ERA_grid.variables["longitude"][:]
     lat_ERA = ERA_grid.variables["latitude"][:]
-    radar_grid_lat = Grid.point_latitude["data"]
-    radar_grid_lon = Grid.point_longitude["data"]
-    radar_grid_alt = Grid.point_z["data"]
+    radar_grid_lat = Grid["point_latitude"].values
+    radar_grid_lon = Grid["point_longitude"].values
+    radar_grid_alt = Grid["point_z"].values
     u_flattened = u_ERA[time_step].flatten()
     v_flattened = v_ERA[time_step].flatten()
     w_flattened = w_ERA[time_step].flatten()
@@ -219,7 +215,7 @@ def make_initialization_from_era5(
     lon_flattened = lon_mgrid.flatten()
     lat_flattened = lat_mgrid.flatten()
     height_flattened = height_ERA[time_step].flatten()
-    height_flattened -= Grid.radar_altitude["data"]
+    height_flattened -= Grid.radar_altitude.values
 
     u_interp = NearestNDInterpolator(
         (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
@@ -241,22 +237,24 @@ def make_initialization_from_era5(
         tfile.close()
 
     u_field = {}
-    u_field["data"] = u_new
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field["data"] = v_new
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field["data"] = w_new
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
-    temp_grid = deepcopy(Grid)
-    temp_grid.add_field("u", u_field, replace_existing=True)
-    temp_grid.add_field("v", v_field, replace_existing=True)
-    temp_grid.add_field("w", w_field, replace_existing=True)
-    return temp_grid
+    Grid["u"] = xr.DataArray(
+        np.expand_dims(u_new, 0), dims=("time", "z", "y", "x"), attrs=u_field
+    )
+    Grid["v"] = xr.DataArray(
+        np.expand_dims(v_new, 0), dims=("time", "z", "y", "x"), attrs=v_field
+    )
+    Grid["w"] = xr.DataArray(
+        np.expand_dims(w_new, 0), dims=("time", "z", "y", "x"), attrs=w_field
+    )
+    return Grid
 
 
 def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
@@ -288,8 +286,8 @@ def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
 
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name("corrected_velocity")
-    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
+        vel_field = Grid.attrs["first_grid_name"]
+    analysis_grid_shape = Grid[vel_field].values.shape
 
     u = wind[0] * np.ones(analysis_grid_shape)
     v = wind[1] * np.ones(analysis_grid_shape)
@@ -297,24 +295,21 @@ def make_constant_wind_field(Grid, wind=(0.0, 0.0, 0.0), vel_field=None):
     u = np.ma.filled(u, 0)
     v = np.ma.filled(v, 0)
     w = np.ma.filled(w, 0)
+
     u_field = {}
-    u_field["data"] = u
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field["data"] = v
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field["data"] = w
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
 
-    temp_grid = deepcopy(Grid)
-    temp_grid.add_field("u", u_field, replace_existing=True)
-    temp_grid.add_field("v", v_field, replace_existing=True)
-    temp_grid.add_field("w", w_field, replace_existing=True)
-    return temp_grid
+    Grid["u"] = xr.DataArray(u, dims=("time", "z", "y", "x"), attrs=u_field)
+    Grid["v"] = xr.DataArray(v, dims=("time", "z", "y", "x"), attrs=v_field)
+    Grid["w"] = xr.DataArray(w, dims=("time", "z", "y", "x"), attrs=w_field)
+    return Grid
 
 
 def make_wind_field_from_profile(Grid, profile, vel_field=None):
@@ -346,8 +341,8 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     """
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name("corrected_velocity")
-    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
+        vel_field = Grid.attrs["first_grid_name"]
+    analysis_grid_shape = Grid[vel_field].values.shape
     u = np.ones(analysis_grid_shape)
     v = np.ones(analysis_grid_shape)
     w = np.zeros(analysis_grid_shape)
@@ -356,32 +351,29 @@ def make_wind_field_from_profile(Grid, profile, vel_field=None):
     z_back = profile.height
     u_interp = interp1d(z_back, u_back, bounds_error=False, fill_value="extrapolate")
     v_interp = interp1d(z_back, v_back, bounds_error=False, fill_value="extrapolate")
-    u_back2 = u_interp(np.asarray(Grid.z["data"]))
-    v_back2 = v_interp(np.asarray(Grid.z["data"]))
+    u_back2 = u_interp(np.asarray(Grid["z"].values))
+    v_back2 = v_interp(np.asarray(Grid["z"].values))
     for i in range(analysis_grid_shape[0]):
         u[i] = u_back2[i]
         v[i] = v_back2[i]
     u = np.ma.filled(u, 0)
     v = np.ma.filled(v, 0)
     w = np.ma.filled(w, 0)
+
     u_field = {}
-    u_field["data"] = u
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field["data"] = v
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field["data"] = w
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
 
-    temp_grid = deepcopy(Grid)
-    temp_grid.add_field("u", u_field, replace_existing=True)
-    temp_grid.add_field("v", v_field, replace_existing=True)
-    temp_grid.add_field("w", w_field, replace_existing=True)
-    return temp_grid
+    Grid["u"] = xr.DataArray(u, dims=("time", "z", "y", "x"), attrs=u_field)
+    Grid["v"] = xr.DataArray(v, dims=("time", "z", "y", "x"), attrs=v_field)
+    Grid["w"] = xr.DataArray(w, dims=("time", "z", "y", "x"), attrs=w_field)
+    return Grid
 
 
 def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=None):
@@ -415,9 +407,9 @@ def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     """
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name("corrected_velocity")
+        vel_field = Grid.attrs["first_grid_name"]
 
-    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
+    analysis_grid_shape = Grid[vel_field].values.shape
     u = np.ones(analysis_grid_shape)
     v = np.ones(analysis_grid_shape)
     w = np.zeros(analysis_grid_shape)
@@ -431,9 +423,9 @@ def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     PHB_wrf = wrf_cdf.variables["PHB"][:]
     alt_wrf = (PH_wrf + PHB_wrf) / 9.81
 
-    new_grid_x = Grid.point_x["data"]
-    new_grid_y = Grid.point_y["data"]
-    new_grid_z = Grid.point_z["data"]
+    new_grid_x = Grid["point_x"].values
+    new_grid_y = Grid["point_y"].values
+    new_grid_z = Grid["point_z"].values
 
     # Find timestep from datetime
     time_wrf = wrf_cdf.variables["Times"]
@@ -477,22 +469,19 @@ def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     )
 
     u_field = {}
-    u_field["data"] = u
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field["data"] = v
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field["data"] = w
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
-    temp_grid = deepcopy(Grid)
-    temp_grid.add_field("u", u_field, replace_existing=True)
-    temp_grid.add_field("v", v_field, replace_existing=True)
-    temp_grid.add_field("w", w_field, replace_existing=True)
-    return temp_grid
+
+    Grid["u"] = xr.DataArray(u, dims=("time", "z", "y", "x"), attrs=u_field)
+    Grid["v"] = xr.DataArray(v, dims=("time", "z", "y", "x"), attrs=v_field)
+    Grid["w"] = xr.DataArray(w, dims=("time", "z", "y", "x"), attrs=w_field)
+    return Grid
 
 
 def make_intialization_from_hrrr(Grid, file_path):
@@ -542,11 +531,11 @@ def make_intialization_from_hrrr(Grid, file_path):
     EARTH_MEAN_RADIUS = 6.3781e6
     gh = gh.data[:, :, :]
     height = (EARTH_MEAN_RADIUS * gh) / (EARTH_MEAN_RADIUS - gh)
-    height = height - Grid.radar_altitude["data"]
+    height = height - Grid["radar_altitude"].values
 
-    radar_grid_lat = Grid.point_latitude["data"]
-    radar_grid_lon = Grid.point_longitude["data"]
-    radar_grid_alt = Grid.point_z["data"]
+    radar_grid_lat = Grid["point_latitude"].values
+    radar_grid_lon = Grid["point_longitude"].values
+    radar_grid_alt = Grid["point_z"].values
     lat_min = radar_grid_lat.min()
     lat_max = radar_grid_lat.max()
     lon_min = radar_grid_lon.min()
@@ -597,19 +586,16 @@ def make_intialization_from_hrrr(Grid, file_path):
     gc.collect()
 
     u_field = {}
-    u_field["data"] = u_new
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "zonal component of wind velocity"
     v_field = {}
-    v_field["data"] = v_new
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "meridonial component of wind velocity"
     w_field = {}
-    w_field["data"] = w_new
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
-    temp_grid = deepcopy(Grid)
-    temp_grid.add_field("u", u_field, replace_existing=True)
-    temp_grid.add_field("v", v_field, replace_existing=True)
-    temp_grid.add_field("w", w_field, replace_existing=True)
-    return temp_grid
+
+    Grid["u"] = xr.DataArray(u_new, dims=("time", "z", "y", "x"), attrs=u_field)
+    Grid["v"] = xr.DataArray(v_new, dims=("time", "z", "y", "x"), attrs=v_field)
+    Grid["w"] = xr.DataArray(w_new, dims=("time", "z", "y", "x"), attrs=w_field)
+    return Grid

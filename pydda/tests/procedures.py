@@ -1,5 +1,4 @@
 import numpy as np
-import pyart
 
 
 def make_test_divergence_field(
@@ -36,9 +35,9 @@ def make_test_divergence_field(
          Initial U, V, W field
     """
 
-    x = Grid.point_x["data"]
-    y = Grid.point_y["data"]
-    z = Grid.point_z["data"]
+    x = Grid["point_x"].values
+    y = Grid["point_y"].values
+    z = Grid["point_z"].values
 
     theta = np.arctan2(x - x_center, y - y_center)
     phi = np.pi * ((z - z_ground) / (z_top - z_ground))
