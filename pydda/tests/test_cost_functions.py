@@ -3,6 +3,7 @@ import pydda
 import pyart
 import numpy as np
 import pytest
+import xarray as xr
 
 try:
     import tensorflow as tf
@@ -21,20 +22,18 @@ except ImportError:
 
 
 def test_calculate_rad_velocity_cost():
-    """Test with a zero velocity field radar"""
     Grid = pyart.testing.make_empty_grid(
         (20, 20, 20), ((0, 10000), (-10000, 10000), (-10000, 10000))
     )
 
     # a zero field
     fdata3 = np.zeros((20, 20, 20))
-    Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
+    Grid.fields["zero_field"] = {"data": fdata3, "units": "m/s"}
+    Grid = pydda.io.read_from_pyart_grid(Grid)
     vel_field = "zero_field"
-    pydda.retrieval.angles.add_azimuth_as_field(Grid, dz_name="zero_field")
-    pydda.retrieval.angles.add_elevation_as_field(Grid, dz_name="zero_field")
-    vrs = [np.ma.array(Grid.fields[vel_field]["data"])]
-    azs = [Grid.fields["AZ"]["data"]]
-    els = [Grid.fields["EL"]["data"]]
+    vrs = [np.ma.array(Grid[vel_field].values)]
+    azs = [Grid["AZ"].values]
+    els = [Grid["EL"].values]
     u = np.zeros((20, 20, 20))
     v = np.zeros((20, 20, 20))
     w = np.zeros((20, 20, 20))
@@ -60,14 +59,13 @@ def test_calculate_rad_velocity_cost_jax():
     )
 
     # a zero field
-    fdata3 = jnp.zeros((20, 20, 20))
-    Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
+    fdata3 = np.zeros((20, 20, 20))
+    Grid.fields["zero_field"] = {"data": fdata3, "units": "m/s"}
+    Grid = pydda.io.read_from_pyart_grid(Grid)
     vel_field = "zero_field"
-    pydda.retrieval.angles.add_azimuth_as_field(Grid, dz_name="zero_field")
-    pydda.retrieval.angles.add_elevation_as_field(Grid, dz_name="zero_field")
-    vrs = [jnp.array(Grid.fields[vel_field]["data"])]
-    azs = [Grid.fields["AZ"]["data"].filled()]
-    els = [Grid.fields["EL"]["data"].filled()]
+    vrs = [np.array(Grid[vel_field].values)]
+    azs = [Grid["AZ"].values]
+    els = [Grid["EL"].values]
     u = jnp.zeros((20, 20, 20))
     v = jnp.zeros((20, 20, 20))
     w = jnp.zeros((20, 20, 20))
@@ -93,14 +91,13 @@ def test_calculate_rad_velocity_cost_tf():
     )
 
     # a zero field
-    fdata3 = tf.zeros((20, 20, 20), dtype=tf.float32)
-    Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
+    fdata3 = np.zeros((20, 20, 20))
+    Grid.fields["zero_field"] = {"data": fdata3, "units": "m/s"}
+    Grid = pydda.io.read_from_pyart_grid(Grid)
     vel_field = "zero_field"
-    pydda.retrieval.angles.add_azimuth_as_field(Grid, dz_name="zero_field")
-    pydda.retrieval.angles.add_elevation_as_field(Grid, dz_name="zero_field")
-    vrs = [tf.constant(Grid.fields[vel_field]["data"], dtype=tf.float32)]
-    azs = [tf.constant(Grid.fields["AZ"]["data"], dtype=tf.float32)]
-    els = [tf.constant(Grid.fields["EL"]["data"], dtype=tf.float32)]
+    vrs = [tf.constant(Grid[vel_field].values.squeeze(), dtype=tf.float32)]
+    azs = [tf.constant(Grid["AZ"].values.squeeze(), dtype=tf.float32)]
+    els = [tf.constant(Grid["EL"].values.squeeze(), dtype=tf.float32)]
     u = tf.zeros((20, 20, 20), dtype=tf.float32)
     v = tf.zeros((20, 20, 20), dtype=tf.float32)
     w = tf.zeros((20, 20, 20), dtype=tf.float32)
@@ -126,11 +123,14 @@ def test_calculate_fall_speed():
     grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
     field_dic = {"data": ref_field, "long_name": "reflectivity", "units": "dBZ"}
     grid.fields = {"reflectivity": field_dic}
+    grid.radar_latitude = {"data": 0}
+    grid.radar_longitude = {"data": 0}
+    grid.radar_altitude = {"data": 0}
     fall_speed = pydda.cost_functions.calculate_fall_speed(
-        grid, refl_field="reflectivity"
+        pydda.io.read_from_pyart_grid(grid), refl_field="reflectivity"
     )
-    assert fall_speed.shape == (10, 100, 100)
-    assert fall_speed[1, 1, 1] < -3
+    assert fall_speed.shape == (1, 10, 100, 100)
+    assert fall_speed[0, 1, 1, 1] < -3
 
 
 def test_calculate_mass_continuity():

@@ -10,8 +10,9 @@ from . import vis
 from . import initialization
 from . import tests
 from . import constraints
+from . import io
 
-__version__ = "1.5.0"
+__version__ = "2.0.0"
 
 print("Welcome to PyDDA %s" % __version__)
 print("If you are using PyDDA in your publications, please cite:")
