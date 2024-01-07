@@ -182,6 +182,7 @@ class DDParameters(object):
         self.cvtol = 1e-2
         self.gtol = 1e-2
         self.Jveltol = 100.0
+        self.const_boundary_cond = False
 
 
 def _get_dd_wind_field_scipy(
@@ -228,6 +229,7 @@ def _get_dd_wind_field_scipy(
     roi=1000.0,
     wind_tol=0.1,
     tolerance=1e-8,
+    const_boundary_cond=False,
 ):
     global _wcurrmax
     global _wprevmax
@@ -250,7 +252,8 @@ def _get_dd_wind_field_scipy(
     parameters.Ut = Ut
     parameters.Vt = Vt
     parameters.engine = engine
-
+    parameters.const_boundary_cond = const_boundary_cond
+    print(parameters.const_boundary_cond)
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
     for g in Grids:
@@ -787,6 +790,7 @@ def _get_dd_wind_field_tensorflow(
     parallel_iterations=1,
     wind_tol=0.1,
     tolerance=1e-8,
+    const_boundary_cond=False,
 ):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError(
@@ -812,6 +816,8 @@ def _get_dd_wind_field_tensorflow(
     parameters.upper_bc = upper_bc
     parameters.lower_bc = lower_bc
     parameters.engine = "tensorflow"
+    parameters.const_boundary_cond = const_boundary_cond
+
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
     for g in Grids:

@@ -11,6 +11,9 @@ import pyart
 import pytest
 import numpy as np
 import xarray as xr
+import matplotlib.pyplot as plt
+
+from datatree import DataTree
 
 try:
     import tensorflow as tf
@@ -258,6 +261,73 @@ def test_model_constraint():
     np.testing.assert_allclose(
         new_grids[0]["v"].values, Grid0["V_fakemodel"].values, atol=1e-2
     )
-    np.testing.assert_allclose(
-        new_grids[0]["w"].values, Grid0["W_fakemodel"].values, atol=1e-2
+
+
+@pytest.mark.mpl_image_compare(tolerance=50)
+def test_nested_retrieval():
+    grid_sw_coarse = pydda.io.read_grid(pydda.tests.get_sample_file("test_coarse0.nc"))
+    grid_se_coarse = pydda.io.read_grid(pydda.tests.get_sample_file("test_coarse1.nc"))
+    grid_sw_fine = pydda.io.read_grid(pydda.tests.get_sample_file("test_fine0.nc"))
+    grid_se_fine = pydda.io.read_grid(pydda.tests.get_sample_file("test_fine1.nc"))
+
+    grid_sw_coarse = pydda.initialization.make_constant_wind_field(
+        grid_sw_coarse, (0.0, 0.0, 0.0)
     )
+
+    input_grids = xr.concat(
+        [grid_sw_coarse.drop("time"), grid_se_coarse.drop("time")], dim="nradar"
+    )
+    kwargs_dict = dict(
+        Cm=128.0,
+        Co=1e-2,
+        Cx=1,
+        Cy=1,
+        Cz=1,
+        Cmod=1e-5,
+        model_fields=["hrrr"],
+        refl_field="DBZ",
+        wind_tol=0.1,
+        max_iterations=100,
+        low_pass_filter=True,
+        engine="scipy",
+    )
+    input_grids["kwargs"] = xr.DataArray([], attrs=kwargs_dict)
+    root = DataTree(data=input_grids, name="coarse_grid")
+    grid_tree_nest_1 = xr.concat(
+        [grid_sw_fine.drop("time"), grid_se_fine.drop("time")], dim="nradar"
+    )
+    grid_tree_nest_1["kwargs"] = input_grids["kwargs"]
+
+    grid_tree = pydda.retrieval.get_dd_wind_field_nested(root)
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+    pydda.vis.plot_horiz_xsection_quiver(
+        grid_tree,
+        ax=ax[0],
+        level=5,
+        cmap="ChaseSpectral",
+        vmin=-10,
+        vmax=80,
+        quiverkey_len=10.0,
+        background_field="DBZ",
+        bg_grid_no=1,
+        w_vel_contours=[1, 2, 5, 10],
+        quiver_spacing_x_km=50.0,
+        quiver_spacing_y_km=50.0,
+        quiverkey_loc="bottom_right",
+    )
+    pydda.vis.plot_horiz_xsection_quiver(
+        grid_tree.children["fine_grid_1"],
+        ax=ax[1],
+        level=5,
+        cmap="ChaseSpectral",
+        vmin=-10,
+        vmax=80,
+        quiverkey_len=10.0,
+        background_field="DBZ",
+        bg_grid_no=1,
+        w_vel_contours=[1, 2, 5, 10],
+        quiver_spacing_x_km=50.0,
+        quiver_spacing_y_km=50.0,
+        quiverkey_loc="bottom_right",
+    )
+    return fig

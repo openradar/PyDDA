@@ -8,3 +8,5 @@ six
 pooch
 cmweather
 cdsapi
+xarray
+datatree
