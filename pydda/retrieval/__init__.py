@@ -18,9 +18,12 @@ how to call these functions.
     get_dd_wind_field
     get_bca
     DDParameters
+    get_dd_wind_field_nested
+    make_initalization_from_other_grid
 """
 
 from .wind_retrieve import get_dd_wind_field
 from .wind_retrieve import get_bca
 from .wind_retrieve import DDParameters
 from .nesting import get_dd_wind_field_nested
+from .nesting import make_initialization_from_other_grid

@@ -8,6 +8,7 @@ import warnings
 
 from .. import retrieval
 from matplotlib.axes import Axes
+from datatree import DataTree
 
 try:
     from cartopy.mpl.geoaxes import GeoAxes
@@ -50,8 +51,8 @@ def plot_horiz_xsection_barbs(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
@@ -110,11 +111,16 @@ def plot_horiz_xsection_barbs(
     ax: matplotlib axis
         Axis handle to output axis
     """
-
-    if bg_grid_no > -1:
-        grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
+    if isinstance(Grids, DataTree):
+        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
     else:
-        grid_array = np.ma.stack([x[background_field].values.squeeze() for x in Grids])
+        grid_list = Grids
+    if bg_grid_no > -1:
+        grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
+    else:
+        grid_array = np.ma.stack(
+            [x[background_field].values.squeeze() for x in grid_list]
+        )
         grid_bg = grid_array.max(axis=0)
 
     if vmin is None:
@@ -123,14 +129,14 @@ def plot_horiz_xsection_barbs(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0]["point_altitude"].values / 1e3
-    grid_x = Grids[0]["point_x"].values / 1e3
-    grid_y = Grids[0]["point_y"].values / 1e3
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0][u_field].values.squeeze()
-    v = Grids[0][v_field].values.squeeze()
-    w = Grids[0][w_field].values.squeeze()
+    u = grid_list[0][u_field].values.squeeze()
+    v = grid_list[0][v_field].values.squeeze()
+    w = grid_list[0][w_field].values.squeeze()
 
     if isinstance(u, np.ma.MaskedArray):
         u = u.filled(np.nan)
@@ -162,9 +168,9 @@ def plot_horiz_xsection_barbs(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -233,14 +239,14 @@ def plot_horiz_xsection_barbs(
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")
 
-    bca_min = math.radians(Grids[0][u_field].attrs["min_bca"])
-    bca_max = math.radians(Grids[0][u_field].attrs["max_bca"])
+    bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
+    bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
 
     if show_lobes is True:
-        for i in range(len(Grids)):
-            for j in range(len(Grids)):
+        for i in range(len(grid_list)):
+            for j in range(len(grid_list)):
                 if i != j:
-                    bca = retrieval.get_bca(Grids[i], Grids[j])
+                    bca = retrieval.get_bca(grid_list[i], grid_list[j])
 
                     ax.contour(
                         grid_x[level, :, :],
@@ -294,8 +300,8 @@ def plot_horiz_xsection_barbs_map(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle (with cartopy ccrs)
         The axis handle to place the plot on. Set to None to create a new map.
         Note: the axis needs to be in a PlateCarree() projection.
@@ -356,16 +362,21 @@ def plot_horiz_xsection_barbs_map(
     ax: matplotlib axis
         Axis handle to output axis
     """
-
+    if isinstance(Grids, DataTree):
+        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+    else:
+        grid_list = Grids
     if not CARTOPY_AVAILABLE:
         raise ModuleNotFoundError(
             "Cartopy needs to be installed in order to use plotting module!"
         )
 
     if bg_grid_no > -1:
-        grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
+        grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
     else:
-        grid_array = np.ma.stack([x[background_field].values.squeeze() for x in Grids])
+        grid_array = np.ma.stack(
+            [x[background_field].values.squeeze() for x in grid_list]
+        )
         grid_bg = grid_array.max(axis=0)
 
     if vmin is None:
@@ -374,17 +385,17 @@ def plot_horiz_xsection_barbs_map(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0]["point_altitude"].values / 1e3
-    grid_x = Grids[0]["point_x"].values / 1e3
-    grid_y = Grids[0]["point_y"].values / 1e3
-    grid_lat = Grids[0].point_latitude["data"][level]
-    grid_lon = Grids[0].point_longitude["data"][level]
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
+    grid_lat = grid_list[0].point_latitude["data"][level]
+    grid_lon = grid_list[0].point_longitude["data"][level]
 
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0][u_field].values.squeeze()
-    v = Grids[0][v_field].values.squeeze()
-    w = Grids[0][w_field].values.squeeze()
+    u = grid_list[0][u_field].values.squeeze()
+    v = grid_list[0][v_field].values.squeeze()
+    w = grid_list[0][w_field].values.squeeze()
 
     transform = ccrs.PlateCarree()
     if ax is None:
@@ -413,9 +424,9 @@ def plot_horiz_xsection_barbs_map(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -550,14 +561,14 @@ def plot_horiz_xsection_barbs_map(
                 RuntimeWarning,
             )
 
-    bca_min = math.radians(Grids[0][u_field].attrs["min_bca"])
-    bca_max = math.radians(Grids[0][u_field].attrs["max_bca"])
+    bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
+    bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
 
     if show_lobes is True:
-        for i in range(len(Grids)):
-            for j in range(len(Grids)):
+        for i in range(len(grid_list)):
+            for j in range(len(grid_list)):
                 if i != j:
-                    bca = retrieval.get_bca(Grids[i], Grids[j])
+                    bca = retrieval.get_bca(grid_list[i], grid_list[j])
 
                     ax.contour(
                         grid_lon[::, ::],
@@ -619,8 +630,8 @@ def plot_xz_xsection_barbs(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
@@ -678,15 +689,21 @@ def plot_xz_xsection_barbs(
     ax: matplotlib axis
         Axis handle to output axis
     """
+    if isinstance(Grids, DataTree):
+        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+    else:
+        grid_list = Grids
 
     if not CARTOPY_AVAILABLE:
         raise ModuleNotFoundError(
             "Cartopy needs to be installed in order to use plotting module!"
         )
     if bg_grid_no > -1:
-        grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
+        grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
     else:
-        grid_array = np.ma.stack([x[background_field].values.squeeze() for x in Grids])
+        grid_array = np.ma.stack(
+            [x[background_field].values.squeeze() for x in grid_list]
+        )
         grid_bg = grid_array.max(axis=0)
 
     if vmin is None:
@@ -695,14 +712,14 @@ def plot_xz_xsection_barbs(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0]["point_altitude"].values / 1e3
-    grid_x = Grids[0]["point_x"].values / 1e3
-    grid_y = Grids[0]["point_y"].values / 1e3
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dz = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0][u_field].values.squeeze()
-    v = Grids[0][v_field].values.squeeze()
-    w = Grids[0][w_field].values.squeeze()
+    u = grid_list[0][u_field].values.squeeze()
+    v = grid_list[0][v_field].values.squeeze()
+    w = grid_list[0][w_field].values.squeeze()
 
     if ax is None:
         ax = plt.gca()
@@ -725,9 +742,9 @@ def plot_xz_xsection_barbs(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -852,8 +869,8 @@ def plot_yz_xsection_barbs(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
@@ -910,11 +927,17 @@ def plot_yz_xsection_barbs(
     ax: matplotlib axis
         Axis handle to output axis
     """
+    if isinstance(Grids, DataTree):
+        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+    else:
+        grid_list = Grids
 
     if bg_grid_no > -1:
-        grid_bg = Grids[bg_grid_no][background_field].values.squeeze()
+        grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
     else:
-        grid_array = np.ma.stack([x[background_field].values.squeeze() for x in Grids])
+        grid_array = np.ma.stack(
+            [x[background_field].values.squeeze() for x in grid_list]
+        )
         grid_bg = grid_array.max(axis=0)
 
     if vmin is None:
@@ -923,14 +946,14 @@ def plot_yz_xsection_barbs(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0]["point_altitude"].values / 1e3
-    grid_x = Grids[0]["point_x"].values / 1e3
-    grid_y = Grids[0]["point_y"].values / 1e3
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dz = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0][u_field].values.squeeze()
-    v = Grids[0][v_field].values.squeeze()
-    w = Grids[0][w_field].values.squeeze()
+    u = grid_list[0][u_field].values.squeeze()
+    v = grid_list[0][v_field].values.squeeze()
+    w = grid_list[0][w_field].values.squeeze()
 
     if ax is None:
         ax = plt.gca()
@@ -953,9 +976,9 @@ def plot_yz_xsection_barbs(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no][background_field].attrs["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no][background_field].attrs["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
