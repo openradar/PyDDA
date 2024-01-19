@@ -1,14 +1,13 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.cost_functions._cost_functions_numpy &#8212; PyDDA 1.5.1 documentation</title>
+    <title>pydda.cost_functions._cost_functions_numpy &#8212; PyDDA 2.0.0 documentation</title>
   
   
   
@@ -18,37 +17,34 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/cost_functions/_cost_functions_numpy';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -61,10 +57,9 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -105,7 +100,7 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -115,6 +110,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -123,7 +119,8 @@
   
   
   
-    <p class="title logo__title">PyDDA 1.5.1 documentation</p>
+  
+    <p class="title logo__title">PyDDA 2.0.0 documentation</p>
   
 </a></div>
     
@@ -133,13 +130,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -179,6 +171,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -192,6 +185,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -208,6 +202,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -223,10 +218,15 @@ document.write(`
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -237,13 +237,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -283,6 +278,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -347,7 +343,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <h1>Source code for pydda.cost_functions._cost_functions_numpy</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -359,7 +355,9 @@ document.write(`
 <span class="n">laplace_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="calculate_radial_vel_cost_function"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function">[docs]</a><span class="k">def</span> <span class="nf">calculate_radial_vel_cost_function</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_radial_vel_cost_function">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_radial_vel_cost_function</span><span class="p">(</span>
     <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -420,7 +418,10 @@ document.write(`
     <span class="k">return</span> <span class="n">J_o</span></div>
 
 
-<div class="viewcode-block" id="calculate_grad_radial_vel"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_grad_radial_vel.html#pydda.cost_functions.calculate_grad_radial_vel">[docs]</a><span class="k">def</span> <span class="nf">calculate_grad_radial_vel</span><span class="p">(</span>
+
+<div class="viewcode-block" id="calculate_grad_radial_vel">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_grad_radial_vel.html#pydda.cost_functions.calculate_grad_radial_vel">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_grad_radial_vel</span><span class="p">(</span>
     <span class="n">vrs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -496,7 +497,10 @@ document.write(`
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="calculate_smoothness_cost"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost">[docs]</a><span class="k">def</span> <span class="nf">calculate_smoothness_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_smoothness_cost">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_smoothness_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the smoothness cost function by taking the Laplacian of the</span>
 <span class="sd">    wind field.</span>
@@ -561,7 +565,10 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">x_term</span> <span class="o">+</span> <span class="n">y_term</span> <span class="o">+</span> <span class="n">z_term</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="calculate_smoothness_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_smoothness_gradient</span><span class="p">(</span>
+
+<div class="viewcode-block" id="calculate_smoothness_gradient">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_smoothness_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -617,7 +624,10 @@ document.write(`
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="calculate_point_cost"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost">[docs]</a><span class="k">def</span> <span class="nf">calculate_point_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_point_cost">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_point_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function related to point observations. A mean square error cost</span>
 <span class="sd">    function term is applied to points that are within the sphere of influence</span>
@@ -669,7 +679,10 @@ document.write(`
     <span class="k">return</span> <span class="n">J</span> <span class="o">*</span> <span class="n">Cp</span></div>
 
 
-<div class="viewcode-block" id="calculate_point_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_point_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_point_gradient">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_point_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the cost function related to point observations.</span>
 <span class="sd">    A mean square error cost function term is applied to points that are within the sphere of influence</span>
@@ -722,7 +735,10 @@ document.write(`
     <span class="k">return</span> <span class="n">gradJ</span> <span class="o">*</span> <span class="n">Cp</span></div>
 
 
-<div class="viewcode-block" id="calculate_mass_continuity"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity.html#pydda.cost_functions.calculate_mass_continuity">[docs]</a><span class="k">def</span> <span class="nf">calculate_mass_continuity</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_mass_continuity">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity.html#pydda.cost_functions.calculate_mass_continuity">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_mass_continuity</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the mass continuity cost function by taking the divergence</span>
 <span class="sd">    of the wind field.</span>
@@ -768,7 +784,10 @@ document.write(`
     <span class="k">return</span> <span class="n">coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">div</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span></div>
 
 
-<div class="viewcode-block" id="calculate_mass_continuity_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_mass_continuity_gradient</span><span class="p">(</span>
+
+<div class="viewcode-block" id="calculate_mass_continuity_gradient">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_mass_continuity_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -824,7 +843,10 @@ document.write(`
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="calculate_fall_speed"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_fall_speed.html#pydda.cost_functions.calculate_fall_speed">[docs]</a><span class="k">def</span> <span class="nf">calculate_fall_speed</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">4500.0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_fall_speed">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_fall_speed.html#pydda.cost_functions.calculate_fall_speed">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_fall_speed</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">4500.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates fall speed based on reflectivity.</span>
 <span class="sd">    Uses methodology of Mike Biggerstaff and Dan Betten</span>
@@ -846,8 +868,8 @@ document.write(`
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">refl_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
 
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="n">refl_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="s2">&quot;point_z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">grid_z</span> <span class="o">/</span> <span class="mf">10000.0</span><span class="p">)</span>
@@ -869,7 +891,10 @@ document.write(`
     <span class="k">return</span> <span class="n">fallspeed</span></div>
 
 
-<div class="viewcode-block" id="calculate_background_cost"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost">[docs]</a><span class="k">def</span> <span class="nf">calculate_background_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_background_cost">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_background_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the background cost function. The background cost function is</span>
 <span class="sd">    simply the sum of the squared differences between the wind field and the</span>
@@ -905,7 +930,10 @@ document.write(`
     <span class="k">return</span> <span class="n">cost</span></div>
 
 
-<div class="viewcode-block" id="calculate_background_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_gradient.html#pydda.cost_functions.calculate_background_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_background_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_background_gradient">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_gradient.html#pydda.cost_functions.calculate_background_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_background_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the background cost function. For each u, v</span>
 <span class="sd">    this is given as 2*coefficent*(analysis wind - background wind).</span>
@@ -943,7 +971,10 @@ document.write(`
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="calculate_vertical_vorticity_cost"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_cost.html#pydda.cost_functions.calculate_vertical_vorticity_cost">[docs]</a><span class="k">def</span> <span class="nf">calculate_vertical_vorticity_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_vertical_vorticity_cost">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_cost.html#pydda.cost_functions.calculate_vertical_vorticity_cost">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_vertical_vorticity_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function due to deviance from vertical vorticity</span>
 <span class="sd">    equation. For more information of the vertical vorticity cost function,</span>
@@ -1004,7 +1035,10 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">coeff</span> <span class="o">*</span> <span class="n">jv_array</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="calculate_vertical_vorticity_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
+
+<div class="viewcode-block" id="calculate_vertical_vorticity_gradient">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1111,7 +1145,10 @@ document.write(`
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="calculate_model_cost"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_cost.html#pydda.cost_functions.calculate_model_cost">[docs]</a><span class="k">def</span> <span class="nf">calculate_model_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_model_cost">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_cost.html#pydda.cost_functions.calculate_model_cost">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_model_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function for the model constraint.</span>
 <span class="sd">    This is calculated simply as the sum of squares of the differences</span>
@@ -1152,7 +1189,10 @@ document.write(`
     <span class="k">return</span> <span class="n">cost</span></div>
 
 
-<div class="viewcode-block" id="calculate_model_gradient"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_gradient.html#pydda.cost_functions.calculate_model_gradient">[docs]</a><span class="k">def</span> <span class="nf">calculate_model_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+<div class="viewcode-block" id="calculate_model_gradient">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_gradient.html#pydda.cost_functions.calculate_model_gradient">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_model_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function for the model constraint.</span>
 <span class="sd">    This is calculated simply as twice the differences</span>
@@ -1193,6 +1233,7 @@ document.write(`
 
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">u_grad</span><span class="p">,</span> <span class="n">v_grad</span><span class="p">,</span> <span class="n">w_grad</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
+
 </pre></div>
 
                 </article>
@@ -1202,7 +1243,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1210,6 +1251,8 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -1222,8 +1265,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1231,6 +1274,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright 2023, PyDDA Developers.
@@ -1240,8 +1284,9 @@ document.write(`
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -1252,8 +1297,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
 </p></div>
       
     </div>

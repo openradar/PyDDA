@@ -1,14 +1,13 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.initialization.wind_fields &#8212; PyDDA 1.5.1 documentation</title>
+    <title>pydda.initialization.wind_fields &#8212; PyDDA 2.0.0 documentation</title>
   
   
   
@@ -18,37 +17,34 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/initialization/wind_fields';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -61,10 +57,9 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -105,7 +100,7 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -115,6 +110,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -123,7 +119,8 @@
   
   
   
-    <p class="title logo__title">PyDDA 1.5.1 documentation</p>
+  
+    <p class="title logo__title">PyDDA 2.0.0 documentation</p>
   
 </a></div>
     
@@ -133,13 +130,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -179,6 +171,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -192,6 +185,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -208,6 +202,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -223,10 +218,15 @@ document.write(`
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -237,13 +237,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -283,6 +278,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -347,7 +343,7 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <h1>Source code for pydda.initialization.wind_fields</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -355,6 +351,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">gc</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 
 <span class="c1"># We want cfgrib to be an optional dependency to ensure Windows compatibility</span>
 <span class="k">try</span><span class="p">:</span>
@@ -368,7 +365,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">Dataset</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">griddata</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">NearestNDInterpolator</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">NearestNDInterpolator</span><span class="p">,</span> <span class="n">LinearNDInterpolator</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="k">try</span><span class="p">:</span>
@@ -379,8 +376,14 @@ document.write(`
     <span class="n">ERA5_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="make_initialization_from_era5"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_initialization_from_era5.html#pydda.initialization.make_initialization_from_era5">[docs]</a><span class="k">def</span> <span class="nf">make_initialization_from_era5</span><span class="p">(</span>
-    <span class="n">Grid</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest_era_file</span><span class="o">=</span><span class="kc">None</span>
+<div class="viewcode-block" id="make_initialization_from_era5">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_initialization_from_era5.html#pydda.initialization.make_initialization_from_era5">[docs]</a>
+<span class="k">def</span> <span class="nf">make_initialization_from_era5</span><span class="p">(</span>
+    <span class="n">Grid</span><span class="p">,</span>
+    <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dest_era_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Written by: Hamid Ali Syed and Bobby Jackson</span>
@@ -415,6 +418,9 @@ document.write(`
 <span class="sd">    dest_era_file:</span>
 <span class="sd">        If this is not None, PyDDA will save the interpolated grid</span>
 <span class="sd">        into this file.</span>
+<span class="sd">    method: str</span>
+<span class="sd">        Interpolation method: &#39;nearest&#39; for nearest neighbor,</span>
+<span class="sd">        &#39;linear&#39; for linear.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    new_Grid: Py-ART Grid</span>
@@ -423,7 +429,7 @@ document.write(`
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;first_grid_name&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">ERA5_AVAILABLE</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">file_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">raise</span> <span class="p">(</span>
@@ -436,7 +442,7 @@ document.write(`
         <span class="p">)</span>
 
     <span class="n">grid_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-        <span class="n">Grid</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="s2">&quot;seconds since %Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+        <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="s2">&quot;seconds since %Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
     <span class="p">)</span>
     <span class="n">hour_rounded_to_nearest_1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">grid_time</span><span class="o">.</span><span class="n">hour</span><span class="p">)))</span>
 
@@ -470,10 +476,10 @@ document.write(`
         <span class="c1"># Retrieve u, v, w, and geopotential</span>
         <span class="c1"># Geopotential is needed to convert into height coordinates</span>
 
-        <span class="n">N</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">S</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">E</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">W</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="n">retrieve_dict</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">pname</span> <span class="o">=</span> <span class="s2">&quot;reanalysis-era5-pressure-levels&quot;</span>
@@ -544,21 +550,16 @@ document.write(`
         <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span><span class="p">,</span> <span class="s2">&quot;hours since %Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S.</span><span class="si">%f</span><span class="s2">&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">time_seconds</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][:]</span>
-    <span class="n">our_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">base_time</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">time_seconds</span><span class="p">])</span>
     <span class="n">time_step</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">base_time</span> <span class="o">-</span> <span class="n">grid_time</span><span class="p">))</span>
-
-    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-
     <span class="n">height_ERA</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">][:]</span>
     <span class="n">u_ERA</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">][:]</span>
     <span class="n">v_ERA</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">][:]</span>
     <span class="n">w_ERA</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">][:]</span>
     <span class="n">lon_ERA</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">][:]</span>
     <span class="n">lat_ERA</span> <span class="o">=</span> <span class="n">ERA_grid</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">][:]</span>
-    <span class="n">radar_grid_lat</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">radar_grid_lon</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">radar_grid_alt</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">radar_grid_lat</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">radar_grid_lon</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">radar_grid_alt</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="n">u_flattened</span> <span class="o">=</span> <span class="n">u_ERA</span><span class="p">[</span><span class="n">time_step</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">v_flattened</span> <span class="o">=</span> <span class="n">v_ERA</span><span class="p">[</span><span class="n">time_step</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">w_flattened</span> <span class="o">=</span> <span class="n">w_ERA</span><span class="p">[</span><span class="n">time_step</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
@@ -571,17 +572,30 @@ document.write(`
     <span class="n">lon_flattened</span> <span class="o">=</span> <span class="n">lon_mgrid</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">lat_flattened</span> <span class="o">=</span> <span class="n">lat_mgrid</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">height_flattened</span> <span class="o">=</span> <span class="n">height_ERA</span><span class="p">[</span><span class="n">time_step</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-    <span class="n">height_flattened</span> <span class="o">-=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">height_flattened</span> <span class="o">-=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">radar_altitude</span><span class="o">.</span><span class="n">values</span>
 
-    <span class="n">u_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">u_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="n">v_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">v_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-    <span class="n">w_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
-        <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">w_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
+        <span class="n">u_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">u_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">v_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">v_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">w_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">w_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;linear&quot;</span><span class="p">:</span>
+        <span class="n">u_interp</span> <span class="o">=</span> <span class="n">LinearNDInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">u_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">v_interp</span> <span class="o">=</span> <span class="n">LinearNDInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">v_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">w_interp</span> <span class="o">=</span> <span class="n">LinearNDInterpolator</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">height_flattened</span><span class="p">,</span> <span class="n">lat_flattened</span><span class="p">,</span> <span class="n">lon_flattened</span><span class="p">),</span> <span class="n">w_flattened</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> interpolation method not implemented!&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
     <span class="n">u_new</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span><span class="n">radar_grid_alt</span><span class="p">,</span> <span class="n">radar_grid_lat</span><span class="p">,</span> <span class="n">radar_grid_lon</span><span class="p">)</span>
     <span class="n">v_new</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span><span class="n">radar_grid_alt</span><span class="p">,</span> <span class="n">radar_grid_lat</span><span class="p">,</span> <span class="n">radar_grid_lon</span><span class="p">)</span>
     <span class="n">w_new</span> <span class="o">=</span> <span class="n">w_interp</span><span class="p">(</span><span class="n">radar_grid_alt</span><span class="p">,</span> <span class="n">radar_grid_lat</span><span class="p">,</span> <span class="n">radar_grid_lon</span><span class="p">)</span>
@@ -593,25 +607,30 @@ document.write(`
         <span class="n">tfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_new</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_new</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w_new</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
-    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">u_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">v_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">w_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">temp_grid</span></div>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">u_new</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">u_field</span>
+    <span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">v_field</span>
+    <span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">w_new</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">w_field</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grid</span></div>
 
 
-<div class="viewcode-block" id="make_constant_wind_field"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_constant_wind_field.html#pydda.initialization.make_constant_wind_field">[docs]</a><span class="k">def</span> <span class="nf">make_constant_wind_field</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">wind</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="make_constant_wind_field">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_constant_wind_field.html#pydda.initialization.make_constant_wind_field">[docs]</a>
+<span class="k">def</span> <span class="nf">make_constant_wind_field</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">wind</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function makes a constant wind field given a wind vector.</span>
 
@@ -640,8 +659,8 @@ document.write(`
 
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
-    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;first_grid_name&quot;</span><span class="p">]</span>
+    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="n">u</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">wind</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
@@ -649,27 +668,27 @@ document.write(`
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
 
-    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">u_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">v_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">w_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">temp_grid</span></div>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">u_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">v_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">w_field</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grid</span></div>
 
 
-<div class="viewcode-block" id="make_wind_field_from_profile"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_wind_field_from_profile.html#pydda.initialization.make_wind_field_from_profile">[docs]</a><span class="k">def</span> <span class="nf">make_wind_field_from_profile</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="make_wind_field_from_profile">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_wind_field_from_profile.html#pydda.initialization.make_wind_field_from_profile">[docs]</a>
+<span class="k">def</span> <span class="nf">make_wind_field_from_profile</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function makes a 3D wind field from a sounding.</span>
 
@@ -698,8 +717,8 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
-    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;first_grid_name&quot;</span><span class="p">]</span>
+    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
@@ -708,35 +727,35 @@ document.write(`
     <span class="n">z_back</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">height</span>
     <span class="n">u_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">z_back</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
     <span class="n">v_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">z_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span><span class="p">)</span>
-    <span class="n">u_back2</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]))</span>
-    <span class="n">v_back2</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]))</span>
+    <span class="n">u_back2</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">v_back2</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_back2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_back2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
 
-    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">u_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">v_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">w_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">temp_grid</span></div>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">u_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">v_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">w_field</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grid</span></div>
 
 
-<div class="viewcode-block" id="make_background_from_wrf"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf">[docs]</a><span class="k">def</span> <span class="nf">make_background_from_wrf</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">wrf_time</span><span class="p">,</span> <span class="n">radar_loc</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<div class="viewcode-block" id="make_background_from_wrf">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_background_from_wrf.html#pydda.initialization.make_background_from_wrf">[docs]</a>
+<span class="k">def</span> <span class="nf">make_background_from_wrf</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">wrf_time</span><span class="p">,</span> <span class="n">radar_loc</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function makes an initalization field based off of the u and w</span>
 <span class="sd">    from a WRF run. Only u and v are used from the WRF file.</span>
@@ -767,9 +786,9 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;first_grid_name&quot;</span><span class="p">]</span>
 
-    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">analysis_grid_shape</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">analysis_grid_shape</span><span class="p">)</span>
@@ -783,9 +802,9 @@ document.write(`
     <span class="n">PHB_wrf</span> <span class="o">=</span> <span class="n">wrf_cdf</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;PHB&quot;</span><span class="p">][:]</span>
     <span class="n">alt_wrf</span> <span class="o">=</span> <span class="p">(</span><span class="n">PH_wrf</span> <span class="o">+</span> <span class="n">PHB_wrf</span><span class="p">)</span> <span class="o">/</span> <span class="mf">9.81</span>
 
-    <span class="n">new_grid_x</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">new_grid_y</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">new_grid_z</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">new_grid_x</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">new_grid_y</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">new_grid_z</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
     <span class="c1"># Find timestep from datetime</span>
     <span class="n">time_wrf</span> <span class="o">=</span> <span class="n">wrf_cdf</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;Times&quot;</span><span class="p">]</span>
@@ -829,25 +848,23 @@ document.write(`
     <span class="p">)</span>
 
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
-    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">u_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">v_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">w_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">temp_grid</span></div>
+
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">u_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">v_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">w_field</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grid</span></div>
 
 
-<span class="k">def</span> <span class="nf">make_intialization_from_hrrr</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">make_intialization_from_hrrr</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function will read an HRRR GRIB2 file and return initial guess</span>
 <span class="sd">    u, v, and w fields from the model</span>
@@ -859,6 +876,9 @@ document.write(`
 <span class="sd">    will be interpolated to the Grid&#39;s specficiation and added as a field.</span>
 <span class="sd">    file_path: string</span>
 <span class="sd">        The path to the GRIB2 file to load.</span>
+<span class="sd">    method: str</span>
+<span class="sd">        Interpolation method: &#39;nearest&#39; for nearest neighbor,</span>
+<span class="sd">        &#39;linear&#39; for linear.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -894,11 +914,11 @@ document.write(`
     <span class="n">EARTH_MEAN_RADIUS</span> <span class="o">=</span> <span class="mf">6.3781e6</span>
     <span class="n">gh</span> <span class="o">=</span> <span class="n">gh</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span>
     <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="n">EARTH_MEAN_RADIUS</span> <span class="o">*</span> <span class="n">gh</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">EARTH_MEAN_RADIUS</span> <span class="o">-</span> <span class="n">gh</span><span class="p">)</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="o">-</span> <span class="n">Grid</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="o">-</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;radar_altitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
-    <span class="n">radar_grid_lat</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">radar_grid_lon</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">radar_grid_alt</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">radar_grid_lat</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">radar_grid_lon</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">radar_grid_alt</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="n">lat_min</span> <span class="o">=</span> <span class="n">radar_grid_lat</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="n">lat_max</span> <span class="o">=</span> <span class="n">radar_grid_lat</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
     <span class="n">lon_min</span> <span class="o">=</span> <span class="n">radar_grid_lon</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -949,22 +969,19 @@ document.write(`
     <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">u_new</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_new</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridonial component of wind velocity&quot;</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">w_new</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
-    <span class="n">temp_grid</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;u&quot;</span><span class="p">,</span> <span class="n">u_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="n">v_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">temp_grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">w_field</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">temp_grid</span>
+
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">u_new</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">u_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">v_new</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">v_field</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">w_new</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">w_field</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grid</span>
 </pre></div>
 
                 </article>
@@ -974,7 +991,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -982,6 +999,8 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -994,8 +1013,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1003,6 +1022,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright 2023, PyDDA Developers.
@@ -1012,8 +1032,9 @@ document.write(`
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -1024,8 +1045,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
 </p></div>
       
     </div>

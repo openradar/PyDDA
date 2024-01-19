@@ -1,14 +1,13 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.vis.streamline_plot &#8212; PyDDA 1.5.1 documentation</title>
+    <title>pydda.vis.streamline_plot &#8212; PyDDA 2.0.0 documentation</title>
   
   
   
@@ -18,37 +17,34 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/vis/streamline_plot';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -61,10 +57,9 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -105,7 +100,7 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -115,6 +110,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../../index.html">
@@ -123,7 +119,8 @@
   
   
   
-    <p class="title logo__title">PyDDA 1.5.1 documentation</p>
+  
+    <p class="title logo__title">PyDDA 2.0.0 documentation</p>
   
 </a></div>
     
@@ -133,13 +130,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -179,6 +171,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -192,6 +185,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -208,6 +202,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -223,10 +218,15 @@ document.write(`
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
@@ -237,13 +237,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -283,6 +278,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -347,20 +343,20 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <h1>Source code for pydda.vis.streamline_plot</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
-<span class="kn">import</span> <span class="nn">cartopy</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
 
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">retrieval</span>
 <span class="kn">from</span> <span class="nn">matplotlib.axes</span> <span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span> <span class="nn">datatree</span> <span class="kn">import</span> <span class="n">DataTree</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">cartopy.mpl.geoaxes</span> <span class="kn">import</span> <span class="n">GeoAxes</span>
@@ -372,14 +368,16 @@ document.write(`
 <span class="n">GeoAxes</span><span class="o">.</span><span class="n">_pcolormesh_patched</span> <span class="o">=</span> <span class="n">Axes</span><span class="o">.</span><span class="n">pcolormesh</span>
 
 
-<div class="viewcode-block" id="plot_horiz_xsection_streamlines"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_streamlines.html#pydda.vis.plot_horiz_xsection_streamlines">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_streamlines</span><span class="p">(</span>
+<div class="viewcode-block" id="plot_horiz_xsection_streamlines">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_streamlines.html#pydda.vis.plot_horiz_xsection_streamlines">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_horiz_xsection_streamlines</span><span class="p">(</span>
     <span class="n">Grids</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
     <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -404,8 +402,8 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Grids: list</span>
-<span class="sd">        List of Py-ART Grids to visualize</span>
+<span class="sd">    Grids: list or DataTree</span>
+<span class="sd">        List of Py-DDA Grids to visualize</span>
 <span class="sd">    ax: matplotlib axis handle</span>
 <span class="sd">        The axis handle to place the plot on. Set to None to plot on the</span>
 <span class="sd">        current axis.</span>
@@ -464,7 +462,22 @@ document.write(`
 <span class="sd">        Axis handle to output axis</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">child_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Grids</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rad_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;radar&quot;</span> <span class="ow">in</span> <span class="n">child</span><span class="p">:</span>
+                <span class="n">grid_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">())</span>
+                <span class="n">rad_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">rad_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">])</span>
+        <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">rad_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="n">Grids</span>
+        <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">])</span>
+        <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">])</span>
+
+    <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -472,14 +485,14 @@ document.write(`
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
     <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -514,9 +527,9 @@ document.write(`
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">the_mesh</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">cp</span><span class="p">))</span>
 
@@ -576,21 +589,13 @@ document.write(`
         <span class="k">if</span> <span class="n">colorbar_contour_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;|V| [m/s]&quot;</span><span class="p">)</span>
 
-    <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;min_bca&quot;</span><span class="p">])</span>
-    <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;max_bca&quot;</span><span class="p">])</span>
-
     <span class="k">if</span> <span class="n">show_lobes</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grid_list</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grid_list</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
                     <span class="n">bca</span> <span class="o">=</span> <span class="n">retrieval</span><span class="o">.</span><span class="n">get_bca</span><span class="p">(</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">(),</span>
+                        <span class="n">grid_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">grid_list</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
                     <span class="p">)</span>
 
                     <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
@@ -613,14 +618,17 @@ document.write(`
     <span class="k">return</span> <span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="plot_horiz_xsection_streamlines_map"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_streamlines_map.html#pydda.vis.plot_horiz_xsection_streamlines_map">[docs]</a><span class="k">def</span> <span class="nf">plot_horiz_xsection_streamlines_map</span><span class="p">(</span>
+
+<div class="viewcode-block" id="plot_horiz_xsection_streamlines_map">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_horiz_xsection_streamlines_map.html#pydda.vis.plot_horiz_xsection_streamlines_map">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_horiz_xsection_streamlines_map</span><span class="p">(</span>
     <span class="n">Grids</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
     <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -647,8 +655,8 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Grids: list</span>
-<span class="sd">        List of Py-ART Grids to visualize</span>
+<span class="sd">    Grids: list or DataTree</span>
+<span class="sd">        List of Py-DDA Grids to visualize</span>
 <span class="sd">    ax: matplotlib axis handle (with cartopy ccrs)</span>
 <span class="sd">        The axis handle to place the plot on. Set to None to create a new map.</span>
 <span class="sd">    Note: the axis needs to be in a PlateCarree() projection.</span>
@@ -711,15 +719,32 @@ document.write(`
 <span class="sd">    ax: matplotlib axis</span>
 <span class="sd">        Axis handle to output axis</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">child_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Grids</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rad_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;radar&quot;</span> <span class="ow">in</span> <span class="n">child</span><span class="p">:</span>
+                <span class="n">grid_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">())</span>
+                <span class="n">rad_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+        <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">rad_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">])</span>
+        <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">rad_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="n">Grids</span>
+        <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">])</span>
+        <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">])</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="n">CARTOPY_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span>
             <span class="s2">&quot;Cartopy needs to be installed in order to use plotting module!&quot;</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">bg_grid_no</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">grid_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">Grids</span><span class="p">])</span>
+        <span class="n">grid_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">grid_list</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">grid_array</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -728,17 +753,22 @@ document.write(`
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_lat</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span>
-    <span class="n">grid_lon</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span>
+    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_lat</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_latitude</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+    <span class="n">grid_lon</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_longitude</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
 
     <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -778,9 +808,9 @@ document.write(`
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">the_mesh</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">cp</span><span class="p">))</span>
 
@@ -919,22 +949,11 @@ document.write(`
                 <span class="ne">RuntimeWarning</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="n">bca_min</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;min_bca&quot;</span><span class="p">])</span>
-    <span class="n">bca_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;max_bca&quot;</span><span class="p">])</span>
-
     <span class="k">if</span> <span class="n">show_lobes</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Grids</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grid_list</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">grid_list</span><span class="p">)):</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
-                    <span class="n">bca</span> <span class="o">=</span> <span class="n">retrieval</span><span class="o">.</span><span class="n">get_bca</span><span class="p">(</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="n">Grids</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">(),</span>
-                    <span class="p">)</span>
+                    <span class="n">bca</span> <span class="o">=</span> <span class="n">retrieval</span><span class="o">.</span><span class="n">get_bca</span><span class="p">(</span><span class="n">grid_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
 
                     <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span>
                         <span class="n">grid_lon</span><span class="p">[:,</span> <span class="p">:],</span>
@@ -968,14 +987,17 @@ document.write(`
     <span class="k">return</span> <span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="plot_xz_xsection_streamlines"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_xz_xsection_streamlines.html#pydda.vis.plot_xz_xsection_streamlines">[docs]</a><span class="k">def</span> <span class="nf">plot_xz_xsection_streamlines</span><span class="p">(</span>
+
+<div class="viewcode-block" id="plot_xz_xsection_streamlines">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_xz_xsection_streamlines.html#pydda.vis.plot_xz_xsection_streamlines">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_xz_xsection_streamlines</span><span class="p">(</span>
     <span class="n">Grids</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
     <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -999,8 +1021,8 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Grids: list</span>
-<span class="sd">        List of Py-ART Grids to visualize</span>
+<span class="sd">    Grids: list or DataTree</span>
+<span class="sd">        List of Py-DDA Grids to visualize</span>
 <span class="sd">    ax: matplotlib axis handle</span>
 <span class="sd">        The axis handle to place the plot on. Set to None to plot on the</span>
 <span class="sd">        current axis.</span>
@@ -1059,8 +1081,18 @@ document.write(`
 <span class="sd">    ax: matplotlib axis</span>
 <span class="sd">        Axis handle to output axis</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">child_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Grids</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rad_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;radar&quot;</span> <span class="ow">in</span> <span class="n">child</span><span class="p">:</span>
+                <span class="n">grid_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">())</span>
+                <span class="n">rad_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="n">Grids</span>
 
-    <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -1068,14 +1100,17 @@ document.write(`
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -1097,7 +1132,7 @@ document.write(`
         <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span>
         <span class="n">grid_x</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span>
         <span class="n">grid_h</span><span class="p">[:,</span> <span class="n">level</span><span class="p">,</span> <span class="p">:],</span>
@@ -1109,9 +1144,9 @@ document.write(`
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">the_mesh</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">cp</span><span class="p">))</span>
 
@@ -1198,14 +1233,17 @@ document.write(`
     <span class="k">return</span> <span class="n">ax</span></div>
 
 
-<div class="viewcode-block" id="plot_yz_xsection_streamlines"><a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_yz_xsection_streamlines.html#pydda.vis.plot_yz_xsection_streamlines">[docs]</a><span class="k">def</span> <span class="nf">plot_yz_xsection_streamlines</span><span class="p">(</span>
+
+<div class="viewcode-block" id="plot_yz_xsection_streamlines">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.vis.plot_yz_xsection_streamlines.html#pydda.vis.plot_yz_xsection_streamlines">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_yz_xsection_streamlines</span><span class="p">(</span>
     <span class="n">Grids</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
     <span class="n">u_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">v_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1229,8 +1267,8 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    Grids: list</span>
-<span class="sd">        List of Py-ART Grids to visualize</span>
+<span class="sd">    Grids: list or DataTree</span>
+<span class="sd">        List of Py-DDA Grids to visualize</span>
 <span class="sd">    ax: matplotlib axis handle</span>
 <span class="sd">        The axis handle to place the plot on. Set to None to plot on the</span>
 <span class="sd">        current axis.</span>
@@ -1289,22 +1327,37 @@ document.write(`
 <span class="sd">    ax: Matplotlib axis handle</span>
 <span class="sd">        The matplotlib axis handle corresponding to the plot</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">child_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Grids</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rad_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">child_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;radar&quot;</span> <span class="ow">in</span> <span class="n">child</span><span class="p">:</span>
+                <span class="n">grid_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Grids</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">())</span>
+                <span class="n">rad_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">grid_list</span> <span class="o">=</span> <span class="n">Grids</span>
 
-    <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">grid_bg</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">grid_bg</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
-    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
-    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_h</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;point_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">/</span> <span class="mf">1e3</span>
     <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">grid_y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">u_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">v_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">w_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Grids</span><span class="p">,</span> <span class="n">DataTree</span><span class="p">):</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">u_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">v_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">w_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -1326,7 +1379,7 @@ document.write(`
         <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span>
         <span class="n">grid_y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span>
         <span class="n">grid_h</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">level</span><span class="p">],</span>
@@ -1339,9 +1392,9 @@ document.write(`
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">colorbar_flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span>
         <span class="n">cp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">Grids</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">background_field</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+        <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">grid_list</span><span class="p">[</span><span class="n">bg_grid_no</span><span class="p">][</span><span class="n">background_field</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
         <span class="n">cp</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">the_mesh</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="p">(</span><span class="n">cp</span><span class="p">))</span>
 
@@ -1419,6 +1472,7 @@ document.write(`
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">grid_y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_y</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">grid_h</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">grid_h</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
     <span class="k">return</span> <span class="n">ax</span></div>
+
 </pre></div>
 
                 </article>
@@ -1428,7 +1482,7 @@ document.write(`
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1436,6 +1490,8 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>
@@ -1448,8 +1504,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1457,6 +1513,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright 2023, PyDDA Developers.
@@ -1466,8 +1523,9 @@ document.write(`
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -1478,8 +1536,9 @@ document.write(`
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
 </p></div>
       
     </div>

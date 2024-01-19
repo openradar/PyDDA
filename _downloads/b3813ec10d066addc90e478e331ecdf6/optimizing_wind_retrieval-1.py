@@ -64,7 +64,8 @@ grid_kict = pyart.map.grid_from_radars([radar_kict], grid_limits=grid_limits,
                              grid_shape=grid_shape, gatefilter=gatefilter_kict,
                                 grid_origin=(radar_kict.latitude['data'].filled(),
                                              radar_kict.longitude['data'].filled()))
-
+grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
 grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
     pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 

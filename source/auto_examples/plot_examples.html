@@ -1,15 +1,14 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example on retrieving and plotting winds &#8212; PyDDA 1.5.1 documentation</title>
+    <title>Example on retrieving and plotting winds &#8212; PyDDA 2.0.0 documentation</title>
   
   
   
@@ -19,41 +18,38 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/auto_examples/plot_examples';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Example on geographic plotting and constraint variation" href="plot_fun_with_constraints.html" />
+    <link rel="next" title="Developer Reference Manual" href="../../dev_reference/index.html" />
     <link rel="prev" title="Example of a wind retrieval in a tornado over Sydney" href="plot_sydney_tornado.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -64,10 +60,9 @@
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -108,7 +103,7 @@
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
 <div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
     <span class="fa-solid fa-bars"></span>
@@ -118,6 +113,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -126,7 +122,8 @@
   
   
   
-    <p class="title logo__title">PyDDA 1.5.1 documentation</p>
+  
+    <p class="title logo__title">PyDDA 2.0.0 documentation</p>
   
 </a></div>
     
@@ -136,13 +133,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -182,6 +174,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -195,6 +188,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -211,6 +205,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -230,10 +225,13 @@ document.write(`
   
 </div>
 
-    </nav>
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -244,13 +242,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
-  <p class="sidebar-header-items__title"
-     role="heading"
-     aria-level="1"
-     aria-label="Site Navigation">
-    Site Navigation
-  </p>
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
                     <li class="nav-item">
@@ -290,6 +283,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -305,13 +299,13 @@ document.write(`
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="plot_sydney_tornado.html">Example of a wind retrieval in a tornado over Sydney</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Example on retrieving and plotting winds</a></li>
-<li class="toctree-l1"><a class="reference internal" href="plot_fun_with_constraints.html">Example on geographic plotting and constraint variation</a></li>
 </ul>
 </div>
 </nav></div>
@@ -367,307 +361,24 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
-  <div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-source-auto-examples-plot-examples-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code</p>
-</div>
-<section class="sphx-glr-example-title" id="example-on-retrieving-and-plotting-winds">
-<span id="sphx-glr-source-auto-examples-plot-examples-py"></span><h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Permalink to this heading">#</a></h1>
+  <section id="example-on-retrieving-and-plotting-winds">
+<h1>Example on retrieving and plotting winds<a class="headerlink" href="#example-on-retrieving-and-plotting-winds" title="Link to this heading">#</a></h1>
 <p>This is a simple example for how to retrieve and plot winds from 2 radars
 using PyDDA.</p>
 <p>Author: Robert C. Jackson</p>
-<ul class="sphx-glr-horizontal">
-<li><img src="../../_images/sphx_glr_plot_examples_001.png" srcset="../../_images/sphx_glr_plot_examples_001.png" alt="PyDDA retreived winds @4.05 km" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_examples_002.png" srcset="../../_images/sphx_glr_plot_examples_002.png" alt="PyDDA retreived winds @20.0 km south of origin." class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_examples_003.png" srcset="../../_images/sphx_glr_plot_examples_003.png" alt="PyDDA retreived winds @20.0 km west of origin." class = "sphx-glr-multi-img"/></li>
-</ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_min not used since it
-cannot be safely cast to variable data type
-  data = self.ncvar[:]
-/usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/pyart/io/cfradial.py:408: UserWarning: WARNING: valid_max not used since it
-cannot be safely cast to variable data type
-  data = self.ncvar[:]
-/home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:24: RuntimeWarning: invalid value encountered in arccos
-  elev = np.arccos((Re**2 + slantrsq - rh**2) / (2 * Re * slantr))
-Calculating weights for radars 0 and 1
-Calculating weights for radars 1 and 0
-Calculating weights for models...
-Starting solver
-rmsVR = 6.827303971100175
-Total points: 81194
-The max of w_init is 18.516070425591412
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-      0| 194.0315|   8.7131|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.5161
-The gradient of the cost functions is 0.23185448245682436
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     10|   0.4550|   7.3153|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.4534
-Max change in w: 5.793
-The gradient of the cost functions is 0.05232435418900656
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     20|   0.1167|   3.4108|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.3191
-Max change in w: 2.753
-The gradient of the cost functions is 0.04955610250589013
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     30|   0.0900|   2.1296|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  18.3051
-Max change in w: 2.851
-The gradient of the cost functions is 0.03975841765214784
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     40|   0.1312|   1.5155|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  19.7236
-Max change in w: 2.673
-The gradient of the cost functions is 0.04607242387735976
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     50|   0.0467|   1.2541|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  22.5621
-Max change in w: 3.781
-The gradient of the cost functions is 0.024071806444311075
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     60|   0.0318|   1.0713|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  25.8456
-Max change in w: 2.559
-The gradient of the cost functions is 0.02393818116721937
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     70|   0.0330|   0.8801|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.9089
-Max change in w: 0.936
-The gradient of the cost functions is 0.019261597977845116
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     80|   0.0269|   0.7849|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7132
-Max change in w: 1.433
-The gradient of the cost functions is 0.01747839654959733
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-     90|   0.0138|   0.7494|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8953
-The gradient of the cost functions is 0.023610525578240664
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    100|   0.0226|   0.7094|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8561
-Max change in w: 2.064
-The gradient of the cost functions is 0.017173507344617728
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    110|   0.0130|   0.7180|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8446
-The gradient of the cost functions is 0.015797911823673277
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    120|   0.0128|   0.7176|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8445
-The gradient of the cost functions is 0.01346694105091776
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    130|   0.0095|   0.7211|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8375
-The gradient of the cost functions is 0.014475880940679416
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    140|   0.0098|   0.7207|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8383
-The gradient of the cost functions is 0.014399014786339296
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    150|   0.0093|   0.7211|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8362
-The gradient of the cost functions is 0.013061668260959211
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    160|   0.0072|   0.7239|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8214
-The gradient of the cost functions is 0.013148389869833708
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    170|   0.0075|   0.7227|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8246
-The gradient of the cost functions is 0.01339839058041766
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    180|   0.0072|   0.7226|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8179
-Max change in w: 0.893
-The gradient of the cost functions is 0.012504311533725682
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    190|   0.0072|   0.7226|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8153
-The gradient of the cost functions is 0.012255662858793521
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    200|   0.0083|   0.7226|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7994
-The gradient of the cost functions is 0.013034598564467606
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    210|   0.0074|   0.7221|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.8033
-The gradient of the cost functions is 0.01219779670654344
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    220|   0.0400|   0.8326|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.6567
-The gradient of the cost functions is 0.012185666692413529
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    230|   0.6203|   0.9123|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.5999
-The gradient of the cost functions is 0.01490076014295897
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    240|   0.0080|   0.7212|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7928
-The gradient of the cost functions is 0.016661917654313588
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    250|   0.0085|   0.7213|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7670
-Max change in w: 0.823
-The gradient of the cost functions is 0.01614047186259851
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    260|   0.0073|   0.7176|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7472
-The gradient of the cost functions is 0.01420308082249054
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    270|   0.0066|   0.7148|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.7332
-The gradient of the cost functions is 0.03731016477200619
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    280|   0.0068|   0.7091|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.6816
-The gradient of the cost functions is 0.04434414732973639
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    290|   0.0071|   0.7077|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.6608
-The gradient of the cost functions is 0.01735392292457416
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    300|   0.0072|   0.7068|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.6424
-Max change in w: 2.271
-The gradient of the cost functions is 0.0472388194317812
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    310|   0.0057|   0.6996|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.5792
-The gradient of the cost functions is 0.04808512256105094
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    320|   0.0061|   0.6960|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.5529
-The gradient of the cost functions is 0.017802420886999824
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    330|   0.0066|   0.6933|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.4720
-The gradient of the cost functions is 0.6675817172930786
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    340|   0.0254|   0.6823|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.4019
-Max change in w: 2.495
-The gradient of the cost functions is 0.025490680242228808
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    350|   0.0054|   0.6981|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.3135
-The gradient of the cost functions is 0.014407221891532398
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    360|   0.0055|   0.6880|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.3864
-The gradient of the cost functions is 0.013624541867213341
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    370|   0.0048|   0.6878|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.3864
-The gradient of the cost functions is 0.07137085322306304
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    380|   0.1045|   0.7562|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2290
-Max change in w: 0.728
-The gradient of the cost functions is 0.06063248176106241
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    390|   0.0111|   0.7903|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1878
-The gradient of the cost functions is 0.04790021654569813
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    400|   0.0235|   0.6445|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2759
-The gradient of the cost functions is 0.049519142281950146
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    410|   0.0220|   0.6458|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2732
-The gradient of the cost functions is 0.04755259210289859
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    420|   0.0267|   0.7878|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1513
-The gradient of the cost functions is 0.037157896301632756
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    430|   0.0172|   0.6505|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2622
-The gradient of the cost functions is 0.04552524430313479
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    440|   0.0509|   0.8200|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1206
-The gradient of the cost functions is 0.04104156825780312
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    450|   0.0162|   0.6512|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2596
-The gradient of the cost functions is 0.043056759410872114
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    460|   0.0165|   0.6508|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2605
-The gradient of the cost functions is 0.01289796111793328
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    470|   0.0047|   0.6448|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2593
-The gradient of the cost functions is 0.030251730854423068
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    480|   0.0077|   0.5959|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2111
-The gradient of the cost functions is 0.024907351701380868
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    490|   0.0087|   0.5949|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2066
-Max change in w: 0.500
-The gradient of the cost functions is 0.024921514749904512
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    500|   0.0097|   0.5941|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2010
-The gradient of the cost functions is 0.026501230772513318
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    510|   0.0095|   0.5938|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2015
-The gradient of the cost functions is 0.02543400023367564
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    520|   0.0095|   0.5938|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2010
-The gradient of the cost functions is 0.025480117246561174
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    530|   0.0094|   0.5938|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2012
-The gradient of the cost functions is 0.025479944414764415
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    540|   0.0094|   0.5938|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.2012
-The gradient of the cost functions is 0.020823720971680837
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    550|   0.0159|   0.5880|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1917
-The gradient of the cost functions is 0.019743497697660397
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    560|   0.0079|   0.5862|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1949
-The gradient of the cost functions is 0.02041360437008568
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    570|   0.0079|   0.5862|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1948
-The gradient of the cost functions is 0.02555013934757438
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    580|   0.0076|   0.5873|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1908
-The gradient of the cost functions is 0.01962050381477192
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    590|   0.0077|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1933
-The gradient of the cost functions is 0.019427109102487114
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    600|   0.0076|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1929
-The gradient of the cost functions is 0.019419684401206293
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    610|   0.0077|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1935
-The gradient of the cost functions is 0.019427109101179264
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    620|   0.0077|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1935
-The gradient of the cost functions is 0.010109164037844212
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    630|   0.0080|   0.5866|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1871
-The gradient of the cost functions is 0.01149601769101237
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    640|   0.0043|   0.5862|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1912
-The gradient of the cost functions is 0.011495935752061348
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    650|   0.0043|   0.5862|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1912
-The gradient of the cost functions is 0.006575497071327693
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    660|   0.0036|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1908
-The gradient of the cost functions is 0.006573833111967
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    670|   0.0036|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1908
-The gradient of the cost functions is 0.006451025050109269
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    680|   0.0035|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1905
-The gradient of the cost functions is 0.005935627016914425
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    690|   0.0035|   0.5863|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1906
-The gradient of the cost functions is 0.005761222299525052
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    700|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1904
-The gradient of the cost functions is 0.005753239663665538
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    710|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1904
-The gradient of the cost functions is 0.005753233141843022
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    720|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1904
-The gradient of the cost functions is 0.02716888410103996
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    730|   0.0035|   0.5865|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1891
-The gradient of the cost functions is 0.005651067444492672
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    740|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1903
-The gradient of the cost functions is 0.005648571399418282
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    750|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1903
-The gradient of the cost functions is 0.005651067730461773
-Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w
-    760|   0.0035|   0.5864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  26.1903
-Applying low pass filter to wind field...
-Done! Time = 334.1
-/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  ax.contour(
-/home/runner/work/PyDDA/PyDDA/pydda/vis/barb_plot.py:253: UserWarning: The following kwargs were not used by contour: &#39;color&#39;
-  ax.contour(
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">import</span> <span class="nn">pydda</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydda</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
-
-<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span><span class="p">)</span>
-<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR1</span><span class="p">)</span>
-
+<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span><span class="p">)</span>
+<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR1</span><span class="p">)</span>
 
 <span class="c1"># Load sounding data and insert as an intialization</span>
-<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
-    <span class="n">cpol_grid</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;corrected_velocity&quot;</span>
+<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
+    <span class="n">berr_grid</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;corrected_velocity&quot;</span>
 <span class="p">)</span>
 
 <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
@@ -687,6 +398,7 @@ Done! Time = 334.1
     <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
 <span class="c1"># Plot a horizontal cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs</span><span class="p">(</span>
@@ -696,9 +408,11 @@ Done! Time = 334.1
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
     <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
     <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">15.0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;Darwin_horiz.png&quot;</span><span class="p">)</span>
+
 <span class="c1"># Plot a vertical X-Z cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_xz_xsection_barbs</span><span class="p">(</span>
@@ -708,6 +422,8 @@ Done! Time = 334.1
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
     <span class="n">barb_spacing_x_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
     <span class="n">barb_spacing_z_km</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -719,20 +435,265 @@ Done! Time = 334.1
     <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
     <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
     <span class="n">barb_spacing_z_km</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;Darwin.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (5 minutes 35.799 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-source-auto-examples-plot-examples-py">
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/073da5338d20f5cb6f19119be8520d7e/plot_examples.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_examples.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/c653c7e4e1032b8be12e5549d43bd274/plot_examples.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_examples.ipynb</span></code></a></p>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>## You are using the Python ARM Radar Toolkit (Py-ART), an open source
+## library for working with weather radar data. Py-ART is partly
+## supported by the U.S. Department of Energy as part of the Atmospheric
+## Radiation Measurement (ARM) Climate Research Facility, an Office of
+## Science user facility.
+##
+## If you use this software to prepare a publication, please cite:
+##
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.0.0
+If you are using PyDDA in your publications, please cite:
+Jackson et al. (2020) Journal of Open Research Science
+Detecting Jax...
+Jax/JaxOpt are not installed on your system, unable to use Jax engine.
+Detecting TensorFlow...
+TensorFlow detected. Checking for tensorflow-probability...
+TensorFlow-probability detected. TensorFlow engine enabled!
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:25: RuntimeWarning: invalid value encountered in arccos
+  elev = np.arccos((Re**2 + slantrsq - rh**2) / (2 * Re * slantr))
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
+Calculating weights for radars 0 and 1
+Calculating weights for radars 1 and 0
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1523: RuntimeWarning: invalid value encountered in divide
+  inp_array1 = x / a
+/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1529: RuntimeWarning: invalid value encountered in divide
+  inp_array3 = (a * a + b * b - c * c) / (2 * a * b)
+/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1526: RuntimeWarning: divide by zero encountered in divide
+  inp_array2 = (x - rad2[1]) / b
+/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1529: RuntimeWarning: invalid value encountered in divide
+  inp_array3 = (a * a + b * b - c * c) / (2 * a * b)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
+Starting solver 
+rmsVR = 6.827303971100175
+Total points: 81194
+The max of w_init is 0.0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total number of model points: 0
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+      0|83859.8222|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.6631357968996711
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+     10|   1.8782|  41.0864|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.3085
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w: 10.561
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.13750649771706588
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+     20|   0.3524|  18.6065|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  11.8823
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w: 6.008
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.09828068193831543
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+     30|   0.1953|  10.8039|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  12.4880
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w: 4.003
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.09730430370400128
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+     40|   0.1245|   7.0774|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|  16.4854
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w: 5.381
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.05299677215060275
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">14</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">berr_grid</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;corrected_velocity&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1"># and data weighting constraints.</span>
+<span class="ne">---&gt; </span><span class="mi">14</span> <span class="n">Grids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span>     <span class="p">[</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span>     <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span>     <span class="n">Cx</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">Cy</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">20</span>     <span class="n">Cz</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">21</span>     <span class="n">Cb</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span>     <span class="n">frz</span><span class="o">=</span><span class="mf">5000.0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">23</span>     <span class="n">filter_window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span>     <span class="n">mask_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>     <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span>     <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="c1"># Plot a horizontal cross section</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1474,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1467</span>     <span class="n">w_init</span> <span class="o">=</span> <span class="n">new_grids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;w&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1469</span> <span class="k">if</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1470</span>     <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1471</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1472</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;auglag&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1473</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1474</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_scipy</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1475</span>         <span class="n">new_grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1476</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1477</span> <span class="k">elif</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;tensorflow&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1478</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_tensorflow</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1479</span>         <span class="n">new_grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1480</span>     <span class="p">)</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:602,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_window, filter_order, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag)</span>
+<span class="g g-Whitespace">    </span><span class="mi">600</span> <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="g g-Whitespace">    </span><span class="mi">601</span> <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">602</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">603</span>         <span class="n">J_function</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span>         <span class="n">winds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">605</span>         <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
+<span class="g g-Whitespace">    </span><span class="mi">606</span>         <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">607</span>         <span class="n">pgtol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">608</span>         <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">609</span>         <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">610</span>         <span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">611</span>         <span class="n">iprint</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">612</span>         <span class="n">callback</span><span class="o">=</span><span class="n">_vert_velocity_callback</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">613</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">614</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">616</span>     <span class="k">def</span> <span class="nf">loss_and_gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_lbfgsb_py.py:199,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, iprint, maxfun, maxiter, disp, callback, maxls)</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span> <span class="n">callback</span> <span class="o">=</span> <span class="n">_wrap_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span> <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;disp&#39;</span><span class="p">:</span> <span class="n">disp</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">189</span>         <span class="s1">&#39;iprint&#39;</span><span class="p">:</span> <span class="n">iprint</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">190</span>         <span class="s1">&#39;maxcor&#39;</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span>         <span class="s1">&#39;callback&#39;</span><span class="p">:</span> <span class="n">callback</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="s1">&#39;maxls&#39;</span><span class="p">:</span> <span class="n">maxls</span><span class="p">}</span>
+<span class="ne">--&gt; </span><span class="mi">199</span> <span class="n">res</span> <span class="o">=</span> <span class="n">_minimize_lbfgsb</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="n">jac</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span>                        <span class="o">**</span><span class="n">opts</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;grad&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;jac&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span>      <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span>      <span class="s1">&#39;funcalls&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;nfev&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span>      <span class="s1">&#39;nit&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;nit&#39;</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_lbfgsb_py.py:365,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">359</span> <span class="n">task_str</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">360</span> <span class="k">if</span> <span class="n">task_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;FG&#39;</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">361</span>     <span class="c1"># The minimization routine wants f and g at the current x.</span>
+<span class="g g-Whitespace">    </span><span class="mi">362</span>     <span class="c1"># Note that interruptions due to maxfun are postponed</span>
+<span class="g g-Whitespace">    </span><span class="mi">363</span>     <span class="c1"># until the completion of the current minimization iteration.</span>
+<span class="g g-Whitespace">    </span><span class="mi">364</span>     <span class="c1"># Overwrite f and g:</span>
+<span class="ne">--&gt; </span><span class="mi">365</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">366</span> <span class="k">elif</span> <span class="n">task_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;NEW_X&#39;</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">367</span>     <span class="c1"># new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">368</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:285,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">283</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">284</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_x_impl</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">285</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:251,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">249</span> <span class="k">def</span> <span class="nf">_update_fun</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">250</span>     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_updated</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">251</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun_impl</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">252</span>         <span class="bp">self</span><span class="o">.</span><span class="n">f_updated</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:155,</span> in <span class="ni">ScalarFunction.__init__.&lt;locals&gt;.update_fun</span><span class="nt">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">154</span> <span class="k">def</span> <span class="nf">update_fun</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">155</span>     <span class="bp">self</span><span class="o">.</span><span class="n">f</span> <span class="o">=</span> <span class="n">fun_wrapped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:137,</span> in <span class="ni">ScalarFunction.__init__.&lt;locals&gt;.fun_wrapped</span><span class="nt">(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfev</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span> <span class="c1"># Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span> <span class="c1"># Overwriting results in undefined behaviour because</span>
+<span class="g g-Whitespace">    </span><span class="mi">136</span> <span class="c1"># fun(self.x) will change self.x, with the two no longer linked.</span>
+<span class="ne">--&gt; </span><span class="mi">137</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">138</span> <span class="c1"># Make sure the function returns a true scalar</span>
+<span class="g g-Whitespace">    </span><span class="mi">139</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">fx</span><span class="p">):</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:178,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">168</span> <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">169</span>     <span class="n">winds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">170</span>     <span class="p">(</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span>     <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">176</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">177</span> <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
+<span class="ne">--&gt; </span><span class="mi">178</span> <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">179</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">181</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">183</span>     <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">184</span>     <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">185</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span>     <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span>     <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span>     <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">189</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">190</span> <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
+<span class="g g-Whitespace">    </span><span class="mi">192</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">193</span>     <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:62,</span> in <span class="ni">calculate_radial_vel_cost_function</span><span class="nt">(vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff)</span>
+<span class="g g-Whitespace">     </span><span class="mi">58</span> <span class="n">lambda_o</span> <span class="o">=</span> <span class="n">coeff</span> <span class="o">/</span> <span class="p">(</span><span class="n">rmsVr</span> <span class="o">*</span> <span class="n">rmsVr</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vrs</span><span class="p">)):</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span>     <span class="n">v_ar</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span>         <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">u</span>
+<span class="ne">---&gt; </span><span class="mi">62</span>         <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">v</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span>         <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">65</span>     <span class="n">the_weight</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span>     <span class="n">J_o</span> <span class="o">+=</span> <span class="n">lambda_o</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_ar</span><span class="p">)</span> <span class="o">*</span> <span class="n">the_weight</span><span class="p">)</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
 </section>
 
 
@@ -743,7 +704,7 @@ Done! Time = 334.1
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="plot_sydney_tornado.html"
@@ -755,11 +716,11 @@ Done! Time = 334.1
       </div>
     </a>
     <a class="right-next"
-       href="plot_fun_with_constraints.html"
+       href="../../dev_reference/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Example on geographic plotting and constraint variation</p>
+        <p class="prev-next-title">Developer Reference Manual</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -772,9 +733,11 @@ Done! Time = 334.1
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
+
   <div class="tocsection sourcelink">
-    <a href="../../_sources/source/auto_examples/plot_examples.rst.txt">
+    <a href="../../_sources/source/auto_examples/plot_examples.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -793,8 +756,8 @@ Done! Time = 334.1
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -802,6 +765,7 @@ Done! Time = 334.1
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright 2023, PyDDA Developers.
@@ -811,8 +775,9 @@ Done! Time = 334.1
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -823,8 +788,9 @@ Done! Time = 334.1
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
 </p></div>
       
     </div>
