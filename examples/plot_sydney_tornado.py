@@ -10,7 +10,7 @@ the mesocyclone. The reduction of noise also helps the solution converge
 much faster since the cost function is smoother and therefore less susecptible
 to find a local minimum that is in noise.
 
-The observational constraint is reduced to 0.01 from the usual 1because we are factoring in
+The observational constraint is reduced to 0.01 from the usual 1 because we are factoring in
 many more data points as we are using 4 radars instead of the two in the Darwin example.
 
 This example uses pooch to download the data files.

@@ -230,6 +230,7 @@ def _get_dd_wind_field_scipy(
     wind_tol=0.1,
     tolerance=1e-8,
     const_boundary_cond=False,
+    max_wind_mag=100.0,
 ):
     global _wcurrmax
     global _wprevmax
@@ -523,7 +524,7 @@ def _get_dd_wind_field_scipy(
     wcurrmax = w_init.max()
     print("The max of w_init is", wcurrmax)
     iterations = 0
-    bounds = [(-x, x) for x in 100 * np.ones(winds.shape)]
+    bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape)]
 
     if model_fields is not None:
         for i, the_field in enumerate(model_fields):
@@ -613,14 +614,14 @@ def _get_dd_wind_field_scipy(
         else:
 
             def loss_and_gradient(x):
-                x_loss = J_function_jax(x["winds"], vars(parameters))
+                x_loss = J_function_jax(x["winds"], parameters)
                 x_grad = {}
-                x_grad["winds"] = grad_jax(x["winds"], vars(parameters))
+                x_grad["winds"] = grad_jax(x["winds"], parameters)
                 return x_loss, x_grad
 
             bounds = (
-                {"winds": -100 * jnp.ones(winds.shape)},
-                {"winds": 100 * jnp.ones(winds.shape)},
+                {"winds": -max_wind_mag * jnp.ones(winds.shape)},
+                {"winds": max_wind_mag * jnp.ones(winds.shape)},
             )
             winds = jnp.array(winds)
             solver = jaxopt.LBFGSB(
@@ -667,7 +668,7 @@ def _get_dd_wind_field_scipy(
         parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float32)
         parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float32)
         parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float32)
-        bounds = [(-x, x) for x in 100 * np.ones(winds.shape, dtype="float32")]
+        bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape, dtype="float32")]
         winds = winds.astype("float32")
         winds, mult, AL_Filter, funcalls = auglag(winds, parameters, bounds)
 
@@ -804,6 +805,7 @@ def _get_dd_wind_field_tensorflow(
     wind_tol=0.1,
     tolerance=1e-8,
     const_boundary_cond=False,
+    max_wind_mag=100.0,
 ):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError(
@@ -1428,6 +1430,8 @@ def get_dd_wind_field(
         Stop iterations after maximum change in winds is less than this value.
     tolerance: float
         Tolerance for L2 norm of gradient before stopping.
+    max_wind_magnitude: float
+        Constrain the optimization to have :math:`|u|, :math:`|w|`, and :math:`|w| < x` m/s.
 
     Returns
     =======

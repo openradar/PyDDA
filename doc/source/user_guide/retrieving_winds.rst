@@ -38,8 +38,21 @@ point, or model data as a weak constraint in order to increase the chance that P
 provide a solution that converges to a physically realistic wind field. For this particular example,
 we are lucky enough to have model data from the Rapid Update Cycle that can be used as a constraint.
 
-Therefore, let's first add the model data into our Grid objects so that PyDDA can use the model
-data as a constraint.
+------------------------
+Using PyDDA's data model
+------------------------
+
+As of PyDDA 2.0, PyDDA uses `xarray Datasets <https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html>`_
+to represent the underlying datastructure. This makes it easier to integrate PyDDA into xarray-based workflows
+that are the standard for use in the Geoscientific Python Community. Therefore, anyone using PyART Grids will need
+to convert their grids to PyDDA Grids using the :meth:`pydda.io.read_from_pyart_grid` helper function.
+
+.. code-block:: python
+
+    grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+    grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
+
+In addition, :meth:`pydda.io.read_grid` will read a cf-Compliant radar grid into a PyDDA Grid.
 
 ----------------------------
 Using models for constraints
@@ -50,10 +63,11 @@ provide a constraint on the horizontal winds. This helps to constrain the backgr
 area where there is suboptimal coverage from the radar network outside of the dual
 Doppler lobes. To add either a RUC or HRRR model time period as a constraint, we need
 to have the original model data in GRIB format and then use the following line to
-load the model data into a PyART grid for processing.
+load the model data into a PyDDA grid for processing.
 
 .. code-block:: python
 
+    # Add constraints
     grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
         pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 
@@ -75,7 +89,7 @@ Retrieving your first wind field
 --------------------------------
 
 We will then take a first attempt at retrieving a wind field using PyDDA. This is done using the
-:code:`pydda.retrieval.get_dd_wind_field` function. This function takes in a minimum of one input, a list
+:meth:`pydda.retrieval.get_dd_wind_field` function. This function takes in a minimum of one input, a list
 of input PyART Grids. We will also specify the constants for the constraints. In this case, we are using
 the mass continuity, radar observation, smoothness, and model constraints.
 
@@ -176,7 +190,8 @@ key on the bottom right interior of the plot.
                                  grid_shape=grid_shape, gatefilter=gatefilter_kict,
                                     grid_origin=(radar_kict.latitude['data'].filled(),
                                                  radar_kict.longitude['data'].filled()))
-
+    grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+    grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
     grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
         pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 
