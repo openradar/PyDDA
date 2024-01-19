@@ -95,7 +95,8 @@ that we did in :ref:`retrieving_winds`.
                                  grid_shape=grid_shape, gatefilter=gatefilter_kict,
                                     grid_origin=(radar_kict.latitude['data'].filled(),
                                                  radar_kict.longitude['data'].filled()))
-
+    grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+    grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
     grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
         pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 
@@ -200,7 +201,8 @@ to the above retrieval.
                                  grid_shape=grid_shape, gatefilter=gatefilter_kict,
                                     grid_origin=(radar_kict.latitude['data'].filled(),
                                                  radar_kict.longitude['data'].filled()))
-
+    grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+    grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
     grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
         pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 
@@ -302,7 +304,8 @@ Let's see what happens when we increase the level of smoothing.
                                  grid_shape=grid_shape, gatefilter=gatefilter_kict,
                                     grid_origin=(radar_kict.latitude['data'].filled(),
                                                  radar_kict.longitude['data'].filled()))
-
+    grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+    grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
     grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
         pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 
@@ -405,7 +408,8 @@ artifact near the edge of the Dual Doppler lobe re-appears.
                                  grid_shape=grid_shape, gatefilter=gatefilter_kict,
                                     grid_origin=(radar_kict.latitude['data'].filled(),
                                                  radar_kict.longitude['data'].filled()))
-
+    grid_ktlx = pydda.io.read_from_pyart_grid(grid_ktlx)
+    grid_kict = pydda.io.read_from_pyart_grid(grid_kict)
     grid_kict = pydda.constraints.add_hrrr_constraint_to_grid(grid_kict,
         pydda.tests.get_sample_file('ruc2anl_130_20110520_0800_001.grb2'), method='linear')
 

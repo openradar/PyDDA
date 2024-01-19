@@ -139,12 +139,19 @@ just type in the following commands assuming you have the above dependencies ins
 
 Finally, PyDDA now supports using `Jax <jax.readthedocs.io>`_ and `TensorFlow <tensorflow.org>`_
 for solving the three dimensional wind field. PyDDA requries TensorFlow 2.6 and the
-tensorflow-probability package for TensorFlow to be enabled. Both the Jax and
-TensorFlow-based engines now use automatic differentiation to solve for the gradients
-of each cost function. This therefore will create gradients that are less susceptible
-to boundary artifacts and rounding errors. In addition, both of these packages can
-utilize CUDA-enabled GPUs for much faster processing. These two
+tensorflow-probability package for TensorFlow to be enabled.
+In addition, both of these packages can utilize CUDA-enabled GPUs for much faster processing. These two
 dependencies are optional as the user can still use PyDDA with the SciPy ecosystem.
+The Jax optimizer uses the same optimizer as SciPy's (`L-BFGS-B <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_).
+
+
+Known issues
+============
+
+The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that the
+the wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
+result in numerical instability, so it is recommended that the user test out both Jax and TensorFlow
+if they desire GPU-accelerated retrievals.
 
 Contents:
 

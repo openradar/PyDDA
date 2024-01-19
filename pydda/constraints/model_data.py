@@ -3,6 +3,7 @@ import pyart
 import gc
 import tempfile
 import os
+import xarray as xr
 
 # We want cfgrib to be an optional dependency to ensure Windows compatibility
 try:
@@ -70,10 +71,10 @@ def download_needed_era_data(Grid, start_date, end_date, file_name):
         )
 
     # Round the latitude and longitude values to 2 decimal places
-    N = round(Grid.point_latitude["data"].max(), 2)
-    S = round(Grid.point_latitude["data"].min(), 2)
-    E = round(Grid.point_longitude["data"].max(), 2)
-    W = round(Grid.point_longitude["data"].min(), 2)
+    N = round(Grid["point_latitude"].values.max(), 2)
+    S = round(Grid["point_latitude"].values.min(), 2)
+    E = round(Grid["point_longitude"].values.max(), 2)
+    W = round(Grid["point_longitude"].values.min(), 2)
 
     # Generate a list of years within the date range
     years = [str(year) for year in range(start_date.year, end_date.year + 1)]
@@ -223,7 +224,7 @@ def make_constraint_from_era5(
 
     """
     if vel_field is None:
-        vel_field = pyart.config.get_field_name("corrected_velocity")
+        vel_field = Grid.attrs["first_grid_name"]
 
     if ERA5_AVAILABLE is False and file_name is None:
         raise (
@@ -236,7 +237,7 @@ def make_constraint_from_era5(
         )
 
     grid_time = datetime.strptime(
-        Grid.time["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
+        Grid["time"].attrs["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
     )
     hour_rounded_to_nearest_1 = int(round(float(grid_time.hour)))
 
@@ -270,10 +271,10 @@ def make_constraint_from_era5(
         # Retrieve u, v, w, and geopotential
         # Geopotential is needed to convert into height coordinates
 
-        N = round(Grid.point_latitude["data"].max(), 2)
-        S = round(Grid.point_latitude["data"].min(), 2)
-        E = round(Grid.point_longitude["data"].max(), 2)
-        W = round(Grid.point_longitude["data"].min(), 2)
+        N = round(Grid["point_latitude"].values.max(), 2)
+        S = round(Grid["point_latitude"].values.min(), 2)
+        E = round(Grid["point_longitude"].values.max(), 2)
+        W = round(Grid["point_longitude"].values.min(), 2)
 
         retrieve_dict = {}
         pname = "reanalysis-era5-pressure-levels"
@@ -344,11 +345,7 @@ def make_constraint_from_era5(
         ERA_grid.variables["time"].units, "hours since %Y-%m-%d %H:%M:%S.%f"
     )
 
-    time_seconds = ERA_grid.variables["time"][:]
-    our_time = np.array([base_time + timedelta(seconds=int(x)) for x in time_seconds])
     time_step = np.argmin(np.abs(base_time - grid_time))
-
-    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
 
     height_ERA = ERA_grid.variables["z"][:]
     u_ERA = ERA_grid.variables["u"][:]
@@ -356,9 +353,9 @@ def make_constraint_from_era5(
     w_ERA = ERA_grid.variables["w"][:]
     lon_ERA = ERA_grid.variables["longitude"][:]
     lat_ERA = ERA_grid.variables["latitude"][:]
-    radar_grid_lat = Grid.point_latitude["data"]
-    radar_grid_lon = Grid.point_longitude["data"]
-    radar_grid_alt = Grid.point_z["data"]
+    radar_grid_lat = Grid["point_latitude"].values
+    radar_grid_lon = Grid["point_longitude"].values
+    radar_grid_alt = Grid["point_z"].values
     u_flattened = u_ERA[time_step].flatten()
     v_flattened = v_ERA[time_step].flatten()
     w_flattened = w_ERA[time_step].flatten()
@@ -371,7 +368,8 @@ def make_constraint_from_era5(
     lon_flattened = lon_mgrid.flatten()
     lat_flattened = lat_mgrid.flatten()
     height_flattened = height_ERA[time_step].flatten()
-    height_flattened -= Grid.radar_altitude["data"]
+    height_flattened -= Grid["radar_altitude"].values
+
     if method == "nearest":
         u_interp = NearestNDInterpolator(
             (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
@@ -394,7 +392,6 @@ def make_constraint_from_era5(
         )
     else:
         raise NotImplementedError("%s interpolation method not implemented!" % method)
-
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
@@ -406,21 +403,24 @@ def make_constraint_from_era5(
         tfile.close()
 
     u_field = {}
-    u_field["data"] = u_new
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     v_field = {}
-    v_field["data"] = v_new
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     w_field = {}
-    w_field["data"] = w_new
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
-    temp_grid = deepcopy(Grid)
-    temp_grid.add_field("U_era5", u_field, replace_existing=True)
-    temp_grid.add_field("V_era5", v_field, replace_existing=True)
-    temp_grid.add_field("W_era5", w_field, replace_existing=True)
+    temp_grid = Grid
+    temp_grid["U_era5"] = xr.DataArray(
+        np.expand_dims(u_new, 0), dims=("time", "z", "y", "x"), attrs=u_field
+    )
+    temp_grid["V_era5"] = xr.DataArray(
+        np.expand_dims(v_new, 0), dims=("time", "z", "y", "x"), attrs=v_field
+    )
+    temp_grid["W_era5"] = xr.DataArray(
+        np.expand_dims(w_new, 0), dims=("time", "z", "y", "x"), attrs=w_field
+    )
     return temp_grid
 
 
@@ -457,9 +457,9 @@ def make_constraint_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
 
     # Parse names of velocity field
     if vel_field is None:
-        vel_field = pyart.config.get_field_name("corrected_velocity")
+        vel_field = Grid.attrs["first_grid_name"]
 
-    analysis_grid_shape = Grid.fields[vel_field]["data"].shape
+    analysis_grid_shape = Grid[vel_field].values.shape
     u = np.ones(analysis_grid_shape)
     v = np.ones(analysis_grid_shape)
     w = np.zeros(analysis_grid_shape)
@@ -473,9 +473,9 @@ def make_constraint_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     PHB_wrf = wrf_cdf.variables["PHB"][:]
     alt_wrf = (PH_wrf + PHB_wrf) / 9.81
 
-    new_grid_x = Grid.point_x["data"]
-    new_grid_y = Grid.point_y["data"]
-    new_grid_z = Grid.point_z["data"]
+    new_grid_x = Grid["point_x"].values
+    new_grid_y = Grid["point_y"].values
+    new_grid_z = Grid["point_z"].values
 
     # Find timestep from datetime
     time_wrf = wrf_cdf.variables["Times"]
@@ -517,12 +517,18 @@ def make_constraint_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     u = griddata(
         (z, y, x_stag), U_wrf, (new_grid_z, new_grid_y, new_grid_x), fill_value=0.0
     )
-    u_dict = {"data": u, "long_name": "U from WRF", "units": "m/s"}
-    v_dict = {"data": v, "long_name": "V from WRF", "units": "m/s"}
-    w_dict = {"data": w, "long_name": "W from WRF", "units": "m/s"}
-    Grid.add_field("U_wrf", u_dict, replace_existing=True)
-    Grid.add_field("V_wrf", v_dict, replace_existing=True)
-    Grid.add_field("W_wrf", w_dict, replace_existing=True)
+    u_dict = {"long_name": "U from WRF", "units": "m/s"}
+    v_dict = {"long_name": "V from WRF", "units": "m/s"}
+    w_dict = {"long_name": "W from WRF", "units": "m/s"}
+    Grid["U_wrf"] = xr.DataArray(
+        np.expand_dims(u, 0), dims=("time", "z", "y", "x"), attrs=u_dict
+    )
+    Grid["V_wrf"] = xr.DataArray(
+        np.expand_dims(v, 0), dims=("time", "z", "y", "x"), attrs=v_dict
+    )
+    Grid["W_wrf"] = xr.DataArray(
+        np.expand_dims(w, 0), dims=("time", "z", "y", "x"), attrs=w_dict
+    )
 
     return Grid
 
@@ -575,15 +581,15 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
     EARTH_MEAN_RADIUS = 6.3781e6
     gh = gh.data[:, :, :]
     height = (EARTH_MEAN_RADIUS * gh) / (EARTH_MEAN_RADIUS - gh)
-    height = height - Grid.radar_altitude["data"]
+    height = height - Grid["radar_altitude"].values
 
-    radar_grid_lat = Grid.point_latitude["data"]
-    radar_grid_lon = Grid.point_longitude["data"]
-    radar_grid_alt = Grid.point_z["data"]
-    lat_min = radar_grid_lat.min() - 1
-    lat_max = radar_grid_lat.max() + 1
-    lon_min = radar_grid_lon.min() - 1
-    lon_max = radar_grid_lon.max() + 1
+    radar_grid_lat = Grid["point_latitude"].values
+    radar_grid_lon = Grid["point_longitude"].values
+    radar_grid_alt = Grid["point_z"].values
+    lat_min = radar_grid_lat.min()
+    lat_max = radar_grid_lat.max()
+    lon_min = radar_grid_lon.min()
+    lon_max = radar_grid_lon.max()
     lon_r = np.tile(lon, (height.shape[0], 1, 1))
     lat_r = np.tile(lat, (height.shape[0], 1, 1))
     lon_flattened = lon_r.flatten()
@@ -645,15 +651,21 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
         )
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
-    new_grid = deepcopy(Grid)
+    new_grid = Grid
 
-    u_dict = {"data": u_new, "long_name": "U from HRRR ", "units": "m/s"}
-    v_dict = {"data": v_new, "long_name": "V from HRRR ", "units": "m/s"}
-    w_dict = {"data": w_new, "long_name": "W from HRRR ", "units": "m/s"}
+    u_dict = {"long_name": "U from HRRR", "units": "m/s"}
+    v_dict = {"long_name": "V from HRRR", "units": "m/s"}
+    w_dict = {"long_name": "W from HRRR", "units": "m/s"}
 
-    new_grid.add_field("U_hrrr", u_dict, replace_existing=True)
-    new_grid.add_field("V_hrrr", v_dict, replace_existing=True)
-    new_grid.add_field("W_hrrr", w_dict, replace_existing=True)
+    new_grid["U_hrrr"] = xr.DataArray(
+        np.expand_dims(u_new, 0), dims=("time", "z", "y", "x"), attrs=u_dict
+    )
+    new_grid["V_hrrr"] = xr.DataArray(
+        np.expand_dims(v_new, 0), dims=("time", "z", "y", "x"), attrs=v_dict
+    )
+    new_grid["W_hrrr"] = xr.DataArray(
+        np.expand_dims(w_new, 0), dims=("time", "z", "y", "x"), attrs=w_dict
+    )
 
     # Free up memory
     del grb_u, grb_v, grb_w, lat, lon

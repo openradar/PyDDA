@@ -7,6 +7,7 @@ import warnings
 
 from .. import retrieval
 from matplotlib.axes import Axes
+from datatree import DataTree
 
 try:
     from cartopy.mpl.geoaxes import GeoAxes
@@ -24,8 +25,8 @@ def plot_horiz_xsection_quiver(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -54,8 +55,8 @@ def plot_horiz_xsection_quiver(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
@@ -154,8 +155,23 @@ def plot_horiz_xsection_quiver(
     ax: Matplotlib axis handle
         The matplotlib axis handle associated with the plot.
     """
+    if isinstance(Grids, DataTree):
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
+        bca_min = math.radians(Grids[u_field].attrs["min_bca"])
+        bca_max = math.radians(Grids[u_field].attrs["max_bca"])
+    else:
+        grid_list = Grids
+        bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
+        bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
 
-    grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+    grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
+    grid_bg = np.ma.masked_invalid(grid_bg)
     if not CARTOPY_AVAILABLE:
         raise ModuleNotFoundError(
             "Cartopy needs to be installed in order to use plotting module!"
@@ -166,14 +182,19 @@ def plot_horiz_xsection_quiver(
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    if isinstance(Grids, DataTree):
+        u = Grids[u_field].values.squeeze()
+        v = Grids[v_field].values.squeeze()
+        w = Grids[w_field].values.squeeze()
+    else:
+        u = grid_list[0][u_field].values.squeeze()
+        v = grid_list[0][v_field].values.squeeze()
+        w = grid_list[0][w_field].values.squeeze()
     qloc_x, qloc_y = _parse_quiverkey_string(
         quiverkey_loc, grid_h[level], grid_x[level], grid_y[level], grid_bg[level]
     )
@@ -219,9 +240,9 @@ def plot_horiz_xsection_quiver(
         fontproperties=quiver_font,
     )
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -281,21 +302,13 @@ def plot_horiz_xsection_quiver(
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")
 
-    bca_min = math.radians(Grids[0].fields[u_field]["min_bca"])
-    bca_max = math.radians(Grids[0].fields[u_field]["max_bca"])
-
     if show_lobes is True:
-        for i in range(len(Grids)):
-            for j in range(len(Grids)):
+        for i in range(len(grid_list)):
+            for j in range(len(grid_list)):
                 if i != j:
                     bca = retrieval.get_bca(
-                        Grids[j].radar_longitude["data"],
-                        Grids[j].radar_latitude["data"],
-                        Grids[i].radar_longitude["data"],
-                        Grids[i].radar_latitude["data"],
-                        Grids[j].point_x["data"][0],
-                        Grids[j].point_y["data"][0],
-                        Grids[j].get_projparams(),
+                        grid_list[i],
+                        grid_list[j],
                     )
 
                     ax.contour(
@@ -324,8 +337,8 @@ def plot_horiz_xsection_quiver_map(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -355,8 +368,8 @@ def plot_horiz_xsection_quiver_map(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle (with cartopy ccrs)
         The axis handle to place the plot on. Set to None to create a new map.
         Note: the axis needs to be in a PlateCarree() projection. Support for
@@ -456,48 +469,69 @@ def plot_horiz_xsection_quiver_map(
     ax: matplotlib axis
         Axis handle to output axis
     """
+    if isinstance(Grids, DataTree):
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
+        bca_min = math.radians(Grids[u_field].attrs["min_bca"])
+        bca_max = math.radians(Grids[u_field].attrs["max_bca"])
+    else:
+        grid_list = Grids
+        bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
+        bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
+
     if not CARTOPY_AVAILABLE:
         raise ModuleNotFoundError(
             "Cartopy needs to be installed in order to use plotting module!"
         )
     if bg_grid_no > -1:
-        grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+        grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
     else:
-        grid_array = np.ma.stack([x.fields[background_field]["data"] for x in Grids])
+        grid_array = np.ma.stack(
+            [x[background_field].values.squeeze() for x in grid_list]
+        )
         grid_bg = grid_array.max(axis=0)
-
+    grid_bg = np.ma.masked_invalid(grid_bg)
     if vmin is None:
         vmin = grid_bg.min()
 
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
-    grid_lat = Grids[0].point_latitude["data"][level]
-    grid_lon = Grids[0].point_longitude["data"][level]
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
+    grid_lat = grid_list[0].point_latitude.values[level]
+    grid_lon = grid_list[0].point_longitude.values[level]
 
     qloc_x, qloc_y = _parse_quiverkey_string(
         quiverkey_loc, grid_h[level], grid_x[level], grid_y[level], grid_bg[level]
     )
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-
-    if np.ma.isMaskedArray(Grids[0].fields[u_field]["data"]):
-        u = Grids[0].fields[u_field]["data"].filled(fill_value=np.nan)
+    if isinstance(Grids, DataTree):
+        u = Grids[u_field].values.squeeze()
+        v = Grids[v_field].values.squeeze()
+        w = Grids[w_field].values.squeeze()
     else:
-        u = Grids[0].fields[u_field]["data"]
+        if np.ma.isMaskedArray(grid_list[0][u_field].values.squeeze()):
+            u = grid_list[0][u_field].values.squeeze().filled(fill_value=np.nan)
+        else:
+            u = grid_list[0][u_field].values.squeeze()
 
-    if np.ma.isMaskedArray(Grids[0].fields[v_field]["data"]):
-        v = Grids[0].fields[v_field]["data"].filled(fill_value=np.nan)
-    else:
-        v = Grids[0].fields[v_field]["data"]
+        if np.ma.isMaskedArray(grid_list[0][v_field].values):
+            v = grid_list[0][v_field].values.squeeze().filled(fill_value=np.nan)
+        else:
+            v = grid_list[0][v_field].values.squeeze()
 
-    if np.ma.isMaskedArray(Grids[0].fields[u_field]["data"]):
-        w = Grids[0].fields[w_field]["data"].filled(fill_value=np.nan)
-    else:
-        w = Grids[0].fields[w_field]["data"]
+        if np.ma.isMaskedArray(grid_list[0][u_field].values):
+            w = grid_list[0][w_field].values.squeeze().filled(fill_value=np.nan)
+        else:
+            w = grid_list[0][w_field].values.squeeze()
 
     transform = ccrs.PlateCarree()
     if ax is None:
@@ -544,9 +578,9 @@ def plot_horiz_xsection_quiver_map(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -684,22 +718,11 @@ def plot_horiz_xsection_quiver_map(
                 RuntimeWarning,
             )
 
-    bca_min = math.radians(Grids[0].fields[u_field]["min_bca"])
-    bca_max = math.radians(Grids[0].fields[u_field]["max_bca"])
-
     if show_lobes is True:
-        for i in range(len(Grids)):
-            for j in range(len(Grids)):
+        for i in range(len(grid_list)):
+            for j in range(len(grid_list)):
                 if i != j:
-                    bca = retrieval.get_bca(
-                        Grids[j].radar_longitude["data"],
-                        Grids[j].radar_latitude["data"],
-                        Grids[i].radar_longitude["data"],
-                        Grids[i].radar_latitude["data"],
-                        Grids[j].point_x["data"][0],
-                        Grids[j].point_y["data"][0],
-                        Grids[j].get_projparams(),
-                    )
+                    bca = retrieval.get_bca(grid_list[i], grid_list[j])
 
                     ax.contour(
                         grid_lon[:, :],
@@ -739,8 +762,8 @@ def plot_xz_xsection_quiver(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -767,8 +790,8 @@ def plot_xz_xsection_quiver(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
@@ -863,23 +886,37 @@ def plot_xz_xsection_quiver(
     ax: matplotlib axis
         Axis handle to output axis
     """
-
-    grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
-
+    if isinstance(Grids, DataTree):
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
+    else:
+        grid_list = Grids
+    grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
+    grid_bg = np.ma.masked_invalid(grid_bg)
     if vmin is None:
         vmin = grid_bg.min()
 
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dz = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    if isinstance(Grids, DataTree):
+        u = Grids[u_field].values.squeeze()
+        v = Grids[v_field].values.squeeze()
+        w = Grids[w_field].values.squeeze()
+    else:
+        u = grid_list[0][u_field].values.squeeze()
+        v = grid_list[0][v_field].values.squeeze()
+        w = grid_list[0][w_field].values.squeeze()
     qloc_x, qloc_y = _parse_quiverkey_string(
         quiverkey_loc,
         grid_h[:, level, :],
@@ -929,9 +966,9 @@ def plot_xz_xsection_quiver(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 
@@ -1024,8 +1061,8 @@ def plot_yz_xsection_quiver(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -1052,8 +1089,8 @@ def plot_yz_xsection_quiver(
 
     Parameters
     ----------
-    Grids: list
-        List of Py-ART Grids to visualize
+    Grids: list or DataTree
+        List of Py-DDA Grids to visualize
     ax: matplotlib axis handle
         The axis handle to place the plot on. Set to None to plot on the
         current axis.
@@ -1145,22 +1182,33 @@ def plot_yz_xsection_quiver(
     ax: matplotlib axis
         Axis handle to output axis
     """
+    if isinstance(Grids, DataTree):
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
+    else:
+        grid_list = Grids
 
-    grid_bg = Grids[bg_grid_no].fields[background_field]["data"]
+    grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
+    grid_bg = np.ma.masked_invalid(grid_bg)
     if vmin is None:
         vmin = grid_bg.min()
 
     if vmax is None:
         vmax = grid_bg.max()
 
-    grid_h = Grids[0].point_altitude["data"] / 1e3
-    grid_x = Grids[0].point_x["data"] / 1e3
-    grid_y = Grids[0].point_y["data"] / 1e3
+    grid_h = grid_list[0]["point_altitude"].values / 1e3
+    grid_x = grid_list[0]["point_x"].values / 1e3
+    grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dz = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = Grids[0].fields[u_field]["data"]
-    v = Grids[0].fields[v_field]["data"]
-    w = Grids[0].fields[w_field]["data"]
+    u = grid_list[0][u_field].values.squeeze()
+    v = grid_list[0][v_field].values.squeeze()
+    w = grid_list[0][w_field].values.squeeze()
     qloc_x, qloc_y = _parse_quiverkey_string(
         quiverkey_loc,
         grid_h[:, :, level],
@@ -1213,9 +1261,9 @@ def plot_yz_xsection_quiver(
     )
 
     if colorbar_flag is True:
-        cp = Grids[bg_grid_no].fields[background_field]["long_name"]
+        cp = grid_list[bg_grid_no][background_field].attrs["long_name"]
         cp.replace(" ", "_")
-        cp = cp + " [" + Grids[bg_grid_no].fields[background_field]["units"]
+        cp = cp + " [" + grid_list[bg_grid_no][background_field].attrs["units"]
         cp = cp + "]"
         plt.colorbar(the_mesh, ax=ax, label=(cp))
 

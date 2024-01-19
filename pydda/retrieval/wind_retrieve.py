@@ -7,14 +7,14 @@ reated on Mon Aug  7 09:17:40 2017
 import pyart
 import numpy as np
 import time
-import cartopy.crs as ccrs
 import math
-import sys
+import xarray as xr
 
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.signal import savgol_filter
 from .auglag import auglag
+from ..io import read_from_pyart_grid
 
 try:
     import tensorflow_probability as tfp
@@ -182,6 +182,7 @@ class DDParameters(object):
         self.cvtol = 1e-2
         self.gtol = 1e-2
         self.Jveltol = 100.0
+        self.const_boundary_cond = False
 
 
 def _get_dd_wind_field_scipy(
@@ -228,6 +229,8 @@ def _get_dd_wind_field_scipy(
     roi=1000.0,
     wind_tol=0.1,
     tolerance=1e-8,
+    const_boundary_cond=False,
+    max_wind_mag=100.0,
 ):
     global _wcurrmax
     global _wprevmax
@@ -250,20 +253,23 @@ def _get_dd_wind_field_scipy(
     parameters.Ut = Ut
     parameters.Vt = Vt
     parameters.engine = engine
-
+    parameters.const_boundary_cond = const_boundary_cond
+    print(parameters.const_boundary_cond)
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
     for g in Grids:
-        if not np.allclose(g.x["data"], prev_grid.x["data"], atol=10):
+        if not np.allclose(g["x"].values, prev_grid["x"].values, atol=10):
             raise ValueError("Grids do not have equal x coordinates!")
 
-        if not np.allclose(g.y["data"], prev_grid.y["data"], atol=10):
+        if not np.allclose(g["y"].values, prev_grid["y"].values, atol=10):
             raise ValueError("Grids do not have equal y coordinates!")
 
-        if not np.allclose(g.z["data"], prev_grid.z["data"], atol=10):
+        if not np.allclose(g["z"].values, prev_grid["z"].values, atol=10):
             raise ValueError("Grids do not have equal z coordinates!")
 
-        if not g.origin_latitude["data"] == prev_grid.origin_latitude["data"]:
+        if not np.allclose(
+            g["origin_latitude"].values, prev_grid["origin_latitude"].values
+        ):
             raise ValueError(("Grids have unequal origin lat/lons!"))
 
         prev_grid = g
@@ -292,15 +298,15 @@ def _get_dd_wind_field_scipy(
         )
         u_interp = interp1d(z_back[valid_inds], u_back[valid_inds], bounds_error=False)
         v_interp = interp1d(z_back[valid_inds], v_back[valid_inds], bounds_error=False)
-        if isinstance(Grids[0].z["data"], np.ma.MaskedArray):
-            parameters.u_back = u_interp(Grids[0].z["data"].filled(np.nan))
-            parameters.v_back = v_interp(Grids[0].z["data"].filled(np.nan))
+        if isinstance(Grids[0]["z"].values, np.ma.MaskedArray):
+            parameters.u_back = u_interp(Grids[0]["z"].values.filled(np.nan))
+            parameters.v_back = v_interp(Grids[0]["z"].values.filled(np.nan))
         else:
-            parameters.u_back = u_interp(Grids[0].z["data"])
-            parameters.v_back = v_interp(Grids[0].z["data"])
+            parameters.u_back = u_interp(Grids[0]["z"].values)
+            parameters.v_back = v_interp(Grids[0]["z"].values)
 
         print("Grid levels:")
-        print(Grids[0].z["data"])
+        print(Grids[0]["z"].values)
 
     # Parse names of velocity field
     if refl_field is None:
@@ -336,17 +342,16 @@ def _get_dd_wind_field_scipy(
     for i in range(len(Grids)):
         parameters.wts.append(
             np.ma.masked_invalid(
-                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz)
+                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz).squeeze()
             )
         )
-        add_azimuth_as_field(Grids[i], dz_name=refl_field)
-        add_elevation_as_field(Grids[i], dz_name=refl_field)
-        parameters.vrs.append(np.ma.masked_invalid(Grids[i].fields[vel_name]["data"]))
+
+        parameters.vrs.append(np.ma.masked_invalid(Grids[i][vel_name].values.squeeze()))
         parameters.azs.append(
-            np.ma.masked_invalid(Grids[i].fields["AZ"]["data"] * np.pi / 180)
+            np.ma.masked_invalid(Grids[i]["AZ"].values.squeeze() * np.pi / 180)
         )
         parameters.els.append(
-            np.ma.masked_invalid(Grids[i].fields["EL"]["data"] * np.pi / 180)
+            np.ma.masked_invalid(Grids[i]["EL"].values.squeeze() * np.pi / 180)
         )
 
     if len(Grids) > 1:
@@ -355,15 +360,7 @@ def _get_dd_wind_field_scipy(
                 if i == j:
                     continue
                 print(("Calculating weights for radars " + str(i) + " and " + str(j)))
-                bca[i, j] = get_bca(
-                    Grids[i].radar_longitude["data"],
-                    Grids[i].radar_latitude["data"],
-                    Grids[j].radar_longitude["data"],
-                    Grids[j].radar_latitude["data"],
-                    Grids[i].point_x["data"][0],
-                    Grids[i].point_y["data"][0],
-                    Grids[i].get_projparams(),
-                )
+                bca[i, j] = get_bca(Grids[i], Grids[j])
 
                 for k in range(parameters.vrs[i].shape[0]):
                     if weights_obs is None:
@@ -513,47 +510,42 @@ def _get_dd_wind_field_scipy(
     winds = winds.flatten()
 
     print("Starting solver ")
-    parameters.dx = np.diff(Grids[0].x["data"], axis=0)[0]
-    parameters.dy = np.diff(Grids[0].y["data"], axis=0)[0]
-    parameters.dz = np.diff(Grids[0].z["data"], axis=0)[0]
+    parameters.dx = np.diff(Grids[0]["x"].values, axis=0)[0]
+    parameters.dy = np.diff(Grids[0]["y"].values, axis=0)[0]
+    parameters.dz = np.diff(Grids[0]["z"].values, axis=0)[0]
     print("rmsVR = " + str(parameters.rmsVr))
     print("Total points: %d" % parameters.weights.sum())
-    parameters.z = Grids[0].point_z["data"]
-    parameters.x = Grids[0].point_x["data"]
-    parameters.y = Grids[0].point_y["data"]
+    parameters.z = Grids[0]["point_z"].values
+    parameters.x = Grids[0]["point_x"].values
+    parameters.y = Grids[0]["point_y"].values
     bt = time.time()
 
     # First pass - no filter
     wcurrmax = w_init.max()
     print("The max of w_init is", wcurrmax)
     iterations = 0
-    bounds = [(-x, x) for x in 100 * np.ones(winds.shape)]
+    bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape)]
 
     if model_fields is not None:
         for i, the_field in enumerate(model_fields):
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            model_finite = np.logical_and.reduce(
-                (
-                    np.isfinite(Grids[0].fields[u_field]["data"]),
-                    np.isfinite(Grids[0].fields[w_field]["data"]),
-                    np.isfinite(Grids[0].fields[v_field]["data"]),
-                )
-            )
-            parameters.model_weights[i] = np.where(
-                model_finite, parameters.model_weights[i], 0
-            )
-            parameters.u_model.append(
-                np.nan_to_num(Grids[0].fields[u_field]["data"], 0)
-            )
-            parameters.v_model.append(
-                np.nan_to_num(Grids[0].fields[v_field]["data"], 0)
-            )
-            parameters.w_model.append(
-                np.nan_to_num(Grids[0].fields[w_field]["data"], 0)
+            parameters.u_model.append(np.nan_to_num(Grids[0][u_field].values.squeeze()))
+            parameters.v_model.append(np.nan_to_num(Grids[0][v_field].values.squeeze()))
+            parameters.w_model.append(np.nan_to_num(Grids[0][w_field].values.squeeze()))
+
+            # Don't weigh in where model data unavailable
+            where_finite_u = np.isfinite(Grids[0][u_field].values.squeeze())
+            where_finite_v = np.isfinite(Grids[0][v_field].values.squeeze())
+            where_finite_w = np.isfinite(Grids[0][w_field].values.squeeze())
+            parameters.model_weights[i, :, :, :] = np.where(
+                np.logical_and.reduce((where_finite_u, where_finite_v, where_finite_w)),
+                1,
+                0,
             )
 
+    print("Total number of model points: %d" % np.sum(parameters.model_weights))
     parameters.Co = Co
     parameters.Cm = Cm
     parameters.Cx = Cx
@@ -622,14 +614,14 @@ def _get_dd_wind_field_scipy(
         else:
 
             def loss_and_gradient(x):
-                x_loss = J_function_jax(x["winds"], vars(parameters))
+                x_loss = J_function_jax(x["winds"], parameters)
                 x_grad = {}
-                x_grad["winds"] = grad_jax(x["winds"], vars(parameters))
+                x_grad["winds"] = grad_jax(x["winds"], parameters)
                 return x_loss, x_grad
 
             bounds = (
-                {"winds": -100 * jnp.ones(winds.shape)},
-                {"winds": 100 * jnp.ones(winds.shape)},
+                {"winds": -max_wind_mag * jnp.ones(winds.shape)},
+                {"winds": max_wind_mag * jnp.ones(winds.shape)},
             )
             winds = jnp.array(winds)
             solver = jaxopt.LBFGSB(
@@ -673,10 +665,10 @@ def _get_dd_wind_field_scipy(
         parameters.weights = tf.constant(parameters.weights, dtype=tf.float32)
         parameters.bg_weights[parameters.bg_weights > 0] = 1
         parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float32)
-        parameters.z = tf.constant(Grids[0].point_z["data"], dtype=tf.float32)
-        parameters.x = tf.constant(Grids[0].point_x["data"], dtype=tf.float32)
-        parameters.y = tf.constant(Grids[0].point_y["data"], dtype=tf.float32)
-        bounds = [(-x, x) for x in 100 * np.ones(winds.shape, dtype="float32")]
+        parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float32)
+        parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float32)
+        parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float32)
+        bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape, dtype="float32")]
         winds = winds.astype("float32")
         winds, mult, AL_Filter, funcalls = auglag(winds, parameters, bounds)
 
@@ -737,20 +729,17 @@ def _get_dd_wind_field_scipy(
     if mask_w_outside_opt is True:
         w = np.ma.masked_where(where_mask < 1, w)
 
-    u_field = deepcopy(Grids[0].fields[vel_name])
-    u_field["data"] = u
+    u_field = {}
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
-    v_field = deepcopy(Grids[0].fields[vel_name])
-    v_field["data"] = v
+    v_field = {}
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
-    w_field = deepcopy(Grids[0].fields[vel_name])
-    w_field["data"] = w
+    w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
     w_field["min_bca"] = min_bca
@@ -759,11 +748,16 @@ def _get_dd_wind_field_scipy(
     new_grid_list = []
 
     for grid in Grids:
-        temp_grid = deepcopy(grid)
-        temp_grid.add_field("u", u_field, replace_existing=True)
-        temp_grid.add_field("v", v_field, replace_existing=True)
-        temp_grid.add_field("w", w_field, replace_existing=True)
-        new_grid_list.append(temp_grid)
+        grid["u"] = xr.DataArray(
+            np.expand_dims(u, 0), dims=("time", "z", "y", "x"), attrs=u_field
+        )
+        grid["v"] = xr.DataArray(
+            np.expand_dims(v, 0), dims=("time", "z", "y", "x"), attrs=v_field
+        )
+        grid["w"] = xr.DataArray(
+            np.expand_dims(w, 0), dims=("time", "z", "y", "x"), attrs=w_field
+        )
+        new_grid_list.append(grid)
 
     return new_grid_list, parameters
 
@@ -810,6 +804,8 @@ def _get_dd_wind_field_tensorflow(
     parallel_iterations=1,
     wind_tol=0.1,
     tolerance=1e-8,
+    const_boundary_cond=False,
+    max_wind_mag=100.0,
 ):
     if not TENSORFLOW_AVAILABLE:
         raise ImportError(
@@ -835,19 +831,23 @@ def _get_dd_wind_field_tensorflow(
     parameters.upper_bc = upper_bc
     parameters.lower_bc = lower_bc
     parameters.engine = "tensorflow"
+    parameters.const_boundary_cond = const_boundary_cond
+
     # Ensure that all Grids are on the same coordinate system
     prev_grid = Grids[0]
     for g in Grids:
-        if not np.allclose(g.x["data"], prev_grid.x["data"], atol=10):
+        if not np.allclose(g["x"].values, prev_grid["x"].values, atol=10):
             raise ValueError("Grids do not have equal x coordinates!")
 
-        if not np.allclose(g.y["data"], prev_grid.y["data"], atol=10):
+        if not np.allclose(g["y"].values, prev_grid["y"].values, atol=10):
             raise ValueError("Grids do not have equal y coordinates!")
 
-        if not np.allclose(g.z["data"], prev_grid.z["data"], atol=10):
+        if not np.allclose(g["z"].values, prev_grid["z"].values, atol=10):
             raise ValueError("Grids do not have equal z coordinates!")
 
-        if not g.origin_latitude["data"] == prev_grid.origin_latitude["data"]:
+        if not np.allclose(
+            g["origin_latitude"].values, prev_grid["origin_latitude"].values
+        ):
             raise ValueError(("Grids have unequal origin lat/lons!"))
 
         prev_grid = g
@@ -871,19 +871,19 @@ def _get_dd_wind_field_tensorflow(
         )
         u_interp = interp1d(z_back[valid_inds], u_back[valid_inds], bounds_error=False)
         v_interp = interp1d(z_back[valid_inds], v_back[valid_inds], bounds_error=False)
-        if isinstance(Grids[0].z["data"], np.ma.MaskedArray):
+        if isinstance(Grids[0]["z"].values, np.ma.MaskedArray):
             parameters.u_back = tf.constant(
-                u_interp(Grids[0].z["data"].filled(np.nan)), dtype=tf.float32
+                u_interp(Grids[0]["z"].values.filled(np.nan)), dtype=tf.float32
             )
             parameters.v_back = tf.constant(
-                v_interp(Grids[0].z["data"].filled(np.nan)), dtype=tf.float32
+                v_interp(Grids[0]["z"].values.filled(np.nan)), dtype=tf.float32
             )
         else:
             parameters.u_back = tf.constant(
-                u_interp(Grids[0].z["data"]), dtype=tf.float32
+                u_interp(Grids[0]["z"].values), dtype=tf.float32
             )
             parameters.v_back = tf.constant(
-                v_interp(Grids[0].z["data"]), dtype=tf.float32
+                v_interp(Grids[0]["z"].values), dtype=tf.float32
             )
 
         print("Interpolated U field:")
@@ -891,7 +891,7 @@ def _get_dd_wind_field_tensorflow(
         print("Interpolated V field:")
         print(parameters.v_back)
         print("Grid levels:")
-        print(Grids[0].z["data"])
+        print(Grids[0]["z"].values)
 
     # Parse names of velocity field
     if refl_field is None:
@@ -931,17 +931,15 @@ def _get_dd_wind_field_tensorflow(
     for i in range(len(Grids)):
         parameters.wts.append(
             np.ma.masked_invalid(
-                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz)
+                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz).squeeze()
             )
         )
-        add_azimuth_as_field(Grids[i], dz_name=refl_field)
-        add_elevation_as_field(Grids[i], dz_name=refl_field)
-        parameters.vrs.append(np.ma.masked_invalid(Grids[i].fields[vel_name]["data"]))
+        parameters.vrs.append(np.ma.masked_invalid(Grids[i][vel_name].values.squeeze()))
         parameters.azs.append(
-            np.ma.masked_invalid(Grids[i].fields["AZ"]["data"] * np.pi / 180)
+            np.ma.masked_invalid(Grids[i]["AZ"].values.squeeze() * np.pi / 180)
         )
         parameters.els.append(
-            np.ma.masked_invalid(Grids[i].fields["EL"]["data"] * np.pi / 180)
+            np.ma.masked_invalid(Grids[i]["EL"].values.squeeze() * np.pi / 180)
         )
 
     if len(Grids) > 1:
@@ -950,15 +948,7 @@ def _get_dd_wind_field_tensorflow(
                 if i == j:
                     continue
                 print(("Calculating weights for radars " + str(i) + " and " + str(j)))
-                bca[i, j] = get_bca(
-                    Grids[i].radar_longitude["data"],
-                    Grids[i].radar_latitude["data"],
-                    Grids[j].radar_longitude["data"],
-                    Grids[j].radar_latitude["data"],
-                    Grids[i].point_x["data"][0],
-                    Grids[i].point_y["data"][0],
-                    Grids[i].get_projparams(),
-                )
+                bca[i, j] = get_bca(Grids[i], Grids[j])
 
                 for k in range(parameters.vrs[i].shape[0]):
                     if weights_obs is None:
@@ -1127,14 +1117,14 @@ def _get_dd_wind_field_tensorflow(
     winds = tf.Variable(winds, name="winds")
 
     print("Starting solver ")
-    parameters.dx = np.diff(Grids[0].x["data"], axis=0)[0]
-    parameters.dy = np.diff(Grids[0].y["data"], axis=0)[0]
-    parameters.dz = np.diff(Grids[0].z["data"], axis=0)[0]
+    parameters.dx = np.diff(Grids[0]["x"].values, axis=0)[0]
+    parameters.dy = np.diff(Grids[0]["y"].values, axis=0)[0]
+    parameters.dz = np.diff(Grids[0]["z"].values, axis=0)[0]
     print("rmsVR = " + str(parameters.rmsVr))
     print("Total points: %d" % tf.reduce_sum(parameters.weights))
-    parameters.z = tf.constant(Grids[0].point_z["data"], dtype=tf.float32)
-    parameters.x = tf.constant(Grids[0].point_x["data"], dtype=tf.float32)
-    parameters.y = tf.constant(Grids[0].point_y["data"], dtype=tf.float32)
+    parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float32)
+    parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float32)
+    parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float32)
     bt = time.time()
 
     # First pass - no filter
@@ -1147,32 +1137,28 @@ def _get_dd_wind_field_tensorflow(
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            model_finite = np.logical_and.reduce(
-                (
-                    np.isfinite(Grids[0].fields[u_field]["data"]),
-                    np.isfinite(Grids[0].fields[w_field]["data"]),
-                    np.isfinite(Grids[0].fields[v_field]["data"]),
-                )
-            )
-            parameters.model_weights[i] = np.where(
-                model_finite, parameters.model_weights[i], 0
-            )
             parameters.u_model.append(
-                tf.constant(
-                    np.nan_to_num(Grids[0].fields[u_field]["data"], 0), dtype=tf.float32
-                )
+                tf.constant(np.nan_to_num(Grids[0][u_field].values.squeeze()))
             )
             parameters.v_model.append(
-                tf.constant(
-                    np.nan_to_num(Grids[0].fields[v_field]["data"], 0), dtype=tf.float32
-                )
+                tf.constant(np.nan_to_num(Grids[0][v_field].values.squeeze()))
             )
             parameters.w_model.append(
-                tf.constant(
-                    np.nan_to_num(Grids[0].fields[w_field]["data"], 0), dtype=tf.float32
-                )
+                tf.constant(np.nan_to_num(Grids[0][w_field].values.squeeze()))
             )
+
+            # Don't weigh in where model data unavailable
+            where_finite_u = np.isfinite(Grids[0][u_field].values.squeeze())
+            where_finite_v = np.isfinite(Grids[0][v_field].values.squeeze())
+            where_finite_w = np.isfinite(Grids[0][w_field].values.squeeze())
+            parameters.model_weights[i, :, :, :] = np.where(
+                np.logical_and.reduce((where_finite_u, where_finite_v, where_finite_w)),
+                1,
+                0,
+            )
+
     parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float32)
+
     parameters.Co = Co
     parameters.Cm = Cm
     parameters.Cx = Cx
@@ -1265,20 +1251,17 @@ def _get_dd_wind_field_tensorflow(
     if mask_w_outside_opt is True:
         w = np.ma.masked_where(where_mask < 1, w)
 
-    u_field = deepcopy(Grids[0].fields[vel_name])
-    u_field["data"] = u
+    u_field = {}
     u_field["standard_name"] = "u_wind"
     u_field["long_name"] = "meridional component of wind velocity"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
-    v_field = deepcopy(Grids[0].fields[vel_name])
-    v_field["data"] = v
+    v_field = {}
     v_field["standard_name"] = "v_wind"
     v_field["long_name"] = "zonal component of wind velocity"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
-    w_field = deepcopy(Grids[0].fields[vel_name])
-    w_field["data"] = w
+    w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
     w_field["min_bca"] = min_bca
@@ -1287,11 +1270,16 @@ def _get_dd_wind_field_tensorflow(
     new_grid_list = []
 
     for grid in Grids:
-        temp_grid = deepcopy(grid)
-        temp_grid.add_field("u", u_field, replace_existing=True)
-        temp_grid.add_field("v", v_field, replace_existing=True)
-        temp_grid.add_field("w", w_field, replace_existing=True)
-        new_grid_list.append(temp_grid)
+        grid["u"] = xr.DataArray(
+            np.expand_dims(u, 0), dims=("time", "z", "y", "x"), attrs=u_field
+        )
+        grid["v"] = xr.DataArray(
+            np.expand_dims(v, 0), dims=("time", "z", "y", "x"), attrs=v_field
+        )
+        grid["w"] = xr.DataArray(
+            np.expand_dims(w, 0), dims=("time", "z", "y", "x"), attrs=w_field
+        )
+        new_grid_list.append(grid)
 
     return new_grid_list, parameters
 
@@ -1317,8 +1305,8 @@ def get_dd_wind_field(
     Parameters
     ==========
 
-    Grids: list of Py-ART Grids
-        The list of Py-ART grids to take in corresponding to each radar.
+    Grids: list of Py-ART/DDA Grids
+        The list of Py-ART or PyDDA grids to take in corresponding to each radar.
         All grids must have the same shape, x coordinates, y coordinates
         and z coordinates.
     u_init: 3D ndarray
@@ -1336,7 +1324,7 @@ def get_dd_wind_field(
     engine: str (one of "scipy", "tensorflow", "jax")
         Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
         Using Tensorflow or Jax expands PyDDA's capabiability to take advantage of GPU-based systems.
-        In addition, these two implementations use automatic differentation to calcualte the gradient
+        In addition, these two implementations use automatic differentation to calculate the gradient
         of the cost function in order to optimize the gradient calculation.
         TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-basedengine.
         The latest version of Jax is required for the Jax-based engine.
@@ -1442,6 +1430,8 @@ def get_dd_wind_field(
         Stop iterations after maximum change in winds is less than this value.
     tolerance: float
         Tolerance for L2 norm of gradient before stopping.
+    max_wind_magnitude: float
+        Constrain the optimization to have :math:`|u|, :math:`|w|`, and :math:`|w| < x` m/s.
 
     Returns
     =======
@@ -1451,53 +1441,57 @@ def get_dd_wind_field(
     parameters: struct
         The parameters used in the generation of the Multi-Doppler wind field.
     """
+
+    if isinstance(Grids, list):
+        if isinstance(Grids[0], pyart.core.Grid):
+            for x in Grids:
+                new_grids = [read_from_pyart_grid(x) for x in Grids]
+        else:
+            new_grids = Grids
+    elif isinstance(Grids, pyart.core.Grid):
+        new_grids = [read_from_pyart_grid(Grids)]
+    elif isinstance(Grids, xr.Dataset):
+        new_grids = [Grids]
+    else:
+        raise TypeError(
+            "Input grids must be an xarray Dataset, Py-ART Grid, or a list of those."
+        )
+
     if u_init is None:
-        if isinstance(u_init, np.ma.MaskedArray):
-            u_init = Grids[0].fields["u"]["data"].filled(0)
-        else:
-            u_init = Grids[0].fields["u"]["data"]
+        u_init = new_grids[0]["u"].values.squeeze()
+
     if v_init is None:
-        if isinstance(u_init, np.ma.MaskedArray):
-            v_init = Grids[0].fields["v"]["data"].filled(0)
-        else:
-            v_init = Grids[0].fields["v"]["data"]
+        v_init = new_grids[0]["v"].values.squeeze()
+
     if w_init is None:
-        if isinstance(u_init, np.ma.MaskedArray):
-            w_init = Grids[0].fields["w"]["data"].filled(0)
-        else:
-            w_init = Grids[0].fields["w"]["data"]
+        w_init = new_grids[0]["w"].values.squeeze()
+
     if (
         engine.lower() == "scipy"
         or engine.lower() == "jax"
         or engine.lower() == "auglag"
     ):
-        return _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine, **kwargs)
+        return _get_dd_wind_field_scipy(
+            new_grids, u_init, v_init, w_init, engine, **kwargs
+        )
     elif engine.lower() == "tensorflow":
-        return _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, **kwargs)
+        return _get_dd_wind_field_tensorflow(
+            new_grids, u_init, v_init, w_init, **kwargs
+        )
     else:
         raise NotImplementedError("Engine %s is not supported." % engine)
 
 
-def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
+def get_bca(Grid1, Grid2):
     """
     This function gets the beam crossing angle between two lat/lon pairs.
 
     Parameters
     ==========
-    rad1_lon: float
-        The longitude of the first radar.
-    rad1_lat: float
-        The latitude of the first radar.
-    rad2_lon: float
-        The longitude of the second radar.
-    rad2_lat: float
-        The latitude of the second radar.
-    x: nD float array
-        The Cartesian x coordinates of the grid
-    y: nD float array
-        The Cartesian y corrdinates of the grid
-    projparams: Py-ART projparams
-        The projection parameters of the Grid
+    Grid1: xarray (PyDDA) Dataset
+        The PyDDA Dataset storing the first radar's Grid.
+    Grid2: PyDDA Dataset
+        The PyDDA Dataset storing the second radar's Grid.
 
     Returns
     =======
@@ -1505,6 +1499,16 @@ def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
         The beam crossing angle between the two radars in radians.
 
     """
+    rad1_lon = Grid1["radar_longitude"].values
+    rad1_lat = Grid1["radar_latitude"].values
+    rad2_lon = Grid2["radar_longitude"].values
+    rad2_lat = Grid2["radar_latitude"].values
+    x = Grid1["point_x"].values
+    y = Grid1["point_y"].values
+    projparams = Grid1["projection"].attrs
+    if projparams["_include_lon_0_lat_0"] == "true":
+        projparams["lat_0"] = Grid1["origin_latitude"].values
+        projparams["lon_0"] = Grid1["origin_longitude"].values
 
     rad1 = pyart.core.geographic_to_cartesian(rad1_lon, rad1_lat, projparams)
     rad2 = pyart.core.geographic_to_cartesian(rad2_lon, rad2_lat, projparams)
@@ -1519,13 +1523,11 @@ def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
     inp_array1 = x / a
     inp_array1 = np.where(inp_array1 < -1, -1, inp_array1)
     inp_array1 = np.where(inp_array1 > 1, 1, inp_array1)
-    np.arccos(inp_array1)
     inp_array2 = (x - rad2[1]) / b
     inp_array2 = np.where(inp_array2 < -1, -1, inp_array2)
     inp_array2 = np.where(inp_array2 > 1, 1, inp_array2)
-    np.arccos(inp_array2)
     inp_array3 = (a * a + b * b - c * c) / (2 * a * b)
     inp_array3 = np.where(inp_array3 < -1, -1, inp_array3)
     inp_array3 = np.where(inp_array3 > 1, 1, inp_array3)
 
-    return np.ma.masked_invalid(np.arccos(inp_array3))
+    return np.ma.masked_invalid(np.arccos(inp_array3))[0, :, :]
