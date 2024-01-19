@@ -5,13 +5,7 @@ use("agg")
 import pydda
 import pytest
 import matplotlib.pyplot as plt
-
-try:
-    import cartopy.crs as ccrs
-
-    CARTOPY_AVAILABLE = True
-except ImportError:
-    CARTOPY_AVAILABLE = False
+import cartopy.crs as ccrs
 
 
 @pytest.mark.mpl_image_compare(tolerance=50)
@@ -77,7 +71,6 @@ def test_plot_horiz_yz_xsection_barbs():
     return fig
 
 
-@pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_barbs_map():
     berr_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
@@ -117,7 +110,6 @@ def test_plot_horiz_xsection_streamlines():
     return fig
 
 
-@pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=60)
 def test_plot_horiz_xsection_streamlines_map():
     berr_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
@@ -199,7 +191,6 @@ def test_plot_horiz_xsection_quiver():
     return fig
 
 
-@pytest.mark.skipif(CARTOPY_AVAILABLE=False)
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_plot_horiz_xsection_quiver_map():
     berr_grid = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)

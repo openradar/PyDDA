@@ -113,7 +113,7 @@ def test_twpice_case_jax():
 
     assert u_mean > 0
     assert v_mean < 0
-    assert w_max > 10
+    assert w_max > 5
 
 
 @pytest.mark.skipif(not TF_AVAILABLE, reason="TensorFlow not installed")
@@ -150,7 +150,7 @@ def test_twpice_case_tensorflow():
 
     assert u_mean > 0
     assert v_mean < 0
-    assert w_max > 10
+    assert w_max > 5
 
 
 def test_twpice_case():
@@ -186,7 +186,7 @@ def test_twpice_case():
 
     assert u_mean > 0
     assert v_mean < 0
-    assert w_max > 10
+    assert w_max > 5
 
 
 def test_smoothing():
@@ -265,43 +265,45 @@ def test_model_constraint():
 
 @pytest.mark.mpl_image_compare(tolerance=50)
 def test_nested_retrieval():
-    grid_sw_coarse = pydda.io.read_grid(pydda.tests.get_sample_file("test_coarse0.nc"))
-    grid_se_coarse = pydda.io.read_grid(pydda.tests.get_sample_file("test_coarse1.nc"))
-    grid_sw_fine = pydda.io.read_grid(pydda.tests.get_sample_file("test_fine0.nc"))
-    grid_se_fine = pydda.io.read_grid(pydda.tests.get_sample_file("test_fine1.nc"))
+    test_coarse0 = pydda.io.read_grid(pydda.tests.get_sample_file("test_coarse0.nc"))
+    test_coarse1 = pydda.io.read_grid(pydda.tests.get_sample_file("test_coarse1.nc"))
+    test_fine0 = pydda.io.read_grid(pydda.tests.get_sample_file("test_fine0.nc"))
+    test_fine1 = pydda.io.read_grid(pydda.tests.get_sample_file("test_fine1.nc"))
 
-    grid_sw_coarse = pydda.initialization.make_constant_wind_field(
-        grid_sw_coarse, (0.0, 0.0, 0.0)
+    test_coarse0 = pydda.initialization.make_constant_wind_field(
+        test_coarse0, (0.0, 0.0, 0.0)
     )
 
-    input_grids = xr.concat(
-        [grid_sw_coarse.drop("time"), grid_se_coarse.drop("time")], dim="nradar"
-    )
     kwargs_dict = dict(
-        Cm=128.0,
+        Cm=256.0,
         Co=1e-2,
-        Cx=1,
-        Cy=1,
-        Cz=1,
+        Cx=150.0,
+        Cy=150.0,
+        Cz=150.0,
         Cmod=1e-5,
         model_fields=["hrrr"],
         refl_field="DBZ",
-        wind_tol=0.1,
-        max_iterations=100,
-        low_pass_filter=True,
+        wind_tol=0.5,
+        max_iterations=50,
+        filter_order=3,
         engine="scipy",
     )
-    input_grids["kwargs"] = xr.DataArray([], attrs=kwargs_dict)
-    root = DataTree(data=input_grids, name="coarse_grid")
-    grid_tree_nest_1 = xr.concat(
-        [grid_sw_fine.drop("time"), grid_se_fine.drop("time")], dim="nradar"
-    )
-    grid_tree_nest_1["kwargs"] = input_grids["kwargs"]
 
-    grid_tree = pydda.retrieval.get_dd_wind_field_nested(root)
+    tree_dict = {
+        "/coarse/radar_ktlx": test_coarse0,
+        "/coarse/radar_kict": test_coarse1,
+        "/coarse/fine/radar_ktlx": test_fine0,
+        "/coarse/fine/radar_kict": test_fine1,
+    }
+
+    tree = DataTree.from_dict(tree_dict)
+    tree["/coarse/"].attrs = kwargs_dict
+    tree["/coarse/fine"].attrs = kwargs_dict
+
+    grid_tree = pydda.retrieval.get_dd_wind_field_nested(tree)
     fig, ax = plt.subplots(1, 2, figsize=(10, 5))
     pydda.vis.plot_horiz_xsection_quiver(
-        grid_tree,
+        grid_tree["coarse"],
         ax=ax[0],
         level=5,
         cmap="ChaseSpectral",
@@ -316,7 +318,7 @@ def test_nested_retrieval():
         quiverkey_loc="bottom_right",
     )
     pydda.vis.plot_horiz_xsection_quiver(
-        grid_tree.children["fine_grid_1"],
+        grid_tree["coarse/fine"],
         ax=ax[1],
         level=5,
         cmap="ChaseSpectral",

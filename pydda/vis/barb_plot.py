@@ -26,8 +26,8 @@ def plot_horiz_xsection_barbs(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -112,9 +112,20 @@ def plot_horiz_xsection_barbs(
         Axis handle to output axis
     """
     if isinstance(Grids, DataTree):
-        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
+        bca_min = math.radians(Grids[rad_names[0]][u_field].attrs["min_bca"])
+        bca_max = math.radians(Grids[rad_names[0]][u_field].attrs["max_bca"])
     else:
         grid_list = Grids
+        bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
+        bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
+
     if bg_grid_no > -1:
         grid_bg = grid_list[bg_grid_no][background_field].values.squeeze()
     else:
@@ -239,9 +250,6 @@ def plot_horiz_xsection_barbs(
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")
 
-    bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
-    bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
-
     if show_lobes is True:
         for i in range(len(grid_list)):
             for j in range(len(grid_list)):
@@ -274,8 +282,8 @@ def plot_horiz_xsection_barbs_map(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -363,9 +371,20 @@ def plot_horiz_xsection_barbs_map(
         Axis handle to output axis
     """
     if isinstance(Grids, DataTree):
-        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
+        bca_min = math.radians(Grids[u_field].attrs["min_bca"])
+        bca_max = math.radians(Grids[u_field].attrs["max_bca"])
     else:
         grid_list = Grids
+        bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
+        bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
+
     if not CARTOPY_AVAILABLE:
         raise ModuleNotFoundError(
             "Cartopy needs to be installed in order to use plotting module!"
@@ -388,14 +407,19 @@ def plot_horiz_xsection_barbs_map(
     grid_h = grid_list[0]["point_altitude"].values / 1e3
     grid_x = grid_list[0]["point_x"].values / 1e3
     grid_y = grid_list[0]["point_y"].values / 1e3
-    grid_lat = grid_list[0].point_latitude["data"][level]
-    grid_lon = grid_list[0].point_longitude["data"][level]
+    grid_lat = grid_list[0].point_latitude.values[level]
+    grid_lon = grid_list[0].point_longitude.values[level]
 
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dy = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = grid_list[0][u_field].values.squeeze()
-    v = grid_list[0][v_field].values.squeeze()
-    w = grid_list[0][w_field].values.squeeze()
+    if isinstance(Grids, DataTree):
+        u = Grids[u_field].values.squeeze()
+        v = Grids[v_field].values.squeeze()
+        w = Grids[w_field].values.squeeze()
+    else:
+        u = grid_list[0][u_field].values.squeeze()
+        v = grid_list[0][v_field].values.squeeze()
+        w = grid_list[0][w_field].values.squeeze()
 
     transform = ccrs.PlateCarree()
     if ax is None:
@@ -561,9 +585,6 @@ def plot_horiz_xsection_barbs_map(
                 RuntimeWarning,
             )
 
-    bca_min = math.radians(grid_list[0][u_field].attrs["min_bca"])
-    bca_max = math.radians(grid_list[0][u_field].attrs["max_bca"])
-
     if show_lobes is True:
         for i in range(len(grid_list)):
             for j in range(len(grid_list)):
@@ -607,8 +628,8 @@ def plot_xz_xsection_barbs(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -690,7 +711,13 @@ def plot_xz_xsection_barbs(
         Axis handle to output axis
     """
     if isinstance(Grids, DataTree):
-        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
     else:
         grid_list = Grids
 
@@ -717,9 +744,14 @@ def plot_xz_xsection_barbs(
     grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dz = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = grid_list[0][u_field].values.squeeze()
-    v = grid_list[0][v_field].values.squeeze()
-    w = grid_list[0][w_field].values.squeeze()
+    if isinstance(Grids, DataTree):
+        u = Grids[u_field].values.squeeze()
+        v = Grids[v_field].values.squeeze()
+        w = Grids[w_field].values.squeeze()
+    else:
+        u = grid_list[0][u_field].values.squeeze()
+        v = grid_list[0][v_field].values.squeeze()
+        w = grid_list[0][w_field].values.squeeze()
 
     if ax is None:
         ax = plt.gca()
@@ -846,8 +878,8 @@ def plot_yz_xsection_barbs(
     background_field="reflectivity",
     level=1,
     cmap="ChaseSpectral",
-    vmin=None,
-    vmax=None,
+    vmin=0,
+    vmax=70,
     u_vel_contours=None,
     v_vel_contours=None,
     w_vel_contours=None,
@@ -928,7 +960,13 @@ def plot_yz_xsection_barbs(
         Axis handle to output axis
     """
     if isinstance(Grids, DataTree):
-        grid_list = [Grids.ds.isel(nradar=i) for i in range(Grids.dims["nradar"])]
+        child_list = list(Grids.children.keys())
+        grid_list = []
+        rad_names = []
+        for child in child_list:
+            if "radar" in child:
+                grid_list.append(Grids[child].to_dataset())
+                rad_names.append(child)
     else:
         grid_list = Grids
 
@@ -951,9 +989,14 @@ def plot_yz_xsection_barbs(
     grid_y = grid_list[0]["point_y"].values / 1e3
     dx = np.diff(grid_x, axis=2)[0, 0, 0]
     dz = np.diff(grid_y, axis=1)[0, 0, 0]
-    u = grid_list[0][u_field].values.squeeze()
-    v = grid_list[0][v_field].values.squeeze()
-    w = grid_list[0][w_field].values.squeeze()
+    if isinstance(Grids, DataTree):
+        u = Grids[u_field].values.squeeze()
+        v = Grids[v_field].values.squeeze()
+        w = Grids[w_field].values.squeeze()
+    else:
+        u = grid_list[0][u_field].values.squeeze()
+        v = grid_list[0][v_field].values.squeeze()
+        w = grid_list[0][w_field].values.squeeze()
 
     if ax is None:
         ax = plt.gca()

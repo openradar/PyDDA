@@ -14,3 +14,7 @@ This is a place to include our user guide.
    retrieving_winds.rst
    optimizing_wind_retrieval.rst
    visualizing_winds.rst
+   retrieving_winds.rst
+   optimizing_wind_retrieval.rst
+   visualizing_winds.rst
+   nesting_wind_retrieval.rst

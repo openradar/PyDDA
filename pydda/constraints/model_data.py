@@ -370,15 +370,28 @@ def make_constraint_from_era5(
     height_flattened = height_ERA[time_step].flatten()
     height_flattened -= Grid["radar_altitude"].values
 
-    u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
-    )
-    v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
-    )
-    w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
-    )
+    if method == "nearest":
+        u_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+        v_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+        w_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    elif method == "linear":
+        u_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+        v_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+        w_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    else:
+        raise NotImplementedError("%s interpolation method not implemented!" % method)
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)

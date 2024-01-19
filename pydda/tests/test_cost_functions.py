@@ -123,9 +123,9 @@ def test_calculate_fall_speed():
     grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
     field_dic = {"data": ref_field, "long_name": "reflectivity", "units": "dBZ"}
     grid.fields = {"reflectivity": field_dic}
-    grid.radar_latitude = {"data": 0}
-    grid.radar_longitude = {"data": 0}
-    grid.radar_altitude = {"data": 0}
+    grid.radar_latitude = {"data": np.array([0])}
+    grid.radar_longitude = {"data": np.array([0])}
+    grid.radar_altitude = {"data": np.array([0])}
     fall_speed = pydda.cost_functions.calculate_fall_speed(
         pydda.io.read_from_pyart_grid(grid), refl_field="reflectivity"
     )
