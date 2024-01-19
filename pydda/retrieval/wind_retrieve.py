@@ -257,7 +257,9 @@ def _get_dd_wind_field_scipy(
         if not np.allclose(g["z"].values, prev_grid["z"].values, atol=10):
             raise ValueError("Grids do not have equal z coordinates!")
 
-        if not g["origin_latitude"].values == prev_grid["origin_latitude"].values:
+        if not np.allclose(
+            g["origin_latitude"].values, prev_grid["origin_latitude"].values
+        ):
             raise ValueError(("Grids have unequal origin lat/lons!"))
 
         prev_grid = g
@@ -515,14 +517,25 @@ def _get_dd_wind_field_scipy(
     bounds = [(-x, x) for x in 100 * np.ones(winds.shape)]
 
     if model_fields is not None:
-        for the_field in model_fields:
+        for i, the_field in enumerate(model_fields):
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            parameters.u_model.append(Grids[0][u_field].values.squeeze())
-            parameters.v_model.append(Grids[0][v_field].values.squeeze())
-            parameters.w_model.append(Grids[0][w_field].values.squeeze())
+            parameters.u_model.append(np.nan_to_num(Grids[0][u_field].values.squeeze()))
+            parameters.v_model.append(np.nan_to_num(Grids[0][v_field].values.squeeze()))
+            parameters.w_model.append(np.nan_to_num(Grids[0][w_field].values.squeeze()))
 
+            # Don't weigh in where model data unavailable
+            where_finite_u = np.isfinite(Grids[0][u_field].values.squeeze())
+            where_finite_v = np.isfinite(Grids[0][v_field].values.squeeze())
+            where_finite_w = np.isfinite(Grids[0][w_field].values.squeeze())
+            parameters.model_weights[i, :, :, :] = np.where(
+                np.logical_and.reduce((where_finite_u, where_finite_v, where_finite_w)),
+                1,
+                0,
+            )
+
+    print("Total number of model points: %d" % np.sum(parameters.model_weights))
     parameters.Co = Co
     parameters.Cm = Cm
     parameters.Cx = Cx
@@ -793,7 +806,9 @@ def _get_dd_wind_field_tensorflow(
         if not np.allclose(g["z"].values, prev_grid["z"].values, atol=10):
             raise ValueError("Grids do not have equal z coordinates!")
 
-        if not g["origin_latitude"].values == prev_grid["origin_latitude"].values:
+        if not np.allclose(
+            g["origin_latitude"].values, prev_grid["origin_latitude"].values
+        ):
             raise ValueError(("Grids have unequal origin lat/lons!"))
 
         prev_grid = g
@@ -1039,7 +1054,7 @@ def _get_dd_wind_field_tensorflow(
     parameters.wts = [
         tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.wts
     ]
-    parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float32)
+
     parameters.weights[~np.isfinite(parameters.weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     for i in range(len(Grids)):
@@ -1078,13 +1093,31 @@ def _get_dd_wind_field_tensorflow(
     [(-x, x) for x in 100.0 * np.ones(winds.shape)]
 
     if model_fields is not None:
-        for the_field in model_fields:
+        for i, the_field in enumerate(model_fields):
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            parameters.u_model.append(tf.constant(Grids[0][u_field].values.squeeze()))
-            parameters.v_model.append(tf.constant(Grids[0][v_field].values.squeeze()))
-            parameters.w_model.append(tf.constant(Grids[0][w_field].values.squeeze()))
+            parameters.u_model.append(
+                tf.constant(np.nan_to_num(Grids[0][u_field].values.squeeze()))
+            )
+            parameters.v_model.append(
+                tf.constant(np.nan_to_num(Grids[0][v_field].values.squeeze()))
+            )
+            parameters.w_model.append(
+                tf.constant(np.nan_to_num(Grids[0][w_field].values.squeeze()))
+            )
+
+            # Don't weigh in where model data unavailable
+            where_finite_u = np.isfinite(Grids[0][u_field].values.squeeze())
+            where_finite_v = np.isfinite(Grids[0][v_field].values.squeeze())
+            where_finite_w = np.isfinite(Grids[0][w_field].values.squeeze())
+            parameters.model_weights[i, :, :, :] = np.where(
+                np.logical_and.reduce((where_finite_u, where_finite_v, where_finite_w)),
+                1,
+                0,
+            )
+
+    parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float32)
 
     parameters.Co = Co
     parameters.Cm = Cm

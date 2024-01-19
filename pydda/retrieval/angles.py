@@ -113,7 +113,7 @@ def add_azimuth_as_field(grid, az_name="AZ", bad=-32768):
         grid["radar_latitude"].values[0],
         grid["radar_longitude"].values[0],
         grid["point_latitude"].values,
-        grid["radar_longitude"].values,
+        grid["point_longitude"].values,
     )
 
     az = np.ma.masked_invalid(az)
@@ -148,7 +148,7 @@ def add_elevation_as_field(grid, el_name="EL"):
         grid["radar_latitude"].values[0],
         grid["radar_longitude"].values[0],
         grid["point_latitude"].values,
-        grid["radar_longitude"].values,
+        grid["point_longitude"].values,
     )
     h3 = 0.0 * gr
     for i in range(len(grid.z.values)):

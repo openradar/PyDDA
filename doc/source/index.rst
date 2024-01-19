@@ -33,9 +33,13 @@ of parallelism we recommend:
 ::
 
 While PyDDA will work on less than this, you may run into performance issues.
-In addition, we do not support Python versions less than 3.6.
+In addition, we do not support Python versions less than 3.9.
 If you have an older version installed, PyDDA may work just fine but we will
-not provide support for any issues unless you are using at least Python 3.6.
+not provide support for any issues unless you are using at least Python 3.9.
+
+In addition, we highly recommend a CUDA-compatible GPU when using the Jax or
+TensorFlow engines so that PyDDA can use GPU acceleration to perform the retrieval.
+This can provide a 10x or more speedup when running retrievals.
 
 =========================
 Installation instructions
@@ -45,16 +49,6 @@ The GitHub repository for PyDDA is available at:
 
 `<https://github.com/openradar/PyDDA>`_
 
-Before you install PyDDA, ensure that the following dependencies are installed:
-::
-
-    Python 3.6+
-    Py-ART 1.9.0+
-    scipy 1.0.1+
-    numpy 1.13.1+
-    matplotlib 1.5.3+
-    cartopy 0.16.0+
-::
 
 In order to use the HRRR data constraint, cfgrib needs to be installed. `cfgrib
 <http://github.com/ecmwf/cfgrib>`_ currently only works on Mac OS and Linux, so
@@ -98,12 +92,19 @@ just type in the following commands assuming you have the above dependencies ins
 
 Finally, PyDDA now supports using `Jax <jax.readthedocs.io>`_ and `TensorFlow <tensorflow.org>`_
 for solving the three dimensional wind field. PyDDA requries TensorFlow 2.6 and the
-tensorflow-probability package for TensorFlow to be enabled. Both the Jax and
-TensorFlow-based engines now use automatic differentiation to solve for the gradients
-of each cost function. This therefore will create gradients that are less susceptible
-to boundary artifacts and rounding errors. In addition, both of these packages can
-utilize CUDA-enabled GPUs for much faster processing. These two
+tensorflow-probability package for TensorFlow to be enabled.
+In addition, both of these packages can utilize CUDA-enabled GPUs for much faster processing. These two
 dependencies are optional as the user can still use PyDDA with the SciPy ecosystem.
+The Jax optimizer uses the same optimizer as SciPy's (`L-BFGS-B <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_).
+
+
+Known issues
+============
+
+The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that the
+the wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
+result in numerical instability, so it is recommended that the user test out both Jax and TensorFlow
+if they desire GPU-accelerated retrievals.
 
 Contents:
 

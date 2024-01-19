@@ -19,7 +19,7 @@ how to call these functions.
     get_bca
     DDParameters
     get_dd_wind_field_nested
-    make_initalization_from_other_grid
+    make_initialization_from_other_grid
 """
 
 from .wind_retrieve import get_dd_wind_field

@@ -17,7 +17,7 @@ except ImportError:
 from netCDF4 import Dataset
 from datetime import datetime, timedelta
 from scipy.interpolate import interp1d, griddata
-from scipy.interpolate import NearestNDInterpolator
+from scipy.interpolate import NearestNDInterpolator, LinearNDInterpolator
 from copy import deepcopy
 
 try:
@@ -29,7 +29,11 @@ except ImportError:
 
 
 def make_initialization_from_era5(
-    Grid, file_name=None, vel_field=None, dest_era_file=None
+    Grid,
+    file_name=None,
+    vel_field=None,
+    dest_era_file=None,
+    method="nearest",
 ):
     """
     Written by: Hamid Ali Syed and Bobby Jackson
@@ -64,6 +68,9 @@ def make_initialization_from_era5(
     dest_era_file:
         If this is not None, PyDDA will save the interpolated grid
         into this file.
+    method: str
+        Interpolation method: 'nearest' for nearest neighbor,
+        'linear' for linear.
     Returns
     -------
     new_Grid: Py-ART Grid
@@ -217,15 +224,28 @@ def make_initialization_from_era5(
     height_flattened = height_ERA[time_step].flatten()
     height_flattened -= Grid.radar_altitude.values
 
-    u_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
-    )
-    v_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
-    )
-    w_interp = NearestNDInterpolator(
-        (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
-    )
+    if method == "nearest":
+        u_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+        v_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+        w_interp = NearestNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    elif method == "linear":
+        u_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), u_flattened, rescale=True
+        )
+        v_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), v_flattened, rescale=True
+        )
+        w_interp = LinearNDInterpolator(
+            (height_flattened, lat_flattened, lon_flattened), w_flattened, rescale=True
+        )
+    else:
+        raise NotImplementedError("%s interpolation method not implemented!" % method)
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     v_new = v_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
     w_new = w_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
@@ -484,7 +504,7 @@ def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     return Grid
 
 
-def make_intialization_from_hrrr(Grid, file_path):
+def make_intialization_from_hrrr(Grid, file_path, method="linear"):
     """
     This function will read an HRRR GRIB2 file and return initial guess
     u, v, and w fields from the model
@@ -496,6 +516,9 @@ def make_intialization_from_hrrr(Grid, file_path):
     will be interpolated to the Grid's specficiation and added as a field.
     file_path: string
         The path to the GRIB2 file to load.
+    method: str
+        Interpolation method: 'nearest' for nearest neighbor,
+        'linear' for linear.
 
     Returns
     -------
