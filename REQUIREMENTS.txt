@@ -9,4 +9,4 @@ pooch
 cmweather
 cdsapi
 xarray
-datatree
+xarray-datatree
