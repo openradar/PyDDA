@@ -390,7 +390,7 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
             jnp.abs(z - the_point["z"]) < roi,
         )
         J += jnp.sum(
-            ((u[the_box] - the_point["u"]) ** 2 + (v[the_box] - the_point["v"]) ** 2)
+            ((u * the_box - the_point["u"]) ** 2 + (v * the_box - the_point["v"]) ** 2)
         )
 
     return J * Cp
