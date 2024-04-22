@@ -27,3 +27,4 @@ dependencies:
   - sphinx-gallery
   - sphinx-copybutton
   - sphinx-design
+  - datatree
