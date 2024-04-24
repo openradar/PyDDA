@@ -11,14 +11,23 @@ def get_dd_wind_field_nested(grid_tree: DataTree, **kwargs):
     """
     Does a wind retrieval over nested grids. The nested grids are created using PyART's
     :func:`pyart.map.grid_from_radars` function and then placed into a tree structure using
-    dictionaries. Each node of the tree has three parameters:
-    'input_grids': The list of PyART grids for the given level of the grid
-    'kwargs': The list of key word arguments for input to the get_dd_wind_field function for the set of grids.
-    If this is None, then the default keyword arguments are carried from the keyword arguments of this function.
-    'children': The list of trees that are the children of this node.
+    :func:`dataTree`s. Each node of the tree has three parameters:
+    .. list-table:: Title
+        :widths: 25 100
+        :header-rows: 1
+
+        * - Dictionary key
+          - Description
+        * - input_grids
+          - The list of PyART grids for the given level of the grid
+        * - kwargs
+          - The list of key word arguments for input to the :py:func:`pydda.retrieval.get_dd_wind_field` function for the set of grids.
+        * - children
+          - The list of trees that are the children of this node.
 
     The function will output the same tree, with the list of output grids of each level output to the 'output_grids'
-    member of the tree structure.
+    member of the tree structure. If *kwargs* is set to None, then the input keyword arguments will be
+    used throughout the retrieval.
     """
 
     # Look for radars in current level
