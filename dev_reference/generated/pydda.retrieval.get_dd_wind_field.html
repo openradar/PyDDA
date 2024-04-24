@@ -43,7 +43,7 @@
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script async="async" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -447,7 +447,7 @@ PyDDA will use the w field in the first Grid as the initalization.</p></li>
 Using Tensorflow or Jax expands PyDDA’s capabiability to take advantage of GPU-based systems.
 In addition, these two implementations use automatic differentation to calculate the gradient
 of the cost function in order to optimize the gradient calculation.
-TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-basedengine.
+TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-based engine.
 The latest version of Jax is required for the Jax-based engine.</p></li>
 <li><p><strong>points</strong> (<em>None or list of dicts</em>) – Point observations as returned by <a class="reference internal" href="pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs" title="pydda.constraints.get_iem_obs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.constraints.get_iem_obs()</span></code></a>. Set
 to None to disable.</p></li>
@@ -504,9 +504,9 @@ commonly called the impermeability condition.</p></li>
 <li><p><strong>model_fields</strong> (<em>list of strings</em>) – The list of fields in the first grid in Grids that contain the custom
 data interpolated to the Grid’s grid specification. Helper functions
 to create such gridded fields for HRRR and NetCDF WRF data exist
-in ::pydda.constraints::. PyDDA will look for fields named U_(model
-field name), V_(model field name), and W_(model field name). For
-example, if you have U_hrrr, V_hrrr, and W_hrrr, then specify [“hrrr”]
+in <a class="reference internal" href="../index.html#module-pydda.constraints" title="pydda.constraints"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.constraints()</span></code></a>. PyDDA will look for fields named <em>U_(model
+field name)</em>, <em>V_(model field name)</em>, and <em>W_(model field name)</em>. For
+example, if you have <em>U_hrrr</em>, <em>V_hrrr</em>, and <em>W_hrrr</em>, then specify <em>[“hrrr”]</em>
 into model_fields.</p></li>
 <li><p><strong>output_cost_functions</strong> (<em>bool</em>) – Set to True to output the value of each cost function every
 10 iterations.</p></li>
@@ -515,8 +515,8 @@ not hold any weight outside this radius.</p></li>
 <li><p><strong>parallel_iterations</strong> (<em>int</em>) – The number of iterations to run in parallel in the optimization loop.
 This is only for the TensorFlow-based engine.</p></li>
 <li><p><strong>wind_tol</strong> (<em>float</em>) – Stop iterations after maximum change in winds is less than this value.</p></li>
-<li><p><strong>tolerance</strong> (<em>float</em>) – Tolerance for L2 norm of gradient before stopping.</p></li>
-<li><p><strong>max_wind_magnitude</strong> (<em>float</em>) – Constrain the optimization to have <span class="math notranslate nohighlight">\(|u|, :math:`|w|\)</span>, and <span class="math notranslate nohighlight">\(|w| &lt; x\)</span> m/s.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – Tolerance for <span class="math notranslate nohighlight">\(L_{2}\)</span> norm of gradient before stopping.</p></li>
+<li><p><strong>max_wind_magnitude</strong> (<em>float</em>) – Constrain the optimization to have <span class="math notranslate nohighlight">\(|u|\)</span>, <span class="math notranslate nohighlight">\(|w|\)</span>, and <span class="math notranslate nohighlight">\(|w| &lt; x\)</span> m/s.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -625,7 +625,7 @@ are displayable by the visualization module.</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>

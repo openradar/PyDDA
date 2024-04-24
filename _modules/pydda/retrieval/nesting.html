@@ -42,7 +42,7 @@
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/retrieval/nesting';</script>
@@ -361,14 +361,23 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Does a wind retrieval over nested grids. The nested grids are created using PyART&#39;s</span>
 <span class="sd">    :func:`pyart.map.grid_from_radars` function and then placed into a tree structure using</span>
-<span class="sd">    dictionaries. Each node of the tree has three parameters:</span>
-<span class="sd">    &#39;input_grids&#39;: The list of PyART grids for the given level of the grid</span>
-<span class="sd">    &#39;kwargs&#39;: The list of key word arguments for input to the get_dd_wind_field function for the set of grids.</span>
-<span class="sd">    If this is None, then the default keyword arguments are carried from the keyword arguments of this function.</span>
-<span class="sd">    &#39;children&#39;: The list of trees that are the children of this node.</span>
+<span class="sd">    :func:`dataTree`s. Each node of the tree has three parameters:</span>
+<span class="sd">    .. list-table:: Title</span>
+<span class="sd">        :widths: 25 100</span>
+<span class="sd">        :header-rows: 1</span>
+
+<span class="sd">        * - Dictionary key</span>
+<span class="sd">          - Description</span>
+<span class="sd">        * - input_grids</span>
+<span class="sd">          - The list of PyART grids for the given level of the grid</span>
+<span class="sd">        * - kwargs</span>
+<span class="sd">          - The list of key word arguments for input to the :py:func:`pydda.retrieval.get_dd_wind_field` function for the set of grids.</span>
+<span class="sd">        * - children</span>
+<span class="sd">          - The list of trees that are the children of this node.</span>
 
 <span class="sd">    The function will output the same tree, with the list of output grids of each level output to the &#39;output_grids&#39;</span>
-<span class="sd">    member of the tree structure.</span>
+<span class="sd">    member of the tree structure. If *kwargs* is set to None, then the input keyword arguments will be</span>
+<span class="sd">    used throughout the retrieval.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Look for radars in current level</span>
@@ -742,7 +751,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>

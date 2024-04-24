@@ -43,7 +43,7 @@
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="../_static/documentation_options.js?v=51b770b3"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script async="async" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -417,7 +417,7 @@ document.write(`
 <dd class="field-odd"><p>2.0.0</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Jan 19, 2024</p>
+<dd class="field-even"><p>Apr 24, 2024</p>
 </dd>
 </dl>
 <p>This is the developer reference guide for PyDDA which covers most of the
@@ -541,7 +541,7 @@ how to call these functions.</p>
 <td><p>This is a helper class for inserting more arguments into the <a class="reference internal" href="generated/pydda.cost_functions.J_function.html#pydda.cost_functions.J_function" title="pydda.cost_functions.J_function"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.J_function()</span></code></a> and <a class="reference internal" href="generated/pydda.cost_functions.grad_J.html#pydda.cost_functions.grad_J" title="pydda.cost_functions.grad_J"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.cost_functions.grad_J()</span></code></a> function.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.retrieval.get_dd_wind_field_nested.html#pydda.retrieval.get_dd_wind_field_nested" title="pydda.retrieval.get_dd_wind_field_nested"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dd_wind_field_nested</span></code></a>(grid_tree, **kwargs)</p></td>
-<td><p>Does a wind retrieval over nested grids.</p></td>
+<td><p>Does a wind retrieval over nested grids. The nested grids are created using PyART's <code class="xref py py-func docutils literal notranslate"><span class="pre">pyart.map.grid_from_radars()</span></code> function and then placed into a tree structure using :func:<a href="#id1"><span class="problematic" id="id2">`</span></a>dataTree`s. Each node of the tree has three parameters: .. list-table:: Title     :widths: 25 100     :header-rows: 1.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.retrieval.make_initialization_from_other_grid.html#pydda.retrieval.make_initialization_from_other_grid" title="pydda.retrieval.make_initialization_from_other_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_initialization_from_other_grid</span></code></a>(...[, ...])</p></td>
 <td><p>This function will create an initaliation by interpolating a wind field from a grid with a different specification than the analysis grid.</p></td>
@@ -781,7 +781,7 @@ simply add (name) into the model_fields option of
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>
