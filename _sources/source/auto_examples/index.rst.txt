@@ -13,6 +13,24 @@ In this section, we show different examples on:
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to retrieve winds in Hurricane Florence. In this example, we use data...">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_hurricane_florence_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_source_auto_examples_plot_hurricane_florence.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Example on integrating radar and HRRR data</div>
+    </div>
+
 
 .. raw:: html
 
@@ -50,14 +68,35 @@ In this section, we show different examples on:
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example on how to use PyDDA&#x27;s ability to handle nested grids using xarray DataTrees....">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_grid_nesting_example_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_source_auto_examples_plot_grid_nesting_example.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Guide and example on how to use nested grids with DataTrees</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
     </div>
 
 
 .. toctree::
    :hidden:
 
+   /source/auto_examples/plot_hurricane_florence
    /source/auto_examples/plot_sydney_tornado
    /source/auto_examples/plot_examples
+   /source/auto_examples/plot_grid_nesting_example
 
 
 .. only:: html
