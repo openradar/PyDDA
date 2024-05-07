@@ -598,7 +598,6 @@ def grad_J(winds, parameters):
                 parameters.point_list,
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
-                upper_bc=parameters.upper_bc,
             )
         # Let's see if we need to enforce strong boundary conditions
         if parameters.const_boundary_cond is True:
