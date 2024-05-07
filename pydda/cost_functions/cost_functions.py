@@ -438,7 +438,6 @@ def grad_J(winds, parameters):
                 parameters.point_list,
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
-                upper_bc=parameters.upper_bc,
             )
         if parameters.const_boundary_cond is True:
             grad = tf.reshape(
