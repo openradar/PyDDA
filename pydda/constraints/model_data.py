@@ -347,7 +347,7 @@ def make_constraint_from_era5(
 
     time_step = np.argmin(np.abs(base_time - grid_time))
 
-    height_ERA = ERA_grid.variables["z"][:]
+    height_ERA = ERA_grid.variables["z"][:] / 9.8
     u_ERA = ERA_grid.variables["u"][:]
     v_ERA = ERA_grid.variables["v"][:]
     w_ERA = ERA_grid.variables["w"][:]
