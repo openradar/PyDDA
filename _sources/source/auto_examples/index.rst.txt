@@ -17,7 +17,7 @@ In this section, we show different examples on:
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to retrieve winds in Hurricane Florence. In this example, we use data...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to retrieve winds in Hurricane Florence. In this example, we use data from 2 NEXRAD radars as well as from the HRRR to retrieve the winds">
 
 .. only:: html
 
@@ -68,7 +68,7 @@ In this section, we show different examples on:
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is an example on how to use PyDDA&#x27;s ability to handle nested grids using xarray DataTrees....">
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example on how to use PyDDA&#x27;s ability to handle nested grids using xarray DataTrees. In this example, we load radars with two pre-generated Cf/Radial grid. The fine grids are higher resolution grids that are contained within the coarser grid.">
 
 .. only:: html
 
