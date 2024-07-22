@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
+  - python>=3.10
   - pip
   - arm_pyart
   - cython
