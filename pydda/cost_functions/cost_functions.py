@@ -23,7 +23,7 @@ from . import _cost_functions_numpy
 from . import _cost_functions_tensorflow
 
 
-def J_function(winds, parameters):
+def J_function(winds, parameters, ref_series=None, time_series=None, print_cost=False):
     """
     Calculates the total cost function. This typically does not need to be
     called directly as get_dd_wind_field is a wrapper around this function and
@@ -45,15 +45,21 @@ def J_function(winds, parameters):
     J: float
         The value of the cost function
     """
+    if parameters.Cd > 0:
+        num_vars = 6
+    else:
+        num_vars = 3
+
     if parameters.engine == "tensorflow":
         if not TENSORFLOW_AVAILABLE:
             raise ImportError(
                 "Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"
             )
+
         winds = tf.reshape(
             winds,
             (
-                3,
+                num_vars,
                 parameters.grid_shape[0],
                 parameters.grid_shape[1],
                 parameters.grid_shape[2],
@@ -165,7 +171,7 @@ def J_function(winds, parameters):
         winds = np.reshape(
             winds,
             (
-                3,
+                num_vars,
                 parameters.grid_shape[0],
                 parameters.grid_shape[1],
                 parameters.grid_shape[2],
@@ -272,45 +278,67 @@ def J_function(winds, parameters):
             )
         else:
             Jpoint = 0
+
+        if parameters.Cd > 0:
+            Jd = _cost_functions_numpy.calc_advection_diffusion_cost(
+                winds[0],
+                winds[1],
+                winds[2],
+                winds[3],
+                winds[4],
+                winds[5],
+                parameters.dx,
+                parameters.dy,
+                parameters.dz,
+                parameters.ref_series,
+                parameters.time_series,
+                coeff=parameters.Cd,
+            )
+        else:
+            Jd = 0
     elif parameters.engine == "jax":
         return J_function_jax(winds, parameters)
 
-    if parameters.Nfeval % 10 == 0:
-        print(
-            (
-                "Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |"
-                + " Max w  "
-            )
-        )
-        print(
-            (
-                "{:7d}".format(int(parameters.Nfeval))
-                + "|"
-                + "{:9.4f}".format(float(Jvel))
-                + "|"
-                + "{:9.4f}".format(float(Jmass))
-                + "|"
-                + "{:9.4f}".format(float(Jsmooth))
-                + "|"
-                + "{:9.4f}".format(float(Jbackground))
-                + "|"
-                + "{:9.4f}".format(float(Jvorticity))
-                + "|"
-                + "{:9.4f}".format(float(Jmod))
-                + "|"
-                + "{:9.4f}".format(float(Jpoint))
-                + "|"
-                + "{:9.4f}".format(np.ma.max(np.ma.abs(winds[2])))
-            )
-        )
+    if print_cost is True:
+        header_string = "Niter  "
+        format_string = "{:7d}".format(int(parameters.Nfeval)) + "|"
+        if parameters.Co > 0:
+            header_string += "| Jvel     "
+            format_string += "{:7.4e}".format(float(Jvel)) + "|"
 
-    parameters.Nfeval += 1
-    # print("The cost functions print", Jvel + Jmass)
+        if parameters.Cm > 0:
+            header_string += "| Jmass    "
+            format_string += "{:7.4e}".format(float(Jmass)) + "|"
 
-    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod + Jpoint
+        if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
+            header_string += "| Js       "
+            format_string += "{:7.4e}".format(float(Jsmooth)) + "|"
+
+        if parameters.Cb > 0:
+            header_string += "| Jbg      "
+            format_string += "{:7.4e}".format(float(Jbackground)) + "|"
+
+        if parameters.Cv > 0:
+            header_string += "| Jvort    "
+            format_string += "{:7.4e}".format(float(Jvorticity)) + "|"
+
+        if parameters.Cmod > 0:
+            header_string += "| Jmodel   "
+            format_string += "{:7.4e}".format(float(Jmod)) + "|"
+
+        if parameters.Cpoint > 0:
+            header_string += "| Jpoint   "
+            format_string += "{:7.4e}".format(float(Jpoint)) + "|"
+        if parameters.Cd > 0:
+            header_string += "| Jd       "
+            format_string += "{:7.4e}".format(float(Jd)) + "|"
+        print(header_string)
+        print(format_string)
+
+    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod + Jpoint + Jd
 
 
-def grad_J(winds, parameters):
+def grad_J(winds, parameters, ref_series=None, time_series=None, print_grad=False):
     """
     Calculates the gradient of the cost function. This typically does not need
     to be called directly as get_dd_wind_field is a wrapper around this
@@ -325,12 +353,22 @@ def grad_J(winds, parameters):
     parameters: DDParameters
         The parameters for the cost function evaluation as specified by the
         :py:func:`pydda.retrieve.DDParameters` class.
+    ref_series: 4-D float array
+        The reflectivity (or radial velocity) time series
+        for the advection-diffusion cost function.
+        The array shape is num_times * nz * ny * nx.
+    time_series: 1-D float array
+        Time in seconds since the epoch for each timestep in `ref_series`.
 
     Returns
     -------
     grad: 1D float array
         Gradient vector of cost function
     """
+    if parameters.Cd > 0:
+        num_vars = 6
+    else:
+        num_vars = 3
     if parameters.engine == "tensorflow":
         if not TENSORFLOW_AVAILABLE:
             raise ImportError(
@@ -364,7 +402,8 @@ def grad_J(winds, parameters):
         )
 
         if parameters.Cm > 0:
-            grad += _cost_functions_tensorflow.calculate_mass_continuity_gradient(
+            print(grad.shape)
+            add = _cost_functions_tensorflow.calculate_mass_continuity_gradient(
                 winds[0],
                 winds[1],
                 winds[2],
@@ -376,6 +415,8 @@ def grad_J(winds, parameters):
                 upper_bc=parameters.upper_bc,
                 lower_bc=parameters.lower_bc,
             )
+            print(add.shape)
+            grad = grad + add
 
         if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
             grad += _cost_functions_tensorflow.calculate_smoothness_gradient(
@@ -500,16 +541,20 @@ def grad_J(winds, parameters):
             )
             grad = tf.reshape(grad, [-1])
     elif parameters.engine == "scipy":
+        grad = np.zeros((num_vars * np.prod(parameters.grid_shape),), dtype="float32")
         winds = np.reshape(
             winds,
             (
-                3,
+                num_vars,
                 parameters.grid_shape[0],
                 parameters.grid_shape[1],
                 parameters.grid_shape[2],
             ),
         )
-        grad = _cost_functions_numpy.calculate_grad_radial_vel(
+        final_ind = 3 * np.prod(parameters.grid_shape)
+        grad[0:final_ind] = grad[
+            0:final_ind
+        ] + _cost_functions_numpy.calculate_grad_radial_vel(
             parameters.vrs,
             parameters.els,
             parameters.azs,
@@ -522,9 +567,9 @@ def grad_J(winds, parameters):
             coeff=parameters.Co,
             upper_bc=parameters.upper_bc,
         )
-
+        normV = np.linalg.norm(grad[0:final_ind], 2)
         if parameters.Cm > 0:
-            grad += _cost_functions_numpy.calculate_mass_continuity_gradient(
+            add = _cost_functions_numpy.calculate_mass_continuity_gradient(
                 winds[0],
                 winds[1],
                 winds[2],
@@ -535,9 +580,10 @@ def grad_J(winds, parameters):
                 coeff=parameters.Cm,
                 upper_bc=parameters.upper_bc,
             )
-
+            normM = np.linalg.norm(add, 2)
+            grad[0:final_ind] += add
         if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
-            grad += _cost_functions_numpy.calculate_smoothness_gradient(
+            add = _cost_functions_numpy.calculate_smoothness_gradient(
                 winds[0],
                 winds[1],
                 winds[2],
@@ -549,9 +595,11 @@ def grad_J(winds, parameters):
                 Cz=parameters.Cz,
                 upper_bc=parameters.upper_bc,
             )
+            normS = np.linalg.norm(add, 2)
+            grad[0:final_ind] += add
 
         if parameters.Cb > 0:
-            grad += _cost_functions_numpy.calculate_background_gradient(
+            add = _cost_functions_numpy.calculate_background_gradient(
                 winds[0],
                 winds[1],
                 winds[2],
@@ -560,9 +608,11 @@ def grad_J(winds, parameters):
                 parameters.v_back,
                 parameters.Cb,
             )
+            normB = np.linalg.norm(add, 2)
+            grad[0:final_ind] += add
 
         if parameters.Cv > 0:
-            grad += _cost_functions_numpy.calculate_vertical_vorticity_gradient(
+            add = _cost_functions_numpy.calculate_vertical_vorticity_gradient(
                 winds[0],
                 winds[1],
                 winds[2],
@@ -574,9 +624,10 @@ def grad_J(winds, parameters):
                 coeff=parameters.Cv,
                 upper_bc=parameters.upper_bc,
             )
-
+            normV = np.linalg.norm(add, 2)
+            grad[0:final_ind] += add
         if parameters.Cmod > 0:
-            grad += _cost_functions_numpy.calculate_model_gradient(
+            add = _cost_functions_numpy.calculate_model_gradient(
                 winds[0],
                 winds[1],
                 winds[2],
@@ -586,9 +637,11 @@ def grad_J(winds, parameters):
                 parameters.w_model,
                 coeff=parameters.Cmod,
             )
+            normMod = np.linalg.norm(add, 2)
+            grad[0:final_ind] += add
 
         if parameters.Cpoint > 0:
-            grad += _cost_functions_numpy.calculate_point_gradient(
+            add = _cost_functions_numpy.calculate_point_gradient(
                 winds[0],
                 winds[1],
                 parameters.x,
@@ -598,12 +651,32 @@ def grad_J(winds, parameters):
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
             )
+            normP = np.linalg.norm(add, 2)
+            grad[0:final_ind] += add
+        if parameters.Cd > 0:
+            add = _cost_functions_numpy.calc_advection_diffusion_gradient(
+                winds[0],
+                winds[1],
+                winds[2],
+                winds[3],
+                winds[4],
+                winds[5],
+                parameters.dx,
+                parameters.dy,
+                parameters.dz,
+                parameters.ref_series,
+                parameters.time_series,
+                coeff=parameters.Cd,
+            )
+            normD = np.linalg.norm(add, 2)
+            grad += add
+
         # Let's see if we need to enforce strong boundary conditions
         if parameters.const_boundary_cond is True:
             grad = np.reshape(
                 grad,
                 (
-                    3,
+                    num_vars,
                     parameters.grid_shape[0],
                     parameters.grid_shape[1],
                     parameters.grid_shape[2],
@@ -620,7 +693,7 @@ def grad_J(winds, parameters):
             grad = jnp.reshape(
                 grad,
                 (
-                    3,
+                    num_vars,
                     parameters.grid_shape[0],
                     parameters.grid_shape[1],
                     parameters.grid_shape[2],
@@ -633,19 +706,56 @@ def grad_J(winds, parameters):
             grad = grad.flatten()
         return grad
 
-    if parameters.Nfeval % 10 == 0:
-        print("The gradient of the cost functions is", str(np.linalg.norm(grad, 2)))
+    if print_grad is True:
+        print("|gradJ| = %5.4e" % np.linalg.norm(grad, 2))
+        header_string = "Niter  "
+        format_string = "{:7d}".format(int(parameters.Nfeval)) + "|"
+        if parameters.Co > 0:
+            header_string += "| gradJvel "
+            format_string += "{:7.4e}".format(float(normV)) + "|"
+
+        if parameters.Cm > 0:
+            header_string += "| gJmass   "
+            format_string += "{:7.4e}".format(float(normM)) + "|"
+
+        if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
+            header_string += "| gradJs   "
+            format_string += "{:7.4e}".format(float(normS)) + "|"
+
+        if parameters.Cb > 0:
+            header_string += "| gradJbg  "
+            format_string += "{:7.4e}".format(float(normB)) + "|"
+
+        if parameters.Cv > 0:
+            header_string += "| gJvort   "
+            format_string += "{:7.4e}".format(float(normV)) + "|"
+
+        if parameters.Cmod > 0:
+            header_string += "| gJmodel  "
+            format_string += "{:7.4e}".format(float(normMod)) + "|"
+
+        if parameters.Cpoint > 0:
+            header_string += "| gJpoint  "
+            format_string += "{:7.4e}".format(float(normP)) + "|"
+        if parameters.Cd > 0:
+            header_string += "| gradJd   "
+            format_string += "{:7.4e}".format(float(normD)) + "|"
+        print(header_string)
+        print(format_string)
     return grad
 
 
-def J_function_jax(winds, parameters):
+def J_function_jax(winds, parameters, print_cost=False):
     if not JAX_AVAILABLE:
         raise ImportError("Jax is needed in order to use the Jax-based PyDDA!")
-
+    if parameters.Cd > 0:
+        num_vars = 6
+    else:
+        num_vars = 3
     winds = jnp.reshape(
         winds,
         (
-            3,
+            num_vars,
             parameters.grid_shape[0],
             parameters.grid_shape[1],
             parameters.grid_shape[2],
@@ -752,35 +862,62 @@ def J_function_jax(winds, parameters):
     else:
         Jpoint = 0
 
-    return Jvel + Jsmooth + Jmass + Jmod + Jpoint + Jvorticity + Jbackground
+    if parameters.Cd > 0:
+        Jd = _cost_functions_jax.calc_advection_diffusion_cost(
+            winds[0],
+            winds[1],
+            winds[2],
+            winds[3],
+            winds[4],
+            winds[5],
+            parameters.dx,
+            parameters.dy,
+            parameters.dz,
+            parameters.ref_series,
+            parameters.time_series,
+            coeff=parameters.Cd,
+        )
+    else:
+        Jd = 0
+
+    return Jvel + Jsmooth + Jmass + Jmod + Jpoint + Jvorticity + Jbackground + Jd
 
 
-def grad_jax(winds, parameters):
+def grad_jax(winds, parameters, print_grad=False):
+    if parameters.Cd > 0:
+        num_vars = 6
+    else:
+        num_vars = 3
     winds = jnp.reshape(
         winds,
         (
-            3,
+            num_vars,
             parameters.grid_shape[0],
             parameters.grid_shape[1],
             parameters.grid_shape[2],
         ),
     )
-    grad = _cost_functions_jax.calculate_grad_radial_vel(
-        parameters.vrs,
-        parameters.els,
-        parameters.azs,
-        winds[0],
-        winds[1],
-        winds[2],
-        parameters.wts,
-        parameters.weights,
-        parameters.rmsVr,
-        coeff=parameters.Co,
-        upper_bc=parameters.upper_bc,
+    grad = jnp.zeros((num_vars * np.prod(parameters.grid_shape),), dtype="float32")
+
+    final_ind = 3 * np.prod(parameters.grid_shape)
+    grad = grad.at[0:final_ind].add(
+        _cost_functions_jax.calculate_grad_radial_vel(
+            parameters.vrs,
+            parameters.els,
+            parameters.azs,
+            winds[0],
+            winds[1],
+            winds[2],
+            parameters.wts,
+            parameters.weights,
+            parameters.rmsVr,
+            coeff=parameters.Co,
+            upper_bc=parameters.upper_bc,
+        )
     )
 
     if parameters.Cm > 0:
-        grad += _cost_functions_jax.calculate_mass_continuity_gradient(
+        add = _cost_functions_jax.calculate_mass_continuity_gradient(
             winds[0],
             winds[1],
             winds[2],
@@ -791,9 +928,9 @@ def grad_jax(winds, parameters):
             coeff=parameters.Cm,
             upper_bc=parameters.upper_bc,
         )
-
+        grad = grad.at[0:final_ind].add(add)
     if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
-        grad += _cost_functions_jax.calculate_smoothness_gradient(
+        add = _cost_functions_jax.calculate_smoothness_gradient(
             winds[0],
             winds[1],
             winds[2],
@@ -806,8 +943,10 @@ def grad_jax(winds, parameters):
             upper_bc=parameters.upper_bc,
         )
 
+        grad = grad.at[0:final_ind].add(add)
+
     if parameters.Cb > 0:
-        grad += _cost_functions_jax.calculate_background_gradient(
+        add = _cost_functions_jax.calculate_background_gradient(
             winds[0],
             winds[1],
             winds[2],
@@ -817,8 +956,10 @@ def grad_jax(winds, parameters):
             parameters.Cb,
         )
 
+        grad = grad.at[0:final_ind].add(add)
+
     if parameters.Cv > 0:
-        grad += _cost_functions_jax.calculate_vertical_vorticity_gradient(
+        add = _cost_functions_jax.calculate_vertical_vorticity_gradient(
             winds[0],
             winds[1],
             winds[2],
@@ -829,10 +970,11 @@ def grad_jax(winds, parameters):
             parameters.Vt,
             coeff=parameters.Cv,
             upper_bc=parameters.upper_bc,
-        ).numpy()
+        )
 
+        grad = grad.at[0:final_ind].add(add)
     if parameters.Cmod > 0:
-        grad += _cost_functions_jax.calculate_model_gradient(
+        add = _cost_functions_jax.calculate_model_gradient(
             winds[0],
             winds[1],
             winds[2],
@@ -843,8 +985,10 @@ def grad_jax(winds, parameters):
             coeff=parameters.Cmod,
         )
 
+        grad = grad.at[0:final_ind].add(add)
+
     if parameters.Cpoint > 0:
-        grad += _cost_functions_jax.calculate_point_gradient(
+        add = _cost_functions_jax.calculate_point_gradient(
             winds[0],
             winds[1],
             parameters.x,
@@ -854,6 +998,26 @@ def grad_jax(winds, parameters):
             Cp=parameters.Cpoint,
             roi=parameters.roi,
         )
+
+        grad = grad.at[0:final_ind].add(add)
+    if parameters.Cd > 0:
+        add = _cost_functions_jax.calc_advection_diffusion_gradient(
+            winds[0],
+            winds[1],
+            winds[2],
+            winds[3],
+            winds[4],
+            winds[5],
+            parameters.dx,
+            parameters.dy,
+            parameters.dz,
+            parameters.ref_series,
+            parameters.time_series,
+            coeff=parameters.Cd,
+        )
+
+        grad = grad + add
+
     return grad
 
 

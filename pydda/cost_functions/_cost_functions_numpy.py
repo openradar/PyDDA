@@ -2,6 +2,7 @@ import numpy as np
 import scipy
 import pyart
 
+
 from scipy.ndimage import _nd_image
 
 laplace_filter = np.asarray([1, -2, 1], dtype=np.float64)
@@ -43,6 +44,7 @@ def calculate_radial_vel_cost_function(
     -------
     J_o: float
          Observational cost function
+
     References
     -----------
     Potvin, C.K., A. Shapiro, and M. Xue, 2012: Impact of a Vertical Vorticity
@@ -62,8 +64,7 @@ def calculate_radial_vel_cost_function(
             + np.cos(els[i]) * np.cos(azs[i]) * v
             + np.sin(els[i]) * (w - np.abs(wts[i]))
         )
-        the_weight = weights[i]
-        J_o += lambda_o * np.sum(np.square(vrs[i] - v_ar) * the_weight)
+        J_o += lambda_o * np.sum(np.square(vrs[i] - v_ar) * weights[i])
 
     return J_o
 
@@ -112,9 +113,9 @@ def calculate_grad_radial_vel(
     # Use zero for all masked values since we don't want to add them into
     # the cost function
 
-    p_x1 = np.zeros(vrs[0].shape)
-    p_y1 = np.zeros(vrs[0].shape)
-    p_z1 = np.zeros(vrs[0].shape)
+    p_x1 = np.zeros(vrs[0].shape, dtype="float64")
+    p_y1 = np.zeros(vrs[0].shape, dtype="float64")
+    p_z1 = np.zeros(vrs[0].shape, dtype="float64")
     lambda_o = coeff / (rmsVr * rmsVr)
 
     for i in range(len(vrs)):
@@ -183,7 +184,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
         Cx
         * (
             np.gradient(dudx, dx, axis=2)
-            + np.gradient(dvdx, dx, axis=1)
+            + np.gradient(dvdx, dx, axis=2)
             + np.gradient(dwdx, dx, axis=2)
         )
         ** 2
@@ -191,22 +192,22 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     y_term = (
         Cy
         * (
-            np.gradient(dudy, dy, axis=2)
+            np.gradient(dudy, dy, axis=1)
             + np.gradient(dvdy, dy, axis=1)
-            + np.gradient(dwdy, dy, axis=2)
+            + np.gradient(dwdy, dy, axis=1)
         )
         ** 2
     )
     z_term = (
         Cz
         * (
-            np.gradient(dudz, dz, axis=2)
-            + np.gradient(dvdz, dz, axis=1)
-            + np.gradient(dwdz, dz, axis=2)
+            np.gradient(dudz, dz, axis=0)
+            + np.gradient(dvdz, dz, axis=0)
+            + np.gradient(dwdz, dz, axis=0)
         )
         ** 2
     )
-    return np.sum(np.nan_to_num(x_term + y_term + z_term))
+    return 0.5 * np.sum(np.nan_to_num(x_term + y_term + z_term))
 
 
 def calculate_smoothness_gradient(
@@ -236,31 +237,58 @@ def calculate_smoothness_gradient(
     y: float array
         value of gradient of smoothness cost function
     """
-    du = np.zeros(w.shape)
-    dv = np.zeros(w.shape)
-    dw = np.zeros(w.shape)
-    grad_u = np.zeros(w.shape)
-    grad_v = np.zeros(w.shape)
-    grad_w = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode="wrap")
-    scipy.ndimage.laplace(v, dv, mode="wrap")
-    scipy.ndimage.laplace(w, dw, mode="wrap")
-    du = du / dx
-    dv = dv / dy
-    dw = dw / dz
-    scipy.ndimage.laplace(du, grad_u, mode="wrap")
-    scipy.ndimage.laplace(dv, grad_v, mode="wrap")
-    scipy.ndimage.laplace(dw, grad_w, mode="wrap")
-    grad_u = grad_u / dx
-    grad_v = grad_v / dy
-    grad_w = grad_w / dz
+    dudx = np.gradient(u, dx, axis=2)
+    dudy = np.gradient(u, dy, axis=1)
+    dudz = np.gradient(u, dz, axis=0)
+    dvdx = np.gradient(v, dx, axis=2)
+    dvdy = np.gradient(v, dy, axis=1)
+    dvdz = np.gradient(v, dz, axis=0)
+    dwdx = np.gradient(w, dx, axis=2)
+    dwdy = np.gradient(w, dy, axis=1)
+    dwdz = np.gradient(w, dz, axis=0)
+    dudx2 = np.gradient(dudx, dx, axis=2)
+    dudy2 = np.gradient(dudy, dy, axis=1)
+    dudz2 = np.gradient(dudz, dz, axis=0)
+    dvdx2 = np.gradient(dvdx, dx, axis=2)
+    dvdy2 = np.gradient(dvdy, dy, axis=1)
+    dvdz2 = np.gradient(dvdz, dz, axis=0)
+    dwdx2 = np.gradient(dwdx, dx, axis=2)
+    dwdy2 = np.gradient(dwdy, dy, axis=1)
+    dwdz2 = np.gradient(dwdz, dz, axis=0)
+    del2u = dudx2 + dudy2 + dudz2
+    del2v = dvdx2 + dvdy2 + dvdz2
+    del2w = dwdx2 + dwdy2 + dwdz2
+    del2udx = np.gradient(del2u, dx, axis=2)
+    del2udy = np.gradient(del2u, dy, axis=1)
+    del2udz = np.gradient(del2u, dz, axis=0)
+    del2vdx = np.gradient(del2v, dx, axis=2)
+    del2vdy = np.gradient(del2v, dy, axis=1)
+    del2vdz = np.gradient(del2v, dz, axis=0)
+    del2wdx = np.gradient(del2w, dx, axis=2)
+    del2wdy = np.gradient(del2w, dy, axis=1)
+    del2wdz = np.gradient(del2w, dz, axis=0)
+    grad_u = (
+        Cx * np.gradient(del2udx, dx, axis=2)
+        + Cy * np.gradient(del2udy, dy, axis=1)
+        + Cz * np.gradient(del2udz, dz, axis=0)
+    )
+    grad_v = (
+        Cx * np.gradient(del2vdx, dx, axis=2)
+        + Cy * np.gradient(del2vdy, dy, axis=1)
+        + Cz * np.gradient(del2vdz, dz, axis=0)
+    )
+    grad_w = (
+        Cx * np.gradient(del2wdx, dx, axis=2)
+        + Cy * np.gradient(del2wdy, dy, axis=1)
+        + Cz * np.gradient(del2wdz, dz, axis=0)
+    )
 
     # Impermeability condition
     grad_w[0, :, :] = 0
     if upper_bc is True:
         grad_w[-1, :, :] = 0
 
-    y = np.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
+    y = np.stack([grad_u, grad_v, grad_w], axis=0)
 
     return y.flatten()
 
@@ -349,9 +377,9 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
         The gradient of the cost function related to the difference between wind field and points.
     """
 
-    gradJ_u = np.zeros_like(u)
-    gradJ_v = np.zeros_like(v)
-    gradJ_w = np.zeros_like(u)
+    gradJ_u = np.zeros_like(u, dtype="float64")
+    gradJ_v = np.zeros_like(v, dtype="float64")
+    gradJ_w = np.zeros_like(u, dtype="float64")
 
     for the_point in point_list:
         the_box = np.where(
@@ -410,7 +438,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         drho_dz = np.gradient(rho, dz, axis=0)
         anel_term = w / rho * drho_dz
     else:
-        anel_term = np.zeros(w.shape)
+        anel_term = np.zeros(w.shape, dtype="float64")
     div = dudx + dvdy + dwdz + anel_term
 
     return coeff * np.sum(np.square(div)) / 2.0
@@ -460,9 +488,9 @@ def calculate_mass_continuity_gradient(
 
     div = dudx + dvdy + dwdz + anel_term
 
-    grad_u = -np.gradient(div, dx, axis=2) * coeff
-    grad_v = -np.gradient(div, dy, axis=1) * coeff
-    grad_w = -np.gradient(div, dz, axis=0) * coeff
+    grad_u = -np.gradient(div, dx, axis=2) * coeff * rho
+    grad_v = -np.gradient(div, dy, axis=1) * coeff * rho
+    grad_w = -np.gradient(div, dz, axis=0) * coeff * rho
 
     # Impermeability condition
     grad_w[0, :, :] = 0
@@ -496,8 +524,8 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
 
     refl = grid[refl_field].values
     grid_z = grid["point_z"].values
-    A = np.zeros(refl.shape)
-    B = np.zeros(refl.shape)
+    A = np.zeros(refl.shape, dtype="float64")
+    B = np.zeros(refl.shape, dtype="float64")
     rho = np.exp(-grid_z / 10000.0)
     A[np.logical_and(grid_z < frz, refl < 55)] = -2.6
     B[np.logical_and(grid_z < frz, refl < 55)] = 0.0107
@@ -513,7 +541,7 @@ def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
     B[np.logical_and(grid_z >= frz, refl > 49)] = 0.0148
 
     fallspeed = A * np.power(10, refl * B) * np.power(1.2 / rho, 0.4)
-    del A, B, rho
+
     return fallspeed
 
 
@@ -579,9 +607,9 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
         value of gradient of background cost function
     """
     the_shape = u.shape
-    u_grad = np.zeros(the_shape)
-    v_grad = np.zeros(the_shape)
-    w_grad = np.zeros(the_shape)
+    u_grad = np.zeros(the_shape, dtype="float64")
+    v_grad = np.zeros(the_shape, dtype="float64")
+    w_grad = np.zeros(the_shape, dtype="float64")
 
     for i in range(the_shape[0]):
         u_grad[i] = Cb * 2 * (u[i] - u_back[i]) * (weights[i])
@@ -659,6 +687,7 @@ def calculate_vertical_vorticity_gradient(
     Calculates the gradient of the cost function due to deviance from vertical
     vorticity equation. This is done by taking the functional derivative of
     the vertical vorticity cost function.
+
     Parameters
     ----------
     u: 3D array
@@ -728,9 +757,9 @@ def calculate_vertical_vorticity_gradient(
     )
 
     # Now we intialize our gradient value
-    u_grad = np.zeros(u.shape)
-    v_grad = np.zeros(v.shape)
-    w_grad = np.zeros(w.shape)
+    u_grad = np.zeros(u.shape, dtype="float64")
+    v_grad = np.zeros(v.shape, dtype="float64")
+    w_grad = np.zeros(w.shape, dtype="float64")
 
     # Vorticity Advection
     u_grad += dzeta_dx + (Ut - u) * dudxdy + (Vt - v) * dudxdy
@@ -826,18 +855,166 @@ def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=
         Vertical wind field from model
     coeff: float
         Weight of background constraint to total cost function
+
     Returns
     -------
     y: float array
         value of gradient of background cost function
     """
     the_shape = u.shape
-    u_grad = np.zeros(the_shape)
-    v_grad = np.zeros(the_shape)
-    w_grad = np.zeros(the_shape)
+    u_grad = np.zeros(the_shape, dtype="float64")
+    v_grad = np.zeros(the_shape, dtype="float64")
+    w_grad = np.zeros(the_shape, dtype="float64")
     for i in range(len(u_model)):
         u_grad += coeff * 2 * (u - u_model[i]) * weights[i]
         v_grad += coeff * 2 * (v - v_model[i]) * weights[i]
 
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    return y.flatten()
+
+
+def calc_advection_diffusion_cost(
+    u, v, w, k_h, k_v, F_m, dx, dy, dz, refl_array, times, coeff=1
+):
+    """
+    Calculates the cost function related to the 3D reflectivity advection-
+    diffusion equation. This is designed for single-Doppler retrievals to
+    constrain the wind field based off of the storm motion between subsequent
+    scans. One can specify a series of radar scans
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    k_h, k_v, F_m: 3D array
+        Forcing terms for advection-diffusion cost function.
+    dx: float array
+        Spacing in x grid
+    dy: float array
+        Spacing in y grid
+    dz: float array
+        Spacing in z grid
+    refl_array: 4D array
+        The reflectivity for each time step
+    times: array of np.datetime64
+        The timestamps for each of the elements in refl_array
+
+
+    Reference
+    ---------
+    Gao, J., Xue, M., Lee, SY. et al. A three-dimensional variational single-Doppler
+    velocity retrieval method with simple conservation equation constraint.
+    Meteorol. Atmos. Phys. 94, 11–26 (2006). https://doi.org/10.1007/s00703-005-0170-7
+    """
+
+    num_timesteps = times.shape[0]
+    E = np.zeros(
+        (
+            num_timesteps - 1,
+            refl_array.shape[1],
+            refl_array.shape[2],
+            refl_array.shape[3],
+        ),
+        dtype="float64",
+    )
+    dZdx = np.gradient(refl_array, dx, axis=3)
+    dZdy = np.gradient(refl_array, dy, axis=2)
+    dZdz = np.gradient(refl_array, dz, axis=1)
+    d2Zdx2 = np.gradient(dZdx, dx, axis=3)
+    d2Zdy2 = np.gradient(dZdy, dy, axis=2)
+    d2Zdz2 = np.gradient(dZdz, dz, axis=1)
+    for i in range(1, num_timesteps - 1):
+        dt = times[i] - times[i - 1]
+        E[i] = E[i] + (refl_array[i + 1] - refl_array[i - 1]) / (2 * dt)
+        E[i] = E[i] + u * dZdx[i] + v * dZdy[i] + w * dZdz[i]
+        E[i] = E[i] - k_h * (d2Zdx2[i] + d2Zdy2[i]) - k_v * d2Zdz2[i] - F_m
+
+    return 0.5 * np.nansum(coeff * E**2)
+
+
+def calc_advection_diffusion_gradient(
+    u, v, w, k_h, k_v, F_m, dx, dy, dz, refl_array, times, coeff=1, upper_bc=True
+):
+    """
+    Calculates the gradient of the cost function related to the 3D reflectivity advection-
+    diffusion equation. This is designed for single-Doppler retrievals to
+    constrain the wind field based off of the storm motion between subsequent
+    scans. One can specify a series of radar scans
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    dx: float array
+        Spacing in x grid
+    dy: float array
+        Spacing in y grid
+    dz: float array
+        Spacing in z grid
+    refl_array: 4D array
+        The reflectivity for each time step
+    times: array of np.datetime64
+        The timestamps for each of the elements in refl_array
+    upper_bc: bool
+        Set to True to force the impermeability condition (w=0) at top
+
+    Reference
+    ---------
+    Gao, J., Xue, M., Lee, SY. et al. A three-dimensional variational single-Doppler
+    velocity retrieval method with simple conservation equation constraint.
+    Meteorol. Atmos. Phys. 94, 11–26 (2006). https://doi.org/10.1007/s00703-005-0170-7
+
+    """
+    num_timesteps = times.shape[0]
+    E = np.zeros(
+        (
+            num_timesteps - 1,
+            refl_array.shape[1],
+            refl_array.shape[2],
+            refl_array.shape[3],
+        ),
+        dtype="float64",
+    )
+
+    dZdx = np.gradient(refl_array, dx, axis=3)
+    dZdy = np.gradient(refl_array, dy, axis=2)
+    dZdz = np.gradient(refl_array, dz, axis=1)
+    d2Zdx2 = np.gradient(dZdx, dx, axis=3)
+    d2Zdy2 = np.gradient(dZdy, dy, axis=2)
+    d2Zdz2 = np.gradient(dZdz, dz, axis=1)
+    for i in range(1, num_timesteps - 1):
+        dt = times[i] - times[i - 1]
+        E[i] = E[i] + (refl_array[i + 1] - refl_array[i - 1]) / (2 * dt)
+        E[i] = E[i] + u * dZdx[i] + v * dZdy[i] + w * dZdz[i]
+        E[i] = E[i] - k_h * (d2Zdx2[i] + d2Zdy2[i]) - k_v * d2Zdz2[i] - F_m
+
+    grad_u = np.zeros_like(u, dtype="float64")
+    grad_v = np.zeros_like(v, dtype="float64")
+    grad_w = np.zeros_like(w, dtype="float64")
+    grad_k_h = np.zeros_like(k_h, dtype="float64")
+    grad_k_v = np.zeros_like(k_v, dtype="float64")
+    grad_Fm = np.zeros_like(F_m, dtype="float64")
+
+    for i in range(num_timesteps - 1):
+        grad_u += coeff * E[i] * dZdx[i]
+        grad_v += coeff * E[i] * dZdy[i]
+        grad_w += coeff * E[i] * dZdz[i]
+        grad_k_h += coeff * E[i] * (d2Zdx2[i] + d2Zdy2[i])
+        grad_k_v += coeff * E[i] * (d2Zdz2[i])
+        grad_Fm -= coeff * E[i]
+
+    # Impermeability condition
+    grad_w[0, :, :] = 0
+    if upper_bc is True:
+        grad_w[-1, :, :] = 0
+    y = np.stack((grad_u, grad_v, grad_w, grad_k_h, grad_k_v, grad_Fm), axis=0)
+    y = np.nan_to_num(y)
     return y.flatten()

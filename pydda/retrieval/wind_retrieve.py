@@ -9,6 +9,7 @@ import numpy as np
 import time
 import math
 import xarray as xr
+import warnings
 
 from scipy.interpolate import interp1d
 from scipy.optimize import fmin_l_bfgs_b
@@ -168,6 +169,7 @@ class DDParameters(object):
         self.Cz = 0.0
         self.Cb = 0.0
         self.Cv = 0.0
+        self.Cd = 0.0
         self.Cmod = 0.0
         self.Cpoint = 0.0
         self.Ut = 0.0
@@ -183,6 +185,8 @@ class DDParameters(object):
         self.gtol = 1e-2
         self.Jveltol = 100.0
         self.const_boundary_cond = False
+        self.ref_series = None
+        self.time_series = None
 
 
 def _get_dd_wind_field_scipy(
@@ -207,6 +211,7 @@ def _get_dd_wind_field_scipy(
     Cv=0.0,
     Cmod=0.0,
     Cpoint=0.0,
+    Cd=0.0,
     cvtol=1e-2,
     gtol=1e-2,
     Jveltol=100.0,
@@ -231,6 +236,8 @@ def _get_dd_wind_field_scipy(
     tolerance=1e-8,
     const_boundary_cond=False,
     max_wind_mag=100.0,
+    average_radial_velocity=False,
+    advect_reflectivity=True,
 ):
     global _wcurrmax
     global _wprevmax
@@ -281,8 +288,8 @@ def _get_dd_wind_field_scipy(
 
     # Disable background constraint if none provided
     if u_back is None or v_back is None:
-        parameters.u_back = np.zeros(u_init.shape[0])
-        parameters.v_back = np.zeros(v_init.shape[0])
+        parameters.u_back = np.zeros(u_init.shape[0], dtype="float64")
+        parameters.v_back = np.zeros(v_init.shape[0], dtype="float64")
     else:
         # Interpolate sounding to radar grid
         print("Interpolating sounding to radar grid")
@@ -299,11 +306,15 @@ def _get_dd_wind_field_scipy(
         u_interp = interp1d(z_back[valid_inds], u_back[valid_inds], bounds_error=False)
         v_interp = interp1d(z_back[valid_inds], v_back[valid_inds], bounds_error=False)
         if isinstance(Grids[0]["z"].values, np.ma.MaskedArray):
-            parameters.u_back = u_interp(Grids[0]["z"].values.filled(np.nan))
-            parameters.v_back = v_interp(Grids[0]["z"].values.filled(np.nan))
+            parameters.u_back = u_interp(Grids[0]["z"].values.filled(np.nan)).astype(
+                "float64"
+            )
+            parameters.v_back = v_interp(Grids[0]["z"].values.filled(np.nan)).astype(
+                "float64"
+            )
         else:
-            parameters.u_back = u_interp(Grids[0]["z"].values)
-            parameters.v_back = v_interp(Grids[0]["z"].values)
+            parameters.u_back = u_interp(Grids[0]["z"].values).astype("float64")
+            parameters.v_back = v_interp(Grids[0]["z"].values).astype("float64")
 
         print("Grid levels:")
         print(Grids[0]["z"].values)
@@ -315,43 +326,74 @@ def _get_dd_wind_field_scipy(
     # Parse names of velocity field
     if vel_name is None:
         vel_name = pyart.config.get_field_name("corrected_velocity")
-    winds = np.stack([u_init, v_init, w_init])
 
+    if Cd > 0:
+        zero_arr = np.zeros_like(u_init, dtype="float64")
+        winds = np.stack([u_init, v_init, w_init, zero_arr, zero_arr, zero_arr])
+    else:
+        winds = np.stack([u_init, v_init, w_init])
+    winds = winds.astype("float64")
     # Set up wind fields and weights from each radar
     parameters.weights = np.zeros(
-        (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2])
+        (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]), dtype="float64"
     )
 
-    parameters.bg_weights = np.zeros(v_init.shape)
+    parameters.bg_weights = np.zeros(v_init.shape, dtype="float64")
     if model_fields is not None:
         parameters.model_weights = np.ones(
-            (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2])
+            (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]),
+            dtype="float64",
         )
     else:
         parameters.model_weights = np.zeros(
-            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2])
+            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]), dtype="float64"
         )
 
     if model_fields is None:
         if Cmod != 0.0:
             raise ValueError("Cmod must be zero if model fields are not specified!")
 
-    bca = np.zeros((len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]))
-    sum_Vr = np.zeros(len(Grids))
+    bca = np.zeros(
+        (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]), dtype="float64"
+    )
+    sum_Vr = np.zeros(len(Grids), dtype="float64")
 
+    # Add our current grid and sort the grid series by time if we are in multi-timestep single-Doppler
     for i in range(len(Grids)):
+        if Grids[i].sizes["time"] > 1:
+            median_ind = np.argsort(Grids[i]["time"].values)[
+                int(Grids[i].sizes["time"] / 2)
+            ]
+        else:
+            median_ind = 0
         parameters.wts.append(
             np.ma.masked_invalid(
-                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz).squeeze()
-            )
+                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz)[
+                    median_ind
+                ]
+            ).astype("float64")
         )
-
-        parameters.vrs.append(np.ma.masked_invalid(Grids[i][vel_name].values.squeeze()))
+        if average_radial_velocity is False:
+            parameters.vrs.append(
+                np.ma.masked_invalid(
+                    Grids[i][vel_name].values[median_ind].squeeze()
+                ).astype("float64")
+            )
+        else:
+            parameters.vrs.append(
+                np.ma.masked_invalid(Grids[i][vel_name].mean(dim="time").values).astype(
+                    "float64"
+                )
+            )
         parameters.azs.append(
-            np.ma.masked_invalid(Grids[i]["AZ"].values.squeeze() * np.pi / 180)
+            np.ma.masked_invalid(
+                Grids[i]["AZ"].values[median_ind].squeeze() * np.pi / 180
+            ).astype("float64")
         )
         parameters.els.append(
-            np.ma.masked_invalid(Grids[i]["EL"].values.squeeze() * np.pi / 180)
+            np.ma.masked_invalid(
+                Grids[i]["EL"].values[median_ind].squeeze() * np.pi / 180
+            ).astype("float64")
         )
 
     if len(Grids) > 1:
@@ -412,7 +454,9 @@ def _get_dd_wind_field_scipy(
                         cur_array[~valid] = 0
                         parameters.weights[i, k] += cur_array
                     else:
-                        parameters.weights[i, k] = weights_obs[i][k, :, :]
+                        parameters.weights[i, k] = weights_obs[i][k, :, :].astype(
+                            "float64"
+                        )
 
                     if weights_bg is None:
                         valid = np.logical_and.reduce(
@@ -463,7 +507,7 @@ def _get_dd_wind_field_scipy(
                         cur_array[~valid] = 1
                         parameters.bg_weights[i] += cur_array
                     else:
-                        parameters.bg_weights[i] = weights_bg[i]
+                        parameters.bg_weights[i] = weights_bg[i].astype("float64")
 
         print("Calculating weights for models...")
         coverage_grade = parameters.weights.sum(axis=0)
@@ -480,17 +524,21 @@ def _get_dd_wind_field_scipy(
                     )
             else:
                 for i in range(len(model_fields)):
-                    parameters.model_weights[i] = weights_model[i]
+                    parameters.model_weights[i] = weights_model[i].astype("float64")
     else:
         if weights_obs is None:
-            parameters.weights[0] = np.where(~parameters.vrs[0].mask, 1, 0)
+            parameters.weights[0] = np.where(~parameters.vrs[0].mask, 1, 0).astype(
+                "float64"
+            )
         else:
-            parameters.weights[0] = weights_obs[0]
+            parameters.weights[0] = weights_obs[0].astype("float64")
 
         if weights_bg is None:
-            parameters.bg_weights = np.where(~parameters.vrs[0].mask, 0, 1)
+            parameters.bg_weights = np.where(~parameters.vrs[0].mask, 0, 1).astype(
+                "float64"
+            )
         else:
-            parameters.bg_weights = weights_bg
+            parameters.bg_weights = weights_bg.astype("float64")
 
     parameters.vrs = [x.filled(-9999.0) for x in parameters.vrs]
     parameters.azs = [x.filled(-9999.0) for x in parameters.azs]
@@ -500,7 +548,8 @@ def _get_dd_wind_field_scipy(
     parameters.bg_weights[~np.isfinite(parameters.bg_weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     parameters.bg_weights[parameters.bg_weights > 0] = 1
-    sum_Vr = np.nansum(np.square(parameters.vrs * parameters.weights))
+    v_array = np.array(parameters.vrs)
+    sum_Vr = np.square(v_array[v_array > -9999])
     parameters.rmsVr = np.sqrt(np.nansum(sum_Vr) / np.nansum(parameters.weights))
 
     del bca
@@ -515,9 +564,14 @@ def _get_dd_wind_field_scipy(
     parameters.dz = np.diff(Grids[0]["z"].values, axis=0)[0]
     print("rmsVR = " + str(parameters.rmsVr))
     print("Total points: %d" % parameters.weights.sum())
-    parameters.z = Grids[0]["point_z"].values
-    parameters.x = Grids[0]["point_x"].values
-    parameters.y = Grids[0]["point_y"].values
+    if Grids[0].sizes["time"] == 1:
+        parameters.z = Grids[0]["point_z"].values.astype("float64")
+        parameters.x = Grids[0]["point_x"].values.astype("float64")
+        parameters.y = Grids[0]["point_y"].values.astype("float64")
+    else:
+        parameters.z = Grids[0]["point_z"].values[0].squeeze().astype("float64")
+        parameters.x = Grids[0]["point_x"].values[0].squeeze().astype("float64")
+        parameters.y = Grids[0]["point_y"].values[0].squeeze().astype("float64")
     bt = time.time()
 
     # First pass - no filter
@@ -531,19 +585,37 @@ def _get_dd_wind_field_scipy(
             u_field = "U_" + the_field
             v_field = "V_" + the_field
             w_field = "W_" + the_field
-            parameters.u_model.append(np.nan_to_num(Grids[0][u_field].values.squeeze()))
-            parameters.v_model.append(np.nan_to_num(Grids[0][v_field].values.squeeze()))
-            parameters.w_model.append(np.nan_to_num(Grids[0][w_field].values.squeeze()))
+            if Grids[i].sizes["time"] > 1:
+                median_ind = np.argsort(Grids[0]["time"].values)[
+                    int(Grids[0].sizes["time"] / 2)
+                ]
+            else:
+                median_ind = 0
+            parameters.u_model.append(
+                np.nan_to_num(Grids[0][u_field].values[median_ind].squeeze()).astype(
+                    "float64"
+                )
+            )
+            parameters.v_model.append(
+                np.nan_to_num(Grids[0][v_field].values[median_ind].squeeze()).astype(
+                    "float64"
+                )
+            )
+            parameters.w_model.append(
+                np.nan_to_num(Grids[0][w_field].values[median_ind].squeeze()).astype(
+                    "float64"
+                )
+            )
 
             # Don't weigh in where model data unavailable
-            where_finite_u = np.isfinite(Grids[0][u_field].values.squeeze())
-            where_finite_v = np.isfinite(Grids[0][v_field].values.squeeze())
-            where_finite_w = np.isfinite(Grids[0][w_field].values.squeeze())
+            where_finite_u = np.isfinite(Grids[0][u_field].values[median_ind].squeeze())
+            where_finite_v = np.isfinite(Grids[0][v_field].values[median_ind].squeeze())
+            where_finite_w = np.isfinite(Grids[0][w_field].values[median_ind].squeeze())
             parameters.model_weights[i, :, :, :] = np.where(
                 np.logical_and.reduce((where_finite_u, where_finite_v, where_finite_w)),
                 1,
                 0,
-            )
+            ).astype("float64")
 
     print("Total number of model points: %d" % np.sum(parameters.model_weights))
     parameters.Co = Co
@@ -553,51 +625,79 @@ def _get_dd_wind_field_scipy(
     parameters.Cz = Cz
     parameters.Cb = Cb
     parameters.Cv = Cv
+    parameters.Cd = Cd
     parameters.Cmod = Cmod
     parameters.Cpoint = Cpoint
     parameters.roi = roi
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
-    _wprevmax = np.zeros(parameters.grid_shape)
-    _wcurrmax = np.zeros(parameters.grid_shape)
+    _wprevmax = np.zeros(parameters.grid_shape).astype("float64")
+    _wcurrmax = np.zeros(parameters.grid_shape).astype("float64")
     iterations = 0
+    if parameters.Cd == 0:
+        num_vars = 3
+    else:
+        num_vars = 6
     if engine.lower() == "scipy" or engine.lower() == "jax":
 
         def _vert_velocity_callback(x):
             global _wprevmax
             global _wcurrmax
             global iterations
+            global _spdpred
 
             if iterations % 10 > 0:
                 iterations = iterations + 1
                 return False
-
+            parameters.Nfeval = iterations
+            J_function(x, parameters, print_cost=True)
+            grad_J(x, parameters, print_grad=True)
             wind = np.reshape(
                 x,
                 (
-                    3,
+                    num_vars,
                     parameters.grid_shape[0],
                     parameters.grid_shape[1],
                     parameters.grid_shape[2],
                 ),
             )
             _wcurrmax = wind[2]
+            _spdmax = wind[0:1]
+
             if iterations == 0:
                 _wprevmax = _wcurrmax
+                _spdpred = _spdmax
                 iterations = iterations + 1
                 return False
             diff = np.abs(_wprevmax - _wcurrmax)
             diff = np.where(parameters.bg_weights == 0, diff, np.nan)
             delta = np.nanmax(diff)
-            if delta < wind_tol:
-                return True
+
             _wprevmax = _wcurrmax
+
             iterations = iterations + 1
-            print("Max change in w: %4.3f" % delta)
+            print("Max change in w-wind: %4.3f" % delta)
+            diff = np.abs(_spdmax - _spdpred).max()
+            _spdpred = _spdmax
+            print("Max change in u/v-wind: %4.3f" % diff)
+            if diff < wind_tol and delta < wind_tol:
+                return True
             return False
 
         parameters.print_out = False
+        if parameters.Cd == 0:
+            parameters.time_series = None
+        else:
+            parameters.time_series = (
+                Grids[0]["time"].values.astype("datetime64[s]").astype(float)
+            )
+        if advect_reflectivity is True:
+            parameters.ref_series = 10 ** (Grids[0][refl_field].values / 10.0)
+            parameters.ref_series = np.nan_to_num(parameters.ref_series, 10**-2)
+        else:
+            parameters.ref_series = Grids[0][vel_name].values
+
         if engine.lower() == "scipy":
             winds = fmin_l_bfgs_b(
                 J_function,
@@ -608,10 +708,48 @@ def _get_dd_wind_field_scipy(
                 bounds=bounds,
                 fprime=grad_J,
                 disp=0,
-                iprint=-1,
+                iprint=10,
                 callback=_vert_velocity_callback,
+                factr=1e3,
             )
+            info = winds[2]
+            if info["warnflag"] > 0:
+                warnings.warn("Optimization did not converge, %s" % info["task"])
         else:
+
+            def _vert_velocity_callback_jax(x):
+                global _wprevmax
+                global _wcurrmax
+                global iterations
+
+                if iterations % 10 > 0:
+                    iterations = iterations + 1
+                    return False
+                parameters.Nfeval = iterations
+
+                wind = jnp.reshape(
+                    x["winds"],
+                    (
+                        num_vars,
+                        parameters.grid_shape[0],
+                        parameters.grid_shape[1],
+                        parameters.grid_shape[2],
+                    ),
+                )
+                _wcurrmax = wind[2]
+                if iterations == 0:
+                    _wprevmax = _wcurrmax
+                    iterations = iterations + 1
+                    return False
+                diff = jnp.abs(_wprevmax - _wcurrmax)
+                diff = jnp.where(parameters.bg_weights == 0, diff, jnp.nan)
+                delta = jnp.nanmax(diff)
+                if delta < wind_tol:
+                    return True
+                _wprevmax = _wcurrmax
+                iterations = iterations + 1
+                print("Max change in w: %4.3f" % delta)
+                return False
 
             def loss_and_gradient(x):
                 x_loss = J_function_jax(x["winds"], parameters)
@@ -632,20 +770,33 @@ def _get_dd_wind_field_scipy(
                 tol=tolerance,
                 jit=True,
                 implicit_diff=False,
+                max_stepsize=10.0,
             )
             winds = {"winds": winds}
-            winds, state = solver.run(winds, bounds=bounds)
+            state = solver.init_state(winds, bounds=bounds)
+            iterations = 0
+
+            while state.error > tolerance and iterations < max_iterations:
+                winds, state = solver.update(winds, state=state, bounds=bounds)
+                _vert_velocity_callback_jax(winds)
+                if iterations % 10 == 0:
+                    print(
+                        "Iterations: %d Cost function: %4.3e"
+                        % (iterations, state.error)
+                    )
+
             winds = [np.asanyarray(winds["winds"])]
 
         winds = np.reshape(
             winds[0],
             (
-                3,
+                num_vars,
                 parameters.grid_shape[0],
                 parameters.grid_shape[1],
                 parameters.grid_shape[2],
             ),
         )
+
         parameters.print_out = True
 
     elif engine.lower() == "auglag":
@@ -653,23 +804,23 @@ def _get_dd_wind_field_scipy(
             raise ImportError(
                 "Tensorflow must be available to use the Augmented Lagrangian engine!"
             )
-        parameters.vrs = [tf.constant(x, dtype=tf.float32) for x in parameters.vrs]
-        parameters.azs = [tf.constant(x, dtype=tf.float32) for x in parameters.azs]
-        parameters.els = [tf.constant(x, dtype=tf.float32) for x in parameters.els]
-        parameters.wts = [tf.constant(x, dtype=tf.float32) for x in parameters.wts]
+        parameters.vrs = [tf.constant(x, dtype=tf.float64) for x in parameters.vrs]
+        parameters.azs = [tf.constant(x, dtype=tf.float64) for x in parameters.azs]
+        parameters.els = [tf.constant(x, dtype=tf.float64) for x in parameters.els]
+        parameters.wts = [tf.constant(x, dtype=tf.float64) for x in parameters.wts]
         parameters.model_weights = tf.constant(
-            parameters.model_weights, dtype=tf.float32
+            parameters.model_weights, dtype=tf.float64
         )
         parameters.weights[~np.isfinite(parameters.weights)] = 0
         parameters.weights[parameters.weights > 0] = 1
-        parameters.weights = tf.constant(parameters.weights, dtype=tf.float32)
+        parameters.weights = tf.constant(parameters.weights, dtype=tf.float64)
         parameters.bg_weights[parameters.bg_weights > 0] = 1
-        parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float32)
-        parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float32)
-        parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float32)
-        parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float32)
-        bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape, dtype="float32")]
-        winds = winds.astype("float32")
+        parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float64)
+        parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float64)
+        parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float64)
+        parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float64)
+        bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape, dtype="float64")]
+        winds = winds.astype("float64")
         winds, mult, AL_Filter, funcalls = auglag(winds, parameters, bounds)
 
         # """
@@ -748,14 +899,21 @@ def _get_dd_wind_field_scipy(
     new_grid_list = []
 
     for grid in Grids:
+        num_times = grid.sizes["time"]
         grid["u"] = xr.DataArray(
-            np.expand_dims(u, 0), dims=("time", "z", "y", "x"), attrs=u_field
+            np.tile(u, (num_times, 1, 1, 1)),
+            dims=("time", "z", "y", "x"),
+            attrs=u_field,
         )
         grid["v"] = xr.DataArray(
-            np.expand_dims(v, 0), dims=("time", "z", "y", "x"), attrs=v_field
+            np.tile(v, (num_times, 1, 1, 1)),
+            dims=("time", "z", "y", "x"),
+            attrs=v_field,
         )
         grid["w"] = xr.DataArray(
-            np.expand_dims(w, 0), dims=("time", "z", "y", "x"), attrs=w_field
+            np.tile(w, (num_times, 1, 1, 1)),
+            dims=("time", "z", "y", "x"),
+            attrs=w_field,
         )
         new_grid_list.append(grid)
 
@@ -873,17 +1031,17 @@ def _get_dd_wind_field_tensorflow(
         v_interp = interp1d(z_back[valid_inds], v_back[valid_inds], bounds_error=False)
         if isinstance(Grids[0]["z"].values, np.ma.MaskedArray):
             parameters.u_back = tf.constant(
-                u_interp(Grids[0]["z"].values.filled(np.nan)), dtype=tf.float32
+                u_interp(Grids[0]["z"].values.filled(np.nan)), dtype=tf.float64
             )
             parameters.v_back = tf.constant(
-                v_interp(Grids[0]["z"].values.filled(np.nan)), dtype=tf.float32
+                v_interp(Grids[0]["z"].values.filled(np.nan)), dtype=tf.float64
             )
         else:
             parameters.u_back = tf.constant(
-                u_interp(Grids[0]["z"].values), dtype=tf.float32
+                u_interp(Grids[0]["z"].values), dtype=tf.float64
             )
             parameters.v_back = tf.constant(
-                v_interp(Grids[0]["z"].values), dtype=tf.float32
+                v_interp(Grids[0]["z"].values), dtype=tf.float64
             )
 
         print("Interpolated U field:")
@@ -901,23 +1059,23 @@ def _get_dd_wind_field_tensorflow(
     if vel_name is None:
         vel_name = pyart.config.get_field_name("corrected_velocity")
     winds = np.stack([u_init, v_init, w_init])
-    winds = winds.astype(np.float32)
+    winds = winds.astype(np.float64)
 
     # Set up wind fields and weights from each radar
     parameters.weights = np.zeros(
         (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]),
-        dtype=np.float32,
+        dtype=np.float64,
     )
 
     parameters.bg_weights = np.zeros(v_init.shape)
     if model_fields is not None:
         parameters.model_weights = np.ones(
             (len(model_fields), u_init.shape[0], u_init.shape[1], u_init.shape[2]),
-            dtype=np.float32,
+            dtype=np.float64,
         )
     else:
         parameters.model_weights = np.zeros(
-            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]), dtype=np.float32
+            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]), dtype=np.float64
         )
 
     if model_fields is None:
@@ -925,21 +1083,31 @@ def _get_dd_wind_field_tensorflow(
             raise ValueError("Cmod must be zero if model fields are not specified!")
 
     bca = np.zeros(
-        (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]), dtype=np.float32
+        (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]), dtype=np.float64
     )
 
     for i in range(len(Grids)):
+        if Grids[i].sizes["time"] > 1:
+            median_ind = np.argsort(Grids[i]["time"].values)[
+                int(Grids[i].sizes["time"] / 2)
+            ]
+        else:
+            median_ind = 0
         parameters.wts.append(
             np.ma.masked_invalid(
-                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz).squeeze()
+                calculate_fall_speed(Grids[i], refl_field=refl_field, frz=frz)[
+                    median_ind
+                ]
             )
         )
-        parameters.vrs.append(np.ma.masked_invalid(Grids[i][vel_name].values.squeeze()))
+        parameters.vrs.append(
+            np.ma.masked_invalid(Grids[i][vel_name].values[median_ind])
+        )
         parameters.azs.append(
-            np.ma.masked_invalid(Grids[i]["AZ"].values.squeeze() * np.pi / 180)
+            np.ma.masked_invalid(Grids[i]["AZ"].values[median_ind] * np.pi / 180)
         )
         parameters.els.append(
-            np.ma.masked_invalid(Grids[i]["EL"].values.squeeze() * np.pi / 180)
+            np.ma.masked_invalid(Grids[i]["EL"].values[median_ind] * np.pi / 180)
         )
 
     if len(Grids) > 1:
@@ -1083,25 +1251,25 @@ def _get_dd_wind_field_tensorflow(
             parameters.bg_weights = weights_bg
 
     parameters.vrs = [
-        tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.vrs
+        tf.constant(x.filled(-9999), dtype=tf.float64) for x in parameters.vrs
     ]
     parameters.azs = [
-        tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.azs
+        tf.constant(x.filled(-9999), dtype=tf.float64) for x in parameters.azs
     ]
     parameters.els = [
-        tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.els
+        tf.constant(x.filled(-9999), dtype=tf.float64) for x in parameters.els
     ]
     parameters.wts = [
-        tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.wts
+        tf.constant(x.filled(-9999), dtype=tf.float64) for x in parameters.wts
     ]
 
     parameters.weights[~np.isfinite(parameters.weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     for i in range(len(Grids)):
         print("Points from Radar %d: %d" % (i, parameters.weights[i].sum()))
-    parameters.weights = tf.constant(parameters.weights, dtype=tf.float32)
+    parameters.weights = tf.constant(parameters.weights, dtype=tf.float64)
     parameters.bg_weights[parameters.bg_weights > 0] = 1
-    parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float32)
+    parameters.bg_weights = tf.constant(parameters.bg_weights, dtype=tf.float64)
     sum_Vr = tf.experimental.numpy.nansum(
         tf.square(parameters.vrs * parameters.weights)
     )
@@ -1122,9 +1290,9 @@ def _get_dd_wind_field_tensorflow(
     parameters.dz = np.diff(Grids[0]["z"].values, axis=0)[0]
     print("rmsVR = " + str(parameters.rmsVr))
     print("Total points: %d" % tf.reduce_sum(parameters.weights))
-    parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float32)
-    parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float32)
-    parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float32)
+    parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float64)
+    parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float64)
+    parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float64)
     bt = time.time()
 
     # First pass - no filter
@@ -1157,7 +1325,7 @@ def _get_dd_wind_field_tensorflow(
                 0,
             )
 
-    parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float32)
+    parameters.model_weights = tf.constant(parameters.model_weights, dtype=tf.float64)
 
     parameters.Co = Co
     parameters.Cm = Cm
@@ -1289,7 +1457,7 @@ def get_dd_wind_field(
 ):
     """
     This function takes in a list of Py-ART Grid objects and derives a
-    wind field. Every Py-ART Grid in Grids must have the same grid
+    wind field. Every Py-ART Grid in `Grids` must have the same grid
     specification.
 
     In order for the model data constraint to be used,
@@ -1309,6 +1477,10 @@ def get_dd_wind_field(
         The list of Py-ART or PyDDA grids to take in corresponding to each radar.
         All grids must have the same shape, x coordinates, y coordinates
         and z coordinates.
+
+        If this is a list containing one Grid with multiple timesteps, PyDDA will
+        perform the retrieval at the median timestep while using the surrounding
+        timesteps for the advection-diffusion equation.
     u_init: 3D ndarray
         The intial guess for the zonal wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
@@ -1432,6 +1604,13 @@ def get_dd_wind_field(
         Tolerance for :math:`L_{2}` norm of gradient before stopping.
     max_wind_magnitude: float
         Constrain the optimization to have :math:`|u|`, :math:`|w|`, and :math:`|w| < x` m/s.
+    average_radial_velocity: bool
+        If grid_series is not empty and we have one Doppler radar,
+        base the observational constraint off of the average Doppler velocity in the
+        `grid_timesteps` list.
+    advect_reflectivity: bool
+        If true, use reflectivity for the advection-diffusion cost function. If False,
+        use Doppler velocity.
 
     Returns
     =======
@@ -1456,15 +1635,20 @@ def get_dd_wind_field(
         raise TypeError(
             "Input grids must be an xarray Dataset, Py-ART Grid, or a list of those."
         )
-
+    if new_grids[0].sizes["time"] > 1:
+        median_ind = np.argsort(Grids[0]["time"].values)[
+            int(Grids[0].sizes["time"] / 2)
+        ]
+    else:
+        median_ind = 0
     if u_init is None:
-        u_init = new_grids[0]["u"].values.squeeze()
+        u_init = new_grids[0]["u"][median_ind].values.squeeze()
 
     if v_init is None:
-        v_init = new_grids[0]["v"].values.squeeze()
+        v_init = new_grids[0]["v"][median_ind].values.squeeze()
 
     if w_init is None:
-        w_init = new_grids[0]["w"].values.squeeze()
+        w_init = new_grids[0]["w"][median_ind].values.squeeze()
 
     if (
         engine.lower() == "scipy"

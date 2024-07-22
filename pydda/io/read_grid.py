@@ -29,7 +29,7 @@ def read_grid(file_name, level_name="parent", **kwargs):
         The dataset with the list of grids as the parent node.
     """
 
-    root = xr.open_dataset(file_name, decode_times=False)
+    root = xr.open_dataset(file_name, decode_times=True)
 
     # Find first grid field name
     root.attrs["first_grid_name"] = ""

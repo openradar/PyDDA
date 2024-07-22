@@ -10,6 +10,7 @@ except ImportError:
     JAX_AVAILABLE = False
 
 
+@jax.jit
 def calculate_radial_vel_cost_function(
     vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
 ):
@@ -77,6 +78,7 @@ def calculate_radial_vel_cost_function(
     return J_o
 
 
+@jax.jit
 def calculate_grad_radial_vel(
     vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
 ):
@@ -143,6 +145,7 @@ def calculate_grad_radial_vel(
     return y.flatten()
 
 
+@jax.jit
 def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
@@ -217,6 +220,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     return jnp.sum(x_term + y_term + z_term)
 
 
+@jax.jit
 def calculate_smoothness_gradient(
     u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
 ):
@@ -345,6 +349,7 @@ def calculate_smoothness_gradient(
     return y.flatten()
 
 
+@jax.jit
 def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
     Calculates the cost function related to point observations. A mean square error cost
@@ -395,6 +400,7 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     return J * Cp
 
 
+@jax.jit
 def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
     Calculates the gradient of the cost function related to point observations.
@@ -453,7 +459,8 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     return gradJ * Cp
 
 
-def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
+@jax.jit
+def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0):
     """
     Calculates the mass continuity cost function by taking the divergence
     of the wind field.
@@ -492,20 +499,19 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
     dvdy = jnp.gradient(v, dy, axis=1)
     dwdz = jnp.gradient(w, dz, axis=0)
 
-    if anel == 1:
-        if not isinstance(z, np.ma.MaskedArray):
-            rho = jnp.exp(-z / 10000.0)
-        else:
-            rho = jnp.exp(-z.filled() / 10000.0)
-        drho_dz = jnp.gradient(rho, dz, axis=0)
-        anel_term = w / rho * drho_dz
+    if not isinstance(z, np.ma.MaskedArray):
+        rho = jnp.exp(-z / 10000.0)
     else:
-        anel_term = jnp.zeros(w.shape)
+        rho = jnp.exp(-z.filled() / 10000.0)
+    drho_dz = jnp.gradient(rho, dz, axis=0)
+    anel_term = w / rho * drho_dz
+
     return coeff * jnp.sum(jnp.square(dudx + dvdy + dwdz + anel_term)) / 2.0
 
 
+@jax.jit
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+    u, v, w, z, dx, dy, dz, coeff=1500.0, upper_bc=True
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -545,9 +551,17 @@ def calculate_mass_continuity_gradient(
     else:
         z_in = z
     primals, fun_vjp = jax.vjp(
-        calculate_mass_continuity, u, v, w, z_in, dx, dy, dz, coeff, anel
+        calculate_mass_continuity,
+        u,
+        v,
+        w,
+        z_in,
+        dx,
+        dy,
+        dz,
+        coeff,
     )
-    grad_u, grad_v, grad_w, _, _, _, _, _, _ = fun_vjp(1.0)
+    grad_u, grad_v, grad_w, _, _, _, _, _ = fun_vjp(1.0)
 
     # Impermeability condition
     grad_w = grad_w.at[0, :, :].set(0)
@@ -557,6 +571,7 @@ def calculate_mass_continuity_gradient(
     return y.flatten()
 
 
+@jax.jit
 def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
     """
     Calculates the background cost function. The background cost function is
@@ -630,6 +645,7 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
     return y.flatten().copy()
 
 
+@jax.jit
 def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     """
     Calculates the cost function due to deviance from vertical vorticity
@@ -700,6 +716,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     return jnp.sum(coeff * jv_array**2)
 
 
+@jax.jit
 def calculate_vertical_vorticity_gradient(
     u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
 ):
@@ -761,6 +778,7 @@ def calculate_vertical_vorticity_gradient(
     return y.flatten().copy()
 
 
+@jax.jit
 def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
@@ -804,6 +822,7 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0)
     return cost
 
 
+@jax.jit
 def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=1.0):
     """
     Calculates the cost function for the model constraint.
@@ -843,3 +862,150 @@ def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=
     u_grad, v_grad, w_grad, _, _, _, _, _ = fun_vjp(1.0)
     y = jnp.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
+
+
+@jax.jit
+def calc_advection_diffusion_cost(
+    u, v, w, k_h, k_v, F_m, dx, dy, dz, refl_array, times, coeff=1
+):
+    """
+    Calculates the cost function related to the 3D reflectivity advection-
+    diffusion equation. This is designed for single-Doppler retrievals to
+    constrain the wind field based off of the storm motion between subsequent
+    scans. One can specify a series of radar scans
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    k_h, k_v, F_m: 3D array
+        Forcing terms for advection-diffusion cost function.
+    dx: float array
+        Spacing in x grid
+    dy: float array
+        Spacing in y grid
+    dz: float array
+        Spacing in z grid
+    refl_array: 4D array
+        The reflectivity for each time step
+    times: array of np.datetime64
+        The timestamps for each of the elements in refl_array
+
+
+    Reference
+    ---------
+    Gao, J., Xue, M., Lee, SY. et al. A three-dimensional variational single-Doppler
+    velocity retrieval method with simple conservation equation constraint.
+    Meteorol. Atmos. Phys. 94, 11–26 (2006). https://doi.org/10.1007/s00703-005-0170-7
+    """
+
+    num_timesteps = times.shape[0]
+    E = jnp.zeros(
+        (
+            num_timesteps - 1,
+            refl_array.shape[1],
+            refl_array.shape[2],
+            refl_array.shape[3],
+        )
+    )
+    dZdx = jnp.gradient(refl_array, dx, axis=3)
+    dZdy = jnp.gradient(refl_array, dy, axis=2)
+    dZdz = jnp.gradient(refl_array, dz, axis=1)
+    d2Zdx2 = jnp.gradient(dZdx, dx, axis=3)
+    d2Zdy2 = jnp.gradient(dZdy, dy, axis=2)
+    d2Zdz2 = jnp.gradient(dZdz, dz, axis=1)
+    for i in range(1, num_timesteps - 1):
+        dt = jnp.array(times[i] - times[i - 1])
+        E = E.at[i, :, :, :].add((refl_array[i + 1] - refl_array[i - 1]) / dt)
+        E = E.at[i, :, :, :].add(u * dZdx[i] + v * dZdy[i] + w * dZdz[i])
+        E = E.at[i, :, :, :].add(-k_h * (d2Zdx2[i] + d2Zdy2[i]) - k_v * d2Zdz2[i] - F_m)
+
+    return 0.5 * jnp.nansum(coeff * E**2)
+
+
+@jax.jit
+def calc_advection_diffusion_gradient(
+    u, v, w, k_h, k_v, F_m, dx, dy, dz, refl_array, times, coeff=1, upper_bc=True
+):
+    """
+    Calculates the gradient of the cost function related to the 3D reflectivity advection-
+    diffusion equation. This is designed for single-Doppler retrievals to
+    constrain the wind field based off of the storm motion between subsequent
+    scans. One can specify a series of radar scans
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    w: 3D array
+        Float array with w component of wind field
+    dx: float array
+        Spacing in x grid
+    dy: float array
+        Spacing in y grid
+    dz: float array
+        Spacing in z grid
+    refl_array: 4D array
+        The reflectivity for each time step
+    times: array of np.datetime64
+        The timestamps for each of the elements in refl_array
+    upper_bc: bool
+        Set to True to force the impermeability condition (w=0) at top
+
+    Reference
+    ---------
+    Gao, J., Xue, M., Lee, SY. et al. A three-dimensional variational single-Doppler
+    velocity retrieval method with simple conservation equation constraint.
+    Meteorol. Atmos. Phys. 94, 11–26 (2006). https://doi.org/10.1007/s00703-005-0170-7
+
+    """
+    num_timesteps = times.shape[0]
+    E = jnp.zeros(
+        (
+            num_timesteps - 1,
+            refl_array.shape[1],
+            refl_array.shape[2],
+            refl_array.shape[3],
+        )
+    )
+
+    dZdx = jnp.gradient(refl_array, dx, axis=3)
+    dZdy = jnp.gradient(refl_array, dy, axis=2)
+    dZdz = jnp.gradient(refl_array, dz, axis=1)
+    d2Zdx2 = jnp.gradient(dZdx, dx, axis=3)
+    d2Zdy2 = jnp.gradient(dZdy, dy, axis=2)
+    d2Zdz2 = jnp.gradient(dZdz, dz, axis=1)
+    for i in range(1, num_timesteps - 1):
+        dt = jnp.array(times[i] - times[i - 1])
+        E = E.at[i, :, :, :].add((refl_array[i + 1] - refl_array[i - 1]) / dt)
+        E = E.at[i, :, :, :].add(u * dZdx[i] + v * dZdy[i] + w * dZdz[i])
+        E = E.at[i, :, :, :].add(-k_h * (d2Zdx2[i] + d2Zdy2[i]) - k_v * d2Zdz2[i] - F_m)
+
+    grad_u = jnp.zeros_like(u)
+    grad_v = jnp.zeros_like(v)
+    grad_w = jnp.zeros_like(w)
+    grad_k_h = jnp.zeros_like(k_h)
+    grad_k_v = jnp.zeros_like(k_v)
+    grad_Fm = jnp.zeros_like(F_m)
+
+    for i in range(num_timesteps - 1):
+        grad_u += coeff * E[i] * dZdx[i]
+        grad_v += coeff * E[i] * dZdy[i]
+        grad_w += coeff * E[i] * dZdz[i]
+        grad_k_h += coeff * E[i] * (d2Zdx2[i] + d2Zdy2[i])
+        grad_k_v += coeff * E[i] * (d2Zdz2[i])
+        grad_Fm -= coeff * E[i]
+
+    # Impermeability condition
+    grad_w = grad_w.at[0, :, :].set(0)
+    if upper_bc is True:
+        grad_w = grad_w.at[-1, :, :].set(0)
+    y = jnp.stack((grad_u, grad_v, grad_w, grad_k_h, grad_k_v, grad_Fm), axis=0)
+    y = jnp.nan_to_num(y)
+    return y.flatten()
