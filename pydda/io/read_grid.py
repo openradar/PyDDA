@@ -1,6 +1,7 @@
 import xarray as xr
 import xradar as xd
 import numpy as np
+import cftime
 
 from glob import glob
 from datatree import DataTree
@@ -101,7 +102,9 @@ def read_from_pyart_grid(Grid):
     new_grid = new_grid.to_xarray()
     new_grid.attrs["radar_name"] = radar_name["data"]
     new_grid["projection"] = xr.DataArray(1, dims=(), attrs=projection)
-
+    new_grid["time"] = cftime.num2date(Grid.time["data"], Grid.time["units"]).astype(
+        "datetime64[ns]"
+    )
     if "lat_0" in projection.keys():
         new_grid["projection"].attrs["_include_lon_0_lat_0"] = "true"
     else:

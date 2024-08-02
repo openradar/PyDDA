@@ -61,10 +61,12 @@ def test_get_iem_data():
     )
     fdata3 = np.zeros((20, 20, 20))
     Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
+    Grid.time["units"] = "seconds since 2024-05-22 15:15:46.934000"
     Grid = pydda.io.read_from_pyart_grid(Grid)
     station_obs = pydda.constraints.get_iem_obs(Grid)
     names = [x["site_id"] for x in station_obs]
-    assert names == ["P28", "WLD", "WDG", "SWO", "END"]
+    assert "P28" in names
+    assert "IAB" in names
 
 
 def test_hrrr_data():

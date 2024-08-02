@@ -10,3 +10,4 @@ cmweather
 cdsapi
 xarray
 datatree
+cftime
