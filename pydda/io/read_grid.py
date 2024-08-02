@@ -1,5 +1,6 @@
 import xarray as xr
 import numpy as np
+import cftime
 
 from glob import glob
 from datatree import DataTree
@@ -90,6 +91,7 @@ def read_from_pyart_grid(Grid):
     origin_latitude = Grid.origin_latitude
     origin_longitude = Grid.origin_longitude
     origin_altitude = Grid.origin_altitude
+    radar_name = Grid.radar_name
 
     if len(list(Grid.fields.keys())) > 0:
         first_grid_name = list(Grid.fields.keys())[0]
@@ -97,19 +99,16 @@ def read_from_pyart_grid(Grid):
         first_grid_name = ""
     projection = Grid.get_projparams()
     new_grid = new_grid.to_xarray()
-
+    new_grid.attrs["radar_name"] = radar_name["data"]
     new_grid["projection"] = xr.DataArray(1, dims=(), attrs=projection)
-
+    new_grid["time"] = cftime.num2date(Grid.time["data"], Grid.time["units"]).astype(
+        "datetime64[ns]"
+    )
     if "lat_0" in projection.keys():
         new_grid["projection"].attrs["_include_lon_0_lat_0"] = "true"
     else:
         new_grid["projection"].attrs["_include_lon_0_lat_0"] = "false"
 
-    if "units" not in new_grid["time"].attrs.keys():
-        new_grid["time"].attrs["units"] = (
-            "seconds since %s"
-            % new_grid["time"].dt.strftime("%Y-%m-%dT%H:%M:%SZ").values[0]
-        )
     new_grid.attrs["first_grid_name"] = first_grid_name
     x = radar_latitude.pop("data").squeeze()
     new_grid["radar_latitude"] = xr.DataArray(
