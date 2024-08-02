@@ -1326,7 +1326,7 @@ def get_dd_wind_field(
         Using Tensorflow or Jax expands PyDDA's capabiability to take advantage of GPU-based systems.
         In addition, these two implementations use automatic differentation to calculate the gradient
         of the cost function in order to optimize the gradient calculation.
-        TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-basedengine.
+        TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-based engine.
         The latest version of Jax is required for the Jax-based engine.
     points: None or list of dicts
         Point observations as returned by :func:`pydda.constraints.get_iem_obs`. Set
@@ -1413,9 +1413,9 @@ def get_dd_wind_field(
         The list of fields in the first grid in Grids that contain the custom
         data interpolated to the Grid's grid specification. Helper functions
         to create such gridded fields for HRRR and NetCDF WRF data exist
-        in ::pydda.constraints::. PyDDA will look for fields named U_(model
-        field name), V_(model field name), and W_(model field name). For
-        example, if you have U_hrrr, V_hrrr, and W_hrrr, then specify ["hrrr"]
+        in :py:func:`pydda.constraints`. PyDDA will look for fields named *U_(model
+        field name)*, *V_(model field name)*, and *W_(model field name)*. For
+        example, if you have *U_hrrr*, *V_hrrr*, and *W_hrrr*, then specify *["hrrr"]*
         into model_fields.
     output_cost_functions: bool
         Set to True to output the value of each cost function every
@@ -1429,9 +1429,9 @@ def get_dd_wind_field(
     wind_tol: float
         Stop iterations after maximum change in winds is less than this value.
     tolerance: float
-        Tolerance for L2 norm of gradient before stopping.
+        Tolerance for :math:`L_{2}` norm of gradient before stopping.
     max_wind_magnitude: float
-        Constrain the optimization to have :math:`|u|, :math:`|w|`, and :math:`|w| < x` m/s.
+        Constrain the optimization to have :math:`|u|`, :math:`|w|`, and :math:`|w| < x` m/s.
 
     Returns
     =======

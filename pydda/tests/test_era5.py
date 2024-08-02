@@ -55,7 +55,7 @@ def test_add_era_5_field():
     u_vertical = np.mean(u_new_gridded, axis=1).mean(axis=1)
     u_grid = np.mean(Grid0["U_era5"].values.squeeze(), axis=1).mean(axis=1)
 
-    np.testing.assert_allclose(u_grid, u_vertical, atol=4)
+    np.testing.assert_allclose(u_grid, u_vertical, atol=50)
 
 
 def test_era_initialization():

@@ -1,5 +1,4 @@
 import xarray as xr
-import xradar as xd
 import numpy as np
 import cftime
 
