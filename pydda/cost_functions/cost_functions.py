@@ -9,9 +9,6 @@ except ImportError:
     TENSORFLOW_AVAILABLE = False
 
 try:
-    from jax.config import config
-
-    config.update("jax_enable_x64", True)
     import jax.numpy as jnp
 
     JAX_AVAILABLE = True
@@ -858,7 +855,6 @@ def grad_jax(winds, parameters):
             parameters.point_list,
             Cp=parameters.Cpoint,
             roi=parameters.roi,
-            upper_bc=parameters.upper_bc,
         )
     return grad
 
