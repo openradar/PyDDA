@@ -1,4 +1,5 @@
-""" Nosetests for continuous integration """
+"""Nosetests for continuous integration"""
+
 import pydda
 import pyart
 import numpy as np

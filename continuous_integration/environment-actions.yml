@@ -21,6 +21,3 @@ dependencies:
   - cmweather
   - jax
   - jaxopt
-  - tensorflow>=2.6
-  - tensorflow-probability
-  - xarray-datatree
