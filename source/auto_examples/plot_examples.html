@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -381,8 +381,8 @@ using PyDDA.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pydda</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
-<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span><span class="p">)</span>
-<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR1</span><span class="p">)</span>
+<span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR0</span></a><span class="p">)</span>
+<span class="n">cpol_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">EXAMPLE_RADAR1</span></a><span class="p">)</span>
 
 <span class="c1"># Load sounding data and insert as an intialization</span>
 <span class="n">berr_grid</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
@@ -391,7 +391,7 @@ using PyDDA.</p>
 
 <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
 <span class="c1"># and data weighting constraints.</span>
-<span class="n">Grids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Grids</span></a><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
     <span class="p">[</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span>
     <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span>
@@ -410,7 +410,7 @@ using PyDDA.</p>
 <span class="c1"># Plot a horizontal cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs</span><span class="p">(</span>
-    <span class="n">Grids</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Grids</span></a><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
@@ -424,7 +424,7 @@ using PyDDA.</p>
 <span class="c1"># Plot a vertical X-Z cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_xz_xsection_barbs</span><span class="p">(</span>
-    <span class="n">Grids</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Grids</span></a><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
@@ -438,7 +438,7 @@ using PyDDA.</p>
 <span class="c1"># Plot a vertical Y-Z cross section</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_yz_xsection_barbs</span><span class="p">(</span>
-    <span class="n">Grids</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Grids</span></a><span class="p">,</span>
     <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
     <span class="n">barb_spacing_y_km</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
@@ -472,23 +472,9 @@ TensorFlow detected. Checking for tensorflow-probability...
 TensorFlow-probability detected. TensorFlow engine enabled!
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/PyDDA/PyDDA/pydda/retrieval/angles.py:25: RuntimeWarning: invalid value encountered in arccos
-  elev = np.arccos((Re**2 + slantrsq - rh**2) / (2 * Re * slantr))
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
 Calculating weights for radars 0 and 1
 Calculating weights for radars 1 and 0
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1523: RuntimeWarning: invalid value encountered in divide
-  inp_array1 = x / a
-/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1529: RuntimeWarning: invalid value encountered in divide
-  inp_array3 = (a * a + b * b - c * c) / (2 * a * b)
-/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1526: RuntimeWarning: divide by zero encountered in divide
-  inp_array2 = (x - rad2[1]) / b
-/home/runner/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1529: RuntimeWarning: invalid value encountered in divide
-  inp_array3 = (a * a + b * b - c * c) / (2 * a * b)
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
@@ -553,7 +539,7 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1"># Start the wind retrieval. This example only uses the mass continuity</span>
 <span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1"># and data weighting constraints.</span>
-<span class="ne">---&gt; </span><span class="mi">14</span> <span class="n">Grids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+<span class="ne">---&gt; </span><span class="mi">14</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Grids</span></a><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
 <span class="g g-Whitespace">     </span><span class="mi">15</span>     <span class="p">[</span><span class="n">berr_grid</span><span class="p">,</span> <span class="n">cpol_grid</span><span class="p">],</span>
 <span class="g g-Whitespace">     </span><span class="mi">16</span>     <span class="n">Co</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
 <span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span>
@@ -621,62 +607,18 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">243</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_lbfgsb_py.py:407,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, **unknown_options)</span>
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_lbfgsb_py.py:398,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">396</span> <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">397</span> <span class="c1"># x, f, g, wa, iwa, task, csave, lsave, isave, dsave = \</span>
+<span class="ne">--&gt; </span><span class="mi">398</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">399</span>                <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span> <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">iprint</span><span class="p">,</span> <span class="n">csave</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">400</span>                <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">401</span> <span class="n">task_str</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
 <span class="g g-Whitespace">    </span><span class="mi">402</span> <span class="k">if</span> <span class="n">task_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;FG&#39;</span><span class="p">):</span>
 <span class="g g-Whitespace">    </span><span class="mi">403</span>     <span class="c1"># The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">404</span>     <span class="c1"># Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">405</span>     <span class="c1"># until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">406</span>     <span class="c1"># Overwrite f and g:</span>
-<span class="ne">--&gt; </span><span class="mi">407</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">408</span> <span class="k">elif</span> <span class="n">task_str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;NEW_X&#39;</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">409</span>     <span class="c1"># new iteration</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:343,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">341</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">342</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">343</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">344</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">345</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
-
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:294,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">292</span> <span class="k">def</span> <span class="nf">_update_fun</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span>     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_updated</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">294</span>         <span class="n">fx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped_fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">295</span>         <span class="k">if</span> <span class="n">fx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lowest_f</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_lowest_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
-
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:20,</span> in <span class="ni">_wrapper_fun.&lt;locals&gt;.wrapped</span><span class="nt">(x)</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">ncalls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="c1"># Send a copy because the user may overwrite it.</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="c1"># Overwriting results in undefined behaviour because</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="c1"># fun(self.x) will change self.x, with the two no longer linked.</span>
-<span class="ne">---&gt; </span><span class="mi">20</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="c1"># Make sure the function returns a true scalar</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">fx</span><span class="p">):</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:191,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">187</span> <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">189</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">190</span>     <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-<span class="ne">--&gt; </span><span class="mi">191</span>     <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">192</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">193</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">194</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">195</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">196</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:416,</span> in <span class="ni">calculate_mass_continuity</span><span class="nt">(u, v, w, z, dx, dy, dz, coeff, anel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">413</span>     <span class="n">anel_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="n">div</span> <span class="o">=</span> <span class="n">dudx</span> <span class="o">+</span> <span class="n">dvdy</span> <span class="o">+</span> <span class="n">dwdz</span> <span class="o">+</span> <span class="n">anel_term</span>
-<span class="ne">--&gt; </span><span class="mi">416</span> <span class="k">return</span> <span class="n">coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">div</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -766,7 +708,7 @@ The max of w_init is 0.0
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -392,15 +392,15 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
 <span class="n">H</span> <span class="o">=</span> <span class="n">Herbie</span><span class="p">(</span><span class="s2">&quot;2018-09-14 06:00&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;hrrr&quot;</span><span class="p">,</span> <span class="n">product</span><span class="o">=</span><span class="s2">&quot;prs&quot;</span><span class="p">,</span> <span class="n">fxx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">H</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
 
-<span class="n">grid_mhx_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid_mhx.nc&quot;</span><span class="p">)</span>
-<span class="n">grid_ltx_path</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid_ltx.nc&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid_mhx_path</span></a> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid_mhx.nc&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid_ltx_path</span></a> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;grid_ltx.nc&quot;</span><span class="p">)</span>
 
-<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid_mhx_path</span><span class="p">)</span>
-<span class="n">grid_ltx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">grid_ltx_path</span><span class="p">)</span>
+<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid_mhx_path</span></a><span class="p">)</span>
+<span class="n">grid_ltx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid_ltx_path</span></a><span class="p">)</span>
 
-<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">grib</span><span class="p">)</span>
+<span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">H</span><span class="o">.</span><span class="n">grib</span></a><span class="p">)</span>
 <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-<span class="n">out_grids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out_grids</span></a><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
     <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span>
     <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
     <span class="n">Cm</span><span class="o">=</span><span class="mf">128.0</span><span class="p">,</span>
@@ -418,7 +418,7 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_barbs_map</span><span class="p">(</span>
-    <span class="n">out_grids</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out_grids</span></a><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">bg_grid_no</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -428,7 +428,7 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
 <span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">80</span><span class="p">,</span> <span class="o">-</span><span class="mi">75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">33.0</span><span class="p">,</span> <span class="mf">35.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">out_grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">][</span><span class="mi">13</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot; winds at 0.5 km&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out_grids</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">][</span><span class="mi">13</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot; winds at 0.5 km&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -453,9 +453,7 @@ Jax/JaxOpt are not installed on your system, unable to use Jax engine.
 Detecting TensorFlow...
 TensorFlow detected. Checking for tensorflow-probability...
 TensorFlow-probability detected. TensorFlow engine enabled!
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>✅ Found ┊ model=hrrr ┊ product=prs ┊ 2018-Sep-14 06:00 UTC F00 ┊ GRIB2 @ local ┊ IDX @ aws
+✅ Found ┊ model=hrrr ┊ product=prs ┊ 2018-Sep-14 06:00 UTC F00 ┊ GRIB2 @ local ┊ IDX @ aws
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
@@ -468,7 +466,9 @@ TensorFlow-probability detected. TensorFlow engine enabled!
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
-Starting solver 
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Starting solver 
 rmsVR = 21.58818045293141
 Total points: 1284618
 The max of w_init is 0.0
@@ -477,9 +477,9 @@ The max of w_init is 0.0
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">19</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">H</span><span class="o">.</span><span class="n">grib</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">constraints</span><span class="o">.</span><span class="n">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">H</span><span class="o">.</span><span class="n">grib</span></a><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="n">grid_mhx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
-<span class="ne">---&gt; </span><span class="mi">19</span> <span class="n">out_grids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
+<span class="ne">---&gt; </span><span class="mi">19</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out_grids</span></a><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field</span><span class="p">(</span>
 <span class="g g-Whitespace">     </span><span class="mi">20</span>     <span class="p">[</span><span class="n">grid_mhx</span><span class="p">,</span> <span class="n">grid_ltx</span><span class="p">],</span>
 <span class="g g-Whitespace">     </span><span class="mi">21</span>     <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
 <span class="g g-Whitespace">     </span><span class="mi">22</span>     <span class="n">Cm</span><span class="o">=</span><span class="mf">128.0</span><span class="p">,</span>
@@ -613,7 +613,7 @@ The max of w_init is 0.0
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>

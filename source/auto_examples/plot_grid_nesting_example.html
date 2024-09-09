@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -414,7 +414,7 @@ DataArrays inside each of the root nodes for each level, in this case
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">datatree</span> <span class="kn">import</span> <span class="n">DataTree</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/warnings.html#warnings.filterwarnings" title="warnings.filterwarnings" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span></a><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">We will load pregenerated grids for this case.</span>
@@ -435,7 +435,7 @@ DataArrays inside each of the root nodes for each level, in this case
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Specify the retrieval parameters at each level</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">kwargs_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span>
     <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
     <span class="n">Cx</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
@@ -452,16 +452,16 @@ DataArrays inside each of the root nodes for each level, in this case
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Provide the overlying grid structure as specified above.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="n">tree_dict</span> <span class="o">=</span> <span class="p">{</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tree_dict</span></a> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;/coarse/radar_ktlx&quot;</span><span class="p">:</span> <span class="n">test_coarse0</span><span class="p">,</span>
     <span class="s2">&quot;/coarse/radar_kict&quot;</span><span class="p">:</span> <span class="n">test_coarse1</span><span class="p">,</span>
     <span class="s2">&quot;/coarse/fine/radar_ktlx&quot;</span><span class="p">:</span> <span class="n">test_fine0</span><span class="p">,</span>
     <span class="s2">&quot;/coarse/fine/radar_kict&quot;</span><span class="p">:</span> <span class="n">test_fine1</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">tree</span> <span class="o">=</span> <span class="n">DataTree</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">tree_dict</span><span class="p">)</span>
-<span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/coarse/&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">kwargs_dict</span>
-<span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/coarse/fine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">kwargs_dict</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">DataTree</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tree_dict</span></a><span class="p">)</span>
+<span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/coarse/&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
+<span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/coarse/fine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Perform the retrieval</span>
@@ -553,7 +553,7 @@ The max of w_init is 0.0
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">60</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/coarse/fine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">kwargs_dict</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/coarse/fine&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
 <span class="g g-Whitespace">     </span><span class="mi">56</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="g g-Whitespace">     </span><span class="mi">57</span><span class="sd"> Perform the retrieval</span>
 <span class="g g-Whitespace">     </span><span class="mi">58</span><span class="sd"> &quot;&quot;&quot;</span>
@@ -724,7 +724,7 @@ The max of w_init is 0.0
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
     <br/>
   </p>
 </div>
