@@ -139,9 +139,7 @@ def al_vert_vort_function(winds, parameters, mult, mu):
             parameters.Vt,
         )
 
-        al = -tf.math.reduce_sum(mult * vort) + (mu / 2.0) * tf.math.reduce_sum(
-            vort**2
-        )
+        al = -tf.math.reduce_sum(mult * vort) + (mu / 2.0) * tf.math.reduce_sum(vort**2)
     vars = {"u": winds[0], "v": winds[1], "w": winds[2]}
     grad = tape.gradient(al, vars)
     grad_u = grad["u"]

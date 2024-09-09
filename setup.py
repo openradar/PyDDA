@@ -7,7 +7,6 @@ A package for the multi-Doppler analysis of radar radial velocity data.
 
 """
 
-
 DOCLINES = __doc__.split("\n")
 
 import glob

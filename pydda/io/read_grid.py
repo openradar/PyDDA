@@ -41,19 +41,19 @@ def read_grid(file_name, level_name="parent", **kwargs):
         raise IOError("NetCDF file does not contain any valid radar grid fields!")
 
     root["point_x"] = xr.DataArray(_point_data_factory(root, "x"), dims=("z", "y", "x"))
-    root.attrs["units"] = root["x"].units
-    root.attrs["long_name"] = "Point x location"
+    root["point_x"].attrs["units"] = root["x"].attrs["units"]
+    root["point_x"].attrs["long_name"] = "Point x location"
     root["point_y"] = xr.DataArray(_point_data_factory(root, "y"), dims=("z", "y", "x"))
-    root.attrs["units"] = root["y"].units
-    root.attrs["long_name"] = "Point y location"
+    root["point_y"].attrs["units"] = root["y"].attrs["units"]
+    root["point_y"].attrs["long_name"] = "Point y location"
     root["point_z"] = xr.DataArray(_point_data_factory(root, "z"), dims=("z", "y", "x"))
-    root.attrs["units"] = root["z"].units
-    root.attrs["long_name"] = "Point z location"
+    root["point_z"].attrs["units"] = root["z"].attrs["units"]
+    root["point_z"].attrs["long_name"] = "Point z location"
     root["point_altitude"] = xr.DataArray(
         _point_altitude_data_factory(root), dims=("z", "y", "x")
     )
-    root.attrs["units"] = root["z"].units
-    root.attrs["long_name"] = "Point altitude"
+    root["point_z"].attrs["units"] = root["z"].attrs["units"]
+    root["point_z"].attrs["long_name"] = "Point altitude"
     lon = _point_lon_lat_data_factory(root, 0)
     lat = _point_lon_lat_data_factory(root, 1)
     root["point_longitude"] = xr.DataArray(lon, dims=("z", "y", "x"))
@@ -138,23 +138,23 @@ def read_from_pyart_grid(Grid):
     new_grid["point_x"] = xr.DataArray(
         _point_data_factory(new_grid, "x"), dims=("z", "y", "x")
     )
-    new_grid.attrs["units"] = new_grid["x"].units
-    new_grid.attrs["long_name"] = "Point x location"
+    new_grid["point_x"].attrs["units"] = Grid.x["units"]
+    new_grid["point_x"].attrs["long_name"] = "Point x location"
     new_grid["point_y"] = xr.DataArray(
         _point_data_factory(new_grid, "y"), dims=("z", "y", "x")
     )
-    new_grid.attrs["units"] = new_grid["y"].units
-    new_grid.attrs["long_name"] = "Point y location"
+    new_grid["point_y"].attrs["units"] = Grid.y["units"]
+    new_grid["point_y"].attrs["long_name"] = "Point y location"
     new_grid["point_z"] = xr.DataArray(
         _point_data_factory(new_grid, "z"), dims=("z", "y", "x")
     )
-    new_grid.attrs["units"] = new_grid["z"].units
-    new_grid.attrs["long_name"] = "Point z location"
+    new_grid["point_z"].attrs["units"] = Grid.z["units"]
+    new_grid["point_z"].attrs["long_name"] = "Point z location"
     new_grid["point_altitude"] = xr.DataArray(
         _point_altitude_data_factory(new_grid), dims=("z", "y", "x")
     )
-    new_grid.attrs["units"] = new_grid["z"].units
-    new_grid.attrs["long_name"] = "Point altitude"
+    new_grid["point_altitude"].attrs["units"] = Grid.z["units"]
+    new_grid["point_altitude"].attrs["long_name"] = "Point altitude"
     lon = _point_lon_lat_data_factory(new_grid, 0)
     lat = _point_lon_lat_data_factory(new_grid, 1)
     new_grid["point_longitude"] = xr.DataArray(

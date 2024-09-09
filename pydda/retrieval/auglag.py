@@ -289,11 +289,9 @@ def auglag(winds, parameters, bounds):
     mu = parameters.Cm
 
     # stopping criteria:
-    cvtol = (
-        parameters.cvtol
-    )  # maximum constraint violation must be less than this number (abs value of largest divergence must be less than this many 1/s units)
-    gtol = parameters.gtol  # Augmented Lagrangian norm must be less than this number
-    Jveltol = parameters.Jveltol  # acceptable terminating value of Jvel
+    cvtol = parameters.cvtol
+    gtol = parameters.gtol
+    Jveltol = parameters.Jveltol
 
     len(winds)
 
