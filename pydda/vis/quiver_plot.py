@@ -1367,29 +1367,25 @@ def _parse_quiverkey_string(qloc, grid_z, grid_y, grid_x, grid_bg, xsection="xy"
             mid_x1 = grid_x.max() - 4 * (grid_x.max() - grid_x.min()) / 10
             mid_y2 = grid_y.max() - 6 * (grid_y.max() - grid_y.min()) / 10
             mid_x2 = grid_x.max() - 6 * (grid_x.max() - grid_x.min()) / 10
-            top_right = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_y > top_y, grid_x > right_x)].mask
-                    is True
-                )[0]
+            top_right = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_y > top_y, grid_x > right_x))
+                ].mask
             )
-            top_left = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_y > top_y, grid_x < left_x)].mask
-                    is True
-                )[0]
+            top_left = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_y > top_y, grid_x < left_x))
+                ].mask
             )
-            bot_left = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_y < bottom_y, grid_x < left_x)].mask
-                    is True
-                )[0]
+            bot_left = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_y < bottom_y, grid_x < left_x))
+                ].mask
             )
-            bot_right = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_y > bottom_y, grid_x > right_x)].mask
-                    is True
-                )[0]
+            bot_right = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_y > bottom_y, grid_x > right_x))
+                ].mask
             )
             top_inds = np.logical_and.reduce(
                 (grid_y > top_y, grid_x > mid_x2, grid_x < mid_x1)
@@ -1397,16 +1393,16 @@ def _parse_quiverkey_string(qloc, grid_z, grid_y, grid_x, grid_bg, xsection="xy"
             bottom_inds = np.logical_and.reduce(
                 (grid_y < bottom_y, grid_x > mid_x2, grid_x < mid_x1)
             )
-            top = len(np.where(grid_bg[top_inds].mask is True)[0])
-            bottom = len(np.where(grid_bg[bottom_inds].mask is True)[0])
+            top = len(np.where(np.atleast_1d(grid_bg[top_inds].mask is True))[0])
+            bottom = len(np.where(np.atleast_1d(grid_bg[bottom_inds].mask is True))[0])
             left_inds = np.logical_and.reduce(
                 (grid_x < left_x, grid_y > mid_y2, grid_y < mid_y1)
             )
-            left = len(np.where(grid_bg[left_inds].mask is True)[0])
+            left = len(np.where(np.atleast_1d(grid_bg[left_inds].mask is True))[0])
             right_inds = np.logical_and.reduce(
                 (grid_x > right_x, grid_y > mid_y2, grid_y < mid_y1)
             )
-            right = len(np.where(grid_bg[right_inds].mask is True)[0])
+            right = len(np.where(np.atleast_1d(grid_bg[right_inds].mask is True))[0])
         elif xsection == "xz":
             top_z = grid_z.max() - (grid_z.max() - grid_y.min()) / 10
             right_x = grid_x.max() - (grid_x.max() - grid_x.min()) / 10
@@ -1416,29 +1412,25 @@ def _parse_quiverkey_string(qloc, grid_z, grid_y, grid_x, grid_bg, xsection="xy"
             mid_x1 = grid_x.max() - 4 * (grid_x.max() - grid_x.min()) / 10
             mid_z2 = grid_z.max() - 6 * (grid_z.max() - grid_z.min()) / 10
             mid_x2 = grid_x.max() - 6 * (grid_x.max() - grid_x.min()) / 10
-            top_right = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z > top_z, grid_x > right_x)].mask
-                    is True
-                )[0]
+            top_right = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z > top_z, grid_x > right_x))
+                ].mask
             )
-            top_left = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z > top_z, grid_x < left_x)].mask
-                    is True
-                )[0]
+            top_left = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z > top_z, grid_x < left_x))
+                ].mask
             )
-            bot_left = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z < bottom_z, grid_x < left_x)].mask
-                    is True
-                )[0]
+            bot_left = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z < bottom_z, grid_x < left_x))
+                ].mask
             )
-            bot_right = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z > bottom_z, grid_x > right_x)].mask
-                    is True
-                )[0]
+            bot_right = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z > bottom_z, grid_x > right_x))
+                ].mask
             )
             top_inds = np.logical_and.reduce(
                 (grid_z > top_z, grid_x > mid_x2, grid_x < mid_x1)
@@ -1446,16 +1438,16 @@ def _parse_quiverkey_string(qloc, grid_z, grid_y, grid_x, grid_bg, xsection="xy"
             bottom_inds = np.logical_and.reduce(
                 (grid_z < bottom_z, grid_x > mid_x2, grid_x < mid_x1)
             )
-            top = len(np.where(grid_bg[top_inds].mask is True)[0])
-            bottom = len(np.where(grid_bg[bottom_inds].mask is True)[0])
+            top = len(np.where(np.atleast_1d(grid_bg[top_inds].mask is True))[0])
+            bottom = len(np.where(np.atleast_1d(grid_bg[bottom_inds].mask is True))[0])
             left_inds = np.logical_and.reduce(
                 (grid_x < left_x, grid_z > mid_z2, grid_z < mid_z1)
             )
-            left = len(np.where(grid_bg[left_inds].mask is True)[0])
+            left = len(np.where(np.atleast_1d(grid_bg[left_inds].mask is True))[0])
             right_inds = np.logical_and.reduce(
                 (grid_x > right_x, grid_z > mid_z2, grid_z < mid_z1)
             )
-            right = len(np.where(grid_bg[right_inds].mask is True)[0])
+            right = len(np.where(np.atleast_1d(grid_bg[right_inds].mask is True))[0])
         elif xsection == "yz":
             top_z = grid_z.max() - (grid_z.max() - grid_y.min()) / 10
             right_y = grid_y.max() - (grid_y.max() - grid_y.min()) / 10
@@ -1465,29 +1457,25 @@ def _parse_quiverkey_string(qloc, grid_z, grid_y, grid_x, grid_bg, xsection="xy"
             mid_y1 = grid_y.max() - 4 * (grid_y.max() - grid_y.min()) / 10
             mid_z2 = grid_z.max() - 6 * (grid_z.max() - grid_z.min()) / 10
             mid_y2 = grid_y.max() - 6 * (grid_y.max() - grid_y.min()) / 10
-            top_right = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z > top_z, grid_y > right_y)].mask
-                    is True
-                )[0]
+            top_right = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z > top_z, grid_y > right_y))
+                ].mask
             )
-            top_left = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z > top_z, grid_y < left_y)].mask
-                    is True
-                )[0]
+            top_left = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z > top_z, grid_y < left_y))
+                ].mask
             )
-            bot_left = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z < bottom_z, grid_y < left_y)].mask
-                    is True
-                )[0]
+            bot_left = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z < bottom_z, grid_y < left_y))
+                ].mask
             )
-            bot_right = len(
-                np.where(
-                    grid_bg[np.logical_and(grid_z > bottom_z, grid_y > right_y)].mask
-                    is True
-                )[0]
+            bot_right = np.sum(
+                grid_bg[
+                    np.atleast_1d(np.logical_and(grid_z > bottom_z, grid_y > right_y))
+                ].mask
             )
             top_inds = np.logical_and.reduce(
                 (grid_z > top_z, grid_y > mid_y2, grid_x < mid_y1)
@@ -1495,16 +1483,16 @@ def _parse_quiverkey_string(qloc, grid_z, grid_y, grid_x, grid_bg, xsection="xy"
             bottom_inds = np.logical_and.reduce(
                 (grid_z < bottom_z, grid_y > mid_y2, grid_y < mid_y1)
             )
-            top = len(np.where(grid_bg[top_inds].mask is True)[0])
-            bottom = len(np.where(grid_bg[bottom_inds].mask is True)[0])
+            top = len(np.where(np.atleast_1d(grid_bg[top_inds].mask is True))[0])
+            bottom = len(np.where(np.atleast_1d(grid_bg[bottom_inds].mask is True))[0])
             left_inds = np.logical_and.reduce(
                 (grid_y < left_y, grid_z > mid_z2, grid_z < mid_z1)
             )
-            left = len(np.where(grid_bg[left_inds].mask is True)[0])
+            left = len(np.where(np.atleast_1d(grid_bg[left_inds].mask is True))[0])
             right_inds = np.logical_and.reduce(
                 (grid_y > right_y, grid_z > mid_z2, grid_z < mid_z1)
             )
-            right = len(np.where(grid_bg[right_inds].mask is True)[0])
+            right = len(np.where(np.atleast_1d(grid_bg[right_inds].mask is True))[0])
 
         loc_array = np.array(
             [top_right, top_left, bot_left, bot_right, top, bottom, left, right]

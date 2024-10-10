@@ -1,4 +1,5 @@
-""" Testing module for PyDDA visualizations """
+"""Testing module for PyDDA visualizations"""
+
 from matplotlib import use
 
 use("agg")

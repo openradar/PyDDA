@@ -1,4 +1,5 @@
-""" Nosetests for continuous integration """
+"""Nosetests for continuous integration"""
+
 import pydda
 import pyart
 import numpy as np
@@ -501,8 +502,6 @@ def test_vert_vorticity_tf():
 def test_point_cost():
     u = 1 * np.ones((10, 10, 10))
     v = 1 * np.ones((10, 10, 10))
-    0 * np.ones((10, 10, 10))
-
     x = np.linspace(-10, 10, 10)
     y = np.linspace(-10, 10, 10)
     z = np.linspace(-10, 10, 10)
@@ -556,8 +555,6 @@ def test_point_cost():
 def test_point_cost_jax():
     u = 1 * np.ones((10, 10, 10))
     v = 1 * np.ones((10, 10, 10))
-    0 * np.ones((10, 10, 10))
-
     x = np.linspace(-10, 10, 10)
     y = np.linspace(-10, 10, 10)
     z = np.linspace(-10, 10, 10)
