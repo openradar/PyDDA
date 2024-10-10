@@ -5,6 +5,7 @@ import numpy as np
 import pyart
 import time
 
+
 from datetime import datetime, timedelta
 from six import StringIO
 
@@ -94,8 +95,13 @@ def get_iem_obs(Grid, window=60.0):
                 )
 
     # Get the timestamp for each request
-    grid_time = datetime.strptime(
-        Grid["time"].attrs["units"], "seconds since %Y-%m-%dT%H:%M:%SZ"
+    grid_time = datetime(
+        year=Grid["time"][0].dt.year.values,
+        month=Grid["time"][0].dt.month.values,
+        day=Grid["time"][0].dt.day.values,
+        hour=Grid["time"][0].dt.hour.values,
+        minute=Grid["time"][0].dt.minute.values,
+        second=Grid["time"][0].dt.second.values,
     )
     start_time = grid_time - timedelta(minutes=window / 2.0)
     end_time = grid_time + timedelta(minutes=window / 2.0)

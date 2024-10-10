@@ -9,4 +9,5 @@ pooch
 cmweather
 cdsapi
 xarray
+cftime
 xarray-datatree
