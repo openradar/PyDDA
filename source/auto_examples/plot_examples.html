@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example on retrieving and plotting winds &#8212; PyDDA 2.0.1 documentation</title>
+    <title>Example on retrieving and plotting winds &#8212; PyDDA 2.0.2 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="../../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../../_static/documentation_options.js?v=c2377ec0"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.0.1 documentation</p>
+    <p class="title logo__title">PyDDA 2.0.2 documentation</p>
   
 </a></div>
     
@@ -462,7 +462,7 @@ using PyDDA.</p>
 ##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.0.1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.0.2
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -619,65 +619,67 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">409</span>     <span class="c1"># new iteration</span>
 <span class="g g-Whitespace">    </span><span class="mi">410</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:343,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">341</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:344,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
 <span class="g g-Whitespace">    </span><span class="mi">342</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">343</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">344</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">343</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">344</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
 <span class="g g-Whitespace">    </span><span class="mi">345</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:294,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">292</span> <span class="k">def</span> <span class="nf">_update_fun</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span>     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_updated</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">294</span>         <span class="n">fx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped_fun</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">295</span>         <span class="k">if</span> <span class="n">fx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lowest_f</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_lowest_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:306,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">304</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orig_grad</span> <span class="ow">in</span> <span class="n">FD_METHODS</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">306</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped_grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">307</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_updated</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:20,</span> in <span class="ni">_wrapper_fun.&lt;locals&gt;.wrapped</span><span class="nt">(x)</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">ncalls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="c1"># Send a copy because the user may overwrite it.</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="c1"># Overwriting results in undefined behaviour because</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="c1"># fun(self.x) will change self.x, with the two no longer linked.</span>
-<span class="ne">---&gt; </span><span class="mi">20</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="c1"># Make sure the function returns a true scalar</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">fx</span><span class="p">):</span>
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_differentiable_functions.py:41,</span> in <span class="ni">_wrapper_grad.&lt;locals&gt;.wrapped</span><span class="nt">(x, **kwds)</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">39</span>     <span class="c1"># kwds present to give function same signature as numdiff variant</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="n">ncalls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="ne">---&gt; </span><span class="mi">41</span>     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">))</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:191,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">187</span> <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">189</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">190</span>     <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-<span class="ne">--&gt; </span><span class="mi">191</span>     <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">192</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">193</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">194</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">195</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">196</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:513,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span> <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">504</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">505</span>         <span class="n">winds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">506</span>         <span class="p">(</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">511</span>         <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">512</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">513</span>     <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">514</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">515</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">516</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">517</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">518</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">519</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">520</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">521</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">522</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">523</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">524</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">525</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">527</span>     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">528</span>         <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">529</span>             <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">530</span>             <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">537</span>             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">538</span>         <span class="p">)</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:405,</span> in <span class="ni">calculate_mass_continuity</span><span class="nt">(u, v, w, z, dx, dy, dz, coeff, anel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">374</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">375</span><span class="sd"> Calculates the mass continuity cost function by taking the divergence</span>
-<span class="g g-Whitespace">    </span><span class="mi">376</span><span class="sd"> of the wind field.</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">402</span><span class="sd">     value of mass continuity cost function</span>
-<span class="g g-Whitespace">    </span><span class="mi">403</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">404</span> <span class="n">dudx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">405</span> <span class="n">dvdy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">406</span> <span class="n">dwdz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">408</span> <span class="k">if</span> <span class="n">anel</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/numpy/lib/function_base.py:1266,</span> in <span class="ni">gradient</span><span class="nt">(f, axis, edge_order, *varargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1264</span>     <span class="n">dx_n</span> <span class="o">=</span> <span class="n">ax_dx</span> <span class="k">if</span> <span class="n">uniform_spacing</span> <span class="k">else</span> <span class="n">ax_dx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1265</span>     <span class="c1"># 1D equivalent -- out[-1] = (f[-1] - f[-2]) / (x[-1] - x[-2])</span>
-<span class="ne">-&gt; </span><span class="mi">1266</span>     <span class="n">out</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slice1</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slice2</span><span class="p">)]</span> <span class="o">-</span> <span class="n">f</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slice3</span><span class="p">)])</span> <span class="o">/</span> <span class="n">dx_n</span>
-<span class="g g-Whitespace">   </span><span class="mi">1268</span> <span class="c1"># Numerical differentiation: 2nd order edges</span>
-<span class="g g-Whitespace">   </span><span class="mi">1269</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1270</span>     <span class="n">slice1</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:131,</span> in <span class="ni">calculate_grad_radial_vel</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc)</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span> <span class="n">v_ar</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span>     <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">u</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">v</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span>     <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">127</span> <span class="n">x_grad</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">128</span>     <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">129</span> <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">130</span> <span class="n">y_grad</span> <span class="o">=</span> <span class="p">(</span>
+<span class="ne">--&gt; </span><span class="mi">131</span>     <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="n">z_grad</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span> <span class="n">p_x1</span> <span class="o">+=</span> <span class="n">x_grad</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
