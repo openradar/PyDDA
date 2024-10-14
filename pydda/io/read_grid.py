@@ -90,6 +90,11 @@ def read_from_pyart_grid(Grid):
     origin_latitude = Grid.origin_latitude
     origin_longitude = Grid.origin_longitude
     origin_altitude = Grid.origin_altitude
+    # Ensure that origin latitude, longitude are 1-D for .to_xarray()
+
+    origin_latitude["data"] = np.atleast_1d(np.squeeze(origin_latitude["data"]))
+    origin_longitude["data"] = np.atleast_1d(np.squeeze(origin_longitude["data"]))
+    origin_altitude["data"] = np.atleast_1d(np.squeeze(origin_altitude["data"]))
 
     if len(list(Grid.fields.keys())) > 0:
         first_grid_name = list(Grid.fields.keys())[0]
