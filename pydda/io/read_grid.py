@@ -2,7 +2,7 @@ import xarray as xr
 import numpy as np
 
 from glob import glob
-from datatree import DataTree
+from xarray import DataTree
 from pyart.core.transforms import cartesian_to_geographic
 
 from ..retrieval.angles import add_azimuth_as_field, add_elevation_as_field

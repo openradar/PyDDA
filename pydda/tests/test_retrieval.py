@@ -13,7 +13,7 @@ import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
 
-from datatree import DataTree
+from xarray import DataTree
 
 try:
     import tensorflow as tf
@@ -289,21 +289,25 @@ def test_nested_retrieval():
         engine="scipy",
     )
 
+    test_coarse1["time"] = test_coarse0["time"]
+    test_fine0["time"] = test_coarse0["time"]
+    test_fine1["time"] = test_coarse1["time"]
+
     tree_dict = {
-        "/coarse/radar_ktlx": test_coarse0,
-        "/coarse/radar_kict": test_coarse1,
-        "/coarse/fine/radar_ktlx": test_fine0,
-        "/coarse/fine/radar_kict": test_fine1,
+        "/nest_0/radar_ktlx": test_coarse0,
+        "/nest_0/radar_kict": test_coarse1,
+        "/nest_1/radar_ktlx": test_fine0,
+        "/nest_1/radar_kict": test_fine1,
     }
 
     tree = DataTree.from_dict(tree_dict)
-    tree["/coarse/"].attrs = kwargs_dict
-    tree["/coarse/fine"].attrs = kwargs_dict
+    tree["/nest_0/"].attrs = kwargs_dict
+    tree["/nest_1/"].attrs = kwargs_dict
 
     grid_tree = pydda.retrieval.get_dd_wind_field_nested(tree)
     fig, ax = plt.subplots(1, 2, figsize=(10, 5))
     pydda.vis.plot_horiz_xsection_quiver(
-        grid_tree["coarse"],
+        grid_tree["nest_0"],
         ax=ax[0],
         level=5,
         cmap="ChaseSpectral",
@@ -318,7 +322,7 @@ def test_nested_retrieval():
         quiverkey_loc="bottom_right",
     )
     pydda.vis.plot_horiz_xsection_quiver(
-        grid_tree["coarse/fine"],
+        grid_tree["nest_1"],
         ax=ax[1],
         level=5,
         cmap="ChaseSpectral",

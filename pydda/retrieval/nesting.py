@@ -4,7 +4,7 @@ import xarray as xr
 
 from scipy.interpolate import RegularGridInterpolator
 from .wind_retrieve import get_dd_wind_field
-from datatree import DataTree
+from xarray import DataTree
 
 
 def get_dd_wind_field_nested(grid_tree: DataTree, **kwargs):
@@ -22,8 +22,6 @@ def get_dd_wind_field_nested(grid_tree: DataTree, **kwargs):
           - The list of PyART grids for the given level of the grid
         * - kwargs
           - The list of key word arguments for input to the :py:func:`pydda.retrieval.get_dd_wind_field` function for the set of grids.
-        * - children
-          - The list of trees that are the children of this node.
 
     The function will output the same tree, with the list of output grids of each level output to the 'output_grids'
     member of the tree structure. If *kwargs* is set to None, then the input keyword arguments will be
@@ -34,53 +32,89 @@ def get_dd_wind_field_nested(grid_tree: DataTree, **kwargs):
     child_list = list(grid_tree.children.keys())
     grid_list = []
     rad_names = []
-    for child in child_list:
-        if "radar" in child:
-            grid_list.append(grid_tree[child].to_dataset())
-            rad_names.append(child)
+    # We are at the parent level, look for nest 0
+    if "nest_0" in child_list:
+        for child in grid_tree["nest_0"].children.keys():
+            if "radar_" in child:
+                grid_list.append(grid_tree["nest_0"][child].to_dataset())
+                rad_names.append(child)
+        tree_attrs = grid_tree["nest_0"].attrs
+        in_parent = True
+    else:
+        tree_attrs = grid_tree.attrs
+        # We are in nest 1...n
+        for child in child_list:
+            if "radar_" in child:
+                grid_list.append(grid_tree[child].to_dataset())
+                rad_names.append(child)
+        in_parent = False
 
-    if len(list(grid_tree.attrs.keys())) == 0 and len(grid_list) > 0:
+    if len(list(tree_attrs.keys())) == 0 and len(grid_list) > 0:
         output_grids, output_parameters = get_dd_wind_field(grid_list, **kwargs)
     elif len(grid_list) > 0:
-        my_kwargs = grid_tree.attrs
+        my_kwargs = tree_attrs
         output_grids, output_parameters = get_dd_wind_field(grid_list, **my_kwargs)
         output_parameters = output_parameters.__dict__
-        grid_tree["weights"] = xr.DataArray(
-            output_parameters.pop("weights"), dims=("nradar", "z", "y", "x")
-        )
-        grid_tree["bg_weights"] = xr.DataArray(
-            output_parameters.pop("bg_weights"), dims=("z", "y", "x")
-        )
-        grid_tree["model_weights"] = xr.DataArray(
-            output_parameters.pop("model_weights"), dims=("nmodel", "z", "y", "x")
-        )
-        output_parameters.pop("u_model")
-        output_parameters.pop("v_model")
-        output_parameters.pop("w_model")
-        grid_tree["output_parameters"] = xr.DataArray([], attrs=output_parameters)
-
-        grid_tree.__setitem__("u", output_grids[0]["u"])
-        grid_tree.__setitem__("v", output_grids[0]["v"])
-        grid_tree.__setitem__("w", output_grids[0]["w"])
-        grid_tree["u"].attrs = output_grids[0]["u"].attrs
-        grid_tree["v"].attrs = output_grids[0]["v"].attrs
-        grid_tree["w"].attrs = output_grids[0]["w"].attrs
+        if in_parent is True:
+            grid_tree["nest_0"]["weights"] = xr.DataArray(
+                output_parameters.pop("weights"), dims=("nradars", "z", "y", "x")
+            )
+            grid_tree["nest_0"]["bg_weights"] = xr.DataArray(
+                output_parameters.pop("bg_weights"), dims=("z", "y", "x")
+            )
+            grid_tree["nest_0"]["model_weights"] = xr.DataArray(
+                output_parameters.pop("model_weights"), dims=("nmodel", "z", "y", "x")
+            )
+            output_parameters.pop("u_model")
+            output_parameters.pop("v_model")
+            output_parameters.pop("w_model")
+            grid_tree["nest_0"]["output_parameters"] = xr.DataArray(
+                [], attrs=output_parameters
+            )
+            grid_tree["nest_0"].__setitem__("u", output_grids[0]["u"])
+            grid_tree["nest_0"].__setitem__("v", output_grids[0]["v"])
+            grid_tree["nest_0"].__setitem__("w", output_grids[0]["w"])
+            grid_tree["nest_0"]["u"].attrs = output_grids[0]["u"].attrs
+            grid_tree["nest_0"]["v"].attrs = output_grids[0]["v"].attrs
+            grid_tree["nest_0"]["w"].attrs = output_grids[0]["w"].attrs
+        else:
+            grid_tree["weights"] = xr.DataArray(
+                output_parameters.pop("weights"), dims=("nradars", "z", "y", "x")
+            )
+            grid_tree["bg_weights"] = xr.DataArray(
+                output_parameters.pop("bg_weights"), dims=("z", "y", "x")
+            )
+            grid_tree["model_weights"] = xr.DataArray(
+                output_parameters.pop("model_weights"), dims=("nmodel", "z", "y", "x")
+            )
+            output_parameters.pop("u_model")
+            output_parameters.pop("v_model")
+            output_parameters.pop("w_model")
+            grid_tree["output_parameters"] = xr.DataArray([], attrs=output_parameters)
+            grid_tree.__setitem__("u", output_grids[0]["u"])
+            grid_tree.__setitem__("v", output_grids[0]["v"])
+            grid_tree.__setitem__("w", output_grids[0]["w"])
+            grid_tree["u"].attrs = output_grids[0]["u"].attrs
+            grid_tree["v"].attrs = output_grids[0]["v"].attrs
+            grid_tree["w"].attrs = output_grids[0]["w"].attrs
 
     if child_list == []:
         return grid_tree
 
     nests = []
     for child in child_list:
-        if "radar_" not in child:
+        if "nest_" in child:
             nests.append(child)
     nests = sorted(nests)
-    for child in nests:
+    for i, child in enumerate(nests):
+        if i == 0:
+            continue
         # Only update child initalization if we are not in parent node
         if len(grid_list) > 0:
-            temp_src = grid_tree[rad_names[0]].to_dataset()
-            temp_src["u"] = grid_tree.ds["u"]
-            temp_src["v"] = grid_tree.ds["v"]
-            temp_src["w"] = grid_tree.ds["w"]
+            temp_src = grid_tree[f"nest_{i-1}"][rad_names[0]].to_dataset()
+            temp_src["u"] = grid_tree[f"nest_{i-1}"].ds["u"]
+            temp_src["v"] = grid_tree[f"nest_{i-1}"].ds["v"]
+            temp_src["w"] = grid_tree[f"nest_{i-1}"].ds["w"]
             input_grids = make_initialization_from_other_grid(
                 temp_src, grid_tree.children[child][rad_names[0]].to_dataset()
             )
@@ -145,26 +179,31 @@ def get_dd_wind_field_nested(grid_tree: DataTree, **kwargs):
         grid_tree.children[child]["w"].attrs = temp_tree.ds["w"].attrs
 
     # Update parent grids from children
+    for child in child_list:
+        if "nest_" in child:
+            nests.append(child)
+    nests = sorted(nests)
+
     if len(rad_names) > 0:
-        for child in nests:
-            temp_src = grid_tree.children[child][rad_names[0]].to_dataset()
-            temp_src["u"] = grid_tree.children[child].ds["u"]
-            temp_src["v"] = grid_tree.children[child].ds["v"]
-            temp_src["w"] = grid_tree.children[child].ds["w"]
-            temp_dest = grid_tree[rad_names[0]].to_dataset()
-            temp_dest["u"] = grid_tree.ds["u"]
-            temp_dest["v"] = grid_tree.ds["v"]
-            temp_dest["w"] = grid_tree.ds["w"]
+        for i, child in enumerate(nests[:-1]):
+            temp_src = grid_tree.children[nests[i + 1]][rad_names[0]].to_dataset()
+            temp_src["u"] = grid_tree.children[nests[i + 1]].ds["u"]
+            temp_src["v"] = grid_tree.children[nests[i + 1]].ds["v"]
+            temp_src["w"] = grid_tree.children[nests[i + 1]].ds["w"]
+            temp_dest = grid_tree.children[nests[i]][rad_names[0]].to_dataset()
+            temp_dest["u"] = grid_tree.children[nests[i]].ds["u"]
+            temp_dest["v"] = grid_tree.children[nests[i]].ds["v"]
+            temp_dest["w"] = grid_tree.children[nests[i]].ds["w"]
             output_grids = make_initialization_from_other_grid(
                 temp_src,
                 temp_dest,
             )
-            grid_tree.__setitem__("u", output_grids["u"])
-            grid_tree.__setitem__("v", output_grids["v"])
-            grid_tree.__setitem__("w", output_grids["w"])
-            grid_tree["u"].attrs = output_grids["u"].attrs
-            grid_tree["v"].attrs = output_grids["v"].attrs
-            grid_tree["w"].attrs = output_grids["w"].attrs
+            grid_tree.children[nests[i]].__setitem__("u", output_grids["u"])
+            grid_tree.children[nests[i]].__setitem__("v", output_grids["v"])
+            grid_tree.children[nests[i]].__setitem__("w", output_grids["w"])
+            grid_tree.children[nests[i]]["u"].attrs = output_grids["u"].attrs
+            grid_tree.children[nests[i]]["v"].attrs = output_grids["v"].attrs
+            grid_tree.children[nests[i]]["w"].attrs = output_grids["w"].attrs
     return grid_tree
 
 

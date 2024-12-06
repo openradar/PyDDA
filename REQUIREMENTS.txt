@@ -8,5 +8,4 @@ six
 pooch
 cmweather
 cdsapi
-xarray
-xarray-datatree
+xarray>=2024.10.0
