@@ -8,7 +8,7 @@ import pyart
 
 from .. import retrieval
 from matplotlib.axes import Axes
-from datatree import DataTree
+from xarray import DataTree
 
 try:
     from cartopy.mpl.geoaxes import GeoAxes

@@ -4,7 +4,7 @@ import xarray as xr
 
 from scipy.interpolate import RegularGridInterpolator
 from .wind_retrieve import get_dd_wind_field
-from datatree import DataTree
+from xarray import DataTree
 
 
 def get_dd_wind_field_nested(grid_tree: DataTree, **kwargs):
