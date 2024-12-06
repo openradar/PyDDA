@@ -13,7 +13,7 @@ import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
 
-from datatree import DataTree
+from xarray import DataTree
 
 try:
     import tensorflow as tf
