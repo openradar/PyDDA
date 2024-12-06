@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example of a wind retrieval in a tornado over Sydney &#8212; PyDDA 2.0.3 documentation</title>
+    <title>Example of a wind retrieval in a tornado over Sydney &#8212; PyDDA 2.1.0 documentation</title>
   
   
   
@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -37,12 +39,13 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=664ffad9"></script>
+    <script src="../../_static/documentation_options.js?v=20623aea"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,6 +56,7 @@
     <link rel="prev" title="Example on integrating radar and HRRR data" href="plot_hurricane_florence.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.1.0" />
   </head>
   
   
@@ -68,19 +72,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -88,7 +81,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -96,8 +88,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -126,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.0.3 documentation</p>
+    <p class="title logo__title">PyDDA 2.1.0 documentation</p>
   
 </a></div>
     
@@ -178,29 +170,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
     </div>
     
@@ -209,15 +193,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -236,7 +216,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -290,15 +271,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
       </div>
     
@@ -341,8 +318,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -354,7 +329,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">PyDDA Example Gallery</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Example of...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Example of a wind retrieval in a tornado over Sydney</span></li>
   </ul>
 </nav>
 </div>
@@ -451,7 +426,7 @@ many more data points as we are using 4 radars instead of the two in the Darwin 
 ##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.0.3
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.1.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -607,47 +582,49 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="n">ncalls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="ne">---&gt; </span><span class="mi">41</span>     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">grad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">))</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:528,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">513</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">514</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">515</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:513,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span> <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">504</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">505</span>         <span class="n">winds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">506</span>         <span class="p">(</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">524</span>     <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">525</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">527</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">528</span>     <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">531</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">532</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">533</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">534</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">535</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">536</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">537</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">538</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">540</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">541</span>     <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_smoothness_gradient</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">542</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">543</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">511</span>         <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">512</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">513</span>     <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">514</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">515</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">516</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">517</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">518</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">519</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">520</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">521</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">522</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">523</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">524</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">525</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">527</span>     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">528</span>         <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">529</span>             <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">530</span>             <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
    <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">551</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">552</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">537</span>             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">538</span>         <span class="p">)</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:471,</span> in <span class="ni">calculate_mass_continuity_gradient</span><span class="nt">(u, v, w, z, dx, dy, dz, coeff, anel, upper_bc)</span>
-<span class="g g-Whitespace">    </span><span class="mi">469</span> <span class="k">if</span> <span class="n">upper_bc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">470</span>     <span class="n">grad_w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="ne">--&gt; </span><span class="mi">471</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">grad_u</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span> <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/numpy/core/shape_base.py:362,</span> in <span class="ni">_stack_dispatcher</span><span class="nt">(arrays, axis, out, dtype, casting)</span>
-<span class="g g-Whitespace">    </span><span class="mi">358</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">359</span>         <span class="k">return</span> <span class="n">_nx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">arrs</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="n">casting</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">362</span> <span class="k">def</span> <span class="nf">_stack_dispatcher</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">363</span>                       <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span>     <span class="n">arrays</span> <span class="o">=</span> <span class="n">_arrays_for_stack_dispatcher</span><span class="p">(</span><span class="n">arrays</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">365</span>     <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">366</span>         <span class="c1"># optimize for the typical case where only arrays is provided</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:131,</span> in <span class="ni">calculate_grad_radial_vel</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc)</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span> <span class="n">v_ar</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span>     <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">u</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">v</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span>     <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">127</span> <span class="n">x_grad</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">128</span>     <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">129</span> <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">130</span> <span class="n">y_grad</span> <span class="o">=</span> <span class="p">(</span>
+<span class="ne">--&gt; </span><span class="mi">131</span>     <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="n">z_grad</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span> <span class="n">p_x1</span> <span class="o">+=</span> <span class="n">x_grad</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -691,7 +668,8 @@ The max of w_init is 0.0
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -716,8 +694,8 @@ The max of w_init is 0.0
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -750,7 +728,7 @@ The max of w_init is 0.0
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

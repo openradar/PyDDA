@@ -30,8 +30,8 @@ nbclient.exceptions.CellTimeoutError: A cell timed out while it was being execut
 The message was: Cell execution timed out.
 Here is a preview of the cell contents:
 -------------------
-['## Do imports', 'import pydda', 'import matplotlib.pyplot as plt', 'import warnings', 'from datatree import DataTree']
+['## Do imports', 'import pydda', 'import matplotlib.pyplot as plt', 'import warnings', 'from xarray import DataTree']
 ...
-['    w_vel_contours=[1, 2, 5, 10],', '    quiver_spacing_x_km=50.0,', '    quiver_spacing_y_km=50.0,', '    quiverkey_loc="bottom_right",', ')']
+['    quiver_spacing_y_km=50.0,', '    quiverkey_loc="bottom_right",', ')', '', 'plt.show()']
 -------------------
 
