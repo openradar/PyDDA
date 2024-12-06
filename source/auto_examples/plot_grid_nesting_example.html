@@ -604,12 +604,12 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">243</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_lbfgsb_py.py:366,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">365</span>     <span class="n">l</span><span class="p">,</span> <span class="n">u</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
-<span class="ne">--&gt; </span><span class="mi">366</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">367</span>         <span class="n">low_bnd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
-<span class="g g-Whitespace">    </span><span class="mi">368</span>         <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="nn">File /usr/share/miniconda3/envs/pydda-docs/lib/python3.10/site-packages/scipy/optimize/_lbfgsb_py.py:369,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">367</span>     <span class="n">low_bnd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+<span class="g g-Whitespace">    </span><span class="mi">368</span>     <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="ne">--&gt; </span><span class="mi">369</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">370</span>     <span class="n">upper_bnd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span>
+<span class="g g-Whitespace">    </span><span class="mi">371</span>     <span class="n">u</span> <span class="o">=</span> <span class="mi">1</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
