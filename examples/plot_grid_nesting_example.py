@@ -12,13 +12,12 @@ The DataTree structure that PyDDA follows is:
 ::
 
     root
-      |---radar_1
-      |---radar_2
-      |---radar_n
-      |---inner_nest
-             |---radar_1
-             |---radar_2
-             |---radar_m
+      |---nest_0/radar_1
+      |---nest_0/radar_2
+      |---nest_0/radar_n
+      |---nest_1/radar_1
+      |---nest_1/radar_2
+      |---nest_1/radar_m
 
 Each member of this tree is a DataTree itself. PyDDA will know if the
 DataTree contains data from a radar when the name of the node begins
@@ -29,11 +28,11 @@ tree. PyDDA will use the attributes at each level as the arguments for the
 retrieval, allowing the user to vary the coefficients by grid level.
 
 Using :code:`pydda.retrieval.get_dd_wind_field_nested` will allow PyDDA
-to perform the retrieval on the outer grids first. It will then
-perform on the inner grid levels, using the outer level grid as both the
-horizontal boundary conditions and initialization for the retrieval in the inner
-nest. Finally, PyDDA will update the winds in the outer grid by nearest-
-neighbor interpolation of the finer grid into the overlapping portion between
+to perform the retrieval on the 0th grid first. It will then
+perform on the subsequent grid levels, using the previous nest as both the
+horizontal boundary conditions and initialization for the retrieval in the next
+nest. Finally, PyDDA will update the winds in the first grid by nearest-
+neighbor interpolation of the latter grid into the overlapping portion between
 the inner and outer grid level.
 
 PyDDA will then return the retrieved wind fields as the "u", "v", and "w"
@@ -46,7 +45,7 @@ DataArrays inside each of the root nodes for each level, in this case
 import pydda
 import matplotlib.pyplot as plt
 import warnings
-from datatree import DataTree
+from xarray import DataTree
 
 warnings.filterwarnings("ignore")
 
@@ -84,18 +83,26 @@ kwargs_dict = dict(
 )
 
 """
+Enforce equal times for each grid. This is required for the DataTree structure since time is an
+inherited dimension.
+"""
+test_coarse1["time"] = test_coarse0["time"]
+test_fine0["time"] = test_coarse0["time"]
+test_fine1["time"] = test_coarse1["time"]
+"""
+
 Provide the overlying grid structure as specified above.
 """
 tree_dict = {
-    "/coarse/radar_ktlx": test_coarse0,
-    "/coarse/radar_kict": test_coarse1,
-    "/coarse/fine/radar_ktlx": test_fine0,
-    "/coarse/fine/radar_kict": test_fine1,
+    "/nest_0/radar_ktlx": test_coarse0,
+    "/nest_0/radar_kict": test_coarse1,
+    "/nest_1/radar_ktlx": test_fine0,
+    "/nest_1/radar_kict": test_fine1,
 }
 
 tree = DataTree.from_dict(tree_dict)
-tree["/coarse/"].attrs = kwargs_dict
-tree["/coarse/fine"].attrs = kwargs_dict
+tree["/nest_0/"].attrs = kwargs_dict
+tree["/nest_1/"].attrs = kwargs_dict
 
 """
 Perform the retrieval
@@ -109,7 +116,7 @@ Plot the coarse grid output and finer grid output
 
 fig, ax = plt.subplots(1, 2, figsize=(10, 5))
 pydda.vis.plot_horiz_xsection_quiver(
-    grid_tree["coarse"],
+    grid_tree["nest_0"],
     ax=ax[0],
     level=5,
     cmap="ChaseSpectral",
@@ -124,7 +131,7 @@ pydda.vis.plot_horiz_xsection_quiver(
     quiverkey_loc="bottom_right",
 )
 pydda.vis.plot_horiz_xsection_quiver(
-    grid_tree["coarse/fine"],
+    grid_tree["nest_1"],
     ax=ax[1],
     level=5,
     cmap="ChaseSpectral",
@@ -138,3 +145,5 @@ pydda.vis.plot_horiz_xsection_quiver(
     quiver_spacing_y_km=50.0,
     quiverkey_loc="bottom_right",
 )
+
+plt.show()

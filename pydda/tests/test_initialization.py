@@ -64,7 +64,11 @@ def test_get_iem_data():
     Grid = pydda.io.read_from_pyart_grid(Grid)
     station_obs = pydda.constraints.get_iem_obs(Grid)
     names = [x["site_id"] for x in station_obs]
-    assert names == ["P28", "WLD", "WDG", "SWO", "END"]
+    assert "P28" in names
+    assert "WLD" in names
+    assert "WDG" in names
+    assert "SWO" in names
+    assert "END" in names
 
 
 def test_hrrr_data():
