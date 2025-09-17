@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python>=3.10
+  - python
   - pip
   - arm_pyart
   - cython
@@ -12,7 +12,6 @@ dependencies:
   - pytest-mpl
   - pytest-cov
   - cartopy
-  - pyproj=3.3
   - cfgrib
   - eccodes
   - sphinx
