@@ -19,7 +19,7 @@ jobs:
      strategy:
         fail-fast: false
         matrix:
-          python-version: ["3.10", "3.11", "3.12"]
+          python-version: ["3.10", "3.11", "3.12", "3.13"]
           os: [macOS, ubuntu]
           inlcude:
             - os: macos-latest
@@ -28,17 +28,14 @@ jobs:
               platform: [x64]
 
      steps:
-      - uses: actions/checkout@v2
-      - name: Setup Conda Environment
-        uses: conda-incubator/setup-miniconda@v3
+      - uses: actions/checkout@v5
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/setup-micromamba@v2.0.6
         with:
-          python-version: ${{ matrix.python-version }}
-          environment-file: ./continuous_integration/environment-actions.yml
-          activate-environment: pydda_env
-          auto-activate-base: False
-          mamba-version: '*'
-          use-mamba: true
-          miniforge-variant: Mambaforge
+          environment-file: doc/environment.yml
+          micromamba-version: '2.0.0-0'
+          environment-name: pyart-docs
+          cache-downloads: false
       - name: Lint with flake8
         run: |
            conda install flake8
