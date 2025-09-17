@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,12 +26,12 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -39,10 +39,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../../../_static/documentation_options.js?v=20623aea"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
@@ -278,9 +278,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -327,18 +332,18 @@
                 <article class="bd-article">
                   
   <h1>Source code for pydda.cost_functions._cost_functions_numpy</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">_nd_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">_nd_image</span>
 
 <span class="n">laplace_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="calculate_radial_vel_cost_function">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_radial_vel_cost_function</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_radial_vel_cost_function</span><span class="p">(</span>
     <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -402,7 +407,7 @@
 
 <div class="viewcode-block" id="calculate_grad_radial_vel">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_grad_radial_vel.html#pydda.cost_functions.calculate_grad_radial_vel">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_grad_radial_vel</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_grad_radial_vel</span><span class="p">(</span>
     <span class="n">vrs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -481,7 +486,7 @@
 
 <div class="viewcode-block" id="calculate_smoothness_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_smoothness_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_smoothness_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the smoothness cost function by taking the Laplacian of the</span>
 <span class="sd">    wind field.</span>
@@ -549,7 +554,7 @@
 
 <div class="viewcode-block" id="calculate_smoothness_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_smoothness_gradient</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_smoothness_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -608,7 +613,7 @@
 
 <div class="viewcode-block" id="calculate_point_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_point_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_point_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function related to point observations. A mean square error cost</span>
 <span class="sd">    function term is applied to points that are within the sphere of influence</span>
@@ -663,7 +668,7 @@
 
 <div class="viewcode-block" id="calculate_point_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_point_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_point_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the cost function related to point observations.</span>
 <span class="sd">    A mean square error cost function term is applied to points that are within the sphere of influence</span>
@@ -719,7 +724,7 @@
 
 <div class="viewcode-block" id="calculate_mass_continuity">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity.html#pydda.cost_functions.calculate_mass_continuity">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_mass_continuity</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_mass_continuity</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the mass continuity cost function by taking the divergence</span>
 <span class="sd">    of the wind field.</span>
@@ -768,7 +773,7 @@
 
 <div class="viewcode-block" id="calculate_mass_continuity_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_mass_continuity_gradient</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_mass_continuity_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -827,7 +832,7 @@
 
 <div class="viewcode-block" id="calculate_fall_speed">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_fall_speed.html#pydda.cost_functions.calculate_fall_speed">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_fall_speed</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">4500.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_fall_speed</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">4500.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates fall speed based on reflectivity.</span>
 <span class="sd">    Uses methodology of Mike Biggerstaff and Dan Betten</span>
@@ -875,7 +880,7 @@
 
 <div class="viewcode-block" id="calculate_background_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_background_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_background_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the background cost function. The background cost function is</span>
 <span class="sd">    simply the sum of the squared differences between the wind field and the</span>
@@ -914,7 +919,7 @@
 
 <div class="viewcode-block" id="calculate_background_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_gradient.html#pydda.cost_functions.calculate_background_gradient">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_background_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_background_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the gradient of the background cost function. For each u, v</span>
 <span class="sd">    this is given as 2*coefficent*(analysis wind - background wind).</span>
@@ -955,7 +960,7 @@
 
 <div class="viewcode-block" id="calculate_vertical_vorticity_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_cost.html#pydda.cost_functions.calculate_vertical_vorticity_cost">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_vertical_vorticity_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_vertical_vorticity_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function due to deviance from vertical vorticity</span>
 <span class="sd">    equation. For more information of the vertical vorticity cost function,</span>
@@ -1019,7 +1024,7 @@
 
 <div class="viewcode-block" id="calculate_vertical_vorticity_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1129,7 +1134,7 @@
 
 <div class="viewcode-block" id="calculate_model_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_cost.html#pydda.cost_functions.calculate_model_cost">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_model_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_model_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function for the model constraint.</span>
 <span class="sd">    This is calculated simply as the sum of squares of the differences</span>
@@ -1173,7 +1178,7 @@
 
 <div class="viewcode-block" id="calculate_model_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_gradient.html#pydda.cost_functions.calculate_model_gradient">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_model_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_model_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the cost function for the model constraint.</span>
 <span class="sd">    This is calculated simply as twice the differences</span>
@@ -1244,8 +1249,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1265,7 +1270,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
@@ -1278,7 +1283,8 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
