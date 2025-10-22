@@ -607,8 +607,6 @@ def _get_dd_wind_field_scipy(
                 pgtol=tolerance,
                 bounds=bounds,
                 fprime=grad_J,
-                disp=0,
-                iprint=-1,
                 callback=_vert_velocity_callback,
             )
         else:
