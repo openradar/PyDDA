@@ -338,7 +338,6 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
                 int(sy0) : int(sy1),
                 int(sx0) : int(sx1),
             ],
-                
             x_dst[
                 int(sz0) : int(sz1),
                 int(sy0) : int(sy1),
@@ -346,7 +345,7 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
             ],
         )
     )
-            
+
     w_dest = w_interp(
         (
             z_dst[
@@ -359,7 +358,6 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
                 int(sy0) : int(sy1),
                 int(sx0) : int(sx1),
             ],
-                
             x_dst[
                 int(sz0) : int(sz1),
                 int(sy0) : int(sy1),
