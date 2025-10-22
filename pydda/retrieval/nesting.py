@@ -282,60 +282,86 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
     u_interp = RegularGridInterpolator((z_src, y_src, x_src), u_src, method=method)
     v_interp = RegularGridInterpolator((z_src, y_src, x_src), v_src, method=method)
     w_interp = RegularGridInterpolator((z_src, y_src, x_src), w_src, method=method)
+    sz0 = subset_z[0].squeeze()
+    sz1 = subset_z[-1].squeeze() + 1
+    sy0 = subset_y[0].squeeze()
+    sy1 = subset_y[-1].squeeze() + 1
+    sx0 = subset_x[0].squeeze()
+    sx1 = subset_x[-1].squeeze() + 1
     u_dest = u_interp(
         (
             z_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
             y_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
             x_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
         )
     )
     v_dest = v_interp(
         (
             z_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
             y_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
             x_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
         )
     )
+    v_dest = v_interp(
+        (
+            z_dst[
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
+            ],
+            y_dst[
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
+            ],
+            x_dst[
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
+            ],
+        )
+    )
+
     w_dest = w_interp(
         (
             z_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
             y_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
             x_dst[
-                int(subset_z[0]) : int(subset_z[-1] + 1),
-                int(subset_y[0]) : int(subset_y[-1] + 1),
-                int(subset_x[0]) : int(subset_x[-1] + 1),
+                int(sz0) : int(sz1),
+                int(sy0) : int(sy1),
+                int(sx0) : int(sx1),
             ],
         )
     )
@@ -349,9 +375,9 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
     else:
         grid_dest["u"][
             :,
-            int(subset_z[0]) : int(subset_z[-1] + 1),
-            int(subset_y[0]) : int(subset_y[-1] + 1),
-            int(subset_x[0]) : int(subset_x[-1] + 1),
+            int(sz0) : int(sz1),
+            int(sy0) : int(sy1),
+            int(sx0) : int(sx1),
         ] = np.expand_dims(u_dest, 0)
 
     grid_dest["u"].attrs = grid_src["u"].attrs
@@ -364,9 +390,9 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
     else:
         grid_dest["v"][
             :,
-            int(subset_z[0]) : int(subset_z[-1] + 1),
-            int(subset_y[0]) : int(subset_y[-1] + 1),
-            int(subset_x[0]) : int(subset_x[-1] + 1),
+            int(sz0) : int(sz1),
+            int(sy0) : int(sy1),
+            int(sx0) : int(sx1),
         ] = np.expand_dims(v_dest, 0)
     grid_dest["v"].attrs = grid_src["v"].attrs
     if "w" not in grid_dest.variables.keys():
@@ -378,9 +404,9 @@ def make_initialization_from_other_grid(grid_src, grid_dest, method="linear"):
     else:
         grid_dest["w"][
             :,
-            int(subset_z[0]) : int(subset_z[-1] + 1),
-            int(subset_y[0]) : int(subset_y[-1] + 1),
-            int(subset_x[0]) : int(subset_x[-1] + 1),
+            int(sz0) : int(sz1),
+            int(sy0) : int(sy1),
+            int(sx0) : int(sx1),
         ] = w_dest
     grid_dest["w"].attrs = grid_src["w"].attrs
     return grid_dest
