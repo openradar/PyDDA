@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.retrieval.nesting &#8212; PyDDA 2.1.0 documentation</title>
+    <title>pydda.retrieval.nesting &#8212; PyDDA 2.1.1 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=20623aea"></script>
+    <script src="../../../_static/documentation_options.js?v=841abef3"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.1.0" />
+  <meta name="docsearch:version" content="2.1.1" />
   </head>
   
   
@@ -115,7 +115,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.1.0 documentation</p>
+    <p class="title logo__title">PyDDA 2.1.1 documentation</p>
   
 </a></div>
     
@@ -621,60 +621,86 @@
     <span class="n">u_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">((</span><span class="n">z_src</span><span class="p">,</span> <span class="n">y_src</span><span class="p">,</span> <span class="n">x_src</span><span class="p">),</span> <span class="n">u_src</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
     <span class="n">v_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">((</span><span class="n">z_src</span><span class="p">,</span> <span class="n">y_src</span><span class="p">,</span> <span class="n">x_src</span><span class="p">),</span> <span class="n">v_src</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
     <span class="n">w_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">((</span><span class="n">z_src</span><span class="p">,</span> <span class="n">y_src</span><span class="p">,</span> <span class="n">x_src</span><span class="p">),</span> <span class="n">w_src</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+    <span class="n">sz0</span> <span class="o">=</span> <span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">sz1</span> <span class="o">=</span> <span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">sy0</span> <span class="o">=</span> <span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">sy1</span> <span class="o">=</span> <span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">sx0</span> <span class="o">=</span> <span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="n">sx1</span> <span class="o">=</span> <span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">u_dest</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span>
         <span class="p">(</span>
             <span class="n">z_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
             <span class="n">y_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
             <span class="n">x_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
         <span class="p">)</span>
     <span class="p">)</span>
     <span class="n">v_dest</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span>
         <span class="p">(</span>
             <span class="n">z_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
             <span class="n">y_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
             <span class="n">x_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
         <span class="p">)</span>
     <span class="p">)</span>
+    <span class="n">v_dest</span> <span class="o">=</span> <span class="n">v_interp</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">z_dst</span><span class="p">[</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">y_dst</span><span class="p">[</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">x_dst</span><span class="p">[</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
     <span class="n">w_dest</span> <span class="o">=</span> <span class="n">w_interp</span><span class="p">(</span>
         <span class="p">(</span>
             <span class="n">z_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
             <span class="n">y_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
             <span class="n">x_dst</span><span class="p">[</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
             <span class="p">],</span>
         <span class="p">)</span>
     <span class="p">)</span>
@@ -688,9 +714,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">grid_dest</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">][</span>
             <span class="p">:,</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">u_dest</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
     <span class="n">grid_dest</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">grid_src</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
@@ -703,9 +729,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">grid_dest</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">][</span>
             <span class="p">:,</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v_dest</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">grid_dest</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">grid_src</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
     <span class="k">if</span> <span class="s2">&quot;w&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">grid_dest</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -717,9 +743,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">grid_dest</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">][</span>
             <span class="p">:,</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_z</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">subset_x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sz0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sz1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sy0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sy1</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">sx0</span><span class="p">)</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx1</span><span class="p">),</span>
         <span class="p">]</span> <span class="o">=</span> <span class="n">w_dest</span>
     <span class="n">grid_dest</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">grid_src</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
     <span class="k">return</span> <span class="n">grid_dest</span></div>
