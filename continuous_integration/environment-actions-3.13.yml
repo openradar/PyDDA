@@ -20,6 +20,3 @@ dependencies:
   - cmweather
   - jax
   - jaxopt
-  - tensorflow
-  - tensorflow-probability
-  - tf-keras
