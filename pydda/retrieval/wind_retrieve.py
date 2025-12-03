@@ -399,7 +399,7 @@ def _get_dd_wind_field_scipy(
                                 ~parameters.els[j][k].mask,
                             )
                         )
-                        cur_array = parameters.weights[i, k]
+                        cur_array = parameters.weights[i, k].copy()
                         cur_array[
                             np.logical_and(
                                 valid,
@@ -950,7 +950,7 @@ def _get_dd_wind_field_tensorflow(
 
                 for k in range(parameters.vrs[i].shape[0]):
                     if weights_obs is None:
-                        cur_array = parameters.weights[i, k]
+                        cur_array = parameters.weights[i, k].copy()
                         valid = np.logical_and.reduce(
                             (
                                 ~parameters.vrs[i][k].mask,
