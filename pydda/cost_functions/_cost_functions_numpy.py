@@ -183,7 +183,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
         Cx
         * (
             np.gradient(dudx, dx, axis=2)
-            + np.gradient(dvdx, dx, axis=1)
+            + np.gradient(dvdx, dx, axis=2)
             + np.gradient(dwdx, dx, axis=2)
         )
         ** 2
@@ -191,18 +191,18 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     y_term = (
         Cy
         * (
-            np.gradient(dudy, dy, axis=2)
+            np.gradient(dudy, dy, axis=1)
             + np.gradient(dvdy, dy, axis=1)
-            + np.gradient(dwdy, dy, axis=2)
+            + np.gradient(dwdy, dy, axis=1)
         )
         ** 2
     )
     z_term = (
         Cz
         * (
-            np.gradient(dudz, dz, axis=2)
-            + np.gradient(dvdz, dz, axis=1)
-            + np.gradient(dwdz, dz, axis=2)
+            np.gradient(dudz, dz, axis=0)
+            + np.gradient(dvdz, dz, axis=0)
+            + np.gradient(dwdz, dz, axis=0)
         )
         ** 2
     )
@@ -260,7 +260,7 @@ def calculate_smoothness_gradient(
     if upper_bc is True:
         grad_w[-1, :, :] = 0
 
-    y = np.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
+    y = np.stack([grad_u, grad_v, grad_w], axis=0)
 
     return y.flatten()
 
