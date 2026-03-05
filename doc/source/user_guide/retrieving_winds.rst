@@ -16,7 +16,7 @@ PyDDA minimizes a cost function :math:`J` that corresponds to various penalties 
 +----------------------------------------------------------------+----------------------------+
 | :math:`J_{o} = \sum_{radar} [V_{ar} - \textbf{V}]^2`           |  Radar winds               |
 +----------------------------------------------------------------+----------------------------+
-| :math:`J_{a} = \sum_{domain} [V_{model} - \textbf{V}]^2`       |  Model winds               |
+| :math:`J_{mod} = \sum_{domain} [V_{model} - \textbf{V}]^2`       |  Model winds               |
 +----------------------------------------------------------------+----------------------------+
 | :math:`J_{b} = \sum_{background} [V_{sounding} - \textbf{V}]^2`|  Sounding background       |
 +----------------------------------------------------------------+----------------------------+
