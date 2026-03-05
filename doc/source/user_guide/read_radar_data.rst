@@ -25,9 +25,8 @@ there is convection as well as velocity values for dual doppler analysis.
 Read in the Data
 ----------------
 
-For this example, we use test data found in Py-ART for two X-Band Scanning ARM
-Precipitation Radars (X-SAPR) found at the Atmospheric Radiation Measurment
-(ARM) Southern Great Plains (SGP) site in Oklahoma.
+For this example, we use test data for two NEXRAD (WSR-88D) radars in
+northern Oklahoma: KTLX (Twin Lakes, OK) and KICT (Wichita, KS).
 
 Get test data::
     https://arm-doe.github.io/pyart/API/generated/pyart.testing.get_test_data.html
@@ -153,7 +152,7 @@ Plot reflectivity of Both Radars
         lon_lines=np.arange(-98, -96.75, 0.25),
     )
 
-We can see convection on both radar images near eachother with similar timestamps which will be perfect for PyDDA.
+We can see convection on both radar images near each other with similar timestamps which will be perfect for PyDDA.
 
 ++++++++++++++++++++++++++++
 Plot Velocity of Both Radars

@@ -1,5 +1,5 @@
 """
-reated on Mon Aug  7 09:17:40 2017
+Created on Mon Aug  7 09:17:40 2017
 
 @author: rjackson
 """
@@ -71,7 +71,7 @@ class DDParameters(object):
     u_back: 1D float array (number of vertical levels)
         Background u wind
     v_back: 1D float array (number of vertical levels)
-        Background u wind
+        Background v wind
     u_model: list of 3D float arrays
         U from each model integrated into the retrieval
     v_model: list of 3D float arrays
@@ -1308,20 +1308,20 @@ def get_dd_wind_field(
         All grids must have the same shape, x coordinates, y coordinates
         and z coordinates.
     u_init: 3D ndarray
-        The intial guess for the zonal wind field, input as a 3D array
+        The initial guess for the zonal wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
         PyDDA will use the u field in the first Grid as the initalization.
     v_init: 3D ndarray
-        The intial guess for the meridional wind field, input as a 3D array
+        The initial guess for the meridional wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
         PyDDA will use the v field in the first Grid as the initalization.
     w_init: 3D ndarray
-        The intial guess for the vertical wind field, input as a 3D array
+        The initial guess for the vertical wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
         PyDDA will use the w field in the first Grid as the initalization.
     engine: str (one of "scipy", "tensorflow", "jax")
         Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
-        Using Tensorflow or Jax expands PyDDA's capabiability to take advantage of GPU-based systems.
+        Using TensorFlow or Jax expands PyDDA's capability to take advantage of GPU-based systems.
         In addition, these two implementations use automatic differentation to calculate the gradient
         of the cost function in order to optimize the gradient calculation.
         TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-based engine.
@@ -1402,7 +1402,7 @@ def get_dd_wind_field(
         Minimum beam crossing angle in degrees between two radars. 30.0 is the
         typical value used in many publications.
     max_bca: float
-        Minimum beam crossing angle in degrees between two radars. 150.0 is the
+        Maximum beam crossing angle in degrees between two radars. 150.0 is the
         typical value used in many publications.
     upper_bc: bool
         Set this to true to enforce w = 0 at the top of the atmosphere. This is
@@ -1428,8 +1428,8 @@ def get_dd_wind_field(
         Stop iterations after maximum change in winds is less than this value.
     tolerance: float
         Tolerance for :math:`L_{2}` norm of gradient before stopping.
-    max_wind_magnitude: float
-        Constrain the optimization to have :math:`|u|`, :math:`|w|`, and :math:`|w| < x` m/s.
+    max_wind_mag: float
+        Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| < x` m/s.
 
     Returns
     =======

@@ -29,7 +29,7 @@ description of each of PyDDA's subroutines.
 
         **User Guide**
 
-        The cookbook provides in-depth information on how
+        The user guide provides in-depth information on how
         to use PyDDA, including how to get started.
         This is where to look for general conceptual descriptions on how
         to use parts of PyDDA, including how to make your first wind retrieval and
@@ -73,7 +73,7 @@ System Requirements
 =========================
 
 This works on any modern version of Linux, Mac OS X, and Windows. For Windows,
-HRRR data integration is not supported. In addition, since PyDDA takes advtange
+HRRR data integration is not supported. In addition, since PyDDA takes advantage
 of parallelism we recommend:
 ::
     An Intel machine with at least 4 cores
@@ -134,11 +134,11 @@ just type in the following commands assuming you have the above dependencies ins
 
  git clone https://github.com/openradar/PyDDA
  cd PyDDA
- python setup.py install
+ pip install -e .
 ::
 
-Finally, PyDDA now supports using `Jax <jax.readthedocs.io>`_ and `TensorFlow <tensorflow.org>`_
-for solving the three dimensional wind field. PyDDA requries TensorFlow 2.6 and the
+Finally, PyDDA now supports using `Jax <https://jax.readthedocs.io>`_ and `TensorFlow <https://tensorflow.org>`_
+for solving the three dimensional wind field. PyDDA requires TensorFlow 2.x and the
 tensorflow-probability package for TensorFlow to be enabled.
 In addition, both of these packages can utilize CUDA-enabled GPUs for much faster processing. These two
 dependencies are optional as the user can still use PyDDA with the SciPy ecosystem.
@@ -148,8 +148,8 @@ The Jax optimizer uses the same optimizer as SciPy's (`L-BFGS-B <https://docs.sc
 Known issues
 ============
 
-The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that the
-the wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
+The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that
+wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
 result in numerical instability, so it is recommended that the user test out both Jax and TensorFlow
 if they desire GPU-accelerated retrievals.
 
@@ -168,7 +168,7 @@ Further support
 
 
 We are now requesting that all questions related to PyDDA that are not potential software issues to be
-relegated to the `openradar Discourse group <openradar.discourse.group>` with a 'pydda' tag on it. This
+relegated to the `openradar Discourse group <https://openradar.discourse.group>`_ with a 'pydda' tag on it. This
 enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
 and users can answer questions people may have.
 

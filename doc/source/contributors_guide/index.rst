@@ -14,8 +14,8 @@ There are just some things that we ask of you. One is that your code be able
 to be distributed under the BSD 3-clause license, which is available in LICENSE
 in the main directory.
 
-One, we ask, that when on the GitHub forum or making contributions to PyDDA
-that all developers and users follow the PyDDA code of conduct.
+We ask that all developers and users follow the PyDDA code of conduct when
+participating in the GitHub forum or making contributions.
 
 
 Contributor Covenant Code of Conduct
@@ -94,8 +94,8 @@ by other members of the project's leadership.
 
 **Attribution**
 
-This Code of Conduct is adapted from the Contributor Covenant, version 1.4,
-available at `<http://contributor-covenant.org/version/1/4>`_
+This Code of Conduct is adapted from the Contributor Covenant, version 2.1,
+available at `<https://www.contributor-covenant.org/version/2/1/code_of_conduct/>`_
 
 Code Style
 ----------
@@ -121,7 +121,7 @@ Python File Setup
 -----------------
 
 In a new .py file, the top of the code should have the function, sphinx comments
-and the public and private functions within the .py file. Public fuunctions are
+and the public and private functions within the .py file. Public functions are
 listed first and then private functions and classes. Private functions should
 have an underscore in front of the name. A space is needed between the last
 function and the closing docstring quotation marks.
@@ -134,7 +134,7 @@ standards, modules should be added in the following order:
     3. Local application imports
 
 Following the main function def line, but before the code within it, a docstring is
-needed to explain all arguments, retuns, references, and other information. Please
+needed to explain all arguments, returns, references, and other information. Please
 follow the NumPy documentation style:
 
 `<https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt>`_
@@ -169,7 +169,7 @@ For an example format of the documentation, see this:
             Returns a 3D float array containing the v component of the wind field.
             The shape will be the same shape as the fields in Grid.
         w: 3D float array
-            Returns a 3D float array containing the u component of the wind field.
+            Returns a 3D float array containing the w component of the wind field.
             The shape will be the same shape as the fields in Grid.
         """
 
@@ -179,13 +179,13 @@ For an example format of the documentation, see this:
 Testing
 -------
 
-When adding a new function to pyart it is important to add it to the __init__.py
+When adding a new function to PyDDA it is important to add it to the __init__.py
 under the corresponding folder.
 
 Create a test function and use assert to test the calculated values against known
 values. For an example, see:
 
-`<https://github.com/openradar/PyDDA/tests/test_retrieval.py>`_
+`<https://github.com/openradar/PyDDA/blob/master/pydda/tests/test_retrieval.py>`_
 
 Pytest will run this test whenever a pull request is made to the master branch
 of the openradar/PyDDA repository. This will then allow the maintainers to
@@ -235,7 +235,6 @@ forking the repository on GitHub, create your own branch by doing:
 ::
 
 git checkout -b this_branch
-git branch this_branch
 
 ::
 

@@ -2,7 +2,9 @@
 User Guide
 ##########################
 
-This is a place to include our user guide.
+This user guide covers the full multi-Doppler wind retrieval workflow in PyDDA,
+from reading and quality-controlling raw radar data through to retrieving and
+visualizing the 3D wind field.
 
 .. toctree::
    :maxdepth: 3
@@ -14,6 +16,4 @@ This is a place to include our user guide.
    retrieving_winds.rst
    optimizing_wind_retrieval.rst
    visualizing_winds.rst
-   retrieving_winds.rst
-   optimizing_wind_retrieval.rst
    nesting_wind_retrieval.rst
