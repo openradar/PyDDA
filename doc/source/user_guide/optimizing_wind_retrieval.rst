@@ -322,7 +322,7 @@ Let's see what happens when we increase the level of smoothing.
 
 In the above retrieval, the updrafts appear to be smoothed out. To help the optimization loop
 resolve the updrafts, we recommend, from here, decreasing the tolerance required for the
-optimization loop to converge. In addition, decreasing the smoothnesss will allow more details
+optimization loop to converge. In addition, decreasing the smoothness will allow more details
 of the resolved wind field to appear. In the below example, we observe this, though part of the
 artifact near the edge of the Dual Doppler lobe re-appears.
 
