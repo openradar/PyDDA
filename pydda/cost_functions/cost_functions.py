@@ -1,6 +1,6 @@
 import numpy as np
 
-# Adding jax inport statements
+# Adding jax import statements
 try:
     import tensorflow as tf
 

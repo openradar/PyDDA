@@ -16,7 +16,7 @@ PyDDA minimizes a cost function :math:`J` that corresponds to various penalties 
 +----------------------------------------------------------------+----------------------------+
 | :math:`J_{o} = \sum_{radar} [V_{ar} - \textbf{V}]^2`           |  Radar winds               |
 +----------------------------------------------------------------+----------------------------+
-| :math:`J_{o} = \sum_{domain} [V_{model} - \textbf{V}]^2`       |  Model winds               |
+| :math:`J_{a} = \sum_{domain} [V_{model} - \textbf{V}]^2`       |  Model winds               |
 +----------------------------------------------------------------+----------------------------+
 | :math:`J_{b} = \sum_{background} [V_{sounding} - \textbf{V}]^2`|  Sounding background       |
 +----------------------------------------------------------------+----------------------------+
@@ -36,7 +36,7 @@ retrieval, there are many aspects that must be considered. After the data proces
 finished, it is now important to constrain the wind field further by adding in either sounding,
 point, or model data as a weak constraint in order to increase the chance that PyDDA will
 provide a solution that converges to a physically realistic wind field. For this particular example,
-we are lucky enough to have model data from the Rapid Update Cycle that can be used as a constraint.
+we are lucky enough to have model data from the Rapid Update Cycle (RUC; the predecessor to the current Rapid Refresh/RAP) that can be used as a constraint.
 
 ------------------------
 Using PyDDA's data model
@@ -210,7 +210,7 @@ We can see in this figure that PyDDA is resolving numerous updrafts in the mid-l
 is the vertical motion at the edge of the Dual Doppler lobe in the top right corner. This vertical motion is likely
 caused by the wind source changing from primarily the radar data to the RUC model run outside of the Dual Doppler
 lobes, causing a slight shift in winds that results in horizontal convergence. This convergence will result in an
-updraft in the domain that is an artifiact of this switch in data sources. It is therefore recommended to not
+updraft in the domain that is an artifact of this switch in data sources. It is therefore recommended to not
 use vertical velocity data in updrafts that are touching the Dual Doppler lobe edges to mitigate this issue. In
 addition, prescribing a stronger background constraint or filtering the data more often may also help mitigate this
 issue. We will go into this further in :ref:`optimizing-wind-retrieval`.

@@ -115,8 +115,8 @@ We can see several potential issues with the wind retrieval. First, there are ar
 Dual Doppler lobe edges where updrafts are being produced by the optimization code simply
 because of a discontinuity in the horizontal winds at the edges of the lobes. In addition,
 there are other discontinuities in the horizontal winds that should be addressed. One thing
-we can do to mitigate these discontunities is to increase the weight of the horizontal
-smoothnes constraints. Therefore, let's prescribe :code:`Cx = 100.` and :code:`Cy = 100`
+we can do to mitigate these discontinuities is to increase the weight of the horizontal
+smoothness constraints. Therefore, let's prescribe :code:`Cx = 100.` and :code:`Cy = 100`
 to the above retrieval.
 
 .. code-block:: python
@@ -322,7 +322,7 @@ Let's see what happens when we increase the level of smoothing.
 
 In the above retrieval, the updrafts appear to be smoothed out. To help the optimization loop
 resolve the updrafts, we recommend, from here, decreasing the tolerance required for the
-optimization loop to converge. In addition, decreasing the smoothness will allow more details
+optimization loop to converge. In addition, decreasing the smoothnesss will allow more details
 of the resolved wind field to appear. In the below example, we observe this, though part of the
 artifact near the edge of the Dual Doppler lobe re-appears.
 

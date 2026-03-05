@@ -43,9 +43,9 @@ Visualization module for PyDDA.
     :undoc-members:
     :show-inheritance:
 
-===========================
-:mod:`initalization` Module
-===========================
+============================
+:mod:`initialization` Module
+============================
 
 The module for creating custom initial states for the PyDDA retrieval.
 
@@ -61,6 +61,17 @@ The module for creating custom initial states for the PyDDA retrieval.
 The module for creating custom constraints (i.e. from models, satellites) for the PyDDA retrieval.
 
 .. automodule:: pydda.constraints
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+================
+:mod:`io` Module
+================
+
+Input/output utilities for reading and writing PyDDA Grids.
+
+.. automodule:: pydda.io
     :members:
     :undoc-members:
     :show-inheritance:

@@ -6,7 +6,7 @@ Converting the radar data to Cartesian coordinates with Py-ART
 PyDDA expects radar data to be in Cartesian coordinates before it retrieves
 the wind fields. Most radar data, however, is in the radar's native antenna
 coordinates. Therefore, the radar data needs to be converted to Cartesian
-coordinates. Py-ART's mapping toolbox contains the necessary utilties
+coordinates. Py-ART's mapping toolbox contains the necessary utilities
 
 We will assume that you have followed the steps outlined in :ref:`reading-radar-data`
 for reading the radar data in its native coordinates.  PyDDA requires dealiased velocities
@@ -46,7 +46,7 @@ The :code:`grid_limits` is a 3-tuple of 2-tuples specifying the :math:`z`, :math
 limits of the grid in meters. The :code:`grid_shape` specifies the shape of the grid in number of
 points. We then use PyART's `grid_from_radars <https://arm-doe.github.io/pyart/API/generated/pyart.map.grid_from_radars.html>`_
 function to create the grids :code:`grid_ktlx` and :code:`grid_kict`. PyDDA requires that both grids have the same
-shape and origin, so we explictly set those in the options for both grids.
+shape and origin, so we explicitly set those in the options for both grids.
 
 .. code-block:: python
 
