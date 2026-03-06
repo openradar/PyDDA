@@ -420,10 +420,6 @@ many more data points as we are using 4 radars instead of the two in the Darwin 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-03-05 23:33:37.246351: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>## You are using the Python ARM Radar Toolkit (Py-ART), an open source
 ## library for working with weather radar data. Py-ART is partly
 ## supported by the U.S. Department of Energy as part of the Atmospheric
@@ -435,25 +431,14 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 FMA, in other opera
 ##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Failed to import TF-Keras. Please note that TF-Keras is not installed by default when you install TensorFlow Probability. This is so that JAX-only users do not have to install TensorFlow or TF-Keras. To use TensorFlow Probability with TensorFlow, please install the tf-keras or tf-keras-nightly package.
-This can be be done through installing the tensorflow-probability[tf] extra.
-
-
-Welcome to PyDDA 2.3.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.3.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
 Jax/JaxOpt are not installed on your system, unable to use Jax engine.
 Detecting TensorFlow...
-TensorFlow detected. Checking for tensorflow-probability...
-
-
-Failed to import TF-Keras. Please note that TF-Keras is not installed by default when you install TensorFlow Probability. This is so that JAX-only users do not have to install TensorFlow or TF-Keras. To use TensorFlow Probability with TensorFlow, please install the tf-keras or tf-keras-nightly package.
-This can be be done through installing the tensorflow-probability[tf] extra.
-
-
 Unable to load both TensorFlow and tensorflow-probability. TensorFlow engine disabled.
-No module named &#39;tf_keras&#39;
+No module named &#39;tensorflow&#39;
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
@@ -479,7 +464,7 @@ Calculating weights for radars 3 and 2
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
 Starting solver 
-rmsVR = 7.3597501102313165
+rmsVR = 7.359750110231316
 Total points: 399749
 The max of w_init is 0.0
 </pre></div>
@@ -491,11 +476,14 @@ The max of w_init is 0.0
       0|4080.4252|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11190916903760367
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11190916903760278
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
      10|  92.4335|  17.0200|   0.0001|   0.0000|   0.0000|   0.0000|   0.0000|  48.1870
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w:  nan
 </pre></div>
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
@@ -551,7 +539,7 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">612</span> <span class="k">else</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">614</span>     <span class="k">def</span><span class="w"> </span><span class="nf">loss_and_gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_lbfgsb_py.py:281,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, iprint, maxfun, maxiter, disp, callback, maxls)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:281,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, iprint, maxfun, maxiter, disp, callback, maxls)</span>
 <span class="g g-Whitespace">    </span><span class="mi">269</span> <span class="n">callback</span> <span class="o">=</span> <span class="n">_wrap_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">270</span> <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;disp&#39;</span><span class="p">:</span> <span class="n">disp</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">271</span>         <span class="s1">&#39;iprint&#39;</span><span class="p">:</span> <span class="n">iprint</span><span class="p">,</span>
@@ -567,7 +555,7 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">287</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">288</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
 <span class="g g-Whitespace">    </span><span class="mi">461</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">462</span>                <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span> <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">,</span> <span class="n">ln_task</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">464</span> <span class="k">if</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
@@ -580,19 +568,19 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">471</span>     <span class="c1"># new iteration</span>
 <span class="g g-Whitespace">    </span><span class="mi">472</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
 <span class="g g-Whitespace">    </span><span class="mi">411</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">412</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
 <span class="ne">--&gt; </span><span class="mi">413</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
 <span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_differentiable_functions.py:375,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:375,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
 <span class="g g-Whitespace">    </span><span class="mi">373</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orig_grad</span> <span class="ow">in</span> <span class="n">FD_METHODS</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">374</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
 <span class="ne">--&gt; </span><span class="mi">375</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped_grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">376</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_updated</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_differentiable_functions.py:39,</span> in <span class="ni">_ScalarGradWrapper.__call__</span><span class="nt">(self, x, f0, **kwds)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:39,</span> in <span class="ni">_ScalarGradWrapper.__call__</span><span class="nt">(self, x, f0, **kwds)</span>
 <span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
 <span class="g g-Whitespace">     </span><span class="mi">36</span>     <span class="c1"># Send a copy because the user may overwrite it.</span>
 <span class="g g-Whitespace">     </span><span class="mi">37</span>     <span class="c1"># The user of this class might want `x` to remain unchanged.</span>
