@@ -15,8 +15,6 @@ dependencies:
   - cfgrib
   - eccodes
   - sphinx
-  - tensorflow
-  - tensorflow-probability
   - herbie-data
   - nbsphinx
   - pydata-sphinx-theme
