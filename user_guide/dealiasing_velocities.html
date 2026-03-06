@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Radar Data Quality Control - Dealiasing &#8212; PyDDA 2.2 documentation</title>
+    <title>Radar Data Quality Control - Dealiasing &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="Reading in Radar Data in Native Radial Coordinates" href="read_radar_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -294,8 +294,7 @@
 <li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a></li>
 </ul>
 </div>
 </nav></div>
@@ -360,11 +359,11 @@
 <span id="dealiasing-velocities"></span><h1>Radar Data Quality Control - Dealiasing<a class="headerlink" href="#radar-data-quality-control-dealiasing" title="Link to this heading">#</a></h1>
 <p>In this notebook, we will showcase how to perform quality control of your
 radar files, specifically dealiasing velocities. By doing this we can provide
-PyDDA with quality controlled doppler velocities for dual doppler analysis.</p>
+PyDDA with quality controlled Doppler velocities for dual Doppler analysis.</p>
 <section id="read-the-data">
 <h2>Read the Data<a class="headerlink" href="#read-the-data" title="Link to this heading">#</a></h2>
-<p>For this example, we use test data for two NEXRAD radars in
-northern Oklahoma. For more information on
+<p>For this example, we use test data for two NEXRAD (WSR-88D) radars in
+northern Oklahoma: KTLX (Twin Lakes, OK) and KICT (Wichita, KS). For more information on
 reading the radar data, consult <a class="reference internal" href="read_radar_data.html#reading-radar-data"><span class="std std-ref">Reading in Radar Data in Native Radial Coordinates</span></a>.</p>
 <dl class="simple">
 <dt>Get test data::</dt><dd><p><a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.testing.get_test_data.html">https://arm-doe.github.io/pyart/API/generated/pyart.testing.get_test_data.html</a></p>
@@ -453,7 +452,7 @@ surrounding a gate.</p>
 <h3>Velocity Texture Displays<a class="headerlink" href="#velocity-texture-displays" title="Link to this heading">#</a></h3>
 <p>Let’s see what this velocity texture looks like.
 Additionally, a histogram of velocity texture values will allow for
-the determination of a threshold to distingiush the hydrometeor signal
+the determination of a threshold to distinguish the hydrometeor signal
 from artifacts.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display the calculated velocity texture</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
@@ -500,7 +499,7 @@ from artifacts.</p>
 <section id="filter-doppler-velocity-artifacts">
 <h3>Filter Doppler Velocity Artifacts<a class="headerlink" href="#filter-doppler-velocity-artifacts" title="Link to this heading">#</a></h3>
 <p>Now that we have determined which velocity texture values correspond to
-artifacts within the doppler velocity data, we utilize Py-ART’s GateFilter
+artifacts within the Doppler velocity data, we utilize Py-ART’s GateFilter
 to filter out these artifacts</p>
 <dl class="simple">
 <dt>Py-ART’s GateFilter function::</dt><dd><p><a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.filters.GateFilter.html">https://arm-doe.github.io/pyart/API/generated/pyart.filters.GateFilter.html</a></p>
@@ -518,7 +517,7 @@ to filter out these artifacts</p>
 <section id="apply-dealiasing">
 <h2>Apply Dealiasing<a class="headerlink" href="#apply-dealiasing" title="Link to this heading">#</a></h2>
 <p>Now that we have removed artifacts, we can proceed with dealiasing
-the doppler velocity data with Py-ART’s Region-Based Dealiasing
+the Doppler velocity data with Py-ART’s Region-Based Dealiasing
 Algorithm.</p>
 <p>The Region-Based Dealiasing finds regions of similar velocities and
 unfolds and merges these pairs of regions until all data are unfolded.</p>
@@ -594,9 +593,9 @@ unfolds and merges these pairs of regions until all data are unfolded.</p>
 <section id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
 <p>Utilizing Py-ART, we read in two radar files within close proximity to each other.
-We then corrected the radar doppler velocities to remove artifacts and clutter.
-Finally, utilizing Py-ART, we applied a region-based dealiasing alogrithm to
-unfold the doppler velocities.</p>
+We then corrected the radar Doppler velocities to remove artifacts and clutter.
+Finally, utilizing Py-ART, we applied a region-based dealiasing algorithm to
+unfold the Doppler velocities.</p>
 <p>Now that we have corrected velocities, incorporating these radars into PyDDA
 will be shown in the next notebook.</p>
 </section>

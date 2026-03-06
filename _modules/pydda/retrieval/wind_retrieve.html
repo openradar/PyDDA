@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 2.2 documentation</title>
+    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -115,7 +115,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -333,7 +333,7 @@
                   
   <h1>Source code for pydda.retrieval.wind_retrieve</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">reated on Mon Aug  7 09:17:40 2017</span>
+<span class="sd">Created on Mon Aug  7 09:17:40 2017</span>
 
 <span class="sd">@author: rjackson</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -407,7 +407,7 @@
 <span class="sd">    u_back: 1D float array (number of vertical levels)</span>
 <span class="sd">        Background u wind</span>
 <span class="sd">    v_back: 1D float array (number of vertical levels)</span>
-<span class="sd">        Background u wind</span>
+<span class="sd">        Background v wind</span>
 <span class="sd">    u_model: list of 3D float arrays</span>
 <span class="sd">        U from each model integrated into the retrieval</span>
 <span class="sd">    v_model: list of 3D float arrays</span>
@@ -1647,20 +1647,20 @@
 <span class="sd">        All grids must have the same shape, x coordinates, y coordinates</span>
 <span class="sd">        and z coordinates.</span>
 <span class="sd">    u_init: 3D ndarray</span>
-<span class="sd">        The intial guess for the zonal wind field, input as a 3D array</span>
+<span class="sd">        The initial guess for the zonal wind field, input as a 3D array</span>
 <span class="sd">        with the same shape as the fields in Grids. If this is None,</span>
 <span class="sd">        PyDDA will use the u field in the first Grid as the initalization.</span>
 <span class="sd">    v_init: 3D ndarray</span>
-<span class="sd">        The intial guess for the meridional wind field, input as a 3D array</span>
+<span class="sd">        The initial guess for the meridional wind field, input as a 3D array</span>
 <span class="sd">        with the same shape as the fields in Grids. If this is None,</span>
 <span class="sd">        PyDDA will use the v field in the first Grid as the initalization.</span>
 <span class="sd">    w_init: 3D ndarray</span>
-<span class="sd">        The intial guess for the vertical wind field, input as a 3D array</span>
+<span class="sd">        The initial guess for the vertical wind field, input as a 3D array</span>
 <span class="sd">        with the same shape as the fields in Grids. If this is None,</span>
 <span class="sd">        PyDDA will use the w field in the first Grid as the initalization.</span>
 <span class="sd">    engine: str (one of &quot;scipy&quot;, &quot;tensorflow&quot;, &quot;jax&quot;)</span>
 <span class="sd">        Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.</span>
-<span class="sd">        Using Tensorflow or Jax expands PyDDA&#39;s capabiability to take advantage of GPU-based systems.</span>
+<span class="sd">        Using TensorFlow or Jax expands PyDDA&#39;s capability to take advantage of GPU-based systems.</span>
 <span class="sd">        In addition, these two implementations use automatic differentation to calculate the gradient</span>
 <span class="sd">        of the cost function in order to optimize the gradient calculation.</span>
 <span class="sd">        TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-based engine.</span>
@@ -1741,7 +1741,7 @@
 <span class="sd">        Minimum beam crossing angle in degrees between two radars. 30.0 is the</span>
 <span class="sd">        typical value used in many publications.</span>
 <span class="sd">    max_bca: float</span>
-<span class="sd">        Minimum beam crossing angle in degrees between two radars. 150.0 is the</span>
+<span class="sd">        Maximum beam crossing angle in degrees between two radars. 150.0 is the</span>
 <span class="sd">        typical value used in many publications.</span>
 <span class="sd">    upper_bc: bool</span>
 <span class="sd">        Set this to true to enforce w = 0 at the top of the atmosphere. This is</span>
@@ -1767,8 +1767,8 @@
 <span class="sd">        Stop iterations after maximum change in winds is less than this value.</span>
 <span class="sd">    tolerance: float</span>
 <span class="sd">        Tolerance for :math:`L_{2}` norm of gradient before stopping.</span>
-<span class="sd">    max_wind_magnitude: float</span>
-<span class="sd">        Constrain the optimization to have :math:`|u|`, :math:`|w|`, and :math:`|w| &lt; x` m/s.</span>
+<span class="sd">    max_wind_mag: float</span>
+<span class="sd">        Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| &lt; x` m/s.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    =======</span>

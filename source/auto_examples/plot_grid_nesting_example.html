@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Guide and example on how to use nested grids with DataTrees &#8212; PyDDA 2.2 documentation</title>
+    <title>Guide and example on how to use nested grids with DataTrees &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="Example on retrieving and plotting winds" href="plot_examples.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -497,7 +497,7 @@ DataArrays inside each of the root nodes for each level, in this case
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-02-24 20:41:57.174758: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-03-05 23:32:29.795403: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -516,7 +516,7 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 FMA, in other opera
 This can be be done through installing the tensorflow-probability[tf] extra.
 
 
-Welcome to PyDDA 2.2
+Welcome to PyDDA 2.3.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -621,82 +621,17 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">287</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">288</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">461</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_lbfgsb_py.py:461,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">459</span> <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">460</span> <span class="c1"># x, f, g, wa, iwa, task, csave, lsave, isave, dsave = \</span>
+<span class="ne">--&gt; </span><span class="mi">461</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">462</span>                <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span> <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">,</span> <span class="n">ln_task</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">464</span> <span class="k">if</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">465</span>     <span class="c1"># The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">466</span>     <span class="c1"># Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">467</span>     <span class="c1"># until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">468</span>     <span class="c1"># Overwrite f and g:</span>
-<span class="ne">--&gt; </span><span class="mi">469</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">470</span> <span class="k">elif</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">471</span>     <span class="c1"># new iteration</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">413</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_differentiable_functions.py:375,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">373</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orig_grad</span> <span class="ow">in</span> <span class="n">FD_METHODS</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">374</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
-<span class="ne">--&gt; </span><span class="mi">375</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped_grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">376</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_updated</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/scipy/optimize/_differentiable_functions.py:39,</span> in <span class="ni">_ScalarGradWrapper.__call__</span><span class="nt">(self, x, f0, **kwds)</span>
-<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
-<span class="g g-Whitespace">     </span><span class="mi">36</span>     <span class="c1"># Send a copy because the user may overwrite it.</span>
-<span class="g g-Whitespace">     </span><span class="mi">37</span>     <span class="c1"># The user of this class might want `x` to remain unchanged.</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span>     <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">39</span>         <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
-<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="ow">in</span> <span class="n">FD_METHODS</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">41</span>         <span class="n">g</span><span class="p">,</span> <span class="n">dct</span> <span class="o">=</span> <span class="n">approx_derivative</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span>             <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span>             <span class="n">x</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">44</span>             <span class="n">f0</span><span class="o">=</span><span class="n">f0</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">finite_diff_options</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span>         <span class="p">)</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:513,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">503</span> <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">504</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">505</span>         <span class="n">winds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">506</span>         <span class="p">(</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">511</span>         <span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">512</span>     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">513</span>     <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">514</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">515</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">516</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">517</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">518</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">519</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">520</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">521</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">522</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">523</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">524</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">525</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">527</span>     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">528</span>         <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span>             <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>             <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">537</span>             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">538</span>         <span class="p">)</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:133,</span> in <span class="ni">calculate_grad_radial_vel</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc)</span>
-<span class="g g-Whitespace">    </span><span class="mi">127</span> <span class="n">x_grad</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">128</span>     <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">129</span> <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">130</span> <span class="n">y_grad</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">131</span>     <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="p">)</span> <span class="o">*</span> <span class="n">lambda_o</span>
-<span class="ne">--&gt; </span><span class="mi">133</span> <span class="n">z_grad</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_ar</span> <span class="o">-</span> <span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">135</span> <span class="n">p_x1</span> <span class="o">+=</span> <span class="n">x_grad</span>
-<span class="g g-Whitespace">    </span><span class="mi">136</span> <span class="n">p_y1</span> <span class="o">+=</span> <span class="n">y_grad</span>
+<span class="g g-Whitespace">    </span><span class="mi">469</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Converting the radar data to Cartesian coordinates with Py-ART &#8212; PyDDA 2.2 documentation</title>
+    <title>Converting the radar data to Cartesian coordinates with Py-ART &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -57,7 +57,7 @@
     <link rel="prev" title="Radar Data Quality Control - Dealiasing" href="dealiasing_velocities.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -119,7 +119,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -295,8 +295,7 @@
 <li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a></li>
 </ul>
 </div>
 </nav></div>
@@ -362,7 +361,7 @@
 <p>PyDDA expects radar data to be in Cartesian coordinates before it retrieves
 the wind fields. Most radar data, however, is in the radar’s native antenna
 coordinates. Therefore, the radar data needs to be converted to Cartesian
-coordinates. Py-ART’s mapping toolbox contains the necessary utilties</p>
+coordinates. Py-ART’s mapping toolbox contains the necessary utilities</p>
 <p>We will assume that you have followed the steps outlined in <a class="reference internal" href="read_radar_data.html#reading-radar-data"><span class="std std-ref">Reading in Radar Data in Native Radial Coordinates</span></a>
 for reading the radar data in its native coordinates.  PyDDA requires dealiased velocities
 with noise, ground clutter, and second trip echoes removed for proper
@@ -393,7 +392,7 @@ example, we will limit the domain to the updrafts of interest.</p>
 limits of the grid in meters. The <code class="code docutils literal notranslate"><span class="pre">grid_shape</span></code> specifies the shape of the grid in number of
 points. We then use PyART’s <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.map.grid_from_radars.html">grid_from_radars</a>
 function to create the grids <code class="code docutils literal notranslate"><span class="pre">grid_ktlx</span></code> and <code class="code docutils literal notranslate"><span class="pre">grid_kict</span></code>. PyDDA requires that both grids have the same
-shape and origin, so we explictly set those in the options for both grids.</p>
+shape and origin, so we explicitly set those in the options for both grids.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grid_ktlx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">([</span><span class="n">radar_ktlx</span><span class="p">],</span> <span class="n">grid_limits</span><span class="o">=</span><span class="n">grid_limits</span><span class="p">,</span>
                                 <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter_ktlx</span><span class="p">,</span>
                                 <span class="n">grid_origin</span><span class="o">=</span><span class="p">(</span><span class="n">radar_kict</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">filled</span><span class="p">(),</span>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example on integrating radar and HRRR data &#8212; PyDDA 2.2 documentation</title>
+    <title>Example on integrating radar and HRRR data &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="PyDDA Example Gallery" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -414,7 +414,7 @@ Herbie is not required to run PyDDA, but must be installed to run this example.<
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-02-24 20:42:31.228549: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2026-03-05 23:33:03.218981: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 </pre></div>
 </div>
@@ -433,7 +433,7 @@ To enable the following instructions: SSE4.1 SSE4.2 AVX AVX2 FMA, in other opera
 This can be be done through installing the tensorflow-probability[tf] extra.
 
 
-Welcome to PyDDA 2.2
+Welcome to PyDDA 2.3.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -460,13 +460,6 @@ No module named &#39;tf_keras&#39;
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 1 and 0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
-Starting solver 
-rmsVR = 21.58818045293141
-Total points: 1284618
-The max of w_init is 0.0
 </pre></div>
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
@@ -506,12 +499,42 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">   </span><span class="mi">1477</span>         <span class="n">new_grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="g g-Whitespace">   </span><span class="mi">1478</span>     <span class="p">)</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:527,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_window, filter_order, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag)</span>
-<span class="g g-Whitespace">    </span><span class="mi">525</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The max of w_init is&quot;</span><span class="p">,</span> <span class="n">wcurrmax</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">526</span> <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="ne">--&gt; </span><span class="mi">527</span> <span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">max_wind_mag</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">winds</span><span class="o">.</span><span class="n">shape</span><span class="p">)]</span>
-<span class="g g-Whitespace">    </span><span class="mi">529</span> <span class="k">if</span> <span class="n">model_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">530</span>     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">the_field</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model_fields</span><span class="p">):</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:420,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_window, filter_order, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag)</span>
+<span class="g g-Whitespace">    </span><span class="mi">415</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">weights_obs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span> <span class="k">if</span> <span class="n">weights_bg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">418</span>     <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">419</span>         <span class="p">(</span>
+<span class="ne">--&gt; </span><span class="mi">420</span>             <span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">421</span>             <span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">422</span>             <span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">423</span>             <span class="o">~</span><span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">424</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">425</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">426</span>     <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">427</span>         <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">428</span>             <span class="n">valid</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">433</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">434</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">435</span>     <span class="n">valid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">436</span>         <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">437</span>             <span class="n">valid</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">442</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">443</span>     <span class="p">)</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.13/site-packages/numpy/ma/core.py:3278,</span> in <span class="ni">MaskedArray.__getitem__</span><span class="nt">(self, indx)</span>
+<span class="g g-Whitespace">   </span><span class="mi">3275</span>             <span class="n">output</span><span class="o">.</span><span class="n">fill_value</span> <span class="o">=</span> <span class="n">fill_value</span>
+<span class="g g-Whitespace">   </span><span class="mi">3276</span>     <span class="k">return</span> <span class="n">output</span>
+<span class="ne">-&gt; </span><span class="mi">3278</span> <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indx</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">3279</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">3280</span><span class="sd">     x.__getitem__(y) &lt;==&gt; x[y]</span>
+<span class="g g-Whitespace">   </span><span class="mi">3281</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">3282</span><span class="sd">     Return the item described by i, as a masked array.</span>
+<span class="g g-Whitespace">   </span><span class="mi">3283</span><span class="sd"> </span>
+<span class="g g-Whitespace">   </span><span class="mi">3284</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">3285</span>     <span class="c1"># We could directly use ndarray.__getitem__ on self.</span>
+<span class="g g-Whitespace">   </span><span class="mi">3286</span>     <span class="c1"># But then we would have to modify __array_finalize__ to prevent the</span>
+<span class="g g-Whitespace">   </span><span class="mi">3287</span>     <span class="c1"># mask of being reshaped if it hasn&#39;t been set up properly yet</span>
+<span class="g g-Whitespace">   </span><span class="mi">3288</span>     <span class="c1"># So it&#39;s easier to stick to the current version</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>

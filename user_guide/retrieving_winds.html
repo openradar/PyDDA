@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Retrieving your first wind field &#8212; PyDDA 2.2 documentation</title>
+    <title>Retrieving your first wind field &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -57,7 +57,7 @@
     <link rel="prev" title="Converting the radar data to Cartesian coordinates with Py-ART" href="gridding.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -119,7 +119,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -295,8 +295,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Retrieving your first wind field</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Retrieving your first wind field</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a></li>
 </ul>
 </div>
 </nav></div>
@@ -362,29 +361,6 @@
 <section id="d-variational-technique">
 <h2>3D variational technique<a class="headerlink" href="#d-variational-technique" title="Link to this heading">#</a></h2>
 <p>PyDDA minimizes a cost function <span class="math notranslate nohighlight">\(J\)</span> that corresponds to various penalties including:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<tbody>
-<tr class="row-odd"><td><p>Cost Function</p></td>
-<td><p>Interpretation</p></td>
-</tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(J_{m} = \nabla \cdot V + w \frac{d\rho}{dz}\)</span></p></td>
-<td><p>Mass continuity equation</p></td>
-</tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(J_{o} = \sum_{radar} [V_{ar} - \textbf{V}]^2\)</span></p></td>
-<td><p>Radar winds</p></td>
-</tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(J_{o} = \sum_{domain} [V_{model} - \textbf{V}]^2\)</span></p></td>
-<td><p>Model winds</p></td>
-</tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(J_{b} = \sum_{background} [V_{sounding} - \textbf{V}]^2\)</span></p></td>
-<td><p>Sounding background</p></td>
-</tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(J_{s} = \nabla^2 V\)</span></p></td>
-<td><p>Wind field smoothness</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <p>The cost function to be minimized is a weighted sum of the various cost functions in PyDDA and are represented in Equation (1):</p>
 <p><span class="math notranslate nohighlight">\(J = c_{m}J_{m} + c_{o}J_{o} + c_{b}J_{b} + c_{s}J_{s} + ...\)</span> (1)</p>
 </section>
@@ -395,19 +371,19 @@ retrieval, there are many aspects that must be considered. After the data proces
 finished, it is now important to constrain the wind field further by adding in either sounding,
 point, or model data as a weak constraint in order to increase the chance that PyDDA will
 provide a solution that converges to a physically realistic wind field. For this particular example,
-we are lucky enough to have model data from the Rapid Update Cycle that can be used as a constraint.</p>
+we are lucky enough to have model data from the Rapid Update Cycle (RUC; the predecessor to the current Rapid Refresh/RAP) that can be used as a constraint.</p>
 </section>
 <section id="using-pydda-s-data-model">
 <h2>Using PyDDA’s data model<a class="headerlink" href="#using-pydda-s-data-model" title="Link to this heading">#</a></h2>
 <p>As of PyDDA 2.0, PyDDA uses <a class="reference external" href="https://docs.xarray.dev/en/stable/generated/xarray.Dataset.html">xarray Datasets</a>
 to represent the underlying datastructure. This makes it easier to integrate PyDDA into xarray-based workflows
 that are the standard for use in the Geoscientific Python Community. Therefore, anyone using PyART Grids will need
-to convert their grids to PyDDA Grids using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">pydda.io.read_from_pyart_grid()</span></code> helper function.</p>
+to convert their grids to PyDDA Grids using the <a class="reference internal" href="../dev_reference/generated/pydda.io.read_from_pyart_grid.html#pydda.io.read_from_pyart_grid" title="pydda.io.read_from_pyart_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pydda.io.read_from_pyart_grid()</span></code></a> helper function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">grid_ktlx</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_from_pyart_grid</span><span class="p">(</span><span class="n">grid_ktlx</span><span class="p">)</span>
 <span class="n">grid_kict</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_from_pyart_grid</span><span class="p">(</span><span class="n">grid_kict</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In addition, <code class="xref py py-meth docutils literal notranslate"><span class="pre">pydda.io.read_grid()</span></code> will read a cf-Compliant radar grid into a PyDDA Grid.</p>
+<p>In addition, <a class="reference internal" href="../dev_reference/generated/pydda.io.read_grid.html#pydda.io.read_grid" title="pydda.io.read_grid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pydda.io.read_grid()</span></code></a> will read a cf-Compliant radar grid into a PyDDA Grid.</p>
 </section>
 <section id="using-models-for-constraints">
 <h2>Using models for constraints<a class="headerlink" href="#using-models-for-constraints" title="Link to this heading">#</a></h2>
@@ -471,7 +447,7 @@ key on the bottom right interior of the plot.</p>
 is the vertical motion at the edge of the Dual Doppler lobe in the top right corner. This vertical motion is likely
 caused by the wind source changing from primarily the radar data to the RUC model run outside of the Dual Doppler
 lobes, causing a slight shift in winds that results in horizontal convergence. This convergence will result in an
-updraft in the domain that is an artifiact of this switch in data sources. It is therefore recommended to not
+updraft in the domain that is an artifact of this switch in data sources. It is therefore recommended to not
 use vertical velocity data in updrafts that are touching the Dual Doppler lobe edges to mitigate this issue. In
 addition, prescribing a stronger background constraint or filtering the data more often may also help mitigate this
 issue. We will go into this further in <a class="reference internal" href="optimizing_wind_retrieval.html#optimizing-wind-retrieval"><span class="std std-ref">Optimizing your wind retrieval</span></a>.</p>

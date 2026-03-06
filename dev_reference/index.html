@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer Reference Manual &#8212; PyDDA 2.2 documentation</title>
+    <title>Developer Reference Manual &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -57,7 +57,7 @@
     <link rel="prev" title="Guide and example on how to use nested grids with DataTrees" href="../source/auto_examples/plot_grid_nesting_example.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -119,7 +119,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -340,6 +340,10 @@
 <li class="toctree-l1"><a class="reference internal" href="generated/pydda.constraints.download_needed_era_data.html">pydda.constraints.download_needed_era_data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="generated/pydda.constraints.get_iem_obs.html">pydda.constraints.get_iem_obs</a></li>
 </ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="generated/pydda.io.read_grid.html">pydda.io.read_grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/pydda.io.read_from_pyart_grid.html">pydda.io.read_from_pyart_grid</a></li>
+</ul>
 </div>
 </nav></div>
     </div>
@@ -400,10 +404,10 @@
 <span id="user"></span><h1>Developer Reference Manual<a class="headerlink" href="#developer-reference-manual" title="Link to this heading">#</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>2.2</p>
+<dd class="field-odd"><p>2.3.0</p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Feb 24, 2026</p>
+<dd class="field-even"><p>Mar 05, 2026</p>
 </dd>
 </dl>
 <p>This is the developer reference guide for PyDDA which covers most of the
@@ -589,8 +593,8 @@ using barbs, streamlines, and quivers.</p>
 </div>
 </section>
 </section>
-<section id="initalization-module">
-<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">initalization</span></code> Module<a class="headerlink" href="#initalization-module" title="Link to this heading">#</a></h2>
+<section id="initialization-module">
+<h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">initialization</span></code> Module<a class="headerlink" href="#initialization-module" title="Link to this heading">#</a></h2>
 <p>The module for creating custom initial states for the PyDDA retrieval.</p>
 <section id="pydda-initialization-pydda-initialization">
 <span id="module-pydda.initialization"></span><h3>pydda.initialization (pydda.initialization)<a class="headerlink" href="#pydda-initialization-pydda-initialization" title="Link to this heading">#</a></h3>
@@ -658,6 +662,25 @@ simply add (name) into the model_fields option of
 </div>
 </section>
 </section>
+<section id="io-module">
+<h2><a class="reference external" href="https://docs.python.org/3/library/io.html#module-io" title="(in Python v3.14)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">io</span></code></a> Module<a class="headerlink" href="#io-module" title="Link to this heading">#</a></h2>
+<p>Input/output utilities for reading and writing PyDDA Grids.</p>
+<section id="pydda-io-pydda-io">
+<span id="module-pydda.io"></span><h3>pydda.io (pydda.io)<a class="headerlink" href="#pydda-io-pydda-io" title="Link to this heading">#</a></h3>
+<p>This module handles the input/ouput of PyDDA.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pydda.io.read_grid.html#pydda.io.read_grid" title="pydda.io.read_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_grid</span></code></a>(file_name[, level_name])</p></td>
+<td><p>Opens a Cf-compliant netCDF grid object produced by a utility like PyART or RadxGrid.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pydda.io.read_from_pyart_grid.html#pydda.io.read_from_pyart_grid" title="pydda.io.read_from_pyart_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_from_pyart_grid</span></code></a>(Grid)</p></td>
+<td><p>Converts a Py-ART Grid to a PyDDA Dataset with the necessary variables</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
 </section>
 
 
@@ -719,12 +742,16 @@ simply add (name) into the model_fields option of
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pydda-vis-pydda-vis">pydda.vis (pydda.vis)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initalization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">initalization</span></code> Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">initialization</span></code> Module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pydda-initialization-pydda-initialization">pydda.initialization (pydda.initialization)</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constraints-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">constraints</span></code> Module</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pydda-constraints-pydda-constraints">pydda.constraints (pydda.constraints)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#io-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">io</span></code> Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pydda-io-pydda-io">pydda.io (pydda.io)</a></li>
 </ul>
 </li>
 </ul>

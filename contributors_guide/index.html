@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Contributor’s Guide &#8212; PyDDA 2.2 documentation</title>
+    <title>Contributor’s Guide &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,10 +53,10 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="PyDDA Example Gallery" href="../source/auto_examples/index.html" />
-    <link rel="prev" title="Visualizing the wind retrieval" href="../user_guide/visualizing_winds.html" />
+    <link rel="prev" title="Nested wind retrievals" href="../user_guide/nesting_wind_retrieval.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -354,8 +354,8 @@ genius.</p>
 <p>There are just some things that we ask of you. One is that your code be able
 to be distributed under the BSD 3-clause license, which is available in LICENSE
 in the main directory.</p>
-<p>One, we ask, that when on the GitHub forum or making contributions to PyDDA
-that all developers and users follow the PyDDA code of conduct.</p>
+<p>We ask that all developers and users follow the PyDDA code of conduct when
+participating in the GitHub forum or making contributions.</p>
 <section id="contributor-covenant-code-of-conduct">
 <h2>Contributor Covenant Code of Conduct<a class="headerlink" href="#contributor-covenant-code-of-conduct" title="Link to this heading">#</a></h2>
 <p><strong>Our Pledge</strong></p>
@@ -413,8 +413,8 @@ of specific enforcement policies may be posted separately.</p>
 good faith may face temporary or permanent repercussions as determined
 by other members of the project’s leadership.</p>
 <p><strong>Attribution</strong></p>
-<p>This Code of Conduct is adapted from the Contributor Covenant, version 1.4,
-available at <a class="reference external" href="http://contributor-covenant.org/version/1/4">http://contributor-covenant.org/version/1/4</a></p>
+<p>This Code of Conduct is adapted from the Contributor Covenant, version 2.1,
+available at <a class="reference external" href="https://www.contributor-covenant.org/version/2/1/code_of_conduct/">https://www.contributor-covenant.org/version/2/1/code_of_conduct/</a></p>
 </section>
 <section id="code-style">
 <h2>Code Style<a class="headerlink" href="#code-style" title="Link to this heading">#</a></h2>
@@ -434,7 +434,7 @@ conda install pylint</p>
 <section id="python-file-setup">
 <h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Link to this heading">#</a></h2>
 <p>In a new .py file, the top of the code should have the function, sphinx comments
-and the public and private functions within the .py file. Public fuunctions are
+and the public and private functions within the .py file. Public functions are
 listed first and then private functions and classes. Private functions should
 have an underscore in front of the name. A space is needed between the last
 function and the closing docstring quotation marks.</p>
@@ -448,7 +448,7 @@ standards, modules should be added in the following order:</p>
 </ol>
 </div></blockquote>
 <p>Following the main function def line, but before the code within it, a docstring is
-needed to explain all arguments, retuns, references, and other information. Please
+needed to explain all arguments, returns, references, and other information. Please
 follow the NumPy documentation style:</p>
 <p><a class="github reference external" href="https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt">numpy/numpy</a></p>
 <p>For an example format of the documentation, see this:</p>
@@ -478,7 +478,7 @@ follow the NumPy documentation style:</p>
 <span class="sd">        Returns a 3D float array containing the v component of the wind field.</span>
 <span class="sd">        The shape will be the same shape as the fields in Grid.</span>
 <span class="sd">    w: 3D float array</span>
-<span class="sd">        Returns a 3D float array containing the u component of the wind field.</span>
+<span class="sd">        Returns a 3D float array containing the w component of the wind field.</span>
 <span class="sd">        The shape will be the same shape as the fields in Grid.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -488,11 +488,11 @@ follow the NumPy documentation style:</p>
 </section>
 <section id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
-<p>When adding a new function to pyart it is important to add it to the __init__.py
+<p>When adding a new function to PyDDA it is important to add it to the __init__.py
 under the corresponding folder.</p>
 <p>Create a test function and use assert to test the calculated values against known
 values. For an example, see:</p>
-<p><a class="github reference external" href="https://github.com/openradar/PyDDA/tests/test_retrieval.py">openradar/PyDDA</a></p>
+<p><a class="github reference external" href="https://github.com/openradar/PyDDA/blob/master/pydda/tests/test_retrieval.py">openradar/PyDDA</a></p>
 <p>Pytest will run this test whenever a pull request is made to the master branch
 of the openradar/PyDDA repository. This will then allow the maintainers to
 determine how the pull request will affect the functionality of PyDDA.</p>
@@ -532,8 +532,7 @@ determine how the pull request will affect the functionality of PyDDA.</p>
 <p>When you make contributions to PyDDA, we ask that you make your own fork
 of openradar/PyDDA and create your own branch from within that fork. After
 forking the repository on GitHub, create your own branch by doing:</p>
-<p>git checkout -b this_branch
-git branch this_branch</p>
+<p>git checkout -b this_branch</p>
 <p>Make your changes, commit, and then to push to that branch do:
 ::
 git push origin this_branch</p>
@@ -553,12 +552,12 @@ on openradar/PyDDA where the maintainers will review your pull request.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../user_guide/visualizing_winds.html"
+       href="../user_guide/nesting_wind_retrieval.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Visualizing the wind retrieval</p>
+        <p class="prev-next-title">Nested wind retrievals</p>
       </div>
     </a>
     <a class="right-next"

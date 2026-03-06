@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualizing the wind retrieval &#8212; PyDDA 2.2 documentation</title>
+    <title>Visualizing the wind retrieval &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,18 +45,18 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/visualizing_winds';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contributor’s Guide" href="../contributors_guide/index.html" />
+    <link rel="next" title="Nested wind retrievals" href="nesting_wind_retrieval.html" />
     <link rel="prev" title="Optimizing your wind retrieval" href="optimizing_wind_retrieval.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -294,8 +294,7 @@
 <li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a></li>
 </ul>
 </div>
 </nav></div>
@@ -358,6 +357,95 @@
                   
   <section id="visualizing-the-wind-retrieval">
 <span id="visualizing-winds"></span><h1>Visualizing the wind retrieval<a class="headerlink" href="#visualizing-the-wind-retrieval" title="Link to this heading">#</a></h1>
+<p>PyDDA’s <a class="reference internal" href="../dev_reference/index.html#module-pydda.vis" title="pydda.vis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydda.vis</span></code></a> module provides routines for plotting horizontal and
+vertical cross-sections of retrieved wind fields overlaid on a gridded radar
+background field (e.g., reflectivity). Three wind-vector styles are supported:</p>
+<ul class="simple">
+<li><p><strong>Quivers</strong> — arrow length proportional to wind speed.</p></li>
+<li><p><strong>Barbs</strong> — meteorological wind barbs.</p></li>
+<li><p><strong>Streamlines</strong> — continuous flow lines.</p></li>
+</ul>
+<p>Each style has three geometry variants:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Cross-section</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../dev_reference/generated/pydda.vis.plot_horiz_xsection_quiver.html#pydda.vis.plot_horiz_xsection_quiver" title="pydda.vis.plot_horiz_xsection_quiver"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_horiz_xsection_quiver()</span></code></a></p></td>
+<td><p>Horizontal (constant altitude)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../dev_reference/generated/pydda.vis.plot_xz_xsection_quiver.html#pydda.vis.plot_xz_xsection_quiver" title="pydda.vis.plot_xz_xsection_quiver"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_xz_xsection_quiver()</span></code></a></p></td>
+<td><p>Vertical, east–west (constant y)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../dev_reference/generated/pydda.vis.plot_yz_xsection_quiver.html#pydda.vis.plot_yz_xsection_quiver" title="pydda.vis.plot_yz_xsection_quiver"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_yz_xsection_quiver()</span></code></a></p></td>
+<td><p>Vertical, north–south (constant x)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../dev_reference/generated/pydda.vis.plot_horiz_xsection_barbs.html#pydda.vis.plot_horiz_xsection_barbs" title="pydda.vis.plot_horiz_xsection_barbs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_horiz_xsection_barbs()</span></code></a></p></td>
+<td><p>Horizontal (constant altitude)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../dev_reference/generated/pydda.vis.plot_xz_xsection_barbs.html#pydda.vis.plot_xz_xsection_barbs" title="pydda.vis.plot_xz_xsection_barbs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_xz_xsection_barbs()</span></code></a></p></td>
+<td><p>Vertical, east–west (constant y)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../dev_reference/generated/pydda.vis.plot_yz_xsection_barbs.html#pydda.vis.plot_yz_xsection_barbs" title="pydda.vis.plot_yz_xsection_barbs"><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_yz_xsection_barbs()</span></code></a></p></td>
+<td><p>Vertical, north–south (constant x)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-func docutils literal notranslate"><span class="pre">pydda.vis.plot_horiz_xsection_streamline()</span></code></p></td>
+<td><p>Horizontal (constant altitude)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="horizontal-cross-section-quiver">
+<h2>Horizontal cross-section (quiver)<a class="headerlink" href="#horizontal-cross-section-quiver" title="Link to this heading">#</a></h2>
+<p>The most common visualization is a horizontal cross-section of horizontal winds
+overlaid on reflectivity. The example below plots the wind field at vertical
+level 15, with updraft contours at 1, 2, 5, and 10 m/s and quivers spaced
+25 km apart.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span>
+    <span class="n">grids_out</span><span class="p">,</span>
+    <span class="n">level</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+    <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;DBZ&quot;</span><span class="p">,</span>
+    <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">25.0</span><span class="p">,</span>
+    <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">25.0</span><span class="p">,</span>
+    <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s2">&quot;bottom_right&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/b3e709ff87b2ccb218a38aa3650355b0/visualizing_winds-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5a090760fbccb18d788c2ccb25be0f5b/visualizing_winds-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/1453f8775107e3b8c1f0ca6dff18a133/visualizing_winds-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/ee36a1408226737d192bc2f7b36f8203/visualizing_winds-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/visualizing_winds-1.png" class="plot-directive" src="../_images/visualizing_winds-1.png" />
+</figure>
+<section id="key-parameters">
+<h3>Key parameters<a class="headerlink" href="#key-parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">level</span></code></dt><dd><p>The index of the vertical level (z dimension) to plot for horizontal
+cross-sections.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">background_field</span></code></dt><dd><p>The name of the gridded variable to show as the color-filled background
+(e.g., <code class="docutils literal notranslate"><span class="pre">&quot;DBZ&quot;</span></code> for reflectivity).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">bg_grid_no</span></code></dt><dd><p>Which grid in the input list to use for the background field. Defaults to 0.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">w_vel_contours</span></code></dt><dd><p>List of vertical velocity values (m/s) at which to draw contours. Set to
+<code class="docutils literal notranslate"><span class="pre">None</span></code> to suppress vertical velocity contours.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">quiver_spacing_x_km</span></code> / <code class="docutils literal notranslate"><span class="pre">quiver_spacing_y_km</span></code></dt><dd><p>Horizontal spacing between quiver arrows in kilometers. Larger values
+produce a less cluttered plot.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">quiverkey_len</span></code></dt><dd><p>The reference wind speed (m/s) represented by the quiver key arrow.</p>
+</dd>
+</dl>
+<p>For full parameter descriptions see the <a class="reference internal" href="../dev_reference/index.html#user"><span class="std std-ref">Developer Reference Manual</span></a> reference guide.</p>
+</section>
+</section>
 </section>
 
 
@@ -380,11 +468,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="../contributors_guide/index.html"
+       href="nesting_wind_retrieval.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Contributor’s Guide</p>
+        <p class="prev-next-title">Nested wind retrievals</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -398,6 +486,21 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-cross-section-quiver">Horizontal cross-section (quiver)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-parameters">Key parameters</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

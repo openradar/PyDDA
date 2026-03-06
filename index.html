@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 2.2 documentation</title>
+    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=f35be339"></script>
+    <script src="_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -55,7 +55,7 @@
     <link rel="next" title="User Guide" href="user_guide/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -327,7 +327,7 @@ description of each of PyDDA’s subroutines.</p>
 <div class="sd-card-title sd-font-weight-bold docutils">
 <svg version="1.1" width="10.0em" height="10.0em" class="sd-octicon sd-octicon-book" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 3.75A.75.75 0 0 1 .75 3h7.497c1.566 0 2.945.8 3.751 2.014A4.495 4.495 0 0 1 15.75 3h7.5a.75.75 0 0 1 .75.75v15.063a.752.752 0 0 1-.755.75l-7.682-.052a3 3 0 0 0-2.142.878l-.89.891a.75.75 0 0 1-1.061 0l-.902-.901a2.996 2.996 0 0 0-2.121-.879H.75a.75.75 0 0 1-.75-.75Zm12.75 15.232a4.503 4.503 0 0 1 2.823-.971l6.927.047V4.5h-6.75a3 3 0 0 0-3 3ZM11.247 7.497a3 3 0 0 0-3-2.997H1.5V18h6.947c1.018 0 2.006.346 2.803.98Z"></path></svg></div>
 <p class="sd-card-text"><strong>User Guide</strong></p>
-<p class="sd-card-text">The cookbook provides in-depth information on how
+<p class="sd-card-text">The user guide provides in-depth information on how
 to use PyDDA, including how to get started.
 This is where to look for general conceptual descriptions on how
 to use parts of PyDDA, including how to make your first wind retrieval and
@@ -376,7 +376,7 @@ sample code demonstrating various parts of PyDDA’s functionality.</p>
 <section id="system-requirements">
 <h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading">#</a></h2>
 <p>This works on any modern version of Linux, Mac OS X, and Windows. For Windows,
-HRRR data integration is not supported. In addition, since PyDDA takes advtange
+HRRR data integration is not supported. In addition, since PyDDA takes advantage
 of parallelism we recommend:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">An</span> <span class="n">Intel</span> <span class="n">machine</span> <span class="k">with</span> <span class="n">at</span> <span class="n">least</span> <span class="mi">4</span> <span class="n">cores</span>
 <span class="mi">8</span> <span class="n">GB</span> <span class="n">RAM</span>
@@ -417,11 +417,11 @@ will install PyDDA and the required dependencies:</p>
 just type in the following commands assuming you have the above dependencies installed.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">openradar</span><span class="o">/</span><span class="n">PyDDA</span>
 <span class="n">cd</span> <span class="n">PyDDA</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
-<p>Finally, PyDDA now supports using <a class="reference external" href="jax.readthedocs.io">Jax</a> and <a class="reference external" href="tensorflow.org">TensorFlow</a>
-for solving the three dimensional wind field. PyDDA requries TensorFlow 2.6 and the
+<p>Finally, PyDDA now supports using <a class="reference external" href="https://jax.readthedocs.io">Jax</a> and <a class="reference external" href="https://tensorflow.org">TensorFlow</a>
+for solving the three dimensional wind field. PyDDA requires TensorFlow 2.x and the
 tensorflow-probability package for TensorFlow to be enabled.
 In addition, both of these packages can utilize CUDA-enabled GPUs for much faster processing. These two
 dependencies are optional as the user can still use PyDDA with the SciPy ecosystem.
@@ -430,15 +430,20 @@ The Jax optimizer uses the same optimizer as SciPy’s (<a class="reference exte
 </section>
 <section id="known-issues">
 <h1>Known issues<a class="headerlink" href="#known-issues" title="Link to this heading">#</a></h1>
-<p>The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that the
-the wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
+<p>The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that
+wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
 result in numerical instability, so it is recommended that the user test out both Jax and TensorFlow
 if they desire GPU-accelerated retrievals.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/index.html">User Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user_guide/overview.html">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/overview.html">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/overview.html#why-multi-doppler-retrieval">Why multi-Doppler retrieval?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/overview.html#how-pydda-works">How PyDDA works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/overview.html#workflow-overview">Workflow overview</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/read_radar_data.html">Reading in Radar Data in Native Radial Coordinates</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="user_guide/read_radar_data.html#read-in-the-data">Read in the Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="user_guide/read_radar_data.html#plot-the-data">Plot the data</a></li>
@@ -468,18 +473,14 @@ if they desire GPU-accelerated retrievals.</p>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide/visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide/retrieving_winds.html">Retrieving your first wind field</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#d-variational-technique">3D variational technique</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#doing-your-first-wind-retrieval">Doing your first wind retrieval</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#using-pydda-s-data-model">Using PyDDA’s data model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#using-models-for-constraints">Using models for constraints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#set-up-your-initialization">Set up your initialization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#id1">Retrieving your first wind field</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#plotting-the-output-winds">Plotting the output winds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/visualizing_winds.html">Visualizing the wind retrieval</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/visualizing_winds.html#horizontal-cross-section-quiver">Horizontal cross-section (quiver)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide/optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/nesting_wind_retrieval.html">Nested wind retrievals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/nesting_wind_retrieval.html#building-the-nested-grid-tree">Building the nested grid tree</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributors_guide/index.html">Contributor’s Guide</a><ul>
@@ -504,12 +505,16 @@ if they desire GPU-accelerated retrievals.</p>
 <li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-vis-pydda-vis">pydda.vis (pydda.vis)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#initalization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">initalization</span></code> Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#initialization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">initialization</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-initialization-pydda-initialization">pydda.initialization (pydda.initialization)</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#constraints-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">constraints</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-constraints-pydda-constraints">pydda.constraints (pydda.constraints)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#io-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">io</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-io-pydda-io">pydda.io (pydda.io)</a></li>
 </ul>
 </li>
 </ul>
@@ -520,7 +525,7 @@ if they desire GPU-accelerated retrievals.</p>
 <section id="further-support">
 <h1>Further support<a class="headerlink" href="#further-support" title="Link to this heading">#</a></h1>
 <p>We are now requesting that all questions related to PyDDA that are not potential software issues to be
-relegated to the <cite>openradar Discourse group &lt;openradar.discourse.group&gt;</cite> with a ‘pydda’ tag on it. This
+relegated to the <a class="reference external" href="https://openradar.discourse.group">openradar Discourse group</a> with a ‘pydda’ tag on it. This
 enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
 and users can answer questions people may have.</p>
 </section>

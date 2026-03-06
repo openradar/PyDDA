@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Overview &#8212; PyDDA 2.2 documentation</title>
+    <title>Overview &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="User Guide" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -294,8 +294,7 @@
 <li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a></li>
 </ul>
 </div>
 </nav></div>
@@ -358,16 +357,59 @@
                   
   <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h1>
-<p>Within this userguide, we will detail the entire multi-doppler workflow, including:</p>
+<p>PyDDA (Pythonic Direct Data Assimilation) is a Python package for retrieving
+three-dimensional wind fields from one or more Doppler weather radars. This
+technique is commonly called <em>multi-Doppler</em> or <em>dual-Doppler</em> wind retrieval
+(though PyDDA supports an arbitrary number of radars).</p>
+<section id="why-multi-doppler-retrieval">
+<h2>Why multi-Doppler retrieval?<a class="headerlink" href="#why-multi-doppler-retrieval" title="Link to this heading">#</a></h2>
+<p>A single Doppler radar measures only the component of wind motion <em>along</em> the
+radar beam (the radial velocity). By combining observations from two or more
+radars viewing the same storm volume from different angles, it becomes possible
+to decompose the full three-dimensional wind vector (u, v, w) at each grid point.</p>
+<p>The quality of the retrieved vertical velocity <strong>w</strong> depends strongly on the
+<em>beam-crossing angle</em> (BCA) — the angle between the two radar beams at each
+grid point. PyDDA uses a BCA threshold (default: 30°–150°) to mask grid points
+where the geometry is too unfavorable for reliable multi-Doppler synthesis.</p>
+</section>
+<section id="how-pydda-works">
+<h2>How PyDDA works<a class="headerlink" href="#how-pydda-works" title="Link to this heading">#</a></h2>
+<p>PyDDA formulates wind retrieval as a variational problem. It minimizes a cost
+function <strong>J</strong> that penalizes deviations from:</p>
 <ul class="simple">
-<li><p>How to read radar data with Py-ART</p></li>
-<li><p>How to clean your radar data</p></li>
-<li><p>How to grid your radar data to cartesian coordinates</p></li>
-<li><p>How to run PyDDA and tune the parameters</p></li>
-<li><p>How to visualize your PyDDA output</p></li>
+<li><p>observed radial velocities from each radar (<em>J</em><sub>o</sub>)</p></li>
+<li><p>the anelastic mass continuity equation (<em>J</em><sub>m</sub>)</p></li>
+<li><p>smoothness of the wind field (<em>J</em><sub>s</sub>)</p></li>
+<li><p>optional background/sounding constraints (<em>J</em><sub>b</sub>)</p></li>
+<li><p>optional model constraints, e.g., HRRR or WRF (<em>J</em><sub>mod</sub>)</p></li>
 </ul>
-<p>If you are interested in adding a section to the user guide,
-please use the template.rst file in the documentation.</p>
+<p>The minimization uses the L-BFGS-B algorithm (via SciPy, Jax, or TensorFlow)
+to find the wind field that best satisfies all active constraints simultaneously.
+Each constraint is weighted by a user-supplied coefficient, allowing the
+relative importance of each term to be tuned for a given radar network geometry
+and scientific application.</p>
+</section>
+<section id="workflow-overview">
+<h2>Workflow overview<a class="headerlink" href="#workflow-overview" title="Link to this heading">#</a></h2>
+<p>The full multi-Doppler retrieval workflow consists of the following steps,
+each covered in a dedicated section of this user guide:</p>
+<ol class="arabic simple">
+<li><p><strong>Read radar data</strong> — Load raw radar files using Py-ART
+(<a class="reference internal" href="read_radar_data.html#reading-radar-data"><span class="std std-ref">Reading in Radar Data in Native Radial Coordinates</span></a>).</p></li>
+<li><p><strong>Quality control</strong> — Remove noise, ground clutter, and second-trip echoes,
+then dealias the Doppler velocities (<a class="reference internal" href="dealiasing_velocities.html#dealiasing-velocities"><span class="std std-ref">Radar Data Quality Control - Dealiasing</span></a>).</p></li>
+<li><p><strong>Grid to Cartesian coordinates</strong> — Project the radar data from native
+antenna coordinates onto a common Cartesian grid (<a class="reference internal" href="gridding.html#gridding"><span class="std std-ref">Converting the radar data to Cartesian coordinates with Py-ART</span></a>).</p></li>
+<li><p><strong>Retrieve the wind field</strong> — Run PyDDA’s variational solver
+(<a class="reference internal" href="retrieving_winds.html#retrieving-winds"><span class="std std-ref">Retrieving your first wind field</span></a>).</p></li>
+<li><p><strong>Optimize parameters</strong> — Tune the cost function weights to balance
+accuracy and smoothness (<a class="reference internal" href="optimizing_wind_retrieval.html#optimizing-wind-retrieval"><span class="std std-ref">Optimizing your wind retrieval</span></a>).</p></li>
+<li><p><strong>Visualize</strong> — Plot horizontal and vertical cross-sections of the
+retrieved wind field (<a class="reference internal" href="visualizing_winds.html#visualizing-winds"><span class="std std-ref">Visualizing the wind retrieval</span></a>).</p></li>
+</ol>
+<p>If you would like to contribute a new section to this user guide,
+please use the <code class="docutils literal notranslate"><span class="pre">template.rst</span></code> file in the documentation source directory.</p>
+</section>
 </section>
 
 
@@ -408,6 +450,20 @@ please use the template.rst file in the documentation.</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-multi-doppler-retrieval">Why multi-Doppler retrieval?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-pydda-works">How PyDDA works</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview">Workflow overview</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

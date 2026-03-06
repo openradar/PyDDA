@@ -5,14 +5,14 @@ Radar Data Quality Control - Dealiasing
 
 In this notebook, we will showcase how to perform quality control of your
 radar files, specifically dealiasing velocities. By doing this we can provide
-PyDDA with quality controlled doppler velocities for dual doppler analysis.
+PyDDA with quality controlled Doppler velocities for dual Doppler analysis.
 
 -------------
 Read the Data
 -------------
 
-For this example, we use test data for two NEXRAD radars in
-northern Oklahoma. For more information on
+For this example, we use test data for two NEXRAD (WSR-88D) radars in
+northern Oklahoma: KTLX (Twin Lakes, OK) and KICT (Wichita, KS). For more information on
 reading the radar data, consult :ref:`reading-radar-data`.
 
 Get test data::
@@ -164,7 +164,7 @@ Velocity Texture Displays
 
 Let's see what this velocity texture looks like.
 Additionally, a histogram of velocity texture values will allow for
-the determination of a threshold to distingiush the hydrometeor signal
+the determination of a threshold to distinguish the hydrometeor signal
 from artifacts.
 
 .. code-block:: python
@@ -260,7 +260,7 @@ Filter Doppler Velocity Artifacts
 +++++++++++++++++++++++++++++++++
 
 Now that we have determined which velocity texture values correspond to
-artifacts within the doppler velocity data, we utilize Py-ART's GateFilter
+artifacts within the Doppler velocity data, we utilize Py-ART's GateFilter
 to filter out these artifacts
 
 Py-ART's GateFilter function::
@@ -279,7 +279,7 @@ Apply Dealiasing
 ----------------
 
 Now that we have removed artifacts, we can proceed with dealiasing
-the doppler velocity data with Py-ART's Region-Based Dealiasing
+the Doppler velocity data with Py-ART's Region-Based Dealiasing
 Algorithm.
 
 The Region-Based Dealiasing finds regions of similar velocities and
@@ -449,9 +449,9 @@ Summary
 -------
 
 Utilizing Py-ART, we read in two radar files within close proximity to each other.
-We then corrected the radar doppler velocities to remove artifacts and clutter.
-Finally, utilizing Py-ART, we applied a region-based dealiasing alogrithm to
-unfold the doppler velocities.
+We then corrected the radar Doppler velocities to remove artifacts and clutter.
+Finally, utilizing Py-ART, we applied a region-based dealiasing algorithm to
+unfold the Doppler velocities.
 
 Now that we have corrected velocities, incorporating these radars into PyDDA
 will be shown in the next notebook.

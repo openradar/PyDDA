@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; PyDDA 2.2 documentation</title>
+    <title>User Guide &#8212; PyDDA 2.3.0 documentation</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=f35be339"></script>
+    <script src="../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="Welcome to the PyDDA documentation!" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3.0" />
   </head>
   
   
@@ -118,7 +118,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.2 documentation</p>
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
   
 </a></div>
     
@@ -294,8 +294,7 @@
 <li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
 <li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a></li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a></li>
 </ul>
 </div>
 </nav></div>
@@ -355,10 +354,17 @@
                   
   <section id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
-<p>This is a place to include our user guide.</p>
+<p>This user guide covers the full multi-Doppler wind retrieval workflow in PyDDA,
+from reading and quality-controlling raw radar data through to retrieving and
+visualizing the 3D wind field.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#why-multi-doppler-retrieval">Why multi-Doppler retrieval?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#how-pydda-works">How PyDDA works</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#workflow-overview">Workflow overview</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="read_radar_data.html">Reading in Radar Data in Native Radial Coordinates</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="read_radar_data.html#read-in-the-data">Read in the Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="read_radar_data.html#plot-the-data">Plot the data</a><ul>
@@ -402,18 +408,17 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieving_winds.html">Retrieving your first wind field</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#d-variational-technique">3D variational technique</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#doing-your-first-wind-retrieval">Doing your first wind retrieval</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#using-pydda-s-data-model">Using PyDDA’s data model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#using-models-for-constraints">Using models for constraints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#set-up-your-initialization">Set up your initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#id1">Retrieving your first wind field</a></li>
-<li class="toctree-l2"><a class="reference internal" href="retrieving_winds.html#plotting-the-output-winds">Plotting the output winds</a></li>
+<li class="toctree-l1"><a class="reference internal" href="visualizing_winds.html">Visualizing the wind retrieval</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualizing_winds.html#horizontal-cross-section-quiver">Horizontal cross-section (quiver)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="visualizing_winds.html#key-parameters">Key parameters</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nesting_wind_retrieval.html">Nested wind retrievals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nesting_wind_retrieval.html#building-the-nested-grid-tree">Building the nested grid tree</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
