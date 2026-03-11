@@ -4,7 +4,7 @@ channels:
 dependencies:
   - arm_pyart
   - pip
-  - numpy<2.2.0
+  - numpy
   - scipy
   - matplotlib
   - netcdf4
@@ -19,6 +19,3 @@ dependencies:
   - cmweather
   - jax
   - jaxopt
-  - tensorflow
-  - tensorflow-probability
-  - tf-keras
