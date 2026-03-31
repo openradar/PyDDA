@@ -542,96 +542,150 @@ The max of w_init is 0.0
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">68</span>
-<span class="g g-Whitespace">     </span><span class="mi">62</span> <span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/nest_1/&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
 <span class="g g-Whitespace">     </span><span class="mi">64</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="g g-Whitespace">     </span><span class="mi">65</span><span class="sd"> Perform the retrieval</span>
 <span class="g g-Whitespace">     </span><span class="mi">66</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> 
 <span class="ne">---&gt; </span><span class="mi">68</span> <span class="n">grid_tree</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field_nested</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">70</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="sd"> Plot the coarse grid output and finer grid output</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">74</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span> 
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="s2"> Plot the coarse grid output and finer grid output</span>
 
 <span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/nesting.py:56,</span> in <span class="ni">get_dd_wind_field_nested</span><span class="nt">(grid_tree, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-<span class="g g-Whitespace">     </span><span class="mi">55</span>     <span class="n">my_kwargs</span> <span class="o">=</span> <span class="n">tree_attrs</span>
-<span class="ne">---&gt; </span><span class="mi">56</span>     <span class="n">output_grids</span><span class="p">,</span> <span class="n">output_parameters</span> <span class="o">=</span> <span class="n">get_dd_wind_field</span><span class="p">(</span><span class="n">grid_list</span><span class="p">,</span> <span class="o">**</span><span class="n">my_kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span>     <span class="n">output_parameters</span> <span class="o">=</span> <span class="n">output_parameters</span><span class="o">.</span><span class="vm">__dict__</span>
-<span class="g g-Whitespace">     </span><span class="mi">58</span>     <span class="k">if</span> <span class="n">in_parent</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span><span class="s2"> elif len(grid_list) &gt; 0:</span>
+<span class="g g-Whitespace">     </span><span class="mi">55</span><span class="s2">     my_kwargs = tree_attrs</span>
+<span class="ne">---&gt; </span><span class="mi">56</span><span class="s2">     output_grids, output_parameters = get_dd_wind_field(grid_list, **my_kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span><span class="s2">     output_parameters = output_parameters.__dict__</span>
+<span class="g g-Whitespace">     </span><span class="mi">58</span><span class="s2">     if in_parent is True:</span>
 
 <span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1472,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1465</span>     <span class="n">w_init</span> <span class="o">=</span> <span class="n">new_grids</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;w&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1467</span> <span class="k">if</span> <span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1468</span>     <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1469</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;jax&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1470</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;auglag&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1471</span> <span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1472</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_scipy</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1473</span>         <span class="n">new_grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1474</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1475</span> <span class="k">elif</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;tensorflow&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1476</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_tensorflow</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1477</span>         <span class="n">new_grids</span><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1478</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1465</span><span class="s2">     w_init = new_grids[0][&quot;w&quot;].values.squeeze()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1467</span><span class="s2"> if (</span>
+<span class="g g-Whitespace">   </span><span class="mi">1468</span><span class="s2">     engine.lower() == &quot;scipy&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1469</span><span class="s2">     or engine.lower() == &quot;jax&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1470</span><span class="s2">     or engine.lower() == &quot;auglag&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1471</span><span class="s2"> ):</span>
+<span class="ne">-&gt; </span><span class="mi">1472</span><span class="s2">     return _get_dd_wind_field_scipy(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1473</span><span class="s2">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1474</span><span class="s2">     )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1475</span><span class="s2"> elif engine.lower() == &quot;tensorflow&quot;:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1476</span><span class="s2">     return _get_dd_wind_field_tensorflow(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1477</span><span class="s2">         new_grids, u_init, v_init, w_init, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1478</span><span class="s2">     )</span>
 
 <span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:602,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_window, filter_order, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag)</span>
-<span class="g g-Whitespace">    </span><span class="mi">600</span> <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="g g-Whitespace">    </span><span class="mi">601</span> <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;scipy&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">602</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">603</span>         <span class="n">J_function</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">604</span>         <span class="n">winds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">605</span>         <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
-<span class="g g-Whitespace">    </span><span class="mi">606</span>         <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">607</span>         <span class="n">pgtol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">608</span>         <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">609</span>         <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">610</span>         <span class="n">callback</span><span class="o">=</span><span class="n">_vert_velocity_callback</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">611</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">612</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">614</span>     <span class="k">def</span><span class="w"> </span><span class="nf">loss_and_gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">600</span><span class="s2"> parameters.print_out = False</span>
+<span class="g g-Whitespace">    </span><span class="mi">601</span><span class="s2"> if engine.lower() == &quot;scipy&quot;:</span>
+<span class="ne">--&gt; </span><span class="mi">602</span><span class="s2">     winds = fmin_l_bfgs_b(</span>
+<span class="g g-Whitespace">    </span><span class="mi">603</span><span class="s2">         J_function,</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span><span class="s2">         winds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">605</span><span class="s2">         args=(parameters,),</span>
+<span class="g g-Whitespace">    </span><span class="mi">606</span><span class="s2">         maxiter=max_iterations,</span>
+<span class="g g-Whitespace">    </span><span class="mi">607</span><span class="s2">         pgtol=tolerance,</span>
+<span class="g g-Whitespace">    </span><span class="mi">608</span><span class="s2">         bounds=bounds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">609</span><span class="s2">         fprime=grad_J,</span>
+<span class="g g-Whitespace">    </span><span class="mi">610</span><span class="s2">         callback=_vert_velocity_callback,</span>
+<span class="g g-Whitespace">    </span><span class="mi">611</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">612</span><span class="s2"> else:</span>
+<span class="g g-Whitespace">    </span><span class="mi">614</span><span class="s2">     def loss_and_gradient(x):</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:281,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, iprint, maxfun, maxiter, disp, callback, maxls)</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span> <span class="n">callback</span> <span class="o">=</span> <span class="n">_wrap_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span> <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;disp&#39;</span><span class="p">:</span> <span class="n">disp</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span>         <span class="s1">&#39;iprint&#39;</span><span class="p">:</span> <span class="n">iprint</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span>         <span class="s1">&#39;maxcor&#39;</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">278</span>         <span class="s1">&#39;callback&#39;</span><span class="p">:</span> <span class="n">callback</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">279</span>         <span class="s1">&#39;maxls&#39;</span><span class="p">:</span> <span class="n">maxls</span><span class="p">}</span>
-<span class="ne">--&gt; </span><span class="mi">281</span> <span class="n">res</span> <span class="o">=</span> <span class="n">_minimize_lbfgsb</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="n">jac</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">282</span>                        <span class="o">**</span><span class="n">opts</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">283</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;grad&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;jac&#39;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">284</span>      <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">285</span>      <span class="s1">&#39;funcalls&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;nfev&#39;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">286</span>      <span class="s1">&#39;nit&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;nit&#39;</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">287</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
-<span class="g g-Whitespace">    </span><span class="mi">288</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">269</span><span class="s2"> callback = _wrap_callback(callback)</span>
+<span class="g g-Whitespace">    </span><span class="mi">270</span><span class="s2"> opts = {&#39;disp&#39;: disp,</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span><span class="s2">         &#39;iprint&#39;: iprint,</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span><span class="s2">         &#39;maxcor&#39;: m,</span>
+<span class="s2">   (...)    278         &#39;callback&#39;: callback,</span>
+<span class="g g-Whitespace">    </span><span class="mi">279</span><span class="s2">         &#39;maxls&#39;: maxls}</span>
+<span class="ne">--&gt; </span><span class="mi">281</span><span class="s2"> res = _minimize_lbfgsb(fun, x0, args=args, jac=jac, bounds=bounds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">282</span><span class="s2">                        **opts)</span>
+<span class="g g-Whitespace">    </span><span class="mi">283</span><span class="s2"> d = {&#39;grad&#39;: res[&#39;jac&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">284</span><span class="s2">      &#39;task&#39;: res[&#39;message&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span><span class="s2">      &#39;funcalls&#39;: res[&#39;nfev&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span><span class="s2">      &#39;nit&#39;: res[&#39;nit&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span><span class="s2">      &#39;warnflag&#39;: res[&#39;status&#39;]}</span>
+<span class="g g-Whitespace">    </span><span class="mi">288</span><span class="s2"> f = res[&#39;fun&#39;]</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">461</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">462</span>                <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span> <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">,</span> <span class="n">ln_task</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">464</span> <span class="k">if</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">465</span>     <span class="c1"># The minimization routine wants f and g at the current x.</span>
-<span class="g g-Whitespace">    </span><span class="mi">466</span>     <span class="c1"># Note that interruptions due to maxfun are postponed</span>
-<span class="g g-Whitespace">    </span><span class="mi">467</span>     <span class="c1"># until the completion of the current minimization iteration.</span>
-<span class="g g-Whitespace">    </span><span class="mi">468</span>     <span class="c1"># Overwrite f and g:</span>
-<span class="ne">--&gt; </span><span class="mi">469</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">470</span> <span class="k">elif</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">471</span>     <span class="c1"># new iteration</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">    </span><span class="mi">461</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="g g-Whitespace">    </span><span class="mi">462</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
+<span class="g g-Whitespace">    </span><span class="mi">464</span><span class="s2"> if task[0] == 3:</span>
+<span class="g g-Whitespace">    </span><span class="mi">465</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
+<span class="g g-Whitespace">    </span><span class="mi">466</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
+<span class="g g-Whitespace">    </span><span class="mi">467</span><span class="s2">     # until the completion of the current minimization iteration.</span>
+<span class="g g-Whitespace">    </span><span class="mi">468</span><span class="s2">     # Overwrite f and g:</span>
+<span class="ne">--&gt; </span><span class="mi">469</span><span class="s2">     f, g = func_and_grad(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">470</span><span class="s2"> elif task[0] == 1:</span>
+<span class="g g-Whitespace">    </span><span class="mi">471</span><span class="s2">     # new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">472</span><span class="s2">     n_iterations += 1</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:410,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">409</span> <span class="k">def</span><span class="w"> </span><span class="nf">fun_and_grad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">410</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_update_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:412,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> if not np.array_equal(x, self.x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
+<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span><span class="s2"> return self.f, self.g</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/_core/numeric.py:2601,</span> in <span class="ni">array_equal</span><span class="nt">(a1, a2, equal_nan)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2599</span>     <span class="k">return</span> <span class="kc">False</span>
-<span class="g g-Whitespace">   </span><span class="mi">2600</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">equal_nan</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">2601</span>     <span class="k">return</span> <span class="n">builtins</span><span class="o">.</span><span class="n">bool</span><span class="p">((</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">a1</span> <span class="o">==</span> <span class="n">a2</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
-<span class="g g-Whitespace">   </span><span class="mi">2603</span> <span class="k">if</span> <span class="n">a1</span> <span class="ow">is</span> <span class="n">a2</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">2604</span>     <span class="c1"># nan will compare equal so an array will compare equal to itself.</span>
-<span class="g g-Whitespace">   </span><span class="mi">2605</span>     <span class="k">return</span> <span class="kc">True</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:362,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="s2"> def _update_fun(self):</span>
+<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="s2">     if not self.f_updated:</span>
+<span class="ne">--&gt; </span><span class="mi">362</span><span class="s2">         fx = self._wrapped_fun(self.x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">363</span><span class="s2">         self._nfev += 1</span>
+<span class="g g-Whitespace">    </span><span class="mi">364</span><span class="s2">         if fx &lt; self._lowest_f:</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:603,</span> in <span class="ni">_ScalarFunctionWrapper.__call__</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">600</span><span class="s2"> def __call__(self, x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">601</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">    </span><span class="mi">602</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
+<span class="ne">--&gt; </span><span class="mi">603</span><span class="s2">     fx = self.f(np.copy(x), *self.args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span><span class="s2">     self.nfev += 1</span>
+<span class="g g-Whitespace">    </span><span class="mi">606</span><span class="s2">     # Make sure the function returns a true scalar</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:205,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span><span class="s2">     Jmass = 0</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span><span class="s2"> if parameters.Cx &gt; 0 or parameters.Cy &gt; 0 or parameters.Cz &gt; 0:</span>
+<span class="ne">--&gt; </span><span class="mi">205</span><span class="s2">     Jsmooth = _cost_functions_numpy.calculate_smoothness_cost(</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span><span class="s2">         winds[0],</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span><span class="s2">         winds[1],</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2">         winds[2],</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2">         parameters.dx,</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span><span class="s2">         parameters.dy,</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span><span class="s2">         parameters.dz,</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span><span class="s2">         Cx=parameters.Cx,</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span><span class="s2">         Cy=parameters.Cy,</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2">         Cz=parameters.Cz,</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">216</span><span class="s2"> else:</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2">     Jsmooth = 0</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:194,</span> in <span class="ni">calculate_smoothness_cost</span><span class="nt">(u, v, w, dx, dy, dz, Cx, Cy, Cz)</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span><span class="s2"> dwdz = np.gradient(w, dz, axis=0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span><span class="s2"> x_term = (</span>
+<span class="g g-Whitespace">    </span><span class="mi">183</span><span class="s2">     Cx</span>
+<span class="g g-Whitespace">    </span><span class="mi">184</span><span class="s2">     * (</span>
+<span class="s2">   (...)    189     ** 2</span>
+<span class="g g-Whitespace">    </span><span class="mi">190</span><span class="s2"> )</span>
+<span class="g g-Whitespace">    </span><span class="mi">191</span><span class="s2"> y_term = (</span>
+<span class="g g-Whitespace">    </span><span class="mi">192</span><span class="s2">     Cy</span>
+<span class="g g-Whitespace">    </span><span class="mi">193</span><span class="s2">     * (</span>
+<span class="ne">--&gt; </span><span class="mi">194</span><span class="s2">         np.gradient(dudy, dy, axis=1)</span>
+<span class="g g-Whitespace">    </span><span class="mi">195</span><span class="s2">         + np.gradient(dvdy, dy, axis=1)</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span><span class="s2">         + np.gradient(dwdy, dy, axis=1)</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">198</span><span class="s2">     ** 2</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span><span class="s2"> )</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span><span class="s2"> z_term = (</span>
+<span class="g g-Whitespace">    </span><span class="mi">201</span><span class="s2">     Cz</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span><span class="s2">     * (</span>
+<span class="s2">   (...)    207     ** 2</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2"> )</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2"> return np.sum(np.nan_to_num(x_term + y_term + z_term))</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:997,</span> in <span class="ni">_gradient_dispatcher</span><span class="nt">(f, axis, edge_order, *varargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">992</span><span class="s2">     return array(a, order=order, subok=subok, copy=True)</span>
+<span class="g g-Whitespace">    </span><span class="mi">994</span><span class="s2"> # Basic operations</span>
+<span class="ne">--&gt; </span><span class="mi">997</span><span class="s2"> def _gradient_dispatcher(f, *varargs, axis=None, edge_order=None):</span>
+<span class="g g-Whitespace">    </span><span class="mi">998</span><span class="s2">     yield f</span>
+<span class="g g-Whitespace">    </span><span class="mi">999</span><span class="s2">     yield from varargs</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
