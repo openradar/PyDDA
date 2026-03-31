@@ -605,87 +605,17 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">287</span><span class="s2">      &#39;warnflag&#39;: res[&#39;status&#39;]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">288</span><span class="s2"> f = res[&#39;fun&#39;]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">461</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:461,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">459</span><span class="s2"> g = g.astype(np.float64)</span>
+<span class="g g-Whitespace">    </span><span class="mi">460</span><span class="s2"> # x, f, g, wa, iwa, task, csave, lsave, isave, dsave = </span><span class="se">\</span>
+<span class="ne">--&gt; </span><span class="mi">461</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
 <span class="g g-Whitespace">    </span><span class="mi">462</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
 <span class="g g-Whitespace">    </span><span class="mi">464</span><span class="s2"> if task[0] == 3:</span>
 <span class="g g-Whitespace">    </span><span class="mi">465</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">466</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">467</span><span class="s2">     # until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">468</span><span class="s2">     # Overwrite f and g:</span>
-<span class="ne">--&gt; </span><span class="mi">469</span><span class="s2">     f, g = func_and_grad(x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">470</span><span class="s2"> elif task[0] == 1:</span>
-<span class="g g-Whitespace">    </span><span class="mi">471</span><span class="s2">     # new iteration</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span><span class="s2">     n_iterations += 1</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:412,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> if not np.array_equal(x, self.x):</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
-<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
-<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span><span class="s2"> return self.f, self.g</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:362,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="s2"> def _update_fun(self):</span>
-<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="s2">     if not self.f_updated:</span>
-<span class="ne">--&gt; </span><span class="mi">362</span><span class="s2">         fx = self._wrapped_fun(self.x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">363</span><span class="s2">         self._nfev += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span><span class="s2">         if fx &lt; self._lowest_f:</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:603,</span> in <span class="ni">_ScalarFunctionWrapper.__call__</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">600</span><span class="s2"> def __call__(self, x):</span>
-<span class="g g-Whitespace">    </span><span class="mi">601</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
-<span class="g g-Whitespace">    </span><span class="mi">602</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
-<span class="ne">--&gt; </span><span class="mi">603</span><span class="s2">     fx = self.f(np.copy(x), *self.args)</span>
-<span class="g g-Whitespace">    </span><span class="mi">604</span><span class="s2">     self.nfev += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">606</span><span class="s2">     # Make sure the function returns a true scalar</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:205,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span><span class="s2">     Jmass = 0</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span><span class="s2"> if parameters.Cx &gt; 0 or parameters.Cy &gt; 0 or parameters.Cz &gt; 0:</span>
-<span class="ne">--&gt; </span><span class="mi">205</span><span class="s2">     Jsmooth = _cost_functions_numpy.calculate_smoothness_cost(</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span><span class="s2">         winds[0],</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span><span class="s2">         winds[1],</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2">         winds[2],</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2">         parameters.dx,</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span><span class="s2">         parameters.dy,</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span><span class="s2">         parameters.dz,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span><span class="s2">         Cx=parameters.Cx,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span><span class="s2">         Cy=parameters.Cy,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2">         Cz=parameters.Cz,</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2">     )</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span><span class="s2"> else:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2">     Jsmooth = 0</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:194,</span> in <span class="ni">calculate_smoothness_cost</span><span class="nt">(u, v, w, dx, dy, dz, Cx, Cy, Cz)</span>
-<span class="g g-Whitespace">    </span><span class="mi">180</span><span class="s2"> dwdz = np.gradient(w, dz, axis=0)</span>
-<span class="g g-Whitespace">    </span><span class="mi">182</span><span class="s2"> x_term = (</span>
-<span class="g g-Whitespace">    </span><span class="mi">183</span><span class="s2">     Cx</span>
-<span class="g g-Whitespace">    </span><span class="mi">184</span><span class="s2">     * (</span>
-<span class="s2">   (...)    189     ** 2</span>
-<span class="g g-Whitespace">    </span><span class="mi">190</span><span class="s2"> )</span>
-<span class="g g-Whitespace">    </span><span class="mi">191</span><span class="s2"> y_term = (</span>
-<span class="g g-Whitespace">    </span><span class="mi">192</span><span class="s2">     Cy</span>
-<span class="g g-Whitespace">    </span><span class="mi">193</span><span class="s2">     * (</span>
-<span class="ne">--&gt; </span><span class="mi">194</span><span class="s2">         np.gradient(dudy, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">195</span><span class="s2">         + np.gradient(dvdy, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">196</span><span class="s2">         + np.gradient(dwdy, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span><span class="s2">     )</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span><span class="s2">     ** 2</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span><span class="s2"> )</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span><span class="s2"> z_term = (</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span><span class="s2">     Cz</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span><span class="s2">     * (</span>
-<span class="s2">   (...)    207     ** 2</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2"> )</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2"> return np.sum(np.nan_to_num(x_term + y_term + z_term))</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:997,</span> in <span class="ni">_gradient_dispatcher</span><span class="nt">(f, axis, edge_order, *varargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">992</span><span class="s2">     return array(a, order=order, subok=subok, copy=True)</span>
-<span class="g g-Whitespace">    </span><span class="mi">994</span><span class="s2"> # Basic operations</span>
-<span class="ne">--&gt; </span><span class="mi">997</span><span class="s2"> def _gradient_dispatcher(f, *varargs, axis=None, edge_order=None):</span>
-<span class="g g-Whitespace">    </span><span class="mi">998</span><span class="s2">     yield f</span>
-<span class="g g-Whitespace">    </span><span class="mi">999</span><span class="s2">     yield from varargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">469</span><span class="s2">     f, g = func_and_grad(x)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
