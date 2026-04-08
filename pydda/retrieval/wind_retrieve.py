@@ -639,6 +639,7 @@ def _get_dd_wind_field_scipy(
                 tol=tolerance,
                 jit=False,
                 implicit_diff=False,
+                verbose=True,
             )
             winds = {"winds": winds}
             winds, state = solver.run(winds, bounds=bounds)
