@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 2.3.0 documentation</title>
+    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 2.4.0 documentation</title>
   
   
   
@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -39,29 +39,34 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
-    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../../_static/documentation_options.js?v=4d935f96"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/retrieval/wind_retrieve';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.3.0" />
+  <meta name="docsearch:version" content="2.4.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
@@ -93,7 +98,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -115,7 +120,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
+    <p class="title logo__title">PyDDA 2.4.0 documentation</p>
   
 </a></div>
     
@@ -518,7 +523,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cvtol</span> <span class="o">=</span> <span class="mf">1e-2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gtol</span> <span class="o">=</span> <span class="mf">1e-2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Jveltol</span> <span class="o">=</span> <span class="mf">100.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">const_boundary_cond</span> <span class="o">=</span> <span class="kc">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">const_boundary_cond</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
 
@@ -568,6 +574,7 @@
     <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span>
     <span class="n">const_boundary_cond</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">max_wind_mag</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">global</span> <span class="n">_wcurrmax</span>
     <span class="k">global</span> <span class="n">_wprevmax</span>
@@ -837,6 +844,15 @@
     <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Zero out bg_weights at height levels where the interpolated background</span>
+    <span class="c1"># is NaN (i.e. outside the sounding&#39;s vertical range). Also replace NaN</span>
+    <span class="c1"># in u_back/v_back with 0 so those levels don&#39;t corrupt cost function</span>
+    <span class="c1"># arithmetic even though they carry zero weight.</span>
+    <span class="n">nan_bg_levels</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">nan_bg_levels</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">)</span>
     <span class="n">sum_Vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sum_Vr</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
 
@@ -896,6 +912,7 @@
     <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">=</span> <span class="n">upper_bc</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span> <span class="o">=</span> <span class="n">points</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span> <span class="o">=</span> <span class="n">parallel</span>
     <span class="n">_wprevmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">)</span>
     <span class="n">_wcurrmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">)</span>
     <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
@@ -959,14 +976,21 @@
                 <span class="p">{</span><span class="s2">&quot;winds&quot;</span><span class="p">:</span> <span class="n">max_wind_mag</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">winds</span><span class="o">.</span><span class="n">shape</span><span class="p">)},</span>
             <span class="p">)</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">winds</span><span class="p">)</span>
+            <span class="c1"># JIT-compile the cost function explicitly so the compilation</span>
+            <span class="c1"># delay is isolated and visible before the solver loop starts.</span>
+            <span class="n">loss_and_gradient</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">loss_and_gradient</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compiling JAX cost functions...&quot;</span><span class="p">)</span>
+            <span class="n">loss_and_gradient</span><span class="p">({</span><span class="s2">&quot;winds&quot;</span><span class="p">:</span> <span class="n">winds</span><span class="p">})</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compilation complete.&quot;</span><span class="p">)</span>
             <span class="n">solver</span> <span class="o">=</span> <span class="n">jaxopt</span><span class="o">.</span><span class="n">LBFGSB</span><span class="p">(</span>
                 <span class="n">loss_and_gradient</span><span class="p">,</span>
                 <span class="kc">True</span><span class="p">,</span>
                 <span class="n">has_aux</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
                 <span class="n">tol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-                <span class="n">jit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">jit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">implicit_diff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;winds&quot;</span><span class="p">:</span> <span class="n">winds</span><span class="p">}</span>
             <span class="n">winds</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
@@ -1769,6 +1793,11 @@
 <span class="sd">        Tolerance for :math:`L_{2}` norm of gradient before stopping.</span>
 <span class="sd">    max_wind_mag: float</span>
 <span class="sd">        Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| &lt; x` m/s.</span>
+<span class="sd">    parallel: bool</span>
+<span class="sd">        If True, enables parallelized cost and gradient computations for the scipy engine.</span>
+<span class="sd">        This vectorizes the radar loop in the radial velocity cost/gradient functions and</span>
+<span class="sd">        computes independent constraint gradients concurrently using a thread pool.</span>
+<span class="sd">        Default is False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    =======</span>
@@ -1901,8 +1930,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1936,7 +1965,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
 </p></div>
       
     </div>
