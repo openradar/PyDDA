@@ -748,17 +748,20 @@ def _get_dd_wind_field_scipy(
 
     u_field = {}
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
+    u_field["units"] = "m/s"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
     v_field = {}
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridional component of wind velocity"
+    v_field["units"] = "m/s"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
     w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
+    w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
 
@@ -1270,17 +1273,20 @@ def _get_dd_wind_field_tensorflow(
 
     u_field = {}
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
+    u_field["units"] = "m/s"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
     v_field = {}
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridional component of wind velocity"
+    v_field["units"] = "m/s"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
     w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
+    w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
 
