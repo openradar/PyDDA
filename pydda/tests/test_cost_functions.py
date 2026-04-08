@@ -827,3 +827,412 @@ def test_model_cost_tf():
         u, v, w, weights, u - 1, v - 1, w
     )
     assert cost2 > cost1
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_calculate_smoothness_cost_nonzero_jax():
+    """Nonzero field: JAX smoothness cost matches numpy; gradient is nonzero.
+
+    Note: the numpy smoothness gradient omits Cx/Cy/Cz and uses a different
+    Laplacian operator (scipy.ndimage) so cross-engine gradient comparison is
+    not meaningful. Each engine's gradient is tested for being nonzero instead.
+    """
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = rng.random((10, 10, 10))
+    dx, dy, dz = 100.0, 100.0, 100.0
+
+    numpy_cost = pydda.cost_functions.calculate_smoothness_cost(u, v, w, dx, dy, dz)
+    jax_cost = pydda.cost_functions.jax.calculate_smoothness_cost(u, v, w, dx, dy, dz)
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
+
+    jax_grad = pydda.cost_functions.jax.calculate_smoothness_gradient(
+        u, v, w, dx, dy, dz
+    )
+    assert np.any(np.array(jax_grad) != 0)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_calculate_smoothness_cost_nonzero_tf():
+    """Nonzero field: TensorFlow smoothness cost matches numpy; gradient is nonzero.
+
+    Note: the numpy smoothness gradient omits Cx/Cy/Cz and uses a different
+    Laplacian operator (scipy.ndimage) so cross-engine gradient comparison is
+    not meaningful. Each engine's gradient is tested for being nonzero instead.
+    """
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = rng.random((10, 10, 10))
+    dx, dy, dz = 100.0, 100.0, 100.0
+
+    numpy_cost = pydda.cost_functions.calculate_smoothness_cost(u, v, w, dx, dy, dz)
+    tf_cost = pydda.cost_functions.tf.calculate_smoothness_cost(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        dx,
+        dy,
+        dz,
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
+
+    tf_grad = pydda.cost_functions.tf.calculate_smoothness_gradient(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        dx,
+        dy,
+        dz,
+    )
+    assert np.any(np.array(tf_grad) != 0)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_calculate_mass_continuity_nonzero_jax():
+    """Nonzero divergent field: JAX mass continuity cost matches numpy; gradient is nonzero.
+
+    Note: the numpy gradient uses an analytic adjoint formula while JAX uses
+    jax.vjp; the discrete transpose differs at grid boundaries, so cross-engine
+    gradient comparison is not used here.
+    """
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = rng.random((10, 10, 10))
+    dx, dy, dz = 100.0, 100.0, 100.0
+    z = np.arange(0, 1000.0, 100)
+
+    numpy_cost = pydda.cost_functions.calculate_mass_continuity(
+        u, v, w, z, dx, dy, dz, anel=0
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_mass_continuity(
+        u, v, w, z, dx, dy, dz, anel=0
+    )
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
+
+    jax_grad = pydda.cost_functions.jax.calculate_mass_continuity_gradient(
+        u, v, w, z, dx, dy, dz, anel=0
+    )
+    assert np.any(np.array(jax_grad) != 0)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_calculate_mass_continuity_nonzero_tf():
+    """Nonzero divergent field: TensorFlow mass continuity cost and gradient match numpy."""
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = rng.random((10, 10, 10))
+    dx, dy, dz = 100.0, 100.0, 100.0
+    z = np.arange(0, 1000.0, 100)
+
+    numpy_cost = pydda.cost_functions.calculate_mass_continuity(
+        u, v, w, z, dx, dy, dz, anel=0
+    )
+    tf_cost = pydda.cost_functions.tf.calculate_mass_continuity(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        tf.constant(z.astype(np.float32)),
+        dx,
+        dy,
+        dz,
+        anel=0,
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_mass_continuity_gradient(
+        u, v, w, z, dx, dy, dz, anel=0
+    )
+    tf_grad = pydda.cost_functions.tf.calculate_mass_continuity_gradient(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        tf.constant(z.astype(np.float32)),
+        dx,
+        dy,
+        dz,
+        anel=0,
+    )
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_background_cost_nonzero_jax():
+    """Nonzero background mismatch: JAX background cost and gradient match numpy."""
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = np.zeros((10, 10, 10))
+    weights = np.ones((10, 10, 10))
+    u_back = 5.0 * np.ones(10)
+    v_back = 3.0 * np.ones(10)
+
+    numpy_cost = pydda.cost_functions.calculate_background_cost(
+        u, v, w, weights, u_back, v_back
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_background_cost(
+        u, v, w, weights, u_back, v_back
+    )
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_background_gradient(
+        u, v, w, weights, u_back, v_back
+    )
+    jax_grad = pydda.cost_functions.jax.calculate_background_gradient(
+        u, v, w, weights, u_back, v_back
+    )
+    np.testing.assert_allclose(np.array(jax_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_background_cost_nonzero_tf():
+    """Nonzero background mismatch: TF background cost and gradient match numpy.
+
+    Note: TF background functions omit the w parameter.
+    """
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = np.zeros((10, 10, 10))
+    weights = np.ones((10, 10, 10))
+    u_back = 5.0 * np.ones(10)
+    v_back = 3.0 * np.ones(10)
+
+    numpy_cost = pydda.cost_functions.calculate_background_cost(
+        u, v, w, weights, u_back, v_back
+    )
+    tf_cost = pydda.cost_functions.tf.calculate_background_cost(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(weights.astype(np.float32)),
+        tf.constant(u_back.astype(np.float32)),
+        tf.constant(v_back.astype(np.float32)),
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_background_gradient(
+        u, v, w, weights, u_back, v_back
+    )
+    tf_grad = pydda.cost_functions.tf.calculate_background_gradient(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(weights.astype(np.float32)),
+        tf.constant(u_back.astype(np.float32)),
+        tf.constant(v_back.astype(np.float32)),
+    )
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_vert_vorticity_nonzero_jax():
+    """Nonzero rotating field: JAX vorticity cost and gradient match numpy."""
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = np.zeros((10, 10, 10))
+    dx, dy, dz = 100.0, 100.0, 100.0
+    Ut, Vt = 10.0, 10.0
+
+    numpy_cost = pydda.cost_functions.calculate_vertical_vorticity_cost(
+        u, v, w, dx, dy, dz, Ut, Vt
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_vertical_vorticity_cost(
+        u, v, w, dx, dy, dz, Ut, Vt
+    )
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_vertical_vorticity_gradient(
+        u, v, w, dx, dy, dz, Ut, Vt
+    )
+    jax_grad = pydda.cost_functions.jax.calculate_vertical_vorticity_gradient(
+        u, v, w, dx, dy, dz, Ut, Vt
+    )
+    np.testing.assert_allclose(np.array(jax_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_vert_vorticity_nonzero_tf():
+    """Nonzero rotating field: TensorFlow vorticity cost and gradient match numpy."""
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = np.zeros((10, 10, 10))
+    dx, dy, dz = 100.0, 100.0, 100.0
+    Ut, Vt = 10.0, 10.0
+
+    # TF default coeff=1 differs from numpy/JAX default coeff=1e-5; pass explicitly
+    numpy_cost = pydda.cost_functions.calculate_vertical_vorticity_cost(
+        u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5
+    )
+    tf_cost = pydda.cost_functions.tf.calculate_vertical_vorticity_cost(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        dx,
+        dy,
+        dz,
+        Ut,
+        Vt,
+        coeff=1e-5,
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_vertical_vorticity_gradient(
+        u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5
+    )
+    tf_grad = pydda.cost_functions.tf.calculate_vertical_vorticity_gradient(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        dx,
+        dy,
+        dz,
+        Ut,
+        Vt,
+        coeff=1e-5,
+    )
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_model_cost_nonzero_jax():
+    """Nonzero model mismatch: JAX model cost and gradient match numpy."""
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = rng.random((10, 10, 10))
+    u_model = 5.0 * np.ones((10, 10, 10))
+    v_model = 3.0 * np.ones((10, 10, 10))
+    w_model = np.zeros((10, 10, 10))
+    weights = np.ones((10, 10, 10))
+
+    numpy_cost = pydda.cost_functions.calculate_model_cost(
+        u, v, w, weights, u_model, v_model, w_model
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_model_cost(
+        u, v, w, weights, u_model, v_model, w_model
+    )
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_model_gradient(
+        u, v, w, weights, u_model, v_model, w_model
+    )
+    jax_grad = pydda.cost_functions.jax.calculate_model_gradient(
+        u, v, w, weights, u_model, v_model, w_model
+    )
+    np.testing.assert_allclose(np.array(jax_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_model_cost_nonzero_tf():
+    """Nonzero model mismatch: TensorFlow model cost and gradient match numpy."""
+    rng = np.random.default_rng(42)
+    u = rng.random((10, 10, 10))
+    v = rng.random((10, 10, 10))
+    w = rng.random((10, 10, 10))
+    u_model = 5.0 * np.ones((10, 10, 10))
+    v_model = 3.0 * np.ones((10, 10, 10))
+    w_model = np.zeros((10, 10, 10))
+    weights = np.ones((10, 10, 10))
+
+    numpy_cost = pydda.cost_functions.calculate_model_cost(
+        u, v, w, weights, u_model, v_model, w_model
+    )
+    tf_cost = pydda.cost_functions.tf.calculate_model_cost(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        tf.constant(weights.astype(np.float32)),
+        tf.constant(u_model.astype(np.float32)),
+        tf.constant(v_model.astype(np.float32)),
+        tf.constant(w_model.astype(np.float32)),
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_model_gradient(
+        u, v, w, weights, u_model, v_model, w_model
+    )
+    tf_grad = pydda.cost_functions.tf.calculate_model_gradient(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        tf.constant(w.astype(np.float32)),
+        tf.constant(weights.astype(np.float32)),
+        tf.constant(u_model.astype(np.float32)),
+        tf.constant(v_model.astype(np.float32)),
+        tf.constant(w_model.astype(np.float32)),
+    )
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_point_cost_nonzero_jax():
+    """Nonzero point observation mismatch: JAX point cost and gradient match numpy."""
+    u = np.ones((10, 10, 10))
+    v = np.ones((10, 10, 10))
+    x_1d = np.linspace(-10, 10, 10)
+    y_1d = np.linspace(-10, 10, 10)
+    z_1d = np.linspace(-10, 10, 10)
+    x, y, z = np.meshgrid(x_1d, y_1d, z_1d)
+    my_point = {"x": 0, "y": 0, "z": 0, "u": 3.0, "v": 3.0, "w": 0.0}
+
+    numpy_cost = pydda.cost_functions.calculate_point_cost(
+        u, v, x, y, z, [my_point], roi=2.0
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_point_cost(
+        u, v, x, y, z, [my_point], roi=2.0
+    )
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_point_gradient(
+        u, v, x, y, z, [my_point], roi=2.0
+    )
+    jax_grad = pydda.cost_functions.jax.calculate_point_gradient(
+        u, v, x, y, z, [my_point], roi=2.0
+    )
+    np.testing.assert_allclose(np.array(jax_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_point_cost_nonzero_tf():
+    """Nonzero point observation mismatch: TensorFlow point cost and gradient match numpy."""
+    u = np.ones((10, 10, 10))
+    v = np.ones((10, 10, 10))
+    x_1d = tf.constant(np.linspace(-10, 10, 10), dtype=tf.float32)
+    y_1d = tf.constant(np.linspace(-10, 10, 10), dtype=tf.float32)
+    z_1d = tf.constant(np.linspace(-10, 10, 10), dtype=tf.float32)
+    x_tf, y_tf, z_tf = tf.meshgrid(x_1d, y_1d, z_1d)
+    x_np, y_np, z_np = np.meshgrid(
+        np.linspace(-10, 10, 10), np.linspace(-10, 10, 10), np.linspace(-10, 10, 10)
+    )
+    my_point = {"x": 0, "y": 0, "z": 0, "u": 3.0, "v": 3.0, "w": 0.0}
+
+    numpy_cost = pydda.cost_functions.calculate_point_cost(
+        u, v, x_np, y_np, z_np, [my_point], roi=2.0
+    )
+    tf_cost = pydda.cost_functions.tf.calculate_point_cost(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        x_tf,
+        y_tf,
+        z_tf,
+        [my_point],
+        roi=2.0,
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_point_gradient(
+        u, v, x_np, y_np, z_np, [my_point], roi=2.0
+    )
+    tf_grad = pydda.cost_functions.tf.calculate_point_gradient(
+        tf.constant(u.astype(np.float32)),
+        tf.constant(v.astype(np.float32)),
+        x_tf,
+        y_tf,
+        z_tf,
+        [my_point],
+        roi=2.0,
+    )
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
