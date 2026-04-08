@@ -625,13 +625,19 @@ def _get_dd_wind_field_scipy(
                 {"winds": max_wind_mag * jnp.ones(winds.shape)},
             )
             winds = jnp.array(winds)
+            # JIT-compile the cost function explicitly so the compilation
+            # delay is isolated and visible before the solver loop starts.
+            loss_and_gradient = jax.jit(loss_and_gradient)
+            print("Compiling JAX cost functions...")
+            loss_and_gradient({"winds": winds})
+            print("Compilation complete.")
             solver = jaxopt.LBFGSB(
                 loss_and_gradient,
                 True,
                 has_aux=False,
                 maxiter=max_iterations,
                 tol=tolerance,
-                jit=True,
+                jit=False,
                 implicit_diff=False,
             )
             winds = {"winds": winds}
