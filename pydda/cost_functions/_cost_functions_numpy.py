@@ -1,8 +1,5 @@
 import numpy as np
-import scipy
 import pyart
-
-from scipy.ndimage import _nd_image
 
 laplace_filter = np.asarray([1, -2, 1], dtype=np.float64)
 
@@ -236,24 +233,43 @@ def calculate_smoothness_gradient(
     y: float array
         value of gradient of smoothness cost function
     """
-    du = np.zeros(w.shape)
-    dv = np.zeros(w.shape)
-    dw = np.zeros(w.shape)
-    grad_u = np.zeros(w.shape)
-    grad_v = np.zeros(w.shape)
-    grad_w = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode="wrap")
-    scipy.ndimage.laplace(v, dv, mode="wrap")
-    scipy.ndimage.laplace(w, dw, mode="wrap")
-    du = du / dx
-    dv = dv / dy
-    dw = dw / dz
-    scipy.ndimage.laplace(du, grad_u, mode="wrap")
-    scipy.ndimage.laplace(dv, grad_v, mode="wrap")
-    scipy.ndimage.laplace(dw, grad_w, mode="wrap")
-    grad_u = grad_u / dx
-    grad_v = grad_v / dy
-    grad_w = grad_w / dz
+    # Recompute the combined second-derivative terms from the cost function
+    dudx = np.gradient(u, dx, axis=2)
+    dudy = np.gradient(u, dy, axis=1)
+    dudz = np.gradient(u, dz, axis=0)
+    dvdx = np.gradient(v, dx, axis=2)
+    dvdy = np.gradient(v, dy, axis=1)
+    dvdz = np.gradient(v, dz, axis=0)
+    dwdx = np.gradient(w, dx, axis=2)
+    dwdy = np.gradient(w, dy, axis=1)
+    dwdz = np.gradient(w, dz, axis=0)
+
+    fx = (
+        np.gradient(dudx, dx, axis=2)
+        + np.gradient(dvdx, dx, axis=2)
+        + np.gradient(dwdx, dx, axis=2)
+    )
+    fy = (
+        np.gradient(dudy, dy, axis=1)
+        + np.gradient(dvdy, dy, axis=1)
+        + np.gradient(dwdy, dy, axis=1)
+    )
+    fz = (
+        np.gradient(dudz, dz, axis=0)
+        + np.gradient(dvdz, dz, axis=0)
+        + np.gradient(dwdz, dz, axis=0)
+    )
+
+    # Gradient: 2*Ci * d²(fi)/di². u, v, w share the same gradient because
+    # the cost treats them symmetrically through the combined fx/fy/fz terms.
+    grad_all = (
+        2 * Cx * np.gradient(np.gradient(fx, dx, axis=2), dx, axis=2)
+        + 2 * Cy * np.gradient(np.gradient(fy, dy, axis=1), dy, axis=1)
+        + 2 * Cz * np.gradient(np.gradient(fz, dz, axis=0), dz, axis=0)
+    )
+    grad_u = grad_all.copy()
+    grad_v = grad_all.copy()
+    grad_w = grad_all.copy()
 
     # Impermeability condition
     grad_w[0, :, :] = 0

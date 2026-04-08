@@ -831,12 +831,7 @@ def test_model_cost_tf():
 
 @pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
 def test_calculate_smoothness_cost_nonzero_jax():
-    """Nonzero field: JAX smoothness cost matches numpy; gradient is nonzero.
-
-    Note: the numpy smoothness gradient omits Cx/Cy/Cz and uses a different
-    Laplacian operator (scipy.ndimage) so cross-engine gradient comparison is
-    not meaningful. Each engine's gradient is tested for being nonzero instead.
-    """
+    """Nonzero field: JAX smoothness cost and gradient match numpy."""
     rng = np.random.default_rng(42)
     u = rng.random((10, 10, 10))
     v = rng.random((10, 10, 10))
@@ -847,20 +842,16 @@ def test_calculate_smoothness_cost_nonzero_jax():
     jax_cost = pydda.cost_functions.jax.calculate_smoothness_cost(u, v, w, dx, dy, dz)
     np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=0.03, atol=1e-4)
 
+    numpy_grad = pydda.cost_functions.calculate_smoothness_gradient(u, v, w, dx, dy, dz)
     jax_grad = pydda.cost_functions.jax.calculate_smoothness_gradient(
         u, v, w, dx, dy, dz
     )
-    assert np.any(np.array(jax_grad) != 0)
+    np.testing.assert_allclose(np.array(jax_grad), numpy_grad, rtol=0.03, atol=1e-4)
 
 
 @pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
 def test_calculate_smoothness_cost_nonzero_tf():
-    """Nonzero field: TensorFlow smoothness cost matches numpy; gradient is nonzero.
-
-    Note: the numpy smoothness gradient omits Cx/Cy/Cz and uses a different
-    Laplacian operator (scipy.ndimage) so cross-engine gradient comparison is
-    not meaningful. Each engine's gradient is tested for being nonzero instead.
-    """
+    """Nonzero field: TensorFlow smoothness cost and gradient match numpy."""
     rng = np.random.default_rng(42)
     u = rng.random((10, 10, 10))
     v = rng.random((10, 10, 10))
@@ -878,6 +869,7 @@ def test_calculate_smoothness_cost_nonzero_tf():
     )
     np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=0.03, atol=1e-4)
 
+    numpy_grad = pydda.cost_functions.calculate_smoothness_gradient(u, v, w, dx, dy, dz)
     tf_grad = pydda.cost_functions.tf.calculate_smoothness_gradient(
         tf.constant(u.astype(np.float32)),
         tf.constant(v.astype(np.float32)),
@@ -886,7 +878,7 @@ def test_calculate_smoothness_cost_nonzero_tf():
         dy,
         dz,
     )
-    assert np.any(np.array(tf_grad) != 0)
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
 
 
 @pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
