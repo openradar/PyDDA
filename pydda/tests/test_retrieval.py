@@ -189,6 +189,59 @@ def test_twpice_case():
     assert w_max > 5
 
 
+def test_twpice_case_parallel():
+    """TWP-ICE case with parallel=True should produce physically consistent results
+    and match the serial retrieval."""
+    Grid0 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
+
+    Grid0 = pydda.initialization.make_wind_field_from_profile(
+        Grid0, sounding[1], vel_field="corrected_velocity"
+    )
+
+    common_kwargs = dict(
+        Co=100,
+        Cm=1500.0,
+        max_iterations=20,
+        Cz=0,
+        Cmod=0.0,
+        vel_name="corrected_velocity",
+        wind_tol=0.1,
+        refl_field="reflectivity",
+        frz=5000.0,
+        engine="scipy",
+        mask_outside_opt=True,
+        upper_bc=1,
+    )
+
+    Grids_serial, _ = pydda.retrieval.get_dd_wind_field(
+        [deepcopy(Grid0), deepcopy(Grid1)], **common_kwargs, parallel=False
+    )
+    Grids_parallel, _ = pydda.retrieval.get_dd_wind_field(
+        [deepcopy(Grid0), deepcopy(Grid1)], **common_kwargs, parallel=True
+    )
+
+    # Physical sanity: mean flow to the southeast, updrafts present
+    u_mean = np.nanmean(Grids_parallel[0]["u"].values)
+    v_mean = np.nanmean(Grids_parallel[0]["v"].values)
+    w_max = np.nanmax(Grids_parallel[0]["w"].values)
+    assert u_mean > 0
+    assert v_mean < 0
+    assert w_max > 5
+
+    # Numerical equivalence with serial
+    np.testing.assert_allclose(
+        Grids_parallel[0]["u"].values, Grids_serial[0]["u"].values, rtol=1e-5
+    )
+    np.testing.assert_allclose(
+        Grids_parallel[0]["v"].values, Grids_serial[0]["v"].values, rtol=1e-5
+    )
+    np.testing.assert_allclose(
+        Grids_parallel[0]["w"].values, Grids_serial[0]["w"].values, rtol=1e-5
+    )
+
+
 def test_smoothing():
     """A field of random numbers from 0 to 1
     should smooth out to near 0.5"""

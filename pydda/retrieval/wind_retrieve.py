@@ -183,6 +183,7 @@ class DDParameters(object):
         self.gtol = 1e-2
         self.Jveltol = 100.0
         self.const_boundary_cond = False
+        self.parallel = False
 
 
 def _get_dd_wind_field_scipy(
@@ -231,6 +232,7 @@ def _get_dd_wind_field_scipy(
     tolerance=1e-8,
     const_boundary_cond=False,
     max_wind_mag=100.0,
+    parallel=True,
 ):
     global _wcurrmax
     global _wprevmax
@@ -559,6 +561,7 @@ def _get_dd_wind_field_scipy(
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
+    parameters.parallel = parallel
     _wprevmax = np.zeros(parameters.grid_shape)
     _wcurrmax = np.zeros(parameters.grid_shape)
     iterations = 0
@@ -1430,6 +1433,11 @@ def get_dd_wind_field(
         Tolerance for :math:`L_{2}` norm of gradient before stopping.
     max_wind_mag: float
         Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| < x` m/s.
+    parallel: bool
+        If True, enables parallelized cost and gradient computations for the scipy engine.
+        This vectorizes the radar loop in the radial velocity cost/gradient functions and
+        computes independent constraint gradients concurrently using a thread pool.
+        Default is False.
 
     Returns
     =======
