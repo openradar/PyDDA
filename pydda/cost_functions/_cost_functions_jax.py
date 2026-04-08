@@ -548,7 +548,7 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
         calculate_background_cost, u, v, w, weights, u_back, v_back, Cb
     )
     u_grad, v_grad, w_grad, _, _, _, _ = fun_vjp(1.0)
-    y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    y = jnp.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
 
 
