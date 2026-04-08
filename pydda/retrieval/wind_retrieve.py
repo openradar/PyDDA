@@ -502,6 +502,15 @@ def _get_dd_wind_field_scipy(
     parameters.bg_weights[~np.isfinite(parameters.bg_weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     parameters.bg_weights[parameters.bg_weights > 0] = 1
+
+    # Zero out bg_weights at height levels where the interpolated background
+    # is NaN (i.e. outside the sounding's vertical range). Also replace NaN
+    # in u_back/v_back with 0 so those levels don't corrupt cost function
+    # arithmetic even though they carry zero weight.
+    nan_bg_levels = ~np.isfinite(parameters.u_back) | ~np.isfinite(parameters.v_back)
+    parameters.bg_weights[nan_bg_levels] = 0
+    parameters.u_back = np.nan_to_num(parameters.u_back)
+    parameters.v_back = np.nan_to_num(parameters.v_back)
     sum_Vr = np.nansum(np.square(parameters.vrs * parameters.weights))
     parameters.rmsVr = np.sqrt(np.nansum(sum_Vr) / np.nansum(parameters.weights))
 
