@@ -22,6 +22,23 @@ except ImportError:
     JAX_AVAILABLE = False
 
 
+def _make_radvel_inputs():
+    """Build single-radar inputs for radial velocity cost function tests."""
+    Grid = pyart.testing.make_empty_grid(
+        (20, 20, 20), ((0, 10000), (-10000, 10000), (-10000, 10000))
+    )
+    rng = np.random.default_rng(0)
+    fdata = rng.random((20, 20, 20))
+    Grid.fields["vel_field"] = {"data": np.ma.array(fdata), "units": "m/s"}
+    Grid = pydda.io.read_from_pyart_grid(Grid)
+    vrs = [np.ma.array(Grid["vel_field"].values).squeeze()]
+    azs = [np.array(Grid["AZ"].values).squeeze()]
+    els = [np.array(Grid["EL"].values).squeeze()]
+    wts = [np.ma.zeros((20, 20, 20))]
+    weights = [np.ones((20, 20, 20))]
+    return vrs, azs, els, wts, weights
+
+
 def test_calculate_rad_velocity_cost():
     Grid = pyart.testing.make_empty_grid(
         (20, 20, 20), ((0, 10000), (-10000, 10000), (-10000, 10000))
@@ -84,6 +101,49 @@ def test_calculate_rad_velocity_cost_jax():
     assert np.all(grad == 0)
 
 
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_calculate_rad_velocity_cost_nonzero_jax():
+    """Nonzero wind field produces nonzero cost and gradient matching numpy."""
+    vrs, azs, els, wts, weights = _make_radvel_inputs()
+    rng = np.random.default_rng(42)
+    u = rng.random((20, 20, 20))
+    v = rng.random((20, 20, 20))
+    w = rng.random((20, 20, 20))
+    rmsVr = 1.0
+
+    numpy_cost = pydda.cost_functions.calculate_radial_vel_cost_function(
+        vrs, azs, els, u, v, w, wts, rmsVr, weights
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_radial_vel_cost_function(
+        [np.array(vrs[0])],
+        azs,
+        els,
+        jnp.array(u),
+        jnp.array(v),
+        jnp.array(w),
+        [jnp.array(np.array(wts[0]))],
+        rmsVr,
+        jnp.array(weights),
+    )
+    np.testing.assert_allclose(float(jax_cost), numpy_cost, rtol=1e-5)
+
+    numpy_grad = pydda.cost_functions.calculate_grad_radial_vel(
+        vrs, els, azs, u, v, w, wts, weights, rmsVr
+    )
+    jax_grad = pydda.cost_functions.jax.calculate_grad_radial_vel(
+        [np.array(vrs[0])],
+        els,
+        azs,
+        jnp.array(u),
+        jnp.array(v),
+        jnp.array(w),
+        [jnp.array(np.array(wts[0]))],
+        jnp.array(weights),
+        rmsVr,
+    )
+    np.testing.assert_allclose(np.array(jax_grad), numpy_grad, rtol=0.03, atol=1e-4)
+
+
 @pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
 def test_calculate_rad_velocity_cost_tf():
     """Test with a zero velocity field radar"""
@@ -114,6 +174,49 @@ def test_calculate_rad_velocity_cost_tf():
 
     assert cost.numpy() == 0
     assert np.all(grad.numpy() == 0)
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_calculate_rad_velocity_cost_nonzero_tf():
+    """Nonzero wind field produces nonzero cost and gradient matching numpy."""
+    vrs, azs, els, wts, weights = _make_radvel_inputs()
+    rng = np.random.default_rng(42)
+    u = rng.random((20, 20, 20))
+    v = rng.random((20, 20, 20))
+    w = rng.random((20, 20, 20))
+    rmsVr = 1.0
+
+    numpy_cost = pydda.cost_functions.calculate_radial_vel_cost_function(
+        vrs, azs, els, u, v, w, wts, rmsVr, weights
+    )
+    tf_cost = pydda.cost_functions.tf.calculate_radial_vel_cost_function(
+        [tf.constant(np.array(vrs[0]), dtype=tf.float32)],
+        [tf.constant(np.array(azs[0]), dtype=tf.float32)],
+        [tf.constant(np.array(els[0]), dtype=tf.float32)],
+        tf.constant(u.astype(np.float32), dtype=tf.float32),
+        tf.constant(v.astype(np.float32), dtype=tf.float32),
+        tf.constant(w.astype(np.float32), dtype=tf.float32),
+        [tf.constant(np.array(wts[0]), dtype=tf.float32)],
+        rmsVr,
+        [tf.constant(weights[0].astype(np.float32), dtype=tf.float32)],
+    )
+    np.testing.assert_allclose(float(tf_cost.numpy()), numpy_cost, rtol=1e-4)
+
+    numpy_grad = pydda.cost_functions.calculate_grad_radial_vel(
+        vrs, els, azs, u, v, w, wts, weights, rmsVr
+    )
+    tf_grad = pydda.cost_functions.tf.calculate_grad_radial_vel(
+        [tf.constant(np.array(vrs[0]), dtype=tf.float32)],
+        [tf.constant(np.array(els[0]), dtype=tf.float32)],
+        [tf.constant(np.array(azs[0]), dtype=tf.float32)],
+        tf.constant(u.astype(np.float32), dtype=tf.float32),
+        tf.constant(v.astype(np.float32), dtype=tf.float32),
+        tf.constant(w.astype(np.float32), dtype=tf.float32),
+        [tf.constant(np.array(wts[0]), dtype=tf.float32)],
+        [tf.constant(weights[0].astype(np.float32), dtype=tf.float32)],
+        rmsVr,
+    )
+    np.testing.assert_allclose(np.array(tf_grad), numpy_grad, rtol=0.03, atol=1e-4)
 
 
 def test_calculate_fall_speed():
