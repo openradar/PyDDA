@@ -36,6 +36,7 @@ Grids, _ = pydda.retrieval.get_dd_wind_field(
     upper_bc=1,
     wind_tol=0.5,
     engine="scipy",
+    parallel=False,
 )
 
 # Plot a horizontal cross section

@@ -183,6 +183,7 @@ class DDParameters(object):
         self.gtol = 1e-2
         self.Jveltol = 100.0
         self.const_boundary_cond = False
+        self.parallel = False
 
 
 def _get_dd_wind_field_scipy(
@@ -231,6 +232,7 @@ def _get_dd_wind_field_scipy(
     tolerance=1e-8,
     const_boundary_cond=False,
     max_wind_mag=100.0,
+    parallel=True,
 ):
     global _wcurrmax
     global _wprevmax
@@ -500,6 +502,15 @@ def _get_dd_wind_field_scipy(
     parameters.bg_weights[~np.isfinite(parameters.bg_weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     parameters.bg_weights[parameters.bg_weights > 0] = 1
+
+    # Zero out bg_weights at height levels where the interpolated background
+    # is NaN (i.e. outside the sounding's vertical range). Also replace NaN
+    # in u_back/v_back with 0 so those levels don't corrupt cost function
+    # arithmetic even though they carry zero weight.
+    nan_bg_levels = ~np.isfinite(parameters.u_back) | ~np.isfinite(parameters.v_back)
+    parameters.bg_weights[nan_bg_levels] = 0
+    parameters.u_back = np.nan_to_num(parameters.u_back)
+    parameters.v_back = np.nan_to_num(parameters.v_back)
     sum_Vr = np.nansum(np.square(parameters.vrs * parameters.weights))
     parameters.rmsVr = np.sqrt(np.nansum(sum_Vr) / np.nansum(parameters.weights))
 
@@ -559,6 +570,7 @@ def _get_dd_wind_field_scipy(
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
+    parameters.parallel = parallel
     _wprevmax = np.zeros(parameters.grid_shape)
     _wcurrmax = np.zeros(parameters.grid_shape)
     iterations = 0
@@ -622,14 +634,21 @@ def _get_dd_wind_field_scipy(
                 {"winds": max_wind_mag * jnp.ones(winds.shape)},
             )
             winds = jnp.array(winds)
+            # JIT-compile the cost function explicitly so the compilation
+            # delay is isolated and visible before the solver loop starts.
+            loss_and_gradient = jax.jit(loss_and_gradient)
+            print("Compiling JAX cost functions...")
+            loss_and_gradient({"winds": winds})
+            print("Compilation complete.")
             solver = jaxopt.LBFGSB(
                 loss_and_gradient,
                 True,
                 has_aux=False,
                 maxiter=max_iterations,
                 tol=tolerance,
-                jit=True,
+                jit=False,
                 implicit_diff=False,
+                verbose=True,
             )
             winds = {"winds": winds}
             winds, state = solver.run(winds, bounds=bounds)
@@ -1430,6 +1449,11 @@ def get_dd_wind_field(
         Tolerance for :math:`L_{2}` norm of gradient before stopping.
     max_wind_mag: float
         Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| < x` m/s.
+    parallel: bool
+        If True, enables parallelized cost and gradient computations for the scipy engine.
+        This vectorizes the radar loop in the radial velocity cost/gradient functions and
+        computes independent constraint gradients concurrently using a thread pool.
+        Default is False.
 
     Returns
     =======
