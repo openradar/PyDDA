@@ -27,27 +27,28 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../../_static/documentation_options.js?v=e9ebdb8f"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/auto_examples/plot_sydney_tornado';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
@@ -75,7 +76,9 @@
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -459,19 +462,17 @@ No module named &#39;tensorflow&#39;
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 0 and 1
 Calculating weights for radars 0 and 2
 Calculating weights for radars 0 and 3
+Calculating weights for radars 1 and 0
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 1 and 0
-Calculating weights for radars 1 and 2
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 1 and 2
 Calculating weights for radars 1 and 3
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 2 and 0
+Calculating weights for radars 2 and 0
 Calculating weights for radars 2 and 1
-Calculating weights for radars 2 and 3
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 3 and 0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 2 and 3
+Calculating weights for radars 3 and 0
 Calculating weights for radars 3 and 1
 Calculating weights for radars 3 and 2
 </pre></div>
@@ -490,7 +491,7 @@ The max of w_init is 0.0
       0|4080.4252|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11190916903769695
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.1119091690376132
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
@@ -559,17 +560,70 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">287</span>      <span class="s1">&#39;warnflag&#39;</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">288</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;fun&#39;</span><span class="p">]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:461,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">459</span> <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">460</span> <span class="c1"># x, f, g, wa, iwa, task, csave, lsave, isave, dsave = \</span>
-<span class="ne">--&gt; </span><span class="mi">461</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">461</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">462</span>                <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span> <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">,</span> <span class="n">ln_task</span><span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">464</span> <span class="k">if</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">465</span>     <span class="c1"># The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">466</span>     <span class="c1"># Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">467</span>     <span class="c1"># until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">468</span>     <span class="c1"># Overwrite f and g:</span>
-<span class="g g-Whitespace">    </span><span class="mi">469</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">469</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">470</span> <span class="k">elif</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">471</span>     <span class="c1"># new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">472</span>     <span class="n">n_iterations</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">413</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_grad</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:375,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">373</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_orig_grad</span> <span class="ow">in</span> <span class="n">FD_METHODS</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">374</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_update_fun</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">375</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped_grad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">376</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_updated</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:39,</span> in <span class="ni">_ScalarGradWrapper.__call__</span><span class="nt">(self, x, f0, **kwds)</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span> <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span>     <span class="c1"># Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span>     <span class="c1"># The user of this class might want `x` to remain unchanged.</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span>     <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">39</span>         <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">))</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span>     <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad</span> <span class="ow">in</span> <span class="n">FD_METHODS</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span>         <span class="n">g</span><span class="p">,</span> <span class="n">dct</span> <span class="o">=</span> <span class="n">approx_derivative</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span>             <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span>             <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span>             <span class="n">f0</span><span class="o">=</span><span class="n">f0</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span>             <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">finite_diff_options</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>         <span class="p">)</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:517,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">515</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">516</span>     <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="ne">--&gt; </span><span class="mi">517</span>     <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">518</span>         <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">519</span>             <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">520</span>                 <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">533</span>             <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">535</span>         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/_base.py:667,</span> in <span class="ni">Executor.__exit__</span><span class="nt">(self, exc_type, exc_val, exc_tb)</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span> <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">667</span>     <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">668</span>     <span class="k">return</span> <span class="kc">False</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/thread.py:273,</span> in <span class="ni">ThreadPoolExecutor.shutdown</span><span class="nt">(self, wait, cancel_futures)</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span> <span class="k">if</span> <span class="n">wait</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span>     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_threads</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">273</span>         <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/threading.py:1133,</span> in <span class="ni">Thread.join</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span> <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span>     <span class="n">timeout</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">timeout</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1133</span> <span class="bp">self</span><span class="o">.</span><span class="n">_os_thread_handle</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -639,8 +693,8 @@ The max of w_init is 0.0
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -674,7 +728,7 @@ The max of w_init is 0.0
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
 </p></div>
       
     </div>
