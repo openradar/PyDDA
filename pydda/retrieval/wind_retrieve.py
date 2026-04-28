@@ -1,5 +1,5 @@
 """
-reated on Mon Aug  7 09:17:40 2017
+Created on Mon Aug  7 09:17:40 2017
 
 @author: rjackson
 """
@@ -71,7 +71,7 @@ class DDParameters(object):
     u_back: 1D float array (number of vertical levels)
         Background u wind
     v_back: 1D float array (number of vertical levels)
-        Background u wind
+        Background v wind
     u_model: list of 3D float arrays
         U from each model integrated into the retrieval
     v_model: list of 3D float arrays
@@ -183,6 +183,7 @@ class DDParameters(object):
         self.gtol = 1e-2
         self.Jveltol = 100.0
         self.const_boundary_cond = False
+        self.parallel = False
 
 
 def _get_dd_wind_field_scipy(
@@ -231,6 +232,7 @@ def _get_dd_wind_field_scipy(
     tolerance=1e-8,
     const_boundary_cond=False,
     max_wind_mag=100.0,
+    parallel=True,
 ):
     global _wcurrmax
     global _wprevmax
@@ -399,7 +401,7 @@ def _get_dd_wind_field_scipy(
                                 ~parameters.els[j][k].mask,
                             )
                         )
-                        cur_array = parameters.weights[i, k]
+                        cur_array = parameters.weights[i, k].copy()
                         cur_array[
                             np.logical_and(
                                 valid,
@@ -500,6 +502,15 @@ def _get_dd_wind_field_scipy(
     parameters.bg_weights[~np.isfinite(parameters.bg_weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     parameters.bg_weights[parameters.bg_weights > 0] = 1
+
+    # Zero out bg_weights at height levels where the interpolated background
+    # is NaN (i.e. outside the sounding's vertical range). Also replace NaN
+    # in u_back/v_back with 0 so those levels don't corrupt cost function
+    # arithmetic even though they carry zero weight.
+    nan_bg_levels = ~np.isfinite(parameters.u_back) | ~np.isfinite(parameters.v_back)
+    parameters.bg_weights[nan_bg_levels] = 0
+    parameters.u_back = np.nan_to_num(parameters.u_back)
+    parameters.v_back = np.nan_to_num(parameters.v_back)
     sum_Vr = np.nansum(np.square(parameters.vrs * parameters.weights))
     parameters.rmsVr = np.sqrt(np.nansum(sum_Vr) / np.nansum(parameters.weights))
 
@@ -559,6 +570,7 @@ def _get_dd_wind_field_scipy(
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
+    parameters.parallel = parallel
     _wprevmax = np.zeros(parameters.grid_shape)
     _wcurrmax = np.zeros(parameters.grid_shape)
     iterations = 0
@@ -607,8 +619,6 @@ def _get_dd_wind_field_scipy(
                 pgtol=tolerance,
                 bounds=bounds,
                 fprime=grad_J,
-                disp=0,
-                iprint=-1,
                 callback=_vert_velocity_callback,
             )
         else:
@@ -624,14 +634,21 @@ def _get_dd_wind_field_scipy(
                 {"winds": max_wind_mag * jnp.ones(winds.shape)},
             )
             winds = jnp.array(winds)
+            # JIT-compile the cost function explicitly so the compilation
+            # delay is isolated and visible before the solver loop starts.
+            loss_and_gradient = jax.jit(loss_and_gradient)
+            print("Compiling JAX cost functions...")
+            loss_and_gradient({"winds": winds})
+            print("Compilation complete.")
             solver = jaxopt.LBFGSB(
                 loss_and_gradient,
                 True,
                 has_aux=False,
                 maxiter=max_iterations,
                 tol=tolerance,
-                jit=True,
+                jit=False,
                 implicit_diff=False,
+                verbose=True,
             )
             winds = {"winds": winds}
             winds, state = solver.run(winds, bounds=bounds)
@@ -731,17 +748,20 @@ def _get_dd_wind_field_scipy(
 
     u_field = {}
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
+    u_field["units"] = "m/s"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
     v_field = {}
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridional component of wind velocity"
+    v_field["units"] = "m/s"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
     w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
+    w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
 
@@ -952,7 +972,7 @@ def _get_dd_wind_field_tensorflow(
 
                 for k in range(parameters.vrs[i].shape[0]):
                     if weights_obs is None:
-                        cur_array = parameters.weights[i, k]
+                        cur_array = parameters.weights[i, k].copy()
                         valid = np.logical_and.reduce(
                             (
                                 ~parameters.vrs[i][k].mask,
@@ -1253,17 +1273,20 @@ def _get_dd_wind_field_tensorflow(
 
     u_field = {}
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
+    u_field["units"] = "m/s"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
     v_field = {}
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridional component of wind velocity"
+    v_field["units"] = "m/s"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
     w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
+    w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
 
@@ -1310,20 +1333,20 @@ def get_dd_wind_field(
         All grids must have the same shape, x coordinates, y coordinates
         and z coordinates.
     u_init: 3D ndarray
-        The intial guess for the zonal wind field, input as a 3D array
+        The initial guess for the zonal wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
         PyDDA will use the u field in the first Grid as the initalization.
     v_init: 3D ndarray
-        The intial guess for the meridional wind field, input as a 3D array
+        The initial guess for the meridional wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
         PyDDA will use the v field in the first Grid as the initalization.
     w_init: 3D ndarray
-        The intial guess for the vertical wind field, input as a 3D array
+        The initial guess for the vertical wind field, input as a 3D array
         with the same shape as the fields in Grids. If this is None,
         PyDDA will use the w field in the first Grid as the initalization.
     engine: str (one of "scipy", "tensorflow", "jax")
         Setting this flag will use the solver based off of SciPy, TensorFlow, or Jax.
-        Using Tensorflow or Jax expands PyDDA's capabiability to take advantage of GPU-based systems.
+        Using TensorFlow or Jax expands PyDDA's capability to take advantage of GPU-based systems.
         In addition, these two implementations use automatic differentation to calculate the gradient
         of the cost function in order to optimize the gradient calculation.
         TensorFlow 2.6 and tensorflow-probability are required for the TensorFlow-based engine.
@@ -1404,7 +1427,7 @@ def get_dd_wind_field(
         Minimum beam crossing angle in degrees between two radars. 30.0 is the
         typical value used in many publications.
     max_bca: float
-        Minimum beam crossing angle in degrees between two radars. 150.0 is the
+        Maximum beam crossing angle in degrees between two radars. 150.0 is the
         typical value used in many publications.
     upper_bc: bool
         Set this to true to enforce w = 0 at the top of the atmosphere. This is
@@ -1430,8 +1453,13 @@ def get_dd_wind_field(
         Stop iterations after maximum change in winds is less than this value.
     tolerance: float
         Tolerance for :math:`L_{2}` norm of gradient before stopping.
-    max_wind_magnitude: float
-        Constrain the optimization to have :math:`|u|`, :math:`|w|`, and :math:`|w| < x` m/s.
+    max_wind_mag: float
+        Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| < x` m/s.
+    parallel: bool
+        If True, enables parallelized cost and gradient computations for the scipy engine.
+        This vectorizes the radar loop in the radial velocity cost/gradient functions and
+        computes independent constraint gradients concurrently using a thread pool.
+        Default is False.
 
     Returns
     =======

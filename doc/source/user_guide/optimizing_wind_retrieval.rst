@@ -115,8 +115,8 @@ We can see several potential issues with the wind retrieval. First, there are ar
 Dual Doppler lobe edges where updrafts are being produced by the optimization code simply
 because of a discontinuity in the horizontal winds at the edges of the lobes. In addition,
 there are other discontinuities in the horizontal winds that should be addressed. One thing
-we can do to mitigate these discontunities is to increase the weight of the horizontal
-smoothnes constraints. Therefore, let's prescribe :code:`Cx = 100.` and :code:`Cy = 100`
+we can do to mitigate these discontinuities is to increase the weight of the horizontal
+smoothness constraints. Therefore, let's prescribe :code:`Cx = 100.` and :code:`Cy = 100`
 to the above retrieval.
 
 .. code-block:: python

@@ -1,7 +1,6 @@
 name: testenv
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - arm_pyart
   - pip
@@ -20,6 +19,6 @@ dependencies:
   - cmweather
   - jax
   - jaxopt
-  - tensorflow
+  - tensorflow=2.14.0
   - tensorflow-probability
   - tf-keras

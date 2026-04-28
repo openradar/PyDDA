@@ -1,6 +1,7 @@
 import numpy as np
+from concurrent.futures import ThreadPoolExecutor
 
-# Adding jax inport statements
+# Adding jax import statements
 try:
     import tensorflow as tf
 
@@ -183,6 +184,7 @@ def J_function(winds, parameters):
             rmsVr=parameters.rmsVr,
             weights=parameters.weights,
             coeff=parameters.Co,
+            parallel=parameters.parallel,
         )
         # print("apples Jvel", Jvel)
 
@@ -510,96 +512,208 @@ def grad_J(winds, parameters):
                 parameters.grid_shape[2],
             ),
         )
-        grad = _cost_functions_numpy.calculate_grad_radial_vel(
-            parameters.vrs,
-            parameters.els,
-            parameters.azs,
-            winds[0],
-            winds[1],
-            winds[2],
-            parameters.wts,
-            parameters.weights,
-            parameters.rmsVr,
-            coeff=parameters.Co,
-            upper_bc=parameters.upper_bc,
-        )
-
-        if parameters.Cm > 0:
-            grad += _cost_functions_numpy.calculate_mass_continuity_gradient(
+        if parameters.parallel:
+            futures = []
+            with ThreadPoolExecutor() as pool:
+                futures.append(
+                    pool.submit(
+                        _cost_functions_numpy.calculate_grad_radial_vel,
+                        parameters.vrs,
+                        parameters.els,
+                        parameters.azs,
+                        winds[0],
+                        winds[1],
+                        winds[2],
+                        parameters.wts,
+                        parameters.weights,
+                        parameters.rmsVr,
+                        parameters.Co,
+                        parameters.upper_bc,
+                        True,
+                    )
+                )
+                if parameters.Cm > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_mass_continuity_gradient,
+                            winds[0],
+                            winds[1],
+                            winds[2],
+                            parameters.z,
+                            parameters.dx,
+                            parameters.dy,
+                            parameters.dz,
+                            parameters.Cm,
+                            1,
+                            parameters.upper_bc,
+                        )
+                    )
+                if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_smoothness_gradient,
+                            winds[0],
+                            winds[1],
+                            winds[2],
+                            parameters.dx,
+                            parameters.dy,
+                            parameters.dz,
+                            parameters.Cx,
+                            parameters.Cy,
+                            parameters.Cz,
+                            parameters.upper_bc,
+                        )
+                    )
+                if parameters.Cb > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_background_gradient,
+                            winds[0],
+                            winds[1],
+                            winds[2],
+                            parameters.bg_weights,
+                            parameters.u_back,
+                            parameters.v_back,
+                            parameters.Cb,
+                        )
+                    )
+                if parameters.Cv > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_vertical_vorticity_gradient,
+                            winds[0],
+                            winds[1],
+                            winds[2],
+                            parameters.dx,
+                            parameters.dy,
+                            parameters.dz,
+                            parameters.Ut,
+                            parameters.Vt,
+                            parameters.Cv,
+                            parameters.upper_bc,
+                        )
+                    )
+                if parameters.Cmod > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_model_gradient,
+                            winds[0],
+                            winds[1],
+                            winds[2],
+                            parameters.model_weights,
+                            parameters.u_model,
+                            parameters.v_model,
+                            parameters.w_model,
+                            parameters.Cmod,
+                        )
+                    )
+                if parameters.Cpoint > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_point_gradient,
+                            winds[0],
+                            winds[1],
+                            parameters.x,
+                            parameters.y,
+                            parameters.z,
+                            parameters.point_list,
+                            parameters.Cpoint,
+                            parameters.roi,
+                        )
+                    )
+            grad = sum(f.result() for f in futures)
+        else:
+            grad = _cost_functions_numpy.calculate_grad_radial_vel(
+                parameters.vrs,
+                parameters.els,
+                parameters.azs,
                 winds[0],
                 winds[1],
                 winds[2],
-                parameters.z,
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                coeff=parameters.Cm,
+                parameters.wts,
+                parameters.weights,
+                parameters.rmsVr,
+                coeff=parameters.Co,
                 upper_bc=parameters.upper_bc,
             )
 
-        if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
-            grad += _cost_functions_numpy.calculate_smoothness_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                Cx=parameters.Cx,
-                Cy=parameters.Cy,
-                Cz=parameters.Cz,
-                upper_bc=parameters.upper_bc,
-            )
+            if parameters.Cm > 0:
+                grad += _cost_functions_numpy.calculate_mass_continuity_gradient(
+                    winds[0],
+                    winds[1],
+                    winds[2],
+                    parameters.z,
+                    parameters.dx,
+                    parameters.dy,
+                    parameters.dz,
+                    coeff=parameters.Cm,
+                    upper_bc=parameters.upper_bc,
+                )
 
-        if parameters.Cb > 0:
-            grad += _cost_functions_numpy.calculate_background_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.bg_weights,
-                parameters.u_back,
-                parameters.v_back,
-                parameters.Cb,
-            )
+            if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
+                grad += _cost_functions_numpy.calculate_smoothness_gradient(
+                    winds[0],
+                    winds[1],
+                    winds[2],
+                    parameters.dx,
+                    parameters.dy,
+                    parameters.dz,
+                    Cx=parameters.Cx,
+                    Cy=parameters.Cy,
+                    Cz=parameters.Cz,
+                    upper_bc=parameters.upper_bc,
+                )
 
-        if parameters.Cv > 0:
-            grad += _cost_functions_numpy.calculate_vertical_vorticity_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.dx,
-                parameters.dy,
-                parameters.dz,
-                parameters.Ut,
-                parameters.Vt,
-                coeff=parameters.Cv,
-                upper_bc=parameters.upper_bc,
-            )
+            if parameters.Cb > 0:
+                grad += _cost_functions_numpy.calculate_background_gradient(
+                    winds[0],
+                    winds[1],
+                    winds[2],
+                    parameters.bg_weights,
+                    parameters.u_back,
+                    parameters.v_back,
+                    parameters.Cb,
+                )
 
-        if parameters.Cmod > 0:
-            grad += _cost_functions_numpy.calculate_model_gradient(
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.model_weights,
-                parameters.u_model,
-                parameters.v_model,
-                parameters.w_model,
-                coeff=parameters.Cmod,
-            )
+            if parameters.Cv > 0:
+                grad += _cost_functions_numpy.calculate_vertical_vorticity_gradient(
+                    winds[0],
+                    winds[1],
+                    winds[2],
+                    parameters.dx,
+                    parameters.dy,
+                    parameters.dz,
+                    parameters.Ut,
+                    parameters.Vt,
+                    coeff=parameters.Cv,
+                    upper_bc=parameters.upper_bc,
+                )
 
-        if parameters.Cpoint > 0:
-            grad += _cost_functions_numpy.calculate_point_gradient(
-                winds[0],
-                winds[1],
-                parameters.x,
-                parameters.y,
-                parameters.z,
-                parameters.point_list,
-                Cp=parameters.Cpoint,
-                roi=parameters.roi,
-                upper_bc=parameters.upper_bc,
-            )
+            if parameters.Cmod > 0:
+                grad += _cost_functions_numpy.calculate_model_gradient(
+                    winds[0],
+                    winds[1],
+                    winds[2],
+                    parameters.model_weights,
+                    parameters.u_model,
+                    parameters.v_model,
+                    parameters.w_model,
+                    coeff=parameters.Cmod,
+                )
+
+            if parameters.Cpoint > 0:
+                grad += _cost_functions_numpy.calculate_point_gradient(
+                    winds[0],
+                    winds[1],
+                    parameters.x,
+                    parameters.y,
+                    parameters.z,
+                    parameters.point_list,
+                    Cp=parameters.Cpoint,
+                    roi=parameters.roi,
+                    upper_bc=parameters.upper_bc,
+                )
+
         # Let's see if we need to enforce strong boundary conditions
         if parameters.const_boundary_cond is True:
             grad = np.reshape(

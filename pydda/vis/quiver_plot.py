@@ -316,7 +316,6 @@ def plot_horiz_xsection_quiver(
                         grid_y[level, :, :],
                         bca,
                         levels=[bca_min, bca_max],
-                        color="k",
                     )
 
     if axes_labels_flag is True:

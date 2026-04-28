@@ -191,7 +191,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
         Cx
         * (
             jnp.gradient(dudx, dx, axis=2)
-            + jnp.gradient(dvdx, dx, axis=1)
+            + jnp.gradient(dvdx, dx, axis=2)
             + jnp.gradient(dwdx, dx, axis=2)
         )
         ** 2
@@ -199,18 +199,18 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     y_term = (
         Cy
         * (
-            jnp.gradient(dudy, dy, axis=2)
+            jnp.gradient(dudy, dy, axis=1)
             + jnp.gradient(dvdy, dy, axis=1)
-            + jnp.gradient(dwdy, dy, axis=2)
+            + jnp.gradient(dwdy, dy, axis=1)
         )
         ** 2
     )
     z_term = (
         Cz
         * (
-            jnp.gradient(dudz, dz, axis=2)
-            + jnp.gradient(dvdz, dz, axis=1)
-            + jnp.gradient(dwdz, dz, axis=2)
+            jnp.gradient(dudz, dz, axis=0)
+            + jnp.gradient(dvdz, dz, axis=0)
+            + jnp.gradient(dwdz, dz, axis=0)
         )
         ** 2
     )
@@ -253,94 +253,16 @@ def calculate_smoothness_gradient(
     y: float array
         value of gradient of smoothness cost function
     """
-    dudx = jnp.gradient(u, dx, axis=2)
-    dudy = jnp.gradient(u, dy, axis=1)
-    dudz = jnp.gradient(u, dz, axis=0)
-    dvdx = jnp.gradient(v, dx, axis=2)
-    dvdy = jnp.gradient(v, dy, axis=1)
-    dvdz = jnp.gradient(v, dz, axis=0)
-    dwdx = jnp.gradient(w, dx, axis=2)
-    dwdy = jnp.gradient(w, dy, axis=1)
-    dwdz = jnp.gradient(w, dz, axis=0)
-
-    x_term = (
-        Cx
-        * (
-            jnp.gradient(dudx, dx, axis=2)
-            + jnp.gradient(dvdx, dx, axis=1)
-            + jnp.gradient(dwdx, dx, axis=2)
-        )
-        ** 2
+    primals, fun_vjp = jax.vjp(
+        calculate_smoothness_cost, u, v, w, dx, dy, dz, Cx, Cy, Cz
     )
-    y_term = (
-        Cy
-        * (
-            jnp.gradient(dudy, dy, axis=2)
-            + jnp.gradient(dvdy, dy, axis=1)
-            + jnp.gradient(dwdy, dy, axis=2)
-        )
-        ** 2
-    )
-    z_term = (
-        Cz
-        * (
-            jnp.gradient(dudz, dz, axis=2)
-            + jnp.gradient(dvdz, dz, axis=1)
-            + jnp.gradient(dwdz, dz, axis=2)
-        )
-        ** 2
-    )
-
-    du = x_term / dx
-    dv = y_term / dy
-    dw = z_term / dz
-    dudx = jnp.gradient(du, dx, axis=2)
-    dudy = jnp.gradient(du, dy, axis=1)
-    dudz = jnp.gradient(du, dz, axis=0)
-    dvdx = jnp.gradient(dv, dx, axis=2)
-    dvdy = jnp.gradient(dv, dy, axis=1)
-    dvdz = jnp.gradient(dv, dz, axis=0)
-    dwdx = jnp.gradient(dw, dx, axis=2)
-    dwdy = jnp.gradient(dw, dy, axis=1)
-    dwdz = jnp.gradient(dw, dz, axis=0)
-
-    x_term = (
-        Cx
-        * (
-            jnp.gradient(dudx, dx, axis=2)
-            + jnp.gradient(dvdx, dx, axis=1)
-            + jnp.gradient(dwdx, dx, axis=2)
-        )
-        ** 2
-    )
-    y_term = (
-        Cy
-        * (
-            jnp.gradient(dudy, dy, axis=2)
-            + jnp.gradient(dvdy, dy, axis=1)
-            + jnp.gradient(dwdy, dy, axis=2)
-        )
-        ** 2
-    )
-    z_term = (
-        Cz
-        * (
-            jnp.gradient(dudz, dz, axis=2)
-            + jnp.gradient(dvdz, dz, axis=1)
-            + jnp.gradient(dwdz, dz, axis=2)
-        )
-        ** 2
-    )
-
-    grad_u = x_term / dx
-    grad_v = y_term / dy
-    grad_w = z_term / dz
+    grad_u, grad_v, grad_w, _, _, _, _, _, _ = fun_vjp(1.0)
 
     # Impermeability condition
-    grad_w.at[0, :, :].set(0)
+    grad_w = grad_w.at[0, :, :].set(0)
     if upper_bc is True:
-        grad_w.at[-1, :, :].set(0)
-    y = jnp.stack([grad_u * Cx * 2, grad_v * Cy * 2, grad_w * Cz * 2], axis=0)
+        grad_w = grad_w.at[-1, :, :].set(0)
+    y = jnp.stack([grad_u, grad_v, grad_w], axis=0)
 
     return y.flatten()
 
@@ -625,7 +547,7 @@ def calculate_background_gradient(u, v, w, weights, u_back, v_back, Cb=0.01):
         calculate_background_cost, u, v, w, weights, u_back, v_back, Cb
     )
     u_grad, v_grad, w_grad, _, _, _, _ = fun_vjp(1.0)
-    y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    y = jnp.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
 
 
