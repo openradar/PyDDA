@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
     <script src="../../_static/documentation_options.js?v=e9ebdb8f"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -188,11 +188,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -279,11 +286,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
@@ -513,10 +527,9 @@ DataArrays inside each of the root nodes for each level, in this case
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>## You are using the Python ARM Radar Toolkit (Py-ART), an open source
-## library for working with weather radar data. Py-ART is partly
-## supported by the U.S. Department of Energy as part of the Atmospheric
-## Radiation Measurement (ARM) Climate Research Facility, an Office of
-## Science user facility.
+## library for working with weather radar data. Py-ART is partly supported
+## by the U.S. Department of Energy Office of Science as part of
+## the Atmospheric Radiation Measurement (ARM) User Facility.
 ##
 ## If you use this software to prepare a publication, please cite:
 ##
@@ -633,58 +646,57 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">471</span><span class="s2">     # new iteration</span>
 <span class="g g-Whitespace">    </span><span class="mi">472</span><span class="s2">     n_iterations += 1</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:412,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> if not np.array_equal(x, self.x):</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
 <span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
-<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
-<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
+<span class="ne">--&gt; </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
 <span class="g g-Whitespace">    </span><span class="mi">414</span><span class="s2"> return self.f, self.g</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:362,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="s2"> def _update_fun(self):</span>
-<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="s2">     if not self.f_updated:</span>
-<span class="ne">--&gt; </span><span class="mi">362</span><span class="s2">         fx = self._wrapped_fun(self.x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">363</span><span class="s2">         self._nfev += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span><span class="s2">         if fx &lt; self._lowest_f:</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:375,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">373</span><span class="s2"> if self._orig_grad in FD_METHODS:</span>
+<span class="g g-Whitespace">    </span><span class="mi">374</span><span class="s2">     self._update_fun()</span>
+<span class="ne">--&gt; </span><span class="mi">375</span><span class="s2"> self.g = self._wrapped_grad(self.x, f0=self.f)</span>
+<span class="g g-Whitespace">    </span><span class="mi">376</span><span class="s2"> self.g_updated = True</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:603,</span> in <span class="ni">_ScalarFunctionWrapper.__call__</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">600</span><span class="s2"> def __call__(self, x):</span>
-<span class="g g-Whitespace">    </span><span class="mi">601</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
-<span class="g g-Whitespace">    </span><span class="mi">602</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
-<span class="ne">--&gt; </span><span class="mi">603</span><span class="s2">     fx = self.f(np.copy(x), *self.args)</span>
-<span class="g g-Whitespace">    </span><span class="mi">604</span><span class="s2">     self.nfev += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">606</span><span class="s2">     # Make sure the function returns a true scalar</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:39,</span> in <span class="ni">_ScalarGradWrapper.__call__</span><span class="nt">(self, x, f0, **kwds)</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span><span class="s2"> def __call__(self, x, f0=None, **kwds):</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span><span class="s2">     if callable(self.grad):</span>
+<span class="ne">---&gt; </span><span class="mi">39</span><span class="s2">         g = np.atleast_1d(self.grad(np.copy(x), *self.args))</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span><span class="s2">     elif self.grad in FD_METHODS:</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span><span class="s2">         g, dct = approx_derivative(</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span><span class="s2">             self.fun,</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span><span class="s2">             x,</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span><span class="s2">             f0=f0,</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span><span class="s2">             **self.finite_diff_options,</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span><span class="s2">         )</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:207,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span><span class="s2">     Jmass = 0</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span><span class="s2"> if parameters.Cx &gt; 0 or parameters.Cy &gt; 0 or parameters.Cz &gt; 0:</span>
-<span class="ne">--&gt; </span><span class="mi">207</span><span class="s2">     Jsmooth = _cost_functions_numpy.calculate_smoothness_cost(</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2">         winds[0],</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2">         winds[1],</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span><span class="s2">         winds[2],</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span><span class="s2">         parameters.dx,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span><span class="s2">         parameters.dy,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span><span class="s2">         parameters.dz,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2">         Cx=parameters.Cx,</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2">         Cy=parameters.Cy,</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span><span class="s2">         Cz=parameters.Cz,</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2">     )</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span><span class="s2"> else:</span>
-<span class="g g-Whitespace">    </span><span class="mi">219</span><span class="s2">     Jsmooth = 0</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:517,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">515</span><span class="s2"> if parameters.parallel:</span>
+<span class="g g-Whitespace">    </span><span class="mi">516</span><span class="s2">     futures = []</span>
+<span class="ne">--&gt; </span><span class="mi">517</span><span class="s2">     with ThreadPoolExecutor() as pool:</span>
+<span class="g g-Whitespace">    </span><span class="mi">518</span><span class="s2">         futures.append(</span>
+<span class="g g-Whitespace">    </span><span class="mi">519</span><span class="s2">             pool.submit(</span>
+<span class="g g-Whitespace">    </span><span class="mi">520</span><span class="s2">                 _cost_functions_numpy.calculate_grad_radial_vel,</span>
+<span class="s2">   (...)    533             )</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span><span class="s2">         )</span>
+<span class="g g-Whitespace">    </span><span class="mi">535</span><span class="s2">         if parameters.Cm &gt; 0:</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:216,</span> in <span class="ni">calculate_smoothness_cost</span><span class="nt">(u, v, w, dx, dy, dz, Cx, Cy, Cz)</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2"> dvdy = np.gradient(v, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2"> dvdz = np.gradient(v, dz, axis=0)</span>
-<span class="ne">--&gt; </span><span class="mi">216</span><span class="s2"> dwdx = np.gradient(w, dx, axis=2)</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2"> dwdy = np.gradient(w, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span><span class="s2"> dwdz = np.gradient(w, dz, axis=0)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/_base.py:667,</span> in <span class="ni">Executor.__exit__</span><span class="nt">(self, exc_type, exc_val, exc_tb)</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span><span class="s2"> def __exit__(self, exc_type, exc_val, exc_tb):</span>
+<span class="ne">--&gt; </span><span class="mi">667</span><span class="s2">     self.shutdown(wait=True)</span>
+<span class="g g-Whitespace">    </span><span class="mi">668</span><span class="s2">     return False</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:1338,</span> in <span class="ni">gradient</span><span class="nt">(f, axis, edge_order, *varargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1336</span><span class="s2"> dx_0 = ax_dx if uniform_spacing else ax_dx[0]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1337</span><span class="s2"> # 1D equivalent -- out[0] = (f[1] - f[0]) / (x[1] - x[0])</span>
-<span class="ne">-&gt; </span><span class="mi">1338</span><span class="s2"> out[tuple(slice1)] = (f[tuple(slice2)] - f[tuple(slice3)]) / dx_0</span>
-<span class="g g-Whitespace">   </span><span class="mi">1340</span><span class="s2"> slice1[axis] = -1</span>
-<span class="g g-Whitespace">   </span><span class="mi">1341</span><span class="s2"> slice2[axis] = -1</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/thread.py:273,</span> in <span class="ni">ThreadPoolExecutor.shutdown</span><span class="nt">(self, wait, cancel_futures)</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span><span class="s2"> if wait:</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span><span class="s2">     for t in self._threads:</span>
+<span class="ne">--&gt; </span><span class="mi">273</span><span class="s2">         t.join()</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/threading.py:1133,</span> in <span class="ni">Thread.join</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span><span class="s2"> if timeout is not None:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span><span class="s2">     timeout = max(timeout, 0)</span>
+<span class="ne">-&gt; </span><span class="mi">1133</span><span class="s2"> self._os_thread_handle.join(timeout)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
@@ -754,8 +766,8 @@ The max of w_init is 0.0
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -789,7 +801,7 @@ The max of w_init is 0.0
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
 </p></div>
       
     </div>
