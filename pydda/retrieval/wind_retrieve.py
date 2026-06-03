@@ -11,10 +11,38 @@ import math
 import xarray as xr
 
 from scipy.interpolate import interp1d
+from scipy.ndimage import convolve1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.signal import savgol_filter
 from .auglag import auglag
 from ..io import read_from_pyart_grid
+
+_LEISE_KERNEL = np.array([-1 / 16, 1 / 4, 5 / 8, 1 / 4, -1 / 16])
+
+
+def _apply_low_pass_filter(
+    winds, filter_type, filter_window, filter_order, leise_nstep
+):
+    """Smooth the (3, nz, ny, nx) wind array in place along all spatial axes."""
+    if filter_type not in ("savgol", "leise"):
+        raise ValueError(
+            "filter_type must be 'savgol' or 'leise', got %r" % filter_type
+        )
+    for c in range(3):
+        for axis in range(winds[c].ndim):
+            if filter_type == "savgol":
+                winds[c] = savgol_filter(
+                    winds[c], filter_window, filter_order, axis=axis
+                )
+            else:
+                if winds[c].shape[axis] < 5:
+                    continue
+                for _ in range(leise_nstep):
+                    winds[c] = convolve1d(
+                        winds[c], _LEISE_KERNEL, axis=axis, mode="mirror"
+                    )
+    return winds
+
 
 try:
     import tensorflow_probability as tfp
@@ -220,8 +248,10 @@ def _get_dd_wind_field_scipy(
     weights_bg=None,
     max_iterations=1000,
     mask_w_outside_opt=True,
+    filter_type="savgol",
     filter_window=5,
     filter_order=3,
+    leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=True,
@@ -693,7 +723,7 @@ def _get_dd_wind_field_scipy(
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
     if low_pass_filter is True:
-        print("Applying low pass filter to wind field...")
+        print("Applying %s low pass filter to wind field..." % filter_type)
         winds = np.reshape(
             winds,
             (
@@ -703,15 +733,9 @@ def _get_dd_wind_field_scipy(
                 parameters.grid_shape[2],
             ),
         )
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
+        winds = _apply_low_pass_filter(
+            winds, filter_type, filter_window, filter_order, leise_nstep
+        )
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -812,8 +836,10 @@ def _get_dd_wind_field_tensorflow(
     weights_bg=None,
     max_iterations=200,
     mask_w_outside_opt=True,
+    filter_type="savgol",
     filter_window=5,
     filter_order=3,
+    leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=True,
@@ -1218,7 +1244,7 @@ def _get_dd_wind_field_tensorflow(
     # """
 
     if low_pass_filter:
-        print("Applying low pass filter to wind field...")
+        print("Applying %s low pass filter to wind field..." % filter_type)
         winds = np.asarray(winds)
         winds = np.reshape(
             winds,
@@ -1229,15 +1255,9 @@ def _get_dd_wind_field_tensorflow(
                 parameters.grid_shape[2],
             ),
         )
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
+        winds = _apply_low_pass_filter(
+            winds, filter_type, filter_window, filter_order, leise_nstep
+        )
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -1415,14 +1435,26 @@ def get_dd_wind_field(
         If set to true, vertical winds outside the multiple doppler lobes will
         be masked, i.e. if less than 2 radars provide coverage for a given
         point.
+    filter_type: str (one of "savgol", "leise")
+        Which low-pass filter to apply after the optimization. ``"savgol"``
+        (default) uses ``scipy.signal.savgol_filter`` along each axis with the
+        ``filter_window`` / ``filter_order`` parameters below. ``"leise"`` uses
+        the iterated 5-point Leise kernel ([-1/16, 1/4, 5/8, 1/4, -1/16]) with
+        mirror boundaries, controlled by ``leise_nstep``.
     filter_window: int
-        Window size to use for the low pass filter. A larger window will
-        increase the number of points factored into the polynomial fit for
-        the filter, and hence will increase the smoothness.
+        Window size to use for the Savitzky-Golay low pass filter. A larger
+        window will increase the number of points factored into the polynomial
+        fit for the filter, and hence will increase the smoothness. Only used
+        when ``filter_type="savgol"``.
     filter_order: int
-        The order of the polynomial to use for the low pass filter. Higher
-        order polynomials allow for the retention of smaller scale features
-        but may also not remove enough noise.
+        The order of the polynomial to use for the Savitzky-Golay low pass
+        filter. Higher order polynomials allow for the retention of smaller
+        scale features but may also not remove enough noise. Only used when
+        ``filter_type="savgol"``.
+    leise_nstep: int
+        Number of Leise filter passes to apply along each spatial axis. Each
+        pass narrows the passband further. Only used when
+        ``filter_type="leise"``.
     min_bca: float
         Minimum beam crossing angle in degrees between two radars. 30.0 is the
         typical value used in many publications.
