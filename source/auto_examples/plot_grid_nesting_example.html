@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
     <script src="../../_static/documentation_options.js?v=e9ebdb8f"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -617,34 +617,34 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">624</span><span class="s2"> else:</span>
 <span class="g g-Whitespace">    </span><span class="mi">626</span><span class="s2">     def loss_and_gradient(x):</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:281,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, iprint, maxfun, maxiter, disp, callback, maxls)</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span><span class="s2"> callback = _wrap_callback(callback)</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span><span class="s2"> opts = {&#39;disp&#39;: disp,</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span><span class="s2">         &#39;iprint&#39;: iprint,</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span><span class="s2">         &#39;maxcor&#39;: m,</span>
-<span class="s2">   (...)    278         &#39;callback&#39;: callback,</span>
-<span class="g g-Whitespace">    </span><span class="mi">279</span><span class="s2">         &#39;maxls&#39;: maxls}</span>
-<span class="ne">--&gt; </span><span class="mi">281</span><span class="s2"> res = _minimize_lbfgsb(fun, x0, args=args, jac=jac, bounds=bounds,</span>
-<span class="g g-Whitespace">    </span><span class="mi">282</span><span class="s2">                        **opts)</span>
-<span class="g g-Whitespace">    </span><span class="mi">283</span><span class="s2"> d = {&#39;grad&#39;: res[&#39;jac&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">284</span><span class="s2">      &#39;task&#39;: res[&#39;message&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">285</span><span class="s2">      &#39;funcalls&#39;: res[&#39;nfev&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">286</span><span class="s2">      &#39;nit&#39;: res[&#39;nit&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">287</span><span class="s2">      &#39;warnflag&#39;: res[&#39;status&#39;]}</span>
-<span class="g g-Whitespace">    </span><span class="mi">288</span><span class="s2"> f = res[&#39;fun&#39;]</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:259,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, maxfun, maxiter, callback, maxls)</span>
+<span class="g g-Whitespace">    </span><span class="mi">249</span><span class="s2"> callback = _wrap_callback(callback)</span>
+<span class="g g-Whitespace">    </span><span class="mi">250</span><span class="s2"> opts = {&#39;maxcor&#39;: m,</span>
+<span class="g g-Whitespace">    </span><span class="mi">251</span><span class="s2">         &#39;ftol&#39;: factr * np.finfo(float).eps,</span>
+<span class="g g-Whitespace">    </span><span class="mi">252</span><span class="s2">         &#39;gtol&#39;: pgtol,</span>
+<span class="s2">   (...)    256         &#39;callback&#39;: callback,</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span><span class="s2">         &#39;maxls&#39;: maxls}</span>
+<span class="ne">--&gt; </span><span class="mi">259</span><span class="s2"> res = _minimize_lbfgsb(fun, x0, args=args, jac=jac, bounds=bounds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">260</span><span class="s2">                        **opts)</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span><span class="s2"> d = {&#39;grad&#39;: res[&#39;jac&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span><span class="s2">      &#39;task&#39;: res[&#39;message&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span><span class="s2">      &#39;funcalls&#39;: res[&#39;nfev&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span><span class="s2">      &#39;nit&#39;: res[&#39;nit&#39;],</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span><span class="s2">      &#39;warnflag&#39;: res[&#39;status&#39;]}</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span><span class="s2"> f = res[&#39;fun&#39;]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:469,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, disp, maxcor, ftol, gtol, eps, maxfun, maxiter, iprint, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">461</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
-<span class="g g-Whitespace">    </span><span class="mi">462</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
-<span class="g g-Whitespace">    </span><span class="mi">464</span><span class="s2"> if task[0] == 3:</span>
-<span class="g g-Whitespace">    </span><span class="mi">465</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
-<span class="g g-Whitespace">    </span><span class="mi">466</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
-<span class="g g-Whitespace">    </span><span class="mi">467</span><span class="s2">     # until the completion of the current minimization iteration.</span>
-<span class="g g-Whitespace">    </span><span class="mi">468</span><span class="s2">     # Overwrite f and g:</span>
-<span class="ne">--&gt; </span><span class="mi">469</span><span class="s2">     f, g = func_and_grad(x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">470</span><span class="s2"> elif task[0] == 1:</span>
-<span class="g g-Whitespace">    </span><span class="mi">471</span><span class="s2">     # new iteration</span>
-<span class="g g-Whitespace">    </span><span class="mi">472</span><span class="s2">     n_iterations += 1</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:420,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
+<span class="g g-Whitespace">    </span><span class="mi">415</span><span class="s2"> if task[0] == 3:</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
+<span class="g g-Whitespace">    </span><span class="mi">418</span><span class="s2">     # until the completion of the current minimization iteration.</span>
+<span class="g g-Whitespace">    </span><span class="mi">419</span><span class="s2">     # Overwrite f and g:</span>
+<span class="ne">--&gt; </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">421</span><span class="s2"> elif task[0] == 1:</span>
+<span class="g g-Whitespace">    </span><span class="mi">422</span><span class="s2">     # new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">423</span><span class="s2">     n_iterations += 1</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
 <span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
@@ -683,10 +683,10 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">534</span><span class="s2">         )</span>
 <span class="g g-Whitespace">    </span><span class="mi">535</span><span class="s2">         if parameters.Cm &gt; 0:</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/_base.py:667,</span> in <span class="ni">Executor.__exit__</span><span class="nt">(self, exc_type, exc_val, exc_tb)</span>
-<span class="g g-Whitespace">    </span><span class="mi">666</span><span class="s2"> def __exit__(self, exc_type, exc_val, exc_tb):</span>
-<span class="ne">--&gt; </span><span class="mi">667</span><span class="s2">     self.shutdown(wait=True)</span>
-<span class="g g-Whitespace">    </span><span class="mi">668</span><span class="s2">     return False</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/_base.py:673,</span> in <span class="ni">Executor.__exit__</span><span class="nt">(self, exc_type, exc_val, exc_tb)</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span><span class="s2"> def __exit__(self, exc_type, exc_val, exc_tb):</span>
+<span class="ne">--&gt; </span><span class="mi">673</span><span class="s2">     self.shutdown(wait=True)</span>
+<span class="g g-Whitespace">    </span><span class="mi">674</span><span class="s2">     return False</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/thread.py:273,</span> in <span class="ni">ThreadPoolExecutor.shutdown</span><span class="nt">(self, wait, cancel_futures)</span>
 <span class="g g-Whitespace">    </span><span class="mi">271</span><span class="s2"> if wait:</span>
@@ -766,8 +766,8 @@ The max of w_init is 0.0
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -801,7 +801,7 @@ The max of w_init is 0.0
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.18.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
 </p></div>
       
     </div>
