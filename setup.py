@@ -41,8 +41,9 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 LICENSE = "BSD"
 PLATFORMS = "Linux, Windows, OSX"
 MAJOR = 2
-MINOR = 4
-MICRO = 1
+MINOR = 5
+MICRO = 0
+
 
 # SCRIPTS = glob.glob('scripts/*')
 # TEST_SUITE = 'nose.collector'

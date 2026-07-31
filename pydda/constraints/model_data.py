@@ -533,10 +533,73 @@ def make_constraint_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     return Grid
 
 
-def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
+def _uv_grid_relative_to_true_north(
+    u, v, lon, lat, lov=-97.5, truelat1=38.5, truelat2=38.5
+):
+    """
+    HRRR (and other WRF-based models) output u and v components that are
+    relative to the model's Lambert Conformal Conic grid rather than true
+    north. This rotates them to earth-relative (true north) components
+    using the standard WRF/NCEP grid-rotation formula (equivalent to the
+    DCOMPUTEUVMET routine used by wrf-python's ``uvmet`` diagnostic).
+
+    Parameters
+    ----------
+    u, v: array_like
+        Grid-relative u and v wind components. Must be broadcastable
+        against lon/lat.
+    lon, lat: array_like
+        Longitude (in the range [-180, 180]) and latitude of each point,
+        broadcastable against u and v.
+    lov: float
+        Standard longitude (line of view/center longitude) of the Lambert
+        Conformal Conic projection, in degrees. Defaults to -97.5, the
+        value used by the operational CONUS HRRR grid.
+    truelat1, truelat2: float
+        The two standard (true) latitudes of the Lambert Conformal Conic
+        projection, in degrees. Default to 38.5, the values used by the
+        operational CONUS HRRR grid (a tangent cone).
+
+    Returns
+    -------
+    u_true, v_true: array_like
+        The u and v wind components relative to true north.
+    """
+    rad_per_deg = np.pi / 180.0
+    if np.isclose(truelat1, truelat2):
+        cone = np.sin(np.abs(truelat1) * rad_per_deg)
+    else:
+        cone = (
+            np.log(np.cos(truelat1 * rad_per_deg))
+            - np.log(np.cos(truelat2 * rad_per_deg))
+        ) / (
+            np.log(np.tan(np.pi / 4.0 + truelat2 * rad_per_deg / 2.0))
+            - np.log(np.tan(np.pi / 4.0 + truelat1 * rad_per_deg / 2.0))
+        )
+
+    diff = lon - lov
+    diff = np.where(diff > 180.0, diff - 360.0, diff)
+    diff = np.where(diff < -180.0, diff + 360.0, diff)
+    alpha = diff * cone * rad_per_deg * np.sign(lat)
+    cos_alpha = np.cos(alpha)
+    sin_alpha = np.sin(alpha)
+
+    u_true = v * sin_alpha + u * cos_alpha
+    v_true = v * cos_alpha - u * sin_alpha
+    return u_true, v_true
+
+
+def add_hrrr_constraint_to_grid(
+    Grid, file_path, method="nearest", lov=-97.5, truelat1=38.5, truelat2=38.5
+):
     """
     This function will read an HRRR GRIB2 file and create the constraining
-    u, v, and w fields for the model constraint
+    u, v, and w fields for the model constraint.
+
+    The u and v winds in the HRRR GRIB2 file are relative to the HRRR's
+    Lambert Conformal Conic grid rather than true north. This function
+    rotates them to true north (earth-relative) components before
+    interpolating them onto the analysis grid.
 
     Parameters
     ----------
@@ -548,6 +611,16 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
     method: str
             Interpolation method: 'nearest' for nearest neighbor,
             'linear' for linear.
+    lov: float
+        The standard longitude (center longitude) of the HRRR's Lambert
+        Conformal Conic projection, in degrees. Only change this if the
+        input file uses a different Lambert Conformal Conic grid than the
+        operational CONUS HRRR.
+    truelat1, truelat2: float
+        The two standard (true) latitudes of the HRRR's Lambert Conformal
+        Conic projection, in degrees. Only change these if the input file
+        uses a different Lambert Conformal Conic grid than the
+        operational CONUS HRRR.
 
     Returns
     -------
@@ -576,6 +649,19 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
     lat = the_grib.variables["latitude"].data[:, :]
     lon = the_grib.variables["longitude"].data[:, :]
     lon[lon > 180] = lon[lon > 180] - 360
+
+    # HRRR's u and v are grid relative (relative to its Lambert Conformal
+    # Conic grid). Rotate them to true north before interpolating onto
+    # the analysis grid.
+    u_true, v_true = _uv_grid_relative_to_true_north(
+        grb_u.data[:, :, :],
+        grb_v.data[:, :, :],
+        lon[np.newaxis, :, :],
+        lat[np.newaxis, :, :],
+        lov=lov,
+        truelat1=truelat1,
+        truelat2=truelat2,
+    )
 
     # Convert geometric height to geopotential height
     EARTH_MEAN_RADIUS = 6.3781e6
@@ -610,7 +696,7 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
     lat_flattened = lat_flattened[the_box]
     height_flattened = height_flattened[the_box]
 
-    u_flattened = grb_u.data[:, :, :].flatten()
+    u_flattened = u_true.flatten()
     u_flattened = u_flattened[the_box]
     if method == "nearest":
         u_interp = NearestNDInterpolator(
@@ -627,7 +713,7 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
 
     u_new = u_interp(radar_grid_alt, radar_grid_lat, radar_grid_lon)
 
-    v_flattened = grb_v.data[:, :, :].flatten()
+    v_flattened = v_true.flatten()
     v_flattened = v_flattened[the_box]
     if method == "nearest":
         v_interp = NearestNDInterpolator(
@@ -668,7 +754,7 @@ def add_hrrr_constraint_to_grid(Grid, file_path, method="nearest"):
     )
 
     # Free up memory
-    del grb_u, grb_v, grb_w, lat, lon
+    del grb_u, grb_v, grb_w, lat, lon, u_true, v_true
     del the_grib
     gc.collect()
     return new_grid

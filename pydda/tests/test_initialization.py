@@ -204,3 +204,53 @@ def test_hrrr_data():
     assert Grid["U_hrrr"].max() > 15
     assert Grid["V_hrrr"].max() > 15
     assert Grid["W_hrrr"].max() > 0
+
+
+def test_hrrr_uv_rotated_to_true_north():
+    # HRRR's u and v are relative to its Lambert Conformal Conic grid, not
+    # true north. add_hrrr_constraint_to_grid must rotate them before they
+    # are interpolated onto the analysis grid.
+    grid_shape = (4, 4, 4)
+    grid_limits = ((0, 5000.0), (-50000.0, 50000.0), (-50000.0, 50000.0))
+    file_path = pydda.tests.get_sample_file("ruc2anl_130_20110520_0800_001.grb2")
+
+    def make_grid(origin_lat, origin_lon):
+        Grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
+        for field in ("origin_latitude", "radar_latitude"):
+            getattr(Grid, field)["data"] = np.array([origin_lat])
+        for field in ("origin_longitude", "radar_longitude"):
+            getattr(Grid, field)["data"] = np.array([origin_lon])
+        Grid.init_point_longitude_latitude()
+        fdata3 = np.zeros(grid_shape)
+        Grid.add_field("zero_field", {"data": fdata3, "_FillValue": -9999.0})
+        return pydda.io.read_from_pyart_grid(Grid)
+
+    # Place the analysis domain well away from HRRR's -97.5 degree central
+    # meridian, where the grid-rotation correction has a large, easily
+    # measurable effect.
+    Grid = make_grid(38.5, -85.0)
+    Grid = pydda.constraints.add_hrrr_constraint_to_grid(Grid, file_path)
+    u_true_north = Grid["U_hrrr"].values
+    v_true_north = Grid["V_hrrr"].values
+
+    # Setting both true latitudes to the equator collapses the Lambert
+    # Conformal cone factor to zero, which makes the rotation a no-op.
+    # This gives an otherwise identical baseline of the raw, grid-relative
+    # winds to compare against.
+    Grid_grid_relative = make_grid(38.5, -85.0)
+    Grid_grid_relative = pydda.constraints.add_hrrr_constraint_to_grid(
+        Grid_grid_relative, file_path, truelat1=0.0, truelat2=0.0
+    )
+    u_grid_relative = Grid_grid_relative["U_hrrr"].values
+    v_grid_relative = Grid_grid_relative["V_hrrr"].values
+
+    # The rotation should meaningfully change the wind components this far
+    # from the central meridian...
+    assert np.abs(u_true_north - u_grid_relative).max() > 0.5
+    assert np.abs(v_true_north - v_grid_relative).max() > 0.5
+
+    # ...while preserving wind speed, since a coordinate rotation cannot
+    # change the magnitude of the wind vector.
+    speed_true_north = np.sqrt(u_true_north**2 + v_true_north**2)
+    speed_grid_relative = np.sqrt(u_grid_relative**2 + v_grid_relative**2)
+    np.testing.assert_allclose(speed_true_north, speed_grid_relative, rtol=1e-4)
