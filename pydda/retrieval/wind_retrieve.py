@@ -11,10 +11,38 @@ import math
 import xarray as xr
 
 from scipy.interpolate import interp1d
+from scipy.ndimage import convolve1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.signal import savgol_filter
 from .auglag import auglag
 from ..io import read_from_pyart_grid
+
+_LEISE_KERNEL = np.array([-1 / 16, 1 / 4, 5 / 8, 1 / 4, -1 / 16])
+
+
+def _apply_low_pass_filter(
+    winds, filter_type, filter_window, filter_order, leise_nstep
+):
+    """Smooth the (3, nz, ny, nx) wind array in place along all spatial axes."""
+    if filter_type not in ("savgol", "leise"):
+        raise ValueError(
+            "filter_type must be 'savgol' or 'leise', got %r" % filter_type
+        )
+    for c in range(3):
+        for axis in range(winds[c].ndim):
+            if filter_type == "savgol":
+                winds[c] = savgol_filter(
+                    winds[c], filter_window, filter_order, axis=axis
+                )
+            else:
+                if winds[c].shape[axis] < 5:
+                    continue
+                for _ in range(leise_nstep):
+                    winds[c] = convolve1d(
+                        winds[c], _LEISE_KERNEL, axis=axis, mode="mirror"
+                    )
+    return winds
+
 
 try:
     import tensorflow_probability as tfp
@@ -183,6 +211,7 @@ class DDParameters(object):
         self.gtol = 1e-2
         self.Jveltol = 100.0
         self.const_boundary_cond = False
+        self.parallel = False
 
 
 def _get_dd_wind_field_scipy(
@@ -219,8 +248,10 @@ def _get_dd_wind_field_scipy(
     weights_bg=None,
     max_iterations=1000,
     mask_w_outside_opt=True,
+    filter_type="savgol",
     filter_window=5,
     filter_order=3,
+    leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=True,
@@ -231,6 +262,7 @@ def _get_dd_wind_field_scipy(
     tolerance=1e-8,
     const_boundary_cond=False,
     max_wind_mag=100.0,
+    parallel=True,
 ):
     global _wcurrmax
     global _wprevmax
@@ -500,6 +532,15 @@ def _get_dd_wind_field_scipy(
     parameters.bg_weights[~np.isfinite(parameters.bg_weights)] = 0
     parameters.weights[parameters.weights > 0] = 1
     parameters.bg_weights[parameters.bg_weights > 0] = 1
+
+    # Zero out bg_weights at height levels where the interpolated background
+    # is NaN (i.e. outside the sounding's vertical range). Also replace NaN
+    # in u_back/v_back with 0 so those levels don't corrupt cost function
+    # arithmetic even though they carry zero weight.
+    nan_bg_levels = ~np.isfinite(parameters.u_back) | ~np.isfinite(parameters.v_back)
+    parameters.bg_weights[nan_bg_levels] = 0
+    parameters.u_back = np.nan_to_num(parameters.u_back)
+    parameters.v_back = np.nan_to_num(parameters.v_back)
     sum_Vr = np.nansum(np.square(parameters.vrs * parameters.weights))
     parameters.rmsVr = np.sqrt(np.nansum(sum_Vr) / np.nansum(parameters.weights))
 
@@ -559,6 +600,7 @@ def _get_dd_wind_field_scipy(
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
+    parameters.parallel = parallel
     _wprevmax = np.zeros(parameters.grid_shape)
     _wcurrmax = np.zeros(parameters.grid_shape)
     iterations = 0
@@ -622,14 +664,21 @@ def _get_dd_wind_field_scipy(
                 {"winds": max_wind_mag * jnp.ones(winds.shape)},
             )
             winds = jnp.array(winds)
+            # JIT-compile the cost function explicitly so the compilation
+            # delay is isolated and visible before the solver loop starts.
+            loss_and_gradient = jax.jit(loss_and_gradient)
+            print("Compiling JAX cost functions...")
+            loss_and_gradient({"winds": winds})
+            print("Compilation complete.")
             solver = jaxopt.LBFGSB(
                 loss_and_gradient,
                 True,
                 has_aux=False,
                 maxiter=max_iterations,
                 tol=tolerance,
-                jit=True,
+                jit=False,
                 implicit_diff=False,
+                verbose=True,
             )
             winds = {"winds": winds}
             winds, state = solver.run(winds, bounds=bounds)
@@ -674,7 +723,7 @@ def _get_dd_wind_field_scipy(
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
     if low_pass_filter is True:
-        print("Applying low pass filter to wind field...")
+        print("Applying %s low pass filter to wind field..." % filter_type)
         winds = np.reshape(
             winds,
             (
@@ -684,15 +733,9 @@ def _get_dd_wind_field_scipy(
                 parameters.grid_shape[2],
             ),
         )
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
+        winds = _apply_low_pass_filter(
+            winds, filter_type, filter_window, filter_order, leise_nstep
+        )
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -729,17 +772,20 @@ def _get_dd_wind_field_scipy(
 
     u_field = {}
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
+    u_field["units"] = "m/s"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
     v_field = {}
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridional component of wind velocity"
+    v_field["units"] = "m/s"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
     w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
+    w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
 
@@ -790,8 +836,10 @@ def _get_dd_wind_field_tensorflow(
     weights_bg=None,
     max_iterations=200,
     mask_w_outside_opt=True,
+    filter_type="savgol",
     filter_window=5,
     filter_order=3,
+    leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=True,
@@ -1196,7 +1244,7 @@ def _get_dd_wind_field_tensorflow(
     # """
 
     if low_pass_filter:
-        print("Applying low pass filter to wind field...")
+        print("Applying %s low pass filter to wind field..." % filter_type)
         winds = np.asarray(winds)
         winds = np.reshape(
             winds,
@@ -1207,15 +1255,9 @@ def _get_dd_wind_field_tensorflow(
                 parameters.grid_shape[2],
             ),
         )
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
+        winds = _apply_low_pass_filter(
+            winds, filter_type, filter_window, filter_order, leise_nstep
+        )
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -1251,17 +1293,20 @@ def _get_dd_wind_field_tensorflow(
 
     u_field = {}
     u_field["standard_name"] = "u_wind"
-    u_field["long_name"] = "meridional component of wind velocity"
+    u_field["long_name"] = "zonal component of wind velocity"
+    u_field["units"] = "m/s"
     u_field["min_bca"] = min_bca
     u_field["max_bca"] = max_bca
     v_field = {}
     v_field["standard_name"] = "v_wind"
-    v_field["long_name"] = "zonal component of wind velocity"
+    v_field["long_name"] = "meridional component of wind velocity"
+    v_field["units"] = "m/s"
     v_field["min_bca"] = min_bca
     v_field["max_bca"] = max_bca
     w_field = {}
     w_field["standard_name"] = "w_wind"
     w_field["long_name"] = "vertical component of wind velocity"
+    w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
 
@@ -1390,14 +1435,26 @@ def get_dd_wind_field(
         If set to true, vertical winds outside the multiple doppler lobes will
         be masked, i.e. if less than 2 radars provide coverage for a given
         point.
+    filter_type: str (one of "savgol", "leise")
+        Which low-pass filter to apply after the optimization. ``"savgol"``
+        (default) uses ``scipy.signal.savgol_filter`` along each axis with the
+        ``filter_window`` / ``filter_order`` parameters below. ``"leise"`` uses
+        the iterated 5-point Leise kernel ([-1/16, 1/4, 5/8, 1/4, -1/16]) with
+        mirror boundaries, controlled by ``leise_nstep``.
     filter_window: int
-        Window size to use for the low pass filter. A larger window will
-        increase the number of points factored into the polynomial fit for
-        the filter, and hence will increase the smoothness.
+        Window size to use for the Savitzky-Golay low pass filter. A larger
+        window will increase the number of points factored into the polynomial
+        fit for the filter, and hence will increase the smoothness. Only used
+        when ``filter_type="savgol"``.
     filter_order: int
-        The order of the polynomial to use for the low pass filter. Higher
-        order polynomials allow for the retention of smaller scale features
-        but may also not remove enough noise.
+        The order of the polynomial to use for the Savitzky-Golay low pass
+        filter. Higher order polynomials allow for the retention of smaller
+        scale features but may also not remove enough noise. Only used when
+        ``filter_type="savgol"``.
+    leise_nstep: int
+        Number of Leise filter passes to apply along each spatial axis. Each
+        pass narrows the passband further. Only used when
+        ``filter_type="leise"``.
     min_bca: float
         Minimum beam crossing angle in degrees between two radars. 30.0 is the
         typical value used in many publications.
@@ -1430,6 +1487,11 @@ def get_dd_wind_field(
         Tolerance for :math:`L_{2}` norm of gradient before stopping.
     max_wind_mag: float
         Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| < x` m/s.
+    parallel: bool
+        If True, enables parallelized cost and gradient computations for the scipy engine.
+        This vectorizes the radar loop in the radial velocity cost/gradient functions and
+        computes independent constraint gradients concurrently using a thread pool.
+        Default is False.
 
     Returns
     =======

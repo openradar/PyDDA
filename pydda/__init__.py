@@ -12,6 +12,7 @@ from . import tests
 from . import constraints
 from . import io
 
+
 __version__ = "2.5.0"
 
 print("Welcome to PyDDA %s" % __version__)

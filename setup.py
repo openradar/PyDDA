@@ -44,6 +44,7 @@ MAJOR = 2
 MINOR = 5
 MICRO = 0
 
+
 # SCRIPTS = glob.glob('scripts/*')
 # TEST_SUITE = 'nose.collector'
 # TESTS_REQUIRE = ['nose']

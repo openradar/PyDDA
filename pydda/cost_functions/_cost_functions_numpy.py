@@ -8,7 +8,7 @@ laplace_filter = np.asarray([1, -2, 1], dtype=np.float64)
 
 
 def calculate_radial_vel_cost_function(
-    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
+    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0, parallel=False
 ):
     """
     Calculates the cost function due to difference of the wind field from
@@ -54,22 +54,44 @@ def calculate_radial_vel_cost_function(
     Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1
     """
 
-    J_o = 0
     lambda_o = coeff / (rmsVr * rmsVr)
+    if parallel:
+        vrs_arr = np.stack(vrs)
+        els_arr = np.stack(els)
+        azs_arr = np.stack(azs)
+        wts_arr = np.stack(wts)
+        v_ar = (
+            np.cos(els_arr) * np.sin(azs_arr) * u[np.newaxis]
+            + np.cos(els_arr) * np.cos(azs_arr) * v[np.newaxis]
+            + np.sin(els_arr) * (w[np.newaxis] - np.abs(wts_arr))
+        )
+        return lambda_o * np.sum(np.square(vrs_arr - v_ar) * weights)
+
+    J_o = 0
     for i in range(len(vrs)):
         v_ar = (
             np.cos(els[i]) * np.sin(azs[i]) * u
             + np.cos(els[i]) * np.cos(azs[i]) * v
             + np.sin(els[i]) * (w - np.abs(wts[i]))
         )
-        the_weight = weights[i]
-        J_o += lambda_o * np.sum(np.square(vrs[i] - v_ar) * the_weight)
+        J_o += lambda_o * np.sum(np.square(vrs[i] - v_ar) * weights[i])
 
     return J_o
 
 
 def calculate_grad_radial_vel(
-    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
+    vrs,
+    els,
+    azs,
+    u,
+    v,
+    w,
+    wts,
+    weights,
+    rmsVr,
+    coeff=1.0,
+    upper_bc=True,
+    parallel=False,
 ):
     """
     Calculates the gradient of the cost function due to difference of wind
@@ -112,29 +134,45 @@ def calculate_grad_radial_vel(
     # Use zero for all masked values since we don't want to add them into
     # the cost function
 
-    p_x1 = np.zeros(vrs[0].shape)
-    p_y1 = np.zeros(vrs[0].shape)
-    p_z1 = np.zeros(vrs[0].shape)
     lambda_o = coeff / (rmsVr * rmsVr)
 
-    for i in range(len(vrs)):
+    if parallel:
+        vrs_arr = np.stack(vrs)
+        els_arr = np.stack(els)
+        azs_arr = np.stack(azs)
+        wts_arr = np.stack(wts)
         v_ar = (
-            np.cos(els[i]) * np.sin(azs[i]) * u
-            + np.cos(els[i]) * np.cos(azs[i]) * v
-            + np.sin(els[i]) * (w - np.abs(wts[i]))
+            np.cos(els_arr) * np.sin(azs_arr) * u[np.newaxis]
+            + np.cos(els_arr) * np.cos(azs_arr) * v[np.newaxis]
+            + np.sin(els_arr) * (w[np.newaxis] - np.abs(wts_arr))
         )
+        residual = 2 * (v_ar - vrs_arr) * lambda_o
+        p_x1 = np.sum(residual * np.cos(els_arr) * np.sin(azs_arr) * weights, axis=0)
+        p_y1 = np.sum(residual * np.cos(els_arr) * np.cos(azs_arr) * weights, axis=0)
+        p_z1 = np.sum(residual * np.sin(els_arr) * weights, axis=0)
+    else:
+        p_x1 = np.zeros(vrs[0].shape)
+        p_y1 = np.zeros(vrs[0].shape)
+        p_z1 = np.zeros(vrs[0].shape)
 
-        x_grad = (
-            2 * (v_ar - vrs[i]) * np.cos(els[i]) * np.sin(azs[i]) * weights[i]
-        ) * lambda_o
-        y_grad = (
-            2 * (v_ar - vrs[i]) * np.cos(els[i]) * np.cos(azs[i]) * weights[i]
-        ) * lambda_o
-        z_grad = (2 * (v_ar - vrs[i]) * np.sin(els[i]) * weights[i]) * lambda_o
+        for i in range(len(vrs)):
+            v_ar = (
+                np.cos(els[i]) * np.sin(azs[i]) * u
+                + np.cos(els[i]) * np.cos(azs[i]) * v
+                + np.sin(els[i]) * (w - np.abs(wts[i]))
+            )
 
-        p_x1 += x_grad
-        p_y1 += y_grad
-        p_z1 += z_grad
+            x_grad = (
+                2 * (v_ar - vrs[i]) * np.cos(els[i]) * np.sin(azs[i]) * weights[i]
+            ) * lambda_o
+            y_grad = (
+                2 * (v_ar - vrs[i]) * np.cos(els[i]) * np.cos(azs[i]) * weights[i]
+            ) * lambda_o
+            z_grad = (2 * (v_ar - vrs[i]) * np.sin(els[i]) * weights[i]) * lambda_o
+
+            p_x1 += x_grad
+            p_y1 += y_grad
+            p_z1 += z_grad
 
     # Impermeability condition
     p_z1[0, :, :] = 0
@@ -265,7 +303,7 @@ def calculate_smoothness_gradient(
     return y.flatten()
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -301,18 +339,17 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     for the_point in point_list:
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
-        the_box = np.where(
-            np.logical_and.reduce(
-                (
-                    np.abs(x - the_point["x"]) < roi,
-                    np.abs(y - the_point["y"]) < roi,
-                    np.abs(z - the_point["z"]) < roi,
-                )
-            )
+
+        dist = np.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        J += np.sum(
-            ((u[the_box] - the_point["u"]) ** 2 + (v[the_box] - the_point["v"]) ** 2)
-        )
+        dist = np.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / np.max(weight)
+
+        J += np.sum(weight * ((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2))
 
     return J * Cp
 
@@ -354,17 +391,16 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_w = np.zeros_like(u)
 
     for the_point in point_list:
-        the_box = np.where(
-            np.logical_and.reduce(
-                (
-                    np.abs(x - the_point["x"]) < roi,
-                    np.abs(y - the_point["y"]) < roi,
-                    np.abs(z - the_point["z"]) < roi,
-                )
-            )
+        dist = np.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        gradJ_u[the_box] += 2 * (u[the_box] - the_point["u"])
-        gradJ_v[the_box] += 2 * (v[the_box] - the_point["v"])
+        dist = np.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / np.max(weight)
+        gradJ_u += 2 * weight * (u - the_point["u"])
+        gradJ_v += 2 * weight * (v - the_point["v"])
 
     gradJ = np.stack([gradJ_u, gradJ_v, gradJ_w], axis=0).flatten()
     return gradJ * Cp
