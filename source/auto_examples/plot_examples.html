@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example on retrieving and plotting winds &#8212; PyDDA 2.4.1 documentation</title>
+    <title>Example on retrieving and plotting winds &#8212; PyDDA 2.5.0 documentation</title>
   
   
   
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=e9ebdb8f"></script>
+    <script src="../../_static/documentation_options.js?v=3c4615cf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Example of a wind retrieval in a tornado over Sydney" href="plot_sydney_tornado.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.4.1" />
+  <meta name="docsearch:version" content="2.5.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.4.1 documentation</p>
+    <p class="title logo__title">PyDDA 2.5.0 documentation</p>
   
 </a></div>
     
@@ -472,7 +472,7 @@ using PyDDA.</p>
 ##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.4.1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.5.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -635,27 +635,40 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">546</span>     <span class="bp">self</span><span class="o">.</span><span class="n">nfev</span> <span class="o">+=</span> <span class="mi">1</span>
 <span class="g g-Whitespace">    </span><span class="mi">548</span>     <span class="c1"># Make sure the function returns a true scalar</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:193,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:176,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">166</span> <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">167</span>     <span class="n">winds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">168</span>     <span class="p">(</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">173</span>     <span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">174</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">175</span> <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
+<span class="ne">--&gt; </span><span class="mi">176</span> <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">177</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">178</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">179</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span>     <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">181</span>     <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">183</span>     <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">184</span>     <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">185</span>     <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span>     <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span>     <span class="n">parallel</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span> <span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">189</span> <span class="c1"># print(&quot;apples Jvel&quot;, Jvel)</span>
 <span class="g g-Whitespace">    </span><span class="mi">191</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 <span class="g g-Whitespace">    </span><span class="mi">192</span>     <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-<span class="ne">--&gt; </span><span class="mi">193</span>     <span class="n">Jmass</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">194</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">195</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">196</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span>     <span class="n">Jmass</span> <span class="o">=</span> <span class="mi">0</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:452,</span> in <span class="ni">calculate_mass_continuity</span><span class="nt">(u, v, w, z, dx, dy, dz, coeff, anel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">449</span>     <span class="n">anel_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="n">div</span> <span class="o">=</span> <span class="n">dudx</span> <span class="o">+</span> <span class="n">dvdy</span> <span class="o">+</span> <span class="n">dwdz</span> <span class="o">+</span> <span class="n">anel_term</span>
-<span class="ne">--&gt; </span><span class="mi">452</span> <span class="k">return</span> <span class="n">coeff</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">div</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:74,</span> in <span class="ni">calculate_radial_vel_cost_function</span><span class="nt">(vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff, parallel)</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="n">J_o</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vrs</span><span class="p">)):</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span>     <span class="n">v_ar</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span>         <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">u</span>
+<span class="ne">---&gt; </span><span class="mi">74</span>         <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">azs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="n">v</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span>         <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">els</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span>     <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">77</span>     <span class="n">J_o</span> <span class="o">+=</span> <span class="n">lambda_o</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">vrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_ar</span><span class="p">)</span> <span class="o">*</span> <span class="n">weights</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span> <span class="k">return</span> <span class="n">J_o</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>

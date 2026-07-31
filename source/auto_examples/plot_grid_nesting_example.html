@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Guide and example on how to use nested grids with DataTrees &#8212; PyDDA 2.4.1 documentation</title>
+    <title>Guide and example on how to use nested grids with DataTrees &#8212; PyDDA 2.5.0 documentation</title>
   
   
   
@@ -45,7 +45,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=e9ebdb8f"></script>
+    <script src="../../_static/documentation_options.js?v=3c4615cf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Example on retrieving and plotting winds" href="plot_examples.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.4.1" />
+  <meta name="docsearch:version" content="2.5.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.4.1 documentation</p>
+    <p class="title logo__title">PyDDA 2.5.0 documentation</p>
   
 </a></div>
     
@@ -537,7 +537,7 @@ DataArrays inside each of the root nodes for each level, in this case
 ##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.4.1
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.5.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -634,17 +634,71 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">265</span><span class="s2">      &#39;warnflag&#39;: res[&#39;status&#39;]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">266</span><span class="s2"> f = res[&#39;fun&#39;]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:412,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> g = g.astype(np.float64)</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2"> # x, f, g, wa, iwa, task, csave, lsave, isave, dsave = </span><span class="se">\</span>
-<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:420,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
 <span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
 <span class="g g-Whitespace">    </span><span class="mi">415</span><span class="s2"> if task[0] == 3:</span>
 <span class="g g-Whitespace">    </span><span class="mi">416</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">417</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">418</span><span class="s2">     # until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">419</span><span class="s2">     # Overwrite f and g:</span>
-<span class="g g-Whitespace">    </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
+<span class="ne">--&gt; </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">421</span><span class="s2"> elif task[0] == 1:</span>
+<span class="g g-Whitespace">    </span><span class="mi">422</span><span class="s2">     # new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">423</span><span class="s2">     n_iterations += 1</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:412,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> if not np.array_equal(x, self.x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
+<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span><span class="s2"> return self.f, self.g</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:362,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="s2"> def _update_fun(self):</span>
+<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="s2">     if not self.f_updated:</span>
+<span class="ne">--&gt; </span><span class="mi">362</span><span class="s2">         fx = self._wrapped_fun(self.x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">363</span><span class="s2">         self._nfev += 1</span>
+<span class="g g-Whitespace">    </span><span class="mi">364</span><span class="s2">         if fx &lt; self._lowest_f:</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:545,</span> in <span class="ni">_ScalarFunctionWrapper.__call__</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">542</span><span class="s2"> def __call__(self, x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">    </span><span class="mi">544</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
+<span class="ne">--&gt; </span><span class="mi">545</span><span class="s2">     fx = self.f(np.copy(x), *self.args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">546</span><span class="s2">     self.nfev += 1</span>
+<span class="g g-Whitespace">    </span><span class="mi">548</span><span class="s2">     # Make sure the function returns a true scalar</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:207,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span><span class="s2">     Jmass = 0</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span><span class="s2"> if parameters.Cx &gt; 0 or parameters.Cy &gt; 0 or parameters.Cz &gt; 0:</span>
+<span class="ne">--&gt; </span><span class="mi">207</span><span class="s2">     Jsmooth = _cost_functions_numpy.calculate_smoothness_cost(</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2">         winds[0],</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2">         winds[1],</span>
+<span class="g g-Whitespace">    </span><span class="mi">210</span><span class="s2">         winds[2],</span>
+<span class="g g-Whitespace">    </span><span class="mi">211</span><span class="s2">         parameters.dx,</span>
+<span class="g g-Whitespace">    </span><span class="mi">212</span><span class="s2">         parameters.dy,</span>
+<span class="g g-Whitespace">    </span><span class="mi">213</span><span class="s2">         parameters.dz,</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2">         Cx=parameters.Cx,</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2">         Cy=parameters.Cy,</span>
+<span class="g g-Whitespace">    </span><span class="mi">216</span><span class="s2">         Cz=parameters.Cz,</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">218</span><span class="s2"> else:</span>
+<span class="g g-Whitespace">    </span><span class="mi">219</span><span class="s2">     Jsmooth = 0</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:216,</span> in <span class="ni">calculate_smoothness_cost</span><span class="nt">(u, v, w, dx, dy, dz, Cx, Cy, Cz)</span>
+<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2"> dvdy = np.gradient(v, dy, axis=1)</span>
+<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2"> dvdz = np.gradient(v, dz, axis=0)</span>
+<span class="ne">--&gt; </span><span class="mi">216</span><span class="s2"> dwdx = np.gradient(w, dx, axis=2)</span>
+<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2"> dwdy = np.gradient(w, dy, axis=1)</span>
+<span class="g g-Whitespace">    </span><span class="mi">218</span><span class="s2"> dwdz = np.gradient(w, dz, axis=0)</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:1324,</span> in <span class="ni">gradient</span><span class="nt">(f, axis, edge_order, *varargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1321</span><span class="s2"> slice4[axis] = slice(2, None)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1323</span><span class="s2"> if uniform_spacing:</span>
+<span class="ne">-&gt; </span><span class="mi">1324</span><span class="s2">     out[tuple(slice1)] = (f[tuple(slice4)] - f[tuple(slice2)]) / (2. * ax_dx)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1325</span><span class="s2"> else:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1326</span><span class="s2">     dx1 = ax_dx[0:-1]</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
