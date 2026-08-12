@@ -501,14 +501,14 @@ def calculate_mass_continuity_gradient(
     grad_w = -np.gradient(div, dz, axis=0) * coeff
 
     # Impermeability conditions
-    grad_w[0, :, :] = 0   # surface is impermeable
-    if upper_bc == 1:#is True: # impermeable at the grid top
-         grad_w[-1, :, :] = 0
-    if upper_bc == 2: # impermeable at cloud top
-         N=np.sum(np.array(vrs)>-1000,axis=0)
-         z_mask = (z > above * 1000)
-         n_mask = (N == 0)
-         grad_w[z_mask & n_mask] = 0
+    grad_w[0, :, :] = 0  # surface is impermeable
+    if upper_bc == 1:  # is True: # impermeable at the grid top
+        grad_w[-1, :, :] = 0
+    if upper_bc == 2:  # impermeable at cloud top
+        N = np.sum(np.array(vrs) > -1000, axis=0)
+        z_mask = z > above * 1000
+        n_mask = N == 0
+        grad_w[z_mask & n_mask] = 0
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 

@@ -547,7 +547,7 @@ def grad_J(winds, parameters):
                             parameters.Cm,
                             1,
                             parameters.upper_bc,
-                            above=parameters.above
+                            above=parameters.above,
                         )
                     )
                 if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
