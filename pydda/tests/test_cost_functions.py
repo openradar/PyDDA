@@ -873,3 +873,224 @@ def test_model_cost_tf():
         u, v, w, weights, u - 1, v - 1, w
     )
     assert cost2 > cost1
+
+
+def _make_upper_bc_inputs():
+    """A synthetic wind field and a single radar whose echo top is at level 5."""
+    nz, ny, nx = 10, 8, 8
+    rng = np.random.default_rng(42)
+    u = rng.random((nz, ny, nx))
+    v = rng.random((nz, ny, nx))
+    w = rng.random((nz, ny, nx))
+    z = np.tile(np.linspace(0.0, 9000.0, nz)[:, None, None], (1, ny, nx))
+
+    # One radar reporting valid velocities only in the lowest six levels of one
+    # quadrant of the domain. Everything else is filled the way PyDDA fills
+    # points without an observation.
+    vr = np.full((nz, ny, nx), -9999.0)
+    vr[:6, :4, :4] = 1.0
+    return u, v, w, z, [vr]
+
+
+def _w_component(grad, shape):
+    """Pull the w block out of a flattened (3, nz, ny, nx) gradient."""
+    return np.asarray(grad).reshape((3,) + shape)[2]
+
+
+def test_calculate_echo_top_mask():
+    u, v, w, z, vrs = _make_upper_bc_inputs()
+    mask = pydda.cost_functions.calculate_echo_top_mask(vrs, z, above=2.0)
+
+    # The condition never applies below the "above" level...
+    assert not mask[z <= 2000.0].any()
+    # ...nor where the radar sees an echo...
+    assert not mask[np.logical_and(vrs[0] > -1000, z > 2000.0)].any()
+    # ...but it does apply in the echo-free air aloft.
+    assert mask[6:, 6:, 6:].all()
+
+    # Raising "above" can only shrink the masked volume.
+    higher = pydda.cost_functions.calculate_echo_top_mask(vrs, z, above=5.0)
+    assert higher.sum() < mask.sum()
+    assert not np.logical_and(higher, ~mask).any()
+
+
+def test_mass_continuity_gradient_upper_bc():
+    """upper_bc selects between no condition, a grid top condition and an
+    echo top condition."""
+    u, v, w, z, vrs = _make_upper_bc_inputs()
+    shape = u.shape
+    mask = pydda.cost_functions.calculate_echo_top_mask(vrs, z, above=2.0)
+    args = (u, v, w, z, 1000.0, 1000.0, 1000.0)
+
+    none_bc = _w_component(
+        pydda.cost_functions.calculate_mass_continuity_gradient(*args, upper_bc=0),
+        shape,
+    )
+    grid_top = _w_component(
+        pydda.cost_functions.calculate_mass_continuity_gradient(*args, upper_bc=1),
+        shape,
+    )
+    echo_top = _w_component(
+        pydda.cost_functions.calculate_mass_continuity_gradient(
+            *args, upper_bc=2, upper_bc_mask=mask
+        ),
+        shape,
+    )
+
+    # The surface is always impermeable, the domain top only for upper_bc=1.
+    assert np.all(none_bc[0] == 0)
+    assert not np.all(none_bc[-1] == 0)
+    assert np.all(grid_top[-1] == 0)
+    np.testing.assert_allclose(grid_top[:-1], none_bc[:-1])
+
+    # upper_bc=2 pins w exactly on the mask and leaves everything else alone.
+    assert np.all(echo_top[mask] == 0)
+    np.testing.assert_allclose(echo_top[~mask], none_bc[~mask])
+    assert np.any(echo_top != grid_top)
+
+    # The legacy booleans still mean what they used to. This is the regression
+    # guard for `upper_bc is True`, which silently skipped the condition for
+    # the integer modes.
+    np.testing.assert_allclose(
+        _w_component(
+            pydda.cost_functions.calculate_mass_continuity_gradient(
+                *args, upper_bc=True
+            ),
+            shape,
+        ),
+        grid_top,
+    )
+    np.testing.assert_allclose(
+        _w_component(
+            pydda.cost_functions.calculate_mass_continuity_gradient(
+                *args, upper_bc=False
+            ),
+            shape,
+        ),
+        none_bc,
+    )
+
+
+def test_all_gradients_honor_echo_top_upper_bc():
+    """Every gradient term that takes upper_bc applies the echo top mask."""
+    u, v, w, z, vrs = _make_upper_bc_inputs()
+    shape = u.shape
+    mask = pydda.cost_functions.calculate_echo_top_mask(vrs, z, above=2.0)
+    els = [np.ones(shape) * 0.5]
+    azs = [np.ones(shape) * 0.5]
+    wts = [np.zeros(shape)]
+    weights = np.ones((1,) + shape)
+
+    grads = {
+        "radial_vel": pydda.cost_functions.calculate_grad_radial_vel(
+            vrs, els, azs, u, v, w, wts, weights, 1.0, upper_bc=2, upper_bc_mask=mask
+        ),
+        "smoothness": pydda.cost_functions.calculate_smoothness_gradient(
+            u,
+            v,
+            w,
+            1000.0,
+            1000.0,
+            1000.0,
+            Cx=1e-4,
+            Cy=1e-4,
+            Cz=1e-4,
+            upper_bc=2,
+            upper_bc_mask=mask,
+        ),
+        "mass_continuity": pydda.cost_functions.calculate_mass_continuity_gradient(
+            u, v, w, z, 1000.0, 1000.0, 1000.0, upper_bc=2, upper_bc_mask=mask
+        ),
+        "vorticity": pydda.cost_functions.calculate_vertical_vorticity_gradient(
+            u,
+            v,
+            w,
+            1000.0,
+            1000.0,
+            1000.0,
+            1.0,
+            1.0,
+            coeff=1e-5,
+            upper_bc=2,
+            upper_bc_mask=mask,
+        ),
+    }
+    for name, grad in grads.items():
+        grad_w = _w_component(grad, shape)
+        assert np.all(grad_w[mask] == 0), "%s ignored the echo top mask" % name
+        assert np.all(grad_w[0] == 0), "%s ignored the surface condition" % name
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_mass_continuity_gradient_upper_bc_jax():
+    u, v, w, z, vrs = _make_upper_bc_inputs()
+    shape = u.shape
+    mask = pydda.cost_functions.calculate_echo_top_mask(vrs, z, above=2.0)
+    args = (
+        jnp.array(u),
+        jnp.array(v),
+        jnp.array(w),
+        jnp.array(z),
+        1000.0,
+        1000.0,
+        1000.0,
+    )
+
+    none_bc = _w_component(
+        pydda.cost_functions.jax.calculate_mass_continuity_gradient(*args, upper_bc=0),
+        shape,
+    )
+    grid_top = _w_component(
+        pydda.cost_functions.jax.calculate_mass_continuity_gradient(*args, upper_bc=1),
+        shape,
+    )
+    echo_top = _w_component(
+        pydda.cost_functions.jax.calculate_mass_continuity_gradient(
+            *args, upper_bc=2, upper_bc_mask=mask
+        ),
+        shape,
+    )
+
+    assert np.all(none_bc[0] == 0)
+    assert not np.all(none_bc[-1] == 0)
+    assert np.all(grid_top[-1] == 0)
+    assert np.all(echo_top[mask] == 0)
+    np.testing.assert_allclose(echo_top[~mask], none_bc[~mask])
+
+
+@pytest.mark.skipif(not TENSORFLOW_AVAILABLE, reason="TensorFlow not installed")
+def test_mass_continuity_gradient_upper_bc_tf():
+    u, v, w, z, vrs = _make_upper_bc_inputs()
+    shape = u.shape
+    mask = pydda.cost_functions.calculate_echo_top_mask(vrs, z, above=2.0)
+    args = (
+        tf.constant(u, dtype=tf.float32),
+        tf.constant(v, dtype=tf.float32),
+        tf.constant(w, dtype=tf.float32),
+        tf.constant(z, dtype=tf.float32),
+        1000.0,
+        1000.0,
+        1000.0,
+    )
+    tf_mask = tf.constant(mask, dtype=tf.bool)
+
+    none_bc = _w_component(
+        pydda.cost_functions.tf.calculate_mass_continuity_gradient(*args, upper_bc=0),
+        shape,
+    )
+    grid_top = _w_component(
+        pydda.cost_functions.tf.calculate_mass_continuity_gradient(*args, upper_bc=1),
+        shape,
+    )
+    echo_top = _w_component(
+        pydda.cost_functions.tf.calculate_mass_continuity_gradient(
+            *args, upper_bc=2, upper_bc_mask=tf_mask
+        ),
+        shape,
+    )
+
+    assert np.all(none_bc[0] == 0)
+    assert not np.all(none_bc[-1] == 0)
+    assert np.all(grid_top[-1] == 0)
+    assert np.all(echo_top[mask] == 0)
+    np.testing.assert_allclose(echo_top[~mask], none_bc[~mask])

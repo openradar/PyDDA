@@ -14,6 +14,25 @@ from scipy.signal import savgol_filter
 from ._cost_functions_tensorflow import _tf_gradient
 
 
+def _apply_upper_bc(p_z1, upper_bc, upper_bc_mask=None):
+    """
+    Zeroes the vertical velocity gradient where the upper impermeability
+    condition applies. *upper_bc* is compared with == rather than *is* so that
+    both the integer modes and the legacy booleans are honored.
+    """
+    if upper_bc == 1:
+        p_z1 = tf.concat(
+            [
+                p_z1[:-1, :, :],
+                tf.zeros((1, p_z1.shape[1], p_z1.shape[2]), dtype=p_z1.dtype),
+            ],
+            axis=0,
+        )
+    elif upper_bc == 2 and upper_bc_mask is not None:
+        p_z1 = tf.where(upper_bc_mask, tf.zeros_like(p_z1), p_z1)
+    return p_z1
+
+
 def radial_velocity_function(winds, parameters):
     """
     Calculates the total cost function. This typically does not need to be
@@ -347,6 +366,7 @@ def grad_radial_velocity(winds, parameters):
         parameters.rmsVr,
         coeff=parameters.Co,
         upper_bc=parameters.upper_bc,
+        upper_bc_mask=parameters.upper_bc_mask,
     )
 
     return grad
@@ -372,6 +392,7 @@ def grad_mass_cont(winds, parameters):
         parameters.dy,
         parameters.dz,
         upper_bc=parameters.upper_bc,
+        upper_bc_mask=parameters.upper_bc_mask,
         coeff=1.0,
     )
 
@@ -393,10 +414,14 @@ def grad_smooth_cost(winds, parameters):
         winds[0],
         winds[1],
         winds[2],
+        parameters.dx,
+        parameters.dy,
+        parameters.dz,
         Cx=parameters.Cx,
         Cy=parameters.Cy,
         Cz=parameters.Cz,
         upper_bc=parameters.upper_bc,
+        upper_bc_mask=parameters.upper_bc_mask,
     )
 
     return grad
@@ -421,7 +446,6 @@ def grad_background_cost(winds, parameters):
         parameters.u_back,
         parameters.v_back,
         parameters.Cb,
-        upper_bc=parameters.upper_bc,
     )
 
     return grad
@@ -448,6 +472,8 @@ def grad_vertical_vorticity_cost(winds, parameters):
         parameters.Ut,
         parameters.Vt,
         coeff=parameters.Cv,
+        upper_bc=parameters.upper_bc,
+        upper_bc_mask=parameters.upper_bc_mask,
     )
 
     return grad
@@ -473,6 +499,8 @@ def grad_model_cost(winds, parameters):
         parameters.v_model,
         parameters.w_model,
         coeff=parameters.Cmod,
+        upper_bc=parameters.upper_bc,
+        upper_bc_mask=parameters.upper_bc_mask,
     )
 
     return grad
@@ -571,7 +599,18 @@ def calculate_radial_vel_cost_function(
 
 
 def calculate_grad_radial_vel(
-    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
+    vrs,
+    els,
+    azs,
+    u,
+    v,
+    w,
+    wts,
+    weights,
+    rmsVr,
+    coeff=1.0,
+    upper_bc=1,
+    upper_bc_mask=None,
 ):
     """
     Calculates the gradient of the cost function due to difference of wind
@@ -600,8 +639,14 @@ def calculate_grad_radial_vel(
         Background velocity field name
     weights: n_radars x_bins x y_bins float array
         Data weights for each pair of radars
-    upper_bc: bool
-        Set to true to impose w=0 at top of domain.
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
 
     Returns
     -------
@@ -635,10 +680,7 @@ def calculate_grad_radial_vel(
         [tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64), p_z1[1:, :, :]],
         axis=0,
     )
-    if upper_bc is True:
-        p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]))], axis=0
-        )
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -706,7 +748,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
 
 
 def calculate_smoothness_gradient(
-    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of the smoothness cost function
@@ -755,11 +797,7 @@ def calculate_smoothness_gradient(
 
     # Impermeability condition
     p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
-    if upper_bc is True:
-        p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64)],
-            axis=0,
-        )
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -928,7 +966,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
 
 
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -977,11 +1015,7 @@ def calculate_mass_continuity_gradient(
 
     # Impermeability condition
     p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
-    if upper_bc is True:
-        p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]), dtype=tf.float64)],
-            axis=0,
-        )
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -1249,7 +1283,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
 
 
 def calculate_vertical_vorticity_gradient(
-    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of the cost function due to deviance from vertical
@@ -1276,8 +1310,14 @@ def calculate_vertical_vorticity_gradient(
         V component of storm motion
     coeff: float
         Weighting coefficient
-    upper_bc: bool
-        If true, impose w=0 at top of domain as a boundary condition.
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
 
     Returns
     -------
@@ -1310,10 +1350,7 @@ def calculate_vertical_vorticity_gradient(
 
     # Impermeability condition
     p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
-    if upper_bc is True:
-        p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]))], axis=0
-        )
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
@@ -1362,7 +1399,16 @@ def calculate_model_cost(u, v, w, weights, u_model, v_model, w_model, coeff=1.0)
 
 
 def calculate_model_gradient(
-    u, v, w, weights, u_model, v_model, w_model, coeff=1.0, upper_bc=True
+    u,
+    v,
+    w,
+    weights,
+    u_model,
+    v_model,
+    w_model,
+    coeff=1.0,
+    upper_bc=1,
+    upper_bc_mask=None,
 ):
     """
     Calculates the cost function for the model constraint.
@@ -1390,8 +1436,14 @@ def calculate_model_gradient(
         Vertical wind field from model
     coeff: float
         Weight of background constraint to total cost function
-    upper_bc: bool
-        If true, impose w=0 at top of domain as boundary condition.
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
 
     Returns
     -------
@@ -1415,9 +1467,6 @@ def calculate_model_gradient(
 
     # Impermeability condition
     p_z1 = tf.concat([tf.zeros((1, u.shape[1], u.shape[2])), p_z1[1:, :, :]], axis=0)
-    if upper_bc is True:
-        p_z1 = tf.concat(
-            [p_z1[:-1, :, :], tf.zeros((1, u.shape[1], u.shape[2]))], axis=0
-        )
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = tf.stack((p_x1, p_y1, p_z1), axis=0)
     return tf.reshape(y, (3 * np.prod(u.shape),))

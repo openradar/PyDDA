@@ -23,7 +23,9 @@ except ImportError:
     TF_AVAILABLE = False
 
 try:
+    # The Jax engine needs jaxopt for the solver, not just jax itself.
     import jax
+    import jaxopt
 
     JAX_AVAILABLE = True
 except ImportError:
@@ -76,6 +78,129 @@ def test_make_updraft_from_convergence_field():
 
     # We should have a pretty strong updraft in the retrieval!
     assert np.ma.max(new_w > 3)
+
+
+def _twpice_grids():
+    """The TWP-ICE grid pair used by the retrieval tests, with a first guess
+    taken from the sounding (which has w = 0 everywhere)."""
+    Grid0 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR0)
+    Grid1 = pydda.io.read_grid(pydda.tests.EXAMPLE_RADAR1)
+    sounding = pyart.io.read_arm_sonde(pydda.tests.SOUNDING_PATH)
+    Grid0 = pydda.initialization.make_wind_field_from_profile(
+        Grid0, sounding[1], vel_field="corrected_velocity"
+    )
+    return Grid0, Grid1
+
+
+# Common arguments for the echo top boundary condition tests. The low pass
+# filter and the masking are turned off so that the retrieved w can be compared
+# against the first guess point by point.
+ECHO_TOP_KWARGS = dict(
+    Co=100,
+    Cm=1500.0,
+    max_iterations=20,
+    Cz=0,
+    Cmod=0.0,
+    vel_name="corrected_velocity",
+    wind_tol=0.1,
+    refl_field="reflectivity",
+    frz=5000.0,
+    upper_bc=2,
+    above=2.0,
+    low_pass_filter=False,
+    mask_outside_opt=False,
+    mask_w_outside_opt=False,
+)
+
+
+def _assert_impermeable_above_echo_top(Grids, parameters):
+    """w must be untouched (i.e. still zero) wherever the echo top condition
+    applies, and the retrieval must still be physically sensible elsewhere."""
+    # The TensorFlow engines store these as tensors rather than numpy arrays.
+    mask = np.asarray(parameters.upper_bc_mask)
+    z = np.asarray(parameters.z)
+    assert mask.dtype == bool
+    # The condition should cover a substantial part of, but not all of, the grid.
+    assert 0.0 < mask.mean() < 1.0
+    assert not mask[z <= 2000.0].any()
+
+    w = Grids[0]["w"].values.squeeze()
+    # A permanently zero gradient component is never moved by L-BFGS-B, so the
+    # first guess of w = 0 survives exactly.
+    np.testing.assert_array_equal(w[mask], 0.0)
+    # ...but the retrieval still produces updrafts where the radars see echoes.
+    assert np.nanmax(w[~mask]) > 5
+
+    u_mean = np.nanmean(Grids[0]["u"].values)
+    v_mean = np.nanmean(Grids[0]["v"].values)
+    assert u_mean > 0
+    assert v_mean < 0
+
+
+def test_twpice_case_upper_bc_echo_top():
+    """The echo top impermeability condition holds w fixed above the echo top."""
+    Grid0, Grid1 = _twpice_grids()
+    Grids, parameters = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], engine="scipy", **ECHO_TOP_KWARGS
+    )
+    _assert_impermeable_above_echo_top(Grids, parameters)
+
+
+def test_twpice_case_upper_bc_modes_differ():
+    """The three upper boundary conditions give three different wind fields."""
+    kwargs = dict(ECHO_TOP_KWARGS)
+    del kwargs["upper_bc"]
+    # This test only needs the three fields to be distinguishable, not
+    # converged, so it runs for fewer iterations than the others.
+    kwargs["max_iterations"] = 10
+
+    results = {}
+    for upper_bc in (0, 1, 2):
+        Grid0, Grid1 = _twpice_grids()
+        Grids, parameters = pydda.retrieval.get_dd_wind_field(
+            [deepcopy(Grid0), deepcopy(Grid1)],
+            engine="scipy",
+            upper_bc=upper_bc,
+            **kwargs,
+        )
+        results[upper_bc] = (Grids[0]["w"].values.squeeze(), parameters)
+
+    w_none, params_none = results[0]
+    w_grid_top, params_grid_top = results[1]
+    w_echo_top, _ = results[2]
+
+    # No mask is built unless it is needed.
+    assert params_none.upper_bc_mask is None
+    assert params_grid_top.upper_bc_mask is None
+
+    # upper_bc=1 pins only the model top; this is the regression guard for
+    # `upper_bc is True`, which used to skip the condition for integer modes.
+    np.testing.assert_array_equal(w_grid_top[-1, :, :], 0.0)
+    assert np.any(w_none[-1, :, :] != 0)
+
+    assert np.any(w_echo_top != w_grid_top)
+    assert np.any(w_echo_top != w_none)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_twpice_case_upper_bc_echo_top_jax():
+    """The echo top impermeability condition also works with the Jax engine."""
+    Grid0, Grid1 = _twpice_grids()
+    Grids, parameters = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], engine="jax", **ECHO_TOP_KWARGS
+    )
+    _assert_impermeable_above_echo_top(Grids, parameters)
+
+
+@pytest.mark.skipif(not TF_AVAILABLE, reason="TensorFlow not installed")
+def test_twpice_case_upper_bc_echo_top_tensorflow():
+    """The echo top impermeability condition also works with the TensorFlow
+    engine."""
+    Grid0, Grid1 = _twpice_grids()
+    Grids, parameters = pydda.retrieval.get_dd_wind_field(
+        [Grid0, Grid1], engine="tensorflow", **ECHO_TOP_KWARGS
+    )
+    _assert_impermeable_above_echo_top(Grids, parameters)
 
 
 @pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")

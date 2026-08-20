@@ -7,6 +7,51 @@ from scipy.ndimage import _nd_image
 laplace_filter = np.asarray([1, -2, 1], dtype=np.float64)
 
 
+def calculate_echo_top_mask(vrs, z, above=2.0):
+    """
+    Finds the grid points that lie above the echo top, i.e. the points above
+    *above* km at which none of the radars report a valid radial velocity.
+
+    Holding w fixed at these points imposes an impermeability condition at the
+    echo top rather than at the (arbitrary) top of the analysis domain. See
+    Thompson et al. (2026), https://doi.org/10.5194/egusphere-2026-4631.
+
+    Parameters
+    ----------
+    vrs: list of float arrays
+        List of radial velocities from each radar. Points without a valid
+        observation are expected to be filled with a large negative number
+        (-9999.0 in PyDDA's retrievals).
+    z: float array
+        Heights of the grid points in m. This must broadcast against the
+        members of *vrs*, i.e. the 3D *point_z* field of the Grid.
+    above: float
+        Minimum height of the impermeable layer in km. The condition is never
+        applied below this level, so that clear air near the surface does not
+        pin w to its first guess.
+
+    Returns
+    -------
+    mask: 3D bool array
+        True wherever the impermeability condition is to be applied.
+    """
+    n_obs = np.sum(np.stack([np.asarray(x) for x in vrs]) > -1000, axis=0)
+    return np.logical_and(np.asarray(z) > above * 1000.0, n_obs == 0)
+
+
+def _apply_upper_bc(grad_w, upper_bc, upper_bc_mask=None):
+    """
+    Zeroes the vertical velocity gradient where the upper impermeability
+    condition applies. *upper_bc* is compared with == rather than *is* so that
+    both the integer modes and the legacy booleans are honored.
+    """
+    if upper_bc == 1:
+        grad_w[-1, :, :] = 0
+    elif upper_bc == 2 and upper_bc_mask is not None:
+        grad_w[upper_bc_mask] = 0
+    return grad_w
+
+
 def calculate_radial_vel_cost_function(
     vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0, parallel=False
 ):
@@ -90,7 +135,8 @@ def calculate_grad_radial_vel(
     weights,
     rmsVr,
     coeff=1.0,
-    upper_bc=True,
+    upper_bc=1,
+    upper_bc_mask=None,
     parallel=False,
 ):
     """
@@ -118,6 +164,14 @@ def calculate_grad_radial_vel(
         Background velocity field name
     weights: n_radars x_bins x y_bins float array
         Data weights for each pair of radars
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
     Returns
     -------
     y: 1-D float array
@@ -176,8 +230,7 @@ def calculate_grad_radial_vel(
 
     # Impermeability condition
     p_z1[0, :, :] = 0
-    if upper_bc is True:
-        p_z1[-1, :, :] = 0
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = np.stack((p_x1, p_y1, p_z1), axis=0)
     return y.flatten()
 
@@ -248,7 +301,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
 
 
 def calculate_smoothness_gradient(
-    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of the smoothness cost function
@@ -269,6 +322,14 @@ def calculate_smoothness_gradient(
         Constant controlling smoothness in y-direction
     Cz: float
         Constant controlling smoothness in z-direction
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
     Returns
     -------
     y: float array
@@ -295,8 +356,7 @@ def calculate_smoothness_gradient(
 
     # Impermeability condition
     grad_w[0, :, :] = 0
-    if upper_bc is True:
-        grad_w[-1, :, :] = 0
+    grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
 
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
 
@@ -453,7 +513,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
 
 
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -479,6 +539,14 @@ def calculate_mass_continuity_gradient(
         Constant controlling contribution of mass continuity to cost function
     anel: int
         = 1 use anelastic approximation, 0=don't
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
     Returns
     -------
     y: float array
@@ -502,8 +570,7 @@ def calculate_mass_continuity_gradient(
 
     # Impermeability condition
     grad_w[0, :, :] = 0
-    if upper_bc is True:
-        grad_w[-1, :, :] = 0
+    grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 
@@ -689,7 +756,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
 
 
 def calculate_vertical_vorticity_gradient(
-    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of the cost function due to deviance from vertical
@@ -715,6 +782,14 @@ def calculate_vertical_vorticity_gradient(
         V component of storm motion
     coeff: float
         Weighting coefficient
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
     Returns
     -------
     Jv: 1D float array
@@ -789,8 +864,7 @@ def calculate_vertical_vorticity_gradient(
 
     # Impermeability condition
     w_grad[0, :, :] = 0
-    if upper_bc is True:
-        w_grad[-1, :, :] = 0
+    w_grad = _apply_upper_bc(w_grad, upper_bc, upper_bc_mask)
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
 

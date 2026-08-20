@@ -66,6 +66,7 @@ from ..cost_functions import (
     J_function,
     grad_J,
     calculate_fall_speed,
+    calculate_echo_top_mask,
     grad_jax,
     J_function_jax,
 )
@@ -159,9 +160,22 @@ class DDParameters(object):
         Cartesian coordinates.
     roi: float
         The radius of influence of each point observation in m.
-    upper_bc: bool
-        True to enforce w=0 at top of domain (impermeability condition),
-        False to not enforce impermeability at top of domain
+    upper_bc: int
+        The upper boundary (impermeability) condition:
+
+        * 0 to not enforce impermeability at the top of the domain,
+        * 1 to enforce w=0 at the top of the domain,
+        * 2 to enforce w=0 above the echo top (or *above*, whichever is higher).
+
+        The legacy booleans True and False are equivalent to 1 and 0.
+    above: float
+        The minimum height of the echo top impermeability condition in km.
+        The condition given by *upper_bc* = 2 is never applied below this
+        level.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
+        This is calculated by PyDDA at the start of the retrieval.
     """
 
     def __init__(self):
@@ -200,8 +214,10 @@ class DDParameters(object):
         self.Cpoint = 0.0
         self.Ut = 0.0
         self.Vt = 0.0
-        self.upper_bc = True
+        self.upper_bc = 1
         self.lower_bc = True
+        self.above = 2.0
+        self.upper_bc_mask = None
         self.roi = 1000.0
         self.frz = 4500.0
         self.Nfeval = 0.0
@@ -254,7 +270,8 @@ def _get_dd_wind_field_scipy(
     leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
-    upper_bc=True,
+    upper_bc=1,
+    above=2.0,
     model_fields=None,
     output_cost_functions=True,
     roi=1000.0,
@@ -598,6 +615,11 @@ def _get_dd_wind_field_scipy(
     parameters.Cpoint = Cpoint
     parameters.roi = roi
     parameters.upper_bc = upper_bc
+    parameters.above = above
+    if upper_bc == 2:
+        parameters.upper_bc_mask = calculate_echo_top_mask(
+            parameters.vrs, parameters.z, above=above
+        )
     parameters.points = points
     parameters.point_list = points
     parameters.parallel = parallel
@@ -715,6 +737,10 @@ def _get_dd_wind_field_scipy(
         parameters.z = tf.constant(Grids[0]["point_z"].values, dtype=tf.float32)
         parameters.x = tf.constant(Grids[0]["point_x"].values, dtype=tf.float32)
         parameters.y = tf.constant(Grids[0]["point_y"].values, dtype=tf.float32)
+        if parameters.upper_bc_mask is not None:
+            parameters.upper_bc_mask = tf.constant(
+                parameters.upper_bc_mask, dtype=tf.bool
+            )
         bounds = [(-x, x) for x in max_wind_mag * np.ones(winds.shape, dtype="float32")]
         winds = winds.astype("float32")
         winds, mult, AL_Filter, funcalls = auglag(winds, parameters, bounds)
@@ -842,7 +868,8 @@ def _get_dd_wind_field_tensorflow(
     leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
-    upper_bc=True,
+    upper_bc=1,
+    above=2.0,
     model_fields=None,
     output_cost_functions=True,
     roi=1000.0,
@@ -876,6 +903,7 @@ def _get_dd_wind_field_tensorflow(
     parameters.Vt = Vt
     parameters.upper_bc = upper_bc
     parameters.lower_bc = lower_bc
+    parameters.above = above
     parameters.engine = "tensorflow"
     parameters.const_boundary_cond = const_boundary_cond
 
@@ -1127,6 +1155,16 @@ def _get_dd_wind_field_tensorflow(
             parameters.bg_weights = np.where(np.isfinite(parameters.vrs[0]), 0, 1)
         else:
             parameters.bg_weights = weights_bg
+
+    if upper_bc == 2:
+        parameters.upper_bc_mask = tf.constant(
+            calculate_echo_top_mask(
+                [x.filled(-9999) for x in parameters.vrs],
+                Grids[0]["point_z"].values,
+                above=above,
+            ),
+            dtype=tf.bool,
+        )
 
     parameters.vrs = [
         tf.constant(x.filled(-9999), dtype=tf.float32) for x in parameters.vrs
@@ -1461,9 +1499,23 @@ def get_dd_wind_field(
     max_bca: float
         Maximum beam crossing angle in degrees between two radars. 150.0 is the
         typical value used in many publications.
-    upper_bc: bool
-        Set this to true to enforce w = 0 at the top of the atmosphere. This is
-        commonly called the impermeability condition.
+    upper_bc: int
+        The upper boundary condition to apply to the vertical velocity, which is
+        commonly called the impermeability condition:
+
+        * 0 -- do not enforce impermeability at the top of the domain.
+        * 1 -- enforce :math:`w = 0` at the top of the analysis domain.
+        * 2 -- enforce :math:`w = 0` above the echo top, i.e. at every point
+          above *above* km at which none of the radars report a valid
+          observation. See Thompson et al. (2026),
+          https://doi.org/10.5194/egusphere-2026-4631.
+
+        The legacy booleans True and False are equivalent to 1 and 0.
+    above: float
+        The minimum height of the echo top impermeability condition in km.
+        :code:`upper_bc=2` is never applied below this level, so that clear air
+        near the surface does not pin the vertical velocity to its first guess.
+        This has no effect for the other values of *upper_bc*.
     model_fields: list of strings
         The list of fields in the first grid in Grids that contain the custom
         data interpolated to the Grid's grid specification. Helper functions
