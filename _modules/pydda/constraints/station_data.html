@@ -373,7 +373,7 @@
 <div class="viewcode-block" id="get_iem_obs">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.get_iem_obs.html#pydda.constraints.get_iem_obs">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_iem_obs</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mf">60.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns all of the station observations from the Iowa Mesonet for a given</span>
 <span class="sd">    Grid in the format needed for PyDDA.</span>
 
@@ -402,11 +402,11 @@
 <span class="sd">        *site_id* - Station ID (string)</span>
 
 <span class="sd">        *x*, *y*, *z* - The (x, y, z) coordinates of the site in the Grid. (floats)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># First query the database for all of the JSON info for every station</span>
-    <span class="c1"># Only add stations whose lat/lon are within the Grid&#39;s boundaries</span>
-    <span class="n">regions</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;AF AL_ AI_ AQ_ AG_ AR_ AK AL AM_ AO_ AS_ AR AW_ AU_ AT_</span>
+    <span class="c1"># Only add stations whose lat/lon are within the Grid's boundaries</span>
+    <span class="n">regions</span> <span class="o">=</span> <span class="s2">"""AF AL_ AI_ AQ_ AG_ AR_ AK AL AM_ AO_ AS_ AR AW_ AU_ AT_</span>
 <span class="s2">         AZ_ BA_ BE_ BB_ BG_ BO_ BR_ BF_ BT_ BS_ BI_ BM_ BB_ BY_ BZ_ BJ_ BW_ AZ CA CA_AB</span>
 <span class="s2">         CA_BC CD_ CK_ CF_ CG_ CL_ CM_ CO CO_ CN_ CR_ CT CU_ CV_ CY_ CZ_ DE DK_ DJ_ DM_ DO_</span>
 <span class="s2">         DZ EE_ ET_ FK_ FM_ FJ_ FI_ FR_ GF_ PF_ GA_ GM_ GE_ DE_ GH_ GI_ KY_ GB_ GR_ GL_ GD_</span>
@@ -419,28 +419,28 @@
 <span class="s2">         TG_ TO_ TT_ TU TN_ TR_ TM_ UG_ UA_ AE_ UN_ UY_  UZ_ VU_ VE_ VN_ VI_ YE_ CA_YT ZM_ ZW_</span>
 <span class="s2">         EC_ EG_ FL GA GQ_ HI HR_ IA ID IL IO_ IN KS KH_ KY KM_ LA MA MD ME</span>
 <span class="s2">         MI MN MO MS MT NC ND NE NH NJ NM NV NY OH OK OR PA RI SC SV_ SD TD_ TN TX UT VA VT VG_</span>
-<span class="s2">         WA WI WV WY&quot;&quot;&quot;</span>
+<span class="s2">         WA WI WV WY"""</span>
 
-    <span class="n">networks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AWOS&quot;</span><span class="p">]</span>
-    <span class="n">grid_lon_min</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">grid_lon_max</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
-    <span class="n">grid_lat_min</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-    <span class="n">grid_lat_max</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">networks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"AWOS"</span><span class="p">]</span>
+    <span class="n">grid_lon_min</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">"point_longitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">grid_lon_max</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">"point_longitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">grid_lat_min</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">"point_latitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">grid_lat_max</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">"point_latitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
-        <span class="n">networks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">_ASOS&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">region</span><span class="p">,))</span>
+        <span class="n">networks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">_ASOS"</span> <span class="o">%</span> <span class="p">(</span><span class="n">region</span><span class="p">,))</span>
 
     <span class="n">site_list</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">elevations</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">network</span> <span class="ow">in</span> <span class="n">networks</span><span class="p">:</span>
         <span class="c1"># Get metadata</span>
-        <span class="n">uri</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;https://mesonet.agron.iastate.edu/&quot;</span> <span class="s2">&quot;geojson/network/</span><span class="si">%s</span><span class="s2">.geojson&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"https://mesonet.agron.iastate.edu/"</span> <span class="s2">"geojson/network/</span><span class="si">%s</span><span class="s2">.geojson"</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span>
             <span class="n">network</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
         <span class="n">jdict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">jdict</span><span class="p">[</span><span class="s2">&quot;features&quot;</span><span class="p">]:</span>
-            <span class="n">lat</span> <span class="o">=</span> <span class="n">site</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">][</span><span class="s2">&quot;coordinates&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">lon</span> <span class="o">=</span> <span class="n">site</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">][</span><span class="s2">&quot;coordinates&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="n">jdict</span><span class="p">[</span><span class="s2">"features"</span><span class="p">]:</span>
+            <span class="n">lat</span> <span class="o">=</span> <span class="n">site</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">lon</span> <span class="o">=</span> <span class="n">site</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">][</span><span class="s2">"coordinates"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="p">(</span>
                 <span class="n">lat</span> <span class="o">&gt;=</span> <span class="n">grid_lat_min</span>
                 <span class="ow">and</span> <span class="n">lat</span> <span class="o">&lt;=</span> <span class="n">grid_lat_max</span>
@@ -448,25 +448,25 @@
                 <span class="ow">and</span> <span class="n">lon</span> <span class="o">&lt;=</span> <span class="n">grid_lon_max</span>
             <span class="p">):</span>
                 <span class="n">site_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="p">(</span><span class="n">site</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;sid&quot;</span><span class="p">],</span> <span class="n">site</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;elevation&quot;</span><span class="p">])</span>
+                    <span class="p">(</span><span class="n">site</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"sid"</span><span class="p">],</span> <span class="n">site</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"elevation"</span><span class="p">])</span>
                 <span class="p">)</span>
 
     <span class="c1"># Get the timestamp for each request</span>
     <span class="n">grid_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
-        <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="s2">&quot;seconds since %Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span>
+        <span class="n">Grid</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"units"</span><span class="p">],</span> <span class="s2">"seconds since %Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ"</span>
     <span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">grid_time</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">window</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">grid_time</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="n">window</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
 
-    <span class="n">SERVICE</span> <span class="o">=</span> <span class="s2">&quot;http://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?&quot;</span>
-    <span class="n">service</span> <span class="o">=</span> <span class="n">SERVICE</span> <span class="o">+</span> <span class="s2">&quot;data=all&amp;tz=Etc/UTC&amp;format=comma&amp;latlon=yes&amp;&quot;</span>
+    <span class="n">SERVICE</span> <span class="o">=</span> <span class="s2">"http://mesonet.agron.iastate.edu/cgi-bin/request/asos.py?"</span>
+    <span class="n">service</span> <span class="o">=</span> <span class="n">SERVICE</span> <span class="o">+</span> <span class="s2">"data=all&amp;tz=Etc/UTC&amp;format=comma&amp;latlon=yes&amp;"</span>
 
-    <span class="n">service</span> <span class="o">+=</span> <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;year1=%Y&amp;month1=%m&amp;day1=</span><span class="si">%d</span><span class="s2">&amp;&quot;</span><span class="p">)</span>
-    <span class="n">service</span> <span class="o">+=</span> <span class="n">end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;year2=%Y&amp;month2=%m&amp;day2=</span><span class="si">%d</span><span class="s2">&amp;&quot;</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">+=</span> <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"year1=%Y&amp;month1=%m&amp;day1=</span><span class="si">%d</span><span class="s2">&amp;"</span><span class="p">)</span>
+    <span class="n">service</span> <span class="o">+=</span> <span class="n">end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"year2=%Y&amp;month2=%m&amp;day2=</span><span class="si">%d</span><span class="s2">&amp;"</span><span class="p">)</span>
     <span class="n">station_obs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">stations</span><span class="p">,</span> <span class="n">elevations</span> <span class="ow">in</span> <span class="n">site_list</span><span class="p">:</span>
-        <span class="n">uri</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&amp;station=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">stations</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">stations</span><span class="p">,))</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="s2">"</span><span class="si">%s</span><span class="s2">&amp;station=</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">stations</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Downloading: </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">stations</span><span class="p">,))</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">_download_data</span><span class="p">(</span><span class="n">uri</span><span class="p">)</span>
         <span class="n">buf</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
         <span class="n">buf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
@@ -474,34 +474,34 @@
 
         <span class="n">my_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">stat_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">my_df</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;No data available at station </span><span class="si">%s</span><span class="s2"> between time </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2">&quot;</span>
+                <span class="s2">"No data available at station </span><span class="si">%s</span><span class="s2"> between time </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2">"</span>
                 <span class="o">%</span> <span class="p">(</span>
                     <span class="n">stations</span><span class="p">,</span>
-                    <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
-                    <span class="n">end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
+                    <span class="n">start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span><span class="p">),</span>
+                    <span class="n">end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S"</span><span class="p">),</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">projparams</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;projection&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_df</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_df</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">projparams</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">"projection"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
 
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">geographic_to_cartesian</span><span class="p">(</span>
-                <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">],</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">],</span> <span class="n">projparams</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"x"</span><span class="p">],</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">geographic_to_cartesian</span><span class="p">(</span>
+                <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">],</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">],</span> <span class="n">projparams</span>
             <span class="p">)</span>
 
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elevations</span> <span class="o">-</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;origin_altitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;drct&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;M&quot;</span><span class="p">:</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"x"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"x"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"y"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"y"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"z"</span><span class="p">]</span> <span class="o">=</span> <span class="n">elevations</span> <span class="o">-</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">"origin_altitude"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">my_df</span><span class="p">[</span><span class="s2">"drct"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"M"</span><span class="p">:</span>
                 <span class="k">continue</span>
-            <span class="n">drct</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;drct&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">s_ms</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">my_df</span><span class="p">[</span><span class="s2">&quot;sknt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.514444</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">drct</span><span class="p">))</span> <span class="o">*</span> <span class="n">s_ms</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">drct</span><span class="p">))</span> <span class="o">*</span> <span class="n">s_ms</span>
-            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">&quot;site_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stations</span>
+            <span class="n">drct</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">my_df</span><span class="p">[</span><span class="s2">"drct"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">s_ms</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">my_df</span><span class="p">[</span><span class="s2">"sknt"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.514444</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"u"</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">drct</span><span class="p">))</span> <span class="o">*</span> <span class="n">s_ms</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"v"</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">drct</span><span class="p">))</span> <span class="o">*</span> <span class="n">s_ms</span>
+            <span class="n">stat_dict</span><span class="p">[</span><span class="s2">"site_id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">stations</span>
             <span class="n">station_obs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stat_dict</span><span class="p">)</span>
         <span class="n">buf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -513,16 +513,16 @@
     <span class="n">attempt</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">attempt</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ERROR&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"ERROR"</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">data</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exp</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;download_data(</span><span class="si">%s</span><span class="s2">) failed with </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">exp</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"download_data(</span><span class="si">%s</span><span class="s2">) failed with </span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="n">exp</span><span class="p">))</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
         <span class="n">attempt</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exhausted attempts to download, returning empty data&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Exhausted attempts to download, returning empty data"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">""</span>
 </pre></div>
 
                 </article>

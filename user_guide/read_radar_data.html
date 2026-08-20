@@ -400,7 +400,7 @@ there is convection as well as velocity values for dual doppler analysis.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pydda</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="read-in-the-data">
@@ -414,8 +414,8 @@ northern Oklahoma: KTLX (Twin Lakes, OK) and KICT (Wichita, KS).</p>
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in the data from both XSAPR radars</span>
-<span class="n">ktlx_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc&quot;</span><span class="p">)</span>
-<span class="n">kict_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc&quot;</span><span class="p">)</span>
+<span class="n">ktlx_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc"</span><span class="p">)</span>
+<span class="n">kict_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc"</span><span class="p">)</span>
 <span class="n">radar_ktlx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">ktlx_file</span><span class="p">)</span>
 <span class="n">radar_kict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">kict_file</span><span class="p">)</span>
 </pre></div>
@@ -439,7 +439,7 @@ then see their applicability to PyDDA.</p>
 <span class="c1"># Plot KTLX</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;DBZ&quot;</span><span class="p">,</span>
+    <span class="s2">"DBZ"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
@@ -455,7 +455,7 @@ then see their applicability to PyDDA.</p>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">)</span>
 <span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;DBZ&quot;</span><span class="p">,</span>
+    <span class="s2">"DBZ"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
@@ -483,7 +483,7 @@ then see their applicability to PyDDA.</p>
 <span class="c1"># Plot the southwestern radar</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;VEL&quot;</span><span class="p">,</span>
+    <span class="s2">"VEL"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span>
@@ -494,14 +494,14 @@ then see their applicability to PyDDA.</p>
     <span class="n">max_lon</span><span class="o">=-</span><span class="mi">97</span><span class="p">,</span>
     <span class="n">lat_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mf">37.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
     <span class="n">lon_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;twilight_shifted&#39;</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">'twilight_shifted'</span>
 <span class="p">)</span>
 
 <span class="c1"># Plot the southeastern radar</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">)</span>
 <span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;VEL&quot;</span><span class="p">,</span>
+    <span class="s2">"VEL"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span>
@@ -512,7 +512,7 @@ then see their applicability to PyDDA.</p>
     <span class="n">max_lon</span><span class="o">=-</span><span class="mi">97</span><span class="p">,</span>
     <span class="n">lat_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mf">37.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
     <span class="n">lon_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;twilight_shifted&#39;</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">'twilight_shifted'</span>
 <span class="p">)</span>
 </pre></div>
 </div>

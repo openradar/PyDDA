@@ -368,7 +368,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_radial_vel_cost_function</span><span class="p">(</span>
     <span class="n">vrs</span><span class="p">,</span> <span class="n">azs</span><span class="p">,</span> <span class="n">els</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">wts</span><span class="p">,</span> <span class="n">rmsVr</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the cost function due to difference of the wind field from</span>
 <span class="sd">    radar radial velocities. For more information on this cost function, see</span>
 <span class="sd">    Potvin et al. (2012) and Shapiro et al. (2009).</span>
@@ -410,7 +410,7 @@
 <span class="sd">    Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity</span>
 <span class="sd">    Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic</span>
 <span class="sd">    Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">lambda_o</span> <span class="o">=</span> <span class="n">coeff</span> <span class="o">/</span> <span class="p">(</span><span class="n">rmsVr</span> <span class="o">*</span> <span class="n">rmsVr</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
@@ -454,7 +454,7 @@
     <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the cost function due to difference of wind</span>
 <span class="sd">    field from radar radial velocities.</span>
 <span class="sd">    All arrays in the given lists must have the same dimensions and represent</span>
@@ -490,9 +490,9 @@
 <span class="sd">    cost function. For more information on functional derivatives, see the</span>
 <span class="sd">    Euler-Lagrange Equation:</span>
 <span class="sd">    https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="c1"># Use zero for all masked values since we don&#39;t want to add them into</span>
+    <span class="c1"># Use zero for all masked values since we don't want to add them into</span>
     <span class="c1"># the cost function</span>
 
     <span class="n">lambda_o</span> <span class="o">=</span> <span class="n">coeff</span> <span class="o">/</span> <span class="p">(</span><span class="n">rmsVr</span> <span class="o">*</span> <span class="n">rmsVr</span><span class="p">)</span>
@@ -547,7 +547,7 @@
 <div class="viewcode-block" id="calculate_smoothness_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_cost.html#pydda.cost_functions.calculate_smoothness_cost">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_smoothness_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the smoothness cost function by taking the Laplacian of the</span>
 <span class="sd">    wind field.</span>
 <span class="sd">    All arrays in the given lists must have the same dimensions and represent</span>
@@ -570,7 +570,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    Js: float</span>
 <span class="sd">        value of smoothness cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dudx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">dudy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">dudz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -617,7 +617,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_smoothness_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the smoothness cost function</span>
 <span class="sd">    by taking the Laplacian of the Laplacian of the wind field.</span>
 <span class="sd">    All arrays in the given lists must have the same dimensions and represent</span>
@@ -640,22 +640,22 @@
 <span class="sd">    -------</span>
 <span class="sd">    y: float array</span>
 <span class="sd">        value of gradient of smoothness cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">du</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">dv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">dw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">grad_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">grad_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">grad_w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dv</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dw</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">)</span>
     <span class="n">du</span> <span class="o">=</span> <span class="n">du</span> <span class="o">/</span> <span class="n">dx</span>
     <span class="n">dv</span> <span class="o">=</span> <span class="n">dv</span> <span class="o">/</span> <span class="n">dy</span>
     <span class="n">dw</span> <span class="o">=</span> <span class="n">dw</span> <span class="o">/</span> <span class="n">dz</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">grad_u</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
-    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dw</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">du</span><span class="p">,</span> <span class="n">grad_u</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dv</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">)</span>
+    <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">laplace</span><span class="p">(</span><span class="n">dw</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"wrap"</span><span class="p">)</span>
     <span class="n">grad_u</span> <span class="o">=</span> <span class="n">grad_u</span> <span class="o">/</span> <span class="n">dx</span>
     <span class="n">grad_v</span> <span class="o">=</span> <span class="n">grad_v</span> <span class="o">/</span> <span class="n">dy</span>
     <span class="n">grad_w</span> <span class="o">=</span> <span class="n">grad_w</span> <span class="o">/</span> <span class="n">dz</span>
@@ -674,7 +674,7 @@
 <div class="viewcode-block" id="calculate_point_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_cost.html#pydda.cost_functions.calculate_point_cost">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_point_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the cost function related to point observations. A mean square error cost</span>
 <span class="sd">    function term is applied to points that are within the sphere of influence</span>
 <span class="sd">    whose radius is determined by *roi*.</span>
@@ -692,10 +692,10 @@
 <span class="sd">        Z coordinated of grid centers</span>
 <span class="sd">    point_list: list of dicts</span>
 <span class="sd">        List of point constraints.</span>
-<span class="sd">        Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;, to correspond</span>
-<span class="sd">        to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;</span>
+<span class="sd">        Each member is a dict with keys of "u", "v", to correspond</span>
+<span class="sd">        to each component of the wind field and "x", "y", "z"</span>
 <span class="sd">        to correspond to the location of the point observation.</span>
-<span class="sd">        In addition, &quot;site_id&quot; gives the METAR code (or name) to the station.</span>
+<span class="sd">        In addition, "site_id" gives the METAR code (or name) to the station.</span>
 <span class="sd">    Cp: float</span>
 <span class="sd">        The weighting coefficient of the point cost function.</span>
 <span class="sd">    roi: float</span>
@@ -704,22 +704,22 @@
 <span class="sd">    -------</span>
 <span class="sd">    J: float</span>
 <span class="sd">        The cost function related to the difference between wind field and points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">J</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">the_point</span> <span class="ow">in</span> <span class="n">point_list</span><span class="p">:</span>
         <span class="c1"># Instead of worrying about whole domain, just find points in radius of influence</span>
         <span class="c1"># Since we know that the weight will be zero outside the sphere of influence anyways</span>
 
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"x"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"y"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"z"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="p">)</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">dist</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
 
-        <span class="n">J</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="p">((</span><span class="n">u</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">J</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weight</span> <span class="o">*</span> <span class="p">((</span><span class="n">u</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"u"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"v"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">J</span> <span class="o">*</span> <span class="n">Cp</span></div>
 
@@ -728,7 +728,7 @@
 <div class="viewcode-block" id="calculate_point_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_point_gradient.html#pydda.cost_functions.calculate_point_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_point_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">point_list</span><span class="p">,</span> <span class="n">Cp</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">roi</span><span class="o">=</span><span class="mf">500.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the cost function related to point observations.</span>
 <span class="sd">    A mean square error cost function term is applied to points that are within the sphere of influence</span>
 <span class="sd">    whose radius is determined by *roi*.</span>
@@ -745,10 +745,10 @@
 <span class="sd">    z: Float array</span>
 <span class="sd">        Z coordinated of grid centers</span>
 <span class="sd">    point_list: list of dicts</span>
-<span class="sd">        List of point constraints. Each member is a dict with keys of &quot;u&quot;, &quot;v&quot;,</span>
-<span class="sd">        to correspond to each component of the wind field and &quot;x&quot;, &quot;y&quot;, &quot;z&quot;</span>
+<span class="sd">        List of point constraints. Each member is a dict with keys of "u", "v",</span>
+<span class="sd">        to correspond to each component of the wind field and "x", "y", "z"</span>
 <span class="sd">        to correspond to the location of the point observation.</span>
-<span class="sd">        In addition, &quot;site_id&quot; gives the METAR code (or name) to the station.</span>
+<span class="sd">        In addition, "site_id" gives the METAR code (or name) to the station.</span>
 <span class="sd">    Cp: float</span>
 <span class="sd">        The weighting coefficient of the point cost function.</span>
 <span class="sd">    roi: float</span>
@@ -757,7 +757,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    gradJ: float array</span>
 <span class="sd">        The gradient of the cost function related to the difference between wind field and points.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">gradJ_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
     <span class="n">gradJ_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
@@ -765,15 +765,15 @@
 
     <span class="k">for</span> <span class="n">the_point</span> <span class="ow">in</span> <span class="n">point_list</span><span class="p">:</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"x"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"y"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"z"</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="p">)</span>
         <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">dist</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
-        <span class="n">gradJ_u</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">])</span>
-        <span class="n">gradJ_v</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">])</span>
+        <span class="n">gradJ_u</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">u</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"u"</span><span class="p">])</span>
+        <span class="n">gradJ_v</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">the_point</span><span class="p">[</span><span class="s2">"v"</span><span class="p">])</span>
 
     <span class="n">gradJ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">gradJ_u</span><span class="p">,</span> <span class="n">gradJ_v</span><span class="p">,</span> <span class="n">gradJ_w</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">gradJ</span> <span class="o">*</span> <span class="n">Cp</span></div>
@@ -783,7 +783,7 @@
 <div class="viewcode-block" id="calculate_mass_continuity">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity.html#pydda.cost_functions.calculate_mass_continuity">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_mass_continuity</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the mass continuity cost function by taking the divergence</span>
 <span class="sd">    of the wind field.</span>
 <span class="sd">    All arrays in the given lists must have the same dimensions and represent</span>
@@ -807,12 +807,12 @@
 <span class="sd">    coeff: float</span>
 <span class="sd">        Constant controlling contribution of mass continuity to cost function</span>
 <span class="sd">    anel: int</span>
-<span class="sd">        = 1 use anelastic approximation, 0=don&#39;t</span>
+<span class="sd">        = 1 use anelastic approximation, 0=don't</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    J: float</span>
 <span class="sd">        value of mass continuity cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dudx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">dvdy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">dwdz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -832,9 +832,9 @@
 <div class="viewcode-block" id="calculate_mass_continuity_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_mass_continuity_gradient</span><span class="p">(</span>
-    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">vrs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">above</span><span class="o">=</span><span class="mf">2.0</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of mass continuity cost function. This is done by</span>
 <span class="sd">    taking the negative gradient of the divergence of the wind field.</span>
 <span class="sd">    All grids must have the same grid specification.</span>
@@ -857,12 +857,12 @@
 <span class="sd">    coeff: float</span>
 <span class="sd">        Constant controlling contribution of mass continuity to cost function</span>
 <span class="sd">    anel: int</span>
-<span class="sd">        = 1 use anelastic approximation, 0=don&#39;t</span>
+<span class="sd">        = 1 use anelastic approximation, 0=don't</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y: float array</span>
 <span class="sd">        value of gradient of mass continuity cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dudx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">dvdy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">dwdz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -879,10 +879,15 @@
     <span class="n">grad_v</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">div</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff</span>
     <span class="n">grad_w</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">div</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff</span>
 
-    <span class="c1"># Impermeability condition</span>
-    <span class="n">grad_w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">upper_bc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># Impermeability conditions</span>
+    <span class="n">grad_w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># surface is impermeable</span>
+    <span class="k">if</span> <span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># is True: # impermeable at the grid top</span>
         <span class="n">grad_w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># impermeable at cloud top</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">z_mask</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="n">above</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="n">n_mask</span> <span class="o">=</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">grad_w</span><span class="p">[</span><span class="n">z_mask</span> <span class="o">&amp;</span> <span class="n">n_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">grad_u</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
@@ -891,7 +896,7 @@
 <div class="viewcode-block" id="calculate_fall_speed">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_fall_speed.html#pydda.cost_functions.calculate_fall_speed">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_fall_speed</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frz</span><span class="o">=</span><span class="mf">4500.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates fall speed based on reflectivity.</span>
 <span class="sd">    Uses methodology of Mike Biggerstaff and Dan Betten</span>
 <span class="sd">    Parameters</span>
@@ -907,13 +912,13 @@
 <span class="sd">    -------</span>
 <span class="sd">    3D float array:</span>
 <span class="sd">        Float array of terminal velocities</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
 
     <span class="n">refl</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="n">refl_field</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="s2">&quot;point_z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">grid</span><span class="p">[</span><span class="s2">"point_z"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">refl</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">rho</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">grid_z</span> <span class="o">/</span> <span class="mf">10000.0</span><span class="p">)</span>
@@ -939,7 +944,7 @@
 <div class="viewcode-block" id="calculate_background_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_cost.html#pydda.cost_functions.calculate_background_cost">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_background_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the background cost function. The background cost function is</span>
 <span class="sd">    simply the sum of the squared differences between the wind field and the</span>
 <span class="sd">    background wind field multiplied by the weighting coefficient.</span>
@@ -963,7 +968,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    cost: float</span>
 <span class="sd">        value of background cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">the_shape</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">the_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -978,7 +983,7 @@
 <div class="viewcode-block" id="calculate_background_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_background_gradient.html#pydda.cost_functions.calculate_background_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_background_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_back</span><span class="p">,</span> <span class="n">v_back</span><span class="p">,</span> <span class="n">Cb</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the background cost function. For each u, v</span>
 <span class="sd">    this is given as 2*coefficent*(analysis wind - background wind).</span>
 <span class="sd">    Parameters</span>
@@ -1001,7 +1006,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    y: float array</span>
 <span class="sd">        value of gradient of background cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">the_shape</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">u_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">the_shape</span><span class="p">)</span>
     <span class="n">v_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">the_shape</span><span class="p">)</span>
@@ -1019,7 +1024,7 @@
 <div class="viewcode-block" id="calculate_vertical_vorticity_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_cost.html#pydda.cost_functions.calculate_vertical_vorticity_cost">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_vertical_vorticity_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the cost function due to deviance from vertical vorticity</span>
 <span class="sd">    equation. For more information of the vertical vorticity cost function,</span>
 <span class="sd">    see Potvin et al. (2012) and Shapiro et al. (2009).</span>
@@ -1056,7 +1061,7 @@
 <span class="sd">    Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity</span>
 <span class="sd">    Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic</span>
 <span class="sd">    Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dvdz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">dudz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">dvdx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1085,7 +1090,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
     <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the cost function due to deviance from vertical</span>
 <span class="sd">    vorticity equation. This is done by taking the functional derivative of</span>
 <span class="sd">    the vertical vorticity cost function.</span>
@@ -1122,7 +1127,7 @@
 <span class="sd">    Shapiro, A., C.K. Potvin, and J. Gao, 2009: Use of a Vertical Vorticity</span>
 <span class="sd">    Equation in Variational Dual-Doppler Wind Analysis. J. Atmos. Oceanic</span>
 <span class="sd">    Technol., 26, 2089–2106, https://doi.org/10.1175/2009JTECHA1256.1</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># First derivatives</span>
     <span class="n">dvdz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1193,7 +1198,7 @@
 <div class="viewcode-block" id="calculate_model_cost">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_cost.html#pydda.cost_functions.calculate_model_cost">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_model_cost</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the cost function for the model constraint.</span>
 <span class="sd">    This is calculated simply as the sum of squares of the differences</span>
 <span class="sd">    between the model wind field and the analysis wind field. Vertical</span>
@@ -1222,7 +1227,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    Jv: float</span>
 <span class="sd">        Value of model cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u_model</span><span class="p">)):</span>
@@ -1237,13 +1242,13 @@
 <div class="viewcode-block" id="calculate_model_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_model_gradient.html#pydda.cost_functions.calculate_model_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_model_gradient</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">u_model</span><span class="p">,</span> <span class="n">v_model</span><span class="p">,</span> <span class="n">w_model</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the cost function for the model constraint.</span>
 <span class="sd">    This is calculated simply as twice the differences</span>
 <span class="sd">    between the model wind field and the analysis wind field for each u, v.</span>
 <span class="sd">    Vertical velocities are not factored into this cost function as there is</span>
 <span class="sd">    typically a high amount of uncertainty in model derived vertical</span>
-<span class="sd">    velocities. Therefore, the gradient for all of the w&#39;s will be 0.</span>
+<span class="sd">    velocities. Therefore, the gradient for all of the w's will be 0.</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    u: Float array</span>
@@ -1266,7 +1271,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    y: float array</span>
 <span class="sd">        value of gradient of background cost function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">the_shape</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">u_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">the_shape</span><span class="p">)</span>
     <span class="n">v_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">the_shape</span><span class="p">)</span>

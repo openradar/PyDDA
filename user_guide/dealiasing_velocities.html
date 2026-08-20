@@ -402,8 +402,8 @@ reading the radar data, consult <a class="reference internal" href="read_radar_d
 </dd>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in the data from both XSAPR radars</span>
-<span class="n">ktlx_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc&quot;</span><span class="p">)</span>
-<span class="n">kict_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc&quot;</span><span class="p">)</span>
+<span class="n">ktlx_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"cfrad.20110520_081431.542_to_20110520_081813.238_KTLX_SUR.nc"</span><span class="p">)</span>
+<span class="n">kict_file</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"cfrad.20110520_081444.871_to_20110520_081914.520_KICT_SUR.nc"</span><span class="p">)</span>
 <span class="n">radar_ktlx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">ktlx_file</span><span class="p">)</span>
 <span class="n">radar_kict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">kict_file</span><span class="p">)</span>
 </pre></div>
@@ -416,7 +416,7 @@ reading the radar data, consult <a class="reference internal" href="read_radar_d
 <span class="c1"># Plot the southwestern radar</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;VEL&quot;</span><span class="p">,</span>
+    <span class="s2">"VEL"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span>
@@ -427,14 +427,14 @@ reading the radar data, consult <a class="reference internal" href="read_radar_d
     <span class="n">max_lon</span><span class="o">=-</span><span class="mi">97</span><span class="p">,</span>
     <span class="n">lat_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mf">37.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
     <span class="n">lon_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;twilight_shifted&#39;</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">'twilight_shifted'</span>
 <span class="p">)</span>
 
 <span class="c1"># Plot the southeastern radar</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">)</span>
 <span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;VEL&quot;</span><span class="p">,</span>
+    <span class="s2">"VEL"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span>
@@ -445,7 +445,7 @@ reading the radar data, consult <a class="reference internal" href="read_radar_d
     <span class="n">max_lon</span><span class="o">=-</span><span class="mi">97</span><span class="p">,</span>
     <span class="n">lat_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mf">37.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
     <span class="n">lon_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;twilight_shifted&#39;</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">'twilight_shifted'</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -467,15 +467,15 @@ surrounding a gate.</p>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate the Velocity Texture and apply the PyART GateFilter Utility</span>
 <span class="n">vel_tex_ktlx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">calculate_velocity_texture</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">,</span>
-                                                       <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;VEL&#39;</span><span class="p">,</span>
+                                                       <span class="n">vel_field</span><span class="o">=</span><span class="s1">'VEL'</span><span class="p">,</span>
                                                        <span class="p">)</span>
 <span class="n">vel_tex_kict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">calculate_velocity_texture</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">,</span>
-                                                       <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;VEL&#39;</span><span class="p">,</span>
+                                                       <span class="n">vel_field</span><span class="o">=</span><span class="s1">'VEL'</span><span class="p">,</span>
                                                        <span class="p">)</span>
 
 <span class="c1">## Add velocity texture to the radar objects</span>
-<span class="n">radar_ktlx</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity_texture&#39;</span><span class="p">,</span> <span class="n">vel_tex_ktlx</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">radar_kict</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity_texture&#39;</span><span class="p">,</span> <span class="n">vel_tex_kict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar_ktlx</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">'velocity_texture'</span><span class="p">,</span> <span class="n">vel_tex_ktlx</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar_kict</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">'velocity_texture'</span><span class="p">,</span> <span class="n">vel_tex_kict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="velocity-texture-displays">
@@ -487,28 +487,28 @@ from artifacts.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Display the calculated velocity texture</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s1">&#39;velocity_texture&#39;</span><span class="p">,</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s1">'velocity_texture'</span><span class="p">,</span>
                      <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                      <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                      <span class="n">vmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-                     <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;twilight_shifted&#39;</span><span class="p">)</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">'twilight_shifted'</span><span class="p">)</span>
                      <span class="p">)</span>
 
 <span class="c1"># Plot a histogram of the velocity textures</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
-<span class="n">hist</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity_texture&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span>
+<span class="n">hist</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">'velocity_texture'</span><span class="p">][</span><span class="s1">'data'</span><span class="p">],</span>
                           <span class="n">bins</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">150</span><span class="p">))</span>
 <span class="n">bins</span> <span class="o">=</span> <span class="p">(</span><span class="n">bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">+</span><span class="n">bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mf">2.0</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span>
          <span class="n">hist</span><span class="p">,</span>
-         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Velocity Texture Frequency&#39;</span>
+         <span class="n">label</span><span class="o">=</span><span class="s1">'Velocity Texture Frequency'</span>
          <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Proposed Velocity Texture Threshold&#39;</span>
+            <span class="n">color</span><span class="o">=</span><span class="s1">'r'</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">'Proposed Velocity Texture Threshold'</span>
             <span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Velocity texture&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Count&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Velocity texture'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Count'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -537,9 +537,9 @@ to filter out these artifacts</p>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply a GateFilter</span>
 <span class="n">gatefilter_ktlx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">)</span>
-<span class="n">gatefilter_ktlx</span><span class="o">.</span><span class="n">exclude_above</span><span class="p">(</span><span class="s1">&#39;velocity_texture&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">gatefilter_ktlx</span><span class="o">.</span><span class="n">exclude_above</span><span class="p">(</span><span class="s1">'velocity_texture'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">gatefilter_kict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">)</span>
-<span class="n">gatefilter_kict</span><span class="o">.</span><span class="n">exclude_above</span><span class="p">(</span><span class="s1">&#39;velocity_texture&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">gatefilter_kict</span><span class="o">.</span><span class="n">exclude_above</span><span class="p">(</span><span class="s1">'velocity_texture'</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -557,21 +557,21 @@ unfolds and merges these pairs of regions until all data are unfolded.</p>
 </dl>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply Region Based DeAlising Utiltiy</span>
 <span class="n">vel_dealias_ktlx</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">,</span>
-                                                    <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;VEL&#39;</span><span class="p">,</span>
+                                                    <span class="n">vel_field</span><span class="o">=</span><span class="s1">'VEL'</span><span class="p">,</span>
                                                     <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                     <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter_ktlx</span>
                                                     <span class="p">)</span>
 
 <span class="c1"># Apply Region Based DeAlising Utiltiy</span>
 <span class="n">vel_dealias_kict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">,</span>
-                                                    <span class="n">vel_field</span><span class="o">=</span><span class="s1">&#39;VEL&#39;</span><span class="p">,</span>
+                                                    <span class="n">vel_field</span><span class="o">=</span><span class="s1">'VEL'</span><span class="p">,</span>
                                                     <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                                     <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter_kict</span>
                                                     <span class="p">)</span>
 
 <span class="c1"># Add our data dictionary to the radar object</span>
-<span class="n">radar_kict</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span> <span class="n">vel_dealias_kict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">radar_ktlx</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span> <span class="n">vel_dealias_ktlx</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar_kict</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">'corrected_velocity'</span><span class="p">,</span> <span class="n">vel_dealias_kict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar_ktlx</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">'corrected_velocity'</span><span class="p">,</span> <span class="n">vel_dealias_ktlx</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="display-corrected-velocity-fields">
@@ -582,7 +582,7 @@ unfolds and merges these pairs of regions until all data are unfolded.</p>
 <span class="c1"># Plot the southwestern radar</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_ktlx</span><span class="p">)</span>
-<span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">,</span>
+<span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s2">"corrected_velocity"</span><span class="p">,</span>
                    <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
                    <span class="n">vmin</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span>
@@ -593,13 +593,13 @@ unfolds and merges these pairs of regions until all data are unfolded.</p>
                    <span class="n">max_lon</span><span class="o">=-</span><span class="mi">97</span><span class="p">,</span>
                    <span class="n">lat_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mf">37.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
                    <span class="n">lon_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
-                   <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;twilight_shifted&#39;</span><span class="p">)</span>
+                   <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">'twilight_shifted'</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="c1"># Plot the southeastern radar</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_kict</span><span class="p">)</span>
-<span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">,</span>
+<span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s2">"corrected_velocity"</span><span class="p">,</span>
                    <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                    <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
                    <span class="n">vmin</span><span class="o">=-</span><span class="mi">35</span><span class="p">,</span>
@@ -610,7 +610,7 @@ unfolds and merges these pairs of regions until all data are unfolded.</p>
                    <span class="n">max_lon</span><span class="o">=-</span><span class="mi">97</span><span class="p">,</span>
                    <span class="n">lat_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mf">37.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
                    <span class="n">lon_lines</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
-                   <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;twilight_shifted&#39;</span><span class="p">)</span>
+                   <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">'twilight_shifted'</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>

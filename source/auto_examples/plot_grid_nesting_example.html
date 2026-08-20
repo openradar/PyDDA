@@ -423,27 +423,27 @@ DataArrays inside each of the root nodes for each level, in this case
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataTree</span>
 
-<a href="https://docs.python.org/3/library/warnings.html#warnings.filterwarnings" title="warnings.filterwarnings" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span></a><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/warnings.html#warnings.filterwarnings" title="warnings.filterwarnings" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span></a><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">We will load pregenerated grids for this case.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">test_coarse0</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;test_coarse0.nc&quot;</span><span class="p">))</span>
-<span class="n">test_coarse1</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;test_coarse1.nc&quot;</span><span class="p">))</span>
-<span class="n">test_fine0</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;test_fine0.nc&quot;</span><span class="p">))</span>
-<span class="n">test_fine1</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">&quot;test_fine1.nc&quot;</span><span class="p">))</span>
+<span class="sd">"""</span>
+<span class="n">test_coarse0</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"test_coarse0.nc"</span><span class="p">))</span>
+<span class="n">test_coarse1</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"test_coarse1.nc"</span><span class="p">))</span>
+<span class="n">test_fine0</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"test_fine0.nc"</span><span class="p">))</span>
+<span class="n">test_fine1</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><span class="n">pydda</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">get_sample_file</span><span class="p">(</span><span class="s2">"test_fine1.nc"</span><span class="p">))</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Initalize with a zero wind field. We have HRRR data already generated for this case inside</span>
 <span class="sd">the example data files to provide a model constraint.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="n">test_coarse0</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">initialization</span><span class="o">.</span><span class="n">make_constant_wind_field</span><span class="p">(</span>
     <span class="n">test_coarse0</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 <span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Specify the retrieval parameters at each level</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span>
     <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
@@ -451,75 +451,75 @@ DataArrays inside each of the root nodes for each level, in this case
     <span class="n">Cy</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
     <span class="n">Cz</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
     <span class="n">Cmod</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
-    <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hrrr&quot;</span><span class="p">],</span>
-    <span class="n">refl_field</span><span class="o">=</span><span class="s2">&quot;DBZ&quot;</span><span class="p">,</span>
+    <span class="n">model_fields</span><span class="o">=</span><span class="p">[</span><span class="s2">"hrrr"</span><span class="p">],</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">"DBZ"</span><span class="p">,</span>
     <span class="n">wind_tol</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
     <span class="n">max_iterations</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
-    <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;scipy&quot;</span><span class="p">,</span>
+    <span class="n">engine</span><span class="o">=</span><span class="s2">"scipy"</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Enforce equal times for each grid. This is required for the DataTree structure since time is an</span>
 <span class="sd">inherited dimension.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="n">test_coarse1</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_coarse0</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
-<span class="n">test_fine0</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_coarse0</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
-<span class="n">test_fine1</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_coarse1</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
+<span class="n">test_coarse1</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_coarse0</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span>
+<span class="n">test_fine0</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_coarse0</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span>
+<span class="n">test_fine1</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_coarse1</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span>
+<span class="sd">"""</span>
 
 <span class="sd">Provide the overlying grid structure as specified above.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tree_dict</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;/nest_0/radar_ktlx&quot;</span><span class="p">:</span> <span class="n">test_coarse0</span><span class="p">,</span>
-    <span class="s2">&quot;/nest_0/radar_kict&quot;</span><span class="p">:</span> <span class="n">test_coarse1</span><span class="p">,</span>
-    <span class="s2">&quot;/nest_1/radar_ktlx&quot;</span><span class="p">:</span> <span class="n">test_fine0</span><span class="p">,</span>
-    <span class="s2">&quot;/nest_1/radar_kict&quot;</span><span class="p">:</span> <span class="n">test_fine1</span><span class="p">,</span>
+    <span class="s2">"/nest_0/radar_ktlx"</span><span class="p">:</span> <span class="n">test_coarse0</span><span class="p">,</span>
+    <span class="s2">"/nest_0/radar_kict"</span><span class="p">:</span> <span class="n">test_coarse1</span><span class="p">,</span>
+    <span class="s2">"/nest_1/radar_ktlx"</span><span class="p">:</span> <span class="n">test_fine0</span><span class="p">,</span>
+    <span class="s2">"/nest_1/radar_kict"</span><span class="p">:</span> <span class="n">test_fine1</span><span class="p">,</span>
 <span class="p">}</span>
 
 <span class="n">tree</span> <span class="o">=</span> <span class="n">DataTree</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tree_dict</span></a><span class="p">)</span>
-<span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/nest_0/&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
-<span class="n">tree</span><span class="p">[</span><span class="s2">&quot;/nest_1/&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
+<span class="n">tree</span><span class="p">[</span><span class="s2">"/nest_0/"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
+<span class="n">tree</span><span class="p">[</span><span class="s2">"/nest_1/"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">kwargs_dict</span></a>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Perform the retrieval</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="n">grid_tree</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field_nested</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="sd">Plot the coarse grid output and finer grid output</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span>
-    <span class="n">grid_tree</span><span class="p">[</span><span class="s2">&quot;nest_0&quot;</span><span class="p">],</span>
+    <span class="n">grid_tree</span><span class="p">[</span><span class="s2">"nest_0"</span><span class="p">],</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"ChaseSpectral"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
     <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
-    <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;DBZ&quot;</span><span class="p">,</span>
+    <span class="n">background_field</span><span class="o">=</span><span class="s2">"DBZ"</span><span class="p">,</span>
     <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
     <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
     <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
-    <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s2">&quot;bottom_right&quot;</span><span class="p">,</span>
+    <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s2">"bottom_right"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">pydda</span><span class="o">.</span><span class="n">vis</span><span class="o">.</span><span class="n">plot_horiz_xsection_quiver</span><span class="p">(</span>
-    <span class="n">grid_tree</span><span class="p">[</span><span class="s2">&quot;nest_1&quot;</span><span class="p">],</span>
+    <span class="n">grid_tree</span><span class="p">[</span><span class="s2">"nest_1"</span><span class="p">],</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
     <span class="n">level</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"ChaseSpectral"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
     <span class="n">quiverkey_len</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
-    <span class="n">background_field</span><span class="o">=</span><span class="s2">&quot;DBZ&quot;</span><span class="p">,</span>
+    <span class="n">background_field</span><span class="o">=</span><span class="s2">"DBZ"</span><span class="p">,</span>
     <span class="n">bg_grid_no</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">w_vel_contours</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
     <span class="n">quiver_spacing_x_km</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
     <span class="n">quiver_spacing_y_km</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
-    <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s2">&quot;bottom_right&quot;</span><span class="p">,</span>
+    <span class="n">quiverkey_loc</span><span class="o">=</span><span class="s2">"bottom_right"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -544,7 +544,7 @@ Detecting Jax...
 Jax/JaxOpt are not installed on your system, unable to use Jax engine.
 Detecting TensorFlow...
 Unable to load both TensorFlow and tensorflow-probability. TensorFlow engine disabled.
-No module named &#39;tensorflow&#39;
+No module named 'tensorflow'
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>False
@@ -571,13 +571,13 @@ The max of w_init is 0.0
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">68</span>
-<span class="g g-Whitespace">     </span><span class="mi">64</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">64</span><span class="w"> </span><span class="sd">"""</span>
 <span class="g g-Whitespace">     </span><span class="mi">65</span><span class="sd"> Perform the retrieval</span>
-<span class="g g-Whitespace">     </span><span class="mi">66</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span><span class="sd"> """</span>
 <span class="g g-Whitespace">     </span><span class="mi">67</span> 
 <span class="ne">---&gt; </span><span class="mi">68</span> <span class="n">grid_tree</span> <span class="o">=</span> <span class="n">pydda</span><span class="o">.</span><span class="n">retrieval</span><span class="o">.</span><span class="n">get_dd_wind_field_nested</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">69</span> 
-<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="s2">"""</span>
 <span class="g g-Whitespace">     </span><span class="mi">71</span><span class="s2"> Plot the coarse grid output and finer grid output</span>
 
 <span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/nesting.py:56,</span> in <span class="ni">get_dd_wind_field_nested</span><span class="nt">(grid_tree, **kwargs)</span>
@@ -587,52 +587,52 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">57</span><span class="s2">     output_parameters = output_parameters.__dict__</span>
 <span class="g g-Whitespace">     </span><span class="mi">58</span><span class="s2">     if in_parent is True:</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1534,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1527</span><span class="s2">     w_init = new_grids[0][&quot;w&quot;].values.squeeze()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1529</span><span class="s2"> if (</span>
-<span class="g g-Whitespace">   </span><span class="mi">1530</span><span class="s2">     engine.lower() == &quot;scipy&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1531</span><span class="s2">     or engine.lower() == &quot;jax&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1532</span><span class="s2">     or engine.lower() == &quot;auglag&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1533</span><span class="s2"> ):</span>
-<span class="ne">-&gt; </span><span class="mi">1534</span><span class="s2">     return _get_dd_wind_field_scipy(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1535</span><span class="s2">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1536</span><span class="s2">     )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1537</span><span class="s2"> elif engine.lower() == &quot;tensorflow&quot;:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1538</span><span class="s2">     return _get_dd_wind_field_tensorflow(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1539</span><span class="s2">         new_grids, u_init, v_init, w_init, **kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1540</span><span class="s2">     )</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1539,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1532</span><span class="s2">     w_init = new_grids[0]["w"].values.squeeze()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1534</span><span class="s2"> if (</span>
+<span class="g g-Whitespace">   </span><span class="mi">1535</span><span class="s2">     engine.lower() == "scipy"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1536</span><span class="s2">     or engine.lower() == "jax"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1537</span><span class="s2">     or engine.lower() == "auglag"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1538</span><span class="s2"> ):</span>
+<span class="ne">-&gt; </span><span class="mi">1539</span><span class="s2">     return _get_dd_wind_field_scipy(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1540</span><span class="s2">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1541</span><span class="s2">     )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1542</span><span class="s2"> elif engine.lower() == "tensorflow":</span>
+<span class="g g-Whitespace">   </span><span class="mi">1543</span><span class="s2">     return _get_dd_wind_field_tensorflow(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1544</span><span class="s2">         new_grids, u_init, v_init, w_init, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1545</span><span class="s2">     )</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:644,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">642</span><span class="s2"> parameters.print_out = False</span>
-<span class="g g-Whitespace">    </span><span class="mi">643</span><span class="s2"> if engine.lower() == &quot;scipy&quot;:</span>
-<span class="ne">--&gt; </span><span class="mi">644</span><span class="s2">     winds = fmin_l_bfgs_b(</span>
-<span class="g g-Whitespace">    </span><span class="mi">645</span><span class="s2">         J_function,</span>
-<span class="g g-Whitespace">    </span><span class="mi">646</span><span class="s2">         winds,</span>
-<span class="g g-Whitespace">    </span><span class="mi">647</span><span class="s2">         args=(parameters,),</span>
-<span class="g g-Whitespace">    </span><span class="mi">648</span><span class="s2">         maxiter=max_iterations,</span>
-<span class="g g-Whitespace">    </span><span class="mi">649</span><span class="s2">         pgtol=tolerance,</span>
-<span class="g g-Whitespace">    </span><span class="mi">650</span><span class="s2">         bounds=bounds,</span>
-<span class="g g-Whitespace">    </span><span class="mi">651</span><span class="s2">         fprime=grad_J,</span>
-<span class="g g-Whitespace">    </span><span class="mi">652</span><span class="s2">         callback=_vert_velocity_callback,</span>
-<span class="g g-Whitespace">    </span><span class="mi">653</span><span class="s2">     )</span>
-<span class="g g-Whitespace">    </span><span class="mi">654</span><span class="s2"> else:</span>
-<span class="g g-Whitespace">    </span><span class="mi">656</span><span class="s2">     def loss_and_gradient(x):</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:649,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, above, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
+<span class="g g-Whitespace">    </span><span class="mi">647</span><span class="s2"> parameters.print_out = False</span>
+<span class="g g-Whitespace">    </span><span class="mi">648</span><span class="s2"> if engine.lower() == "scipy":</span>
+<span class="ne">--&gt; </span><span class="mi">649</span><span class="s2">     winds = fmin_l_bfgs_b(</span>
+<span class="g g-Whitespace">    </span><span class="mi">650</span><span class="s2">         J_function,</span>
+<span class="g g-Whitespace">    </span><span class="mi">651</span><span class="s2">         winds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">652</span><span class="s2">         args=(parameters,),</span>
+<span class="g g-Whitespace">    </span><span class="mi">653</span><span class="s2">         maxiter=max_iterations,</span>
+<span class="g g-Whitespace">    </span><span class="mi">654</span><span class="s2">         pgtol=tolerance,</span>
+<span class="g g-Whitespace">    </span><span class="mi">655</span><span class="s2">         bounds=bounds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">656</span><span class="s2">         fprime=grad_J,</span>
+<span class="g g-Whitespace">    </span><span class="mi">657</span><span class="s2">         callback=_vert_velocity_callback,</span>
+<span class="g g-Whitespace">    </span><span class="mi">658</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">659</span><span class="s2"> else:</span>
+<span class="g g-Whitespace">    </span><span class="mi">661</span><span class="s2">     def loss_and_gradient(x):</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:259,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, maxfun, maxiter, callback, maxls)</span>
 <span class="g g-Whitespace">    </span><span class="mi">249</span><span class="s2"> callback = _wrap_callback(callback)</span>
-<span class="g g-Whitespace">    </span><span class="mi">250</span><span class="s2"> opts = {&#39;maxcor&#39;: m,</span>
-<span class="g g-Whitespace">    </span><span class="mi">251</span><span class="s2">         &#39;ftol&#39;: factr * np.finfo(float).eps,</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span><span class="s2">         &#39;gtol&#39;: pgtol,</span>
-<span class="s2">   (...)    256         &#39;callback&#39;: callback,</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span><span class="s2">         &#39;maxls&#39;: maxls}</span>
+<span class="g g-Whitespace">    </span><span class="mi">250</span><span class="s2"> opts = {'maxcor': m,</span>
+<span class="g g-Whitespace">    </span><span class="mi">251</span><span class="s2">         'ftol': factr * np.finfo(float).eps,</span>
+<span class="g g-Whitespace">    </span><span class="mi">252</span><span class="s2">         'gtol': pgtol,</span>
+<span class="s2">   (...)    256         'callback': callback,</span>
+<span class="g g-Whitespace">    </span><span class="mi">257</span><span class="s2">         'maxls': maxls}</span>
 <span class="ne">--&gt; </span><span class="mi">259</span><span class="s2"> res = _minimize_lbfgsb(fun, x0, args=args, jac=jac, bounds=bounds,</span>
 <span class="g g-Whitespace">    </span><span class="mi">260</span><span class="s2">                        **opts)</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span><span class="s2"> d = {&#39;grad&#39;: res[&#39;jac&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span><span class="s2">      &#39;task&#39;: res[&#39;message&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span><span class="s2">      &#39;funcalls&#39;: res[&#39;nfev&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">264</span><span class="s2">      &#39;nit&#39;: res[&#39;nit&#39;],</span>
-<span class="g g-Whitespace">    </span><span class="mi">265</span><span class="s2">      &#39;warnflag&#39;: res[&#39;status&#39;]}</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span><span class="s2"> f = res[&#39;fun&#39;]</span>
+<span class="g g-Whitespace">    </span><span class="mi">261</span><span class="s2"> d = {'grad': res['jac'],</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span><span class="s2">      'task': res['message'],</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span><span class="s2">      'funcalls': res['nfev'],</span>
+<span class="g g-Whitespace">    </span><span class="mi">264</span><span class="s2">      'nit': res['nit'],</span>
+<span class="g g-Whitespace">    </span><span class="mi">265</span><span class="s2">      'warnflag': res['status']}</span>
+<span class="g g-Whitespace">    </span><span class="mi">266</span><span class="s2"> f = res['fun']</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:420,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
 <span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
@@ -647,58 +647,19 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">422</span><span class="s2">     # new iteration</span>
 <span class="g g-Whitespace">    </span><span class="mi">423</span><span class="s2">     n_iterations += 1</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:412,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> if not np.array_equal(x, self.x):</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
-<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
-<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
-<span class="g g-Whitespace">    </span><span class="mi">414</span><span class="s2"> return self.f, self.g</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:410,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span><span class="s2"> def fun_and_grad(self, x):</span>
+<span class="ne">--&gt; </span><span class="mi">410</span><span class="s2">     if not np.array_equal(x, self.x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">         self._update_x(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2">     self._update_fun()</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:362,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="s2"> def _update_fun(self):</span>
-<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="s2">     if not self.f_updated:</span>
-<span class="ne">--&gt; </span><span class="mi">362</span><span class="s2">         fx = self._wrapped_fun(self.x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">363</span><span class="s2">         self._nfev += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span><span class="s2">         if fx &lt; self._lowest_f:</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:545,</span> in <span class="ni">_ScalarFunctionWrapper.__call__</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">542</span><span class="s2"> def __call__(self, x):</span>
-<span class="g g-Whitespace">    </span><span class="mi">543</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
-<span class="g g-Whitespace">    </span><span class="mi">544</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
-<span class="ne">--&gt; </span><span class="mi">545</span><span class="s2">     fx = self.f(np.copy(x), *self.args)</span>
-<span class="g g-Whitespace">    </span><span class="mi">546</span><span class="s2">     self.nfev += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">548</span><span class="s2">     # Make sure the function returns a true scalar</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:207,</span> in <span class="ni">J_function</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span><span class="s2">     Jmass = 0</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span><span class="s2"> if parameters.Cx &gt; 0 or parameters.Cy &gt; 0 or parameters.Cz &gt; 0:</span>
-<span class="ne">--&gt; </span><span class="mi">207</span><span class="s2">     Jsmooth = _cost_functions_numpy.calculate_smoothness_cost(</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span><span class="s2">         winds[0],</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span><span class="s2">         winds[1],</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span><span class="s2">         winds[2],</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span><span class="s2">         parameters.dx,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span><span class="s2">         parameters.dy,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span><span class="s2">         parameters.dz,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2">         Cx=parameters.Cx,</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2">         Cy=parameters.Cy,</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span><span class="s2">         Cz=parameters.Cz,</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2">     )</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span><span class="s2"> else:</span>
-<span class="g g-Whitespace">    </span><span class="mi">219</span><span class="s2">     Jsmooth = 0</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:216,</span> in <span class="ni">calculate_smoothness_cost</span><span class="nt">(u, v, w, dx, dy, dz, Cx, Cy, Cz)</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span><span class="s2"> dvdy = np.gradient(v, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">215</span><span class="s2"> dvdz = np.gradient(v, dz, axis=0)</span>
-<span class="ne">--&gt; </span><span class="mi">216</span><span class="s2"> dwdx = np.gradient(w, dx, axis=2)</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span><span class="s2"> dwdy = np.gradient(w, dy, axis=1)</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span><span class="s2"> dwdz = np.gradient(w, dz, axis=0)</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:1324,</span> in <span class="ni">gradient</span><span class="nt">(f, axis, edge_order, *varargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1321</span><span class="s2"> slice4[axis] = slice(2, None)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1323</span><span class="s2"> if uniform_spacing:</span>
-<span class="ne">-&gt; </span><span class="mi">1324</span><span class="s2">     out[tuple(slice1)] = (f[tuple(slice4)] - f[tuple(slice2)]) / (2. * ax_dx)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1325</span><span class="s2"> else:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1326</span><span class="s2">     dx1 = ax_dx[0:-1]</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/_core/numeric.py:2537,</span> in <span class="ni">array_equal</span><span class="nt">(a1, a2, equal_nan)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2535</span><span class="s2">     return False</span>
+<span class="g g-Whitespace">   </span><span class="mi">2536</span><span class="s2"> if not equal_nan:</span>
+<span class="ne">-&gt; </span><span class="mi">2537</span><span class="s2">     return builtins.bool((asanyarray(a1 == a2)).all())</span>
+<span class="g g-Whitespace">   </span><span class="mi">2539</span><span class="s2"> if a1 is a2:</span>
+<span class="g g-Whitespace">   </span><span class="mi">2540</span><span class="s2">     # nan will compare equal so an array will compare equal to itself.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2541</span><span class="s2">     return True</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
