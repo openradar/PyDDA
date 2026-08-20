@@ -549,7 +549,6 @@ def grad_J(winds, parameters):
                             parameters.dx,
                             parameters.dy,
                             parameters.dz,
-                            parameters.vrs,
                             parameters.Cm,
                             1,
                             parameters.upper_bc,
