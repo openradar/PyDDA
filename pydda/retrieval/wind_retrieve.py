@@ -219,6 +219,7 @@ class DDParameters(object):
         self.above = 2.0
         self.upper_bc_mask = None
         self.roi = 1000.0
+        self.above = 2.0
         self.frz = 4500.0
         self.Nfeval = 0.0
         self.engine = "scipy"
@@ -275,6 +276,7 @@ def _get_dd_wind_field_scipy(
     model_fields=None,
     output_cost_functions=True,
     roi=1000.0,
+    above=2.0,
     wind_tol=0.1,
     tolerance=1e-8,
     const_boundary_cond=False,

@@ -571,6 +571,7 @@ def calculate_mass_continuity_gradient(
     # Impermeability condition
     grad_w[0, :, :] = 0
     grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
+
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 
