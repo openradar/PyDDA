@@ -276,7 +276,6 @@ def _get_dd_wind_field_scipy(
     model_fields=None,
     output_cost_functions=True,
     roi=1000.0,
-    above=2.0,
     wind_tol=0.1,
     tolerance=1e-8,
     const_boundary_cond=False,
