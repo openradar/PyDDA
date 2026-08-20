@@ -453,7 +453,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
 
 
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+    u, v, w, z, dx, dy, dz, vrs=0, coeff=1500.0, anel=1, upper_bc=True, above=2.0
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -500,10 +500,15 @@ def calculate_mass_continuity_gradient(
     grad_v = -np.gradient(div, dy, axis=1) * coeff
     grad_w = -np.gradient(div, dz, axis=0) * coeff
 
-    # Impermeability condition
-    grad_w[0, :, :] = 0
-    if upper_bc is True:
+    # Impermeability conditions
+    grad_w[0, :, :] = 0  # surface is impermeable
+    if upper_bc == 1:  # is True: # impermeable at the grid top
         grad_w[-1, :, :] = 0
+    if upper_bc == 2:  # impermeable at cloud top
+        N = np.sum(np.array(vrs) > -1000, axis=0)
+        z_mask = z > above * 1000
+        n_mask = N == 0
+        grad_w[z_mask & n_mask] = 0
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 

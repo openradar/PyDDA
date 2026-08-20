@@ -159,9 +159,12 @@ class DDParameters(object):
         Cartesian coordinates.
     roi: float
         The radius of influence of each point observation in m.
-    upper_bc: bool
-        True to enforce w=0 at top of domain (impermeability condition),
-        False to not enforce impermeability at top of domain
+    above: float
+        The altitude below which the cloud top impermeability would not apply (minimum impermeable height)
+    upper_bc: int
+        0 to not enforce impermeability at top of domain
+        1 to enforce w=0 at top of domain (impermeability condition),
+        2 to enforce w=0 at cloud top (or "above" if higher) (impermeability condition),
     """
 
     def __init__(self):
@@ -203,6 +206,7 @@ class DDParameters(object):
         self.upper_bc = True
         self.lower_bc = True
         self.roi = 1000.0
+        self.above = 2.0
         self.frz = 4500.0
         self.Nfeval = 0.0
         self.engine = "scipy"
@@ -254,10 +258,11 @@ def _get_dd_wind_field_scipy(
     leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
-    upper_bc=True,
+    upper_bc=1,
     model_fields=None,
     output_cost_functions=True,
     roi=1000.0,
+    above=2.0,
     wind_tol=0.1,
     tolerance=1e-8,
     const_boundary_cond=False,
