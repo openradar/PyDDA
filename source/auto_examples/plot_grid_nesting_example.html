@@ -552,10 +552,10 @@ No module named 'tensorflow'
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 0 and 1
 Calculating weights for radars 1 and 0
-Calculating weights for models...
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Starting solver 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
+Starting solver 
 rmsVR = 16.213679825765688
 Total points: 412470
 The max of w_init is 0.0
@@ -634,17 +634,70 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">265</span><span class="s2">      'warnflag': res['status']}</span>
 <span class="g g-Whitespace">    </span><span class="mi">266</span><span class="s2"> f = res['fun']</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:412,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> g = g.astype(np.float64)</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2"> # x, f, g, wa, iwa, task, csave, lsave, isave, dsave = </span><span class="se">\</span>
-<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:420,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
 <span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
 <span class="g g-Whitespace">    </span><span class="mi">415</span><span class="s2"> if task[0] == 3:</span>
 <span class="g g-Whitespace">    </span><span class="mi">416</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">417</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">418</span><span class="s2">     # until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">419</span><span class="s2">     # Overwrite f and g:</span>
-<span class="g g-Whitespace">    </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
+<span class="ne">--&gt; </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">421</span><span class="s2"> elif task[0] == 1:</span>
+<span class="g g-Whitespace">    </span><span class="mi">422</span><span class="s2">     # new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">423</span><span class="s2">     n_iterations += 1</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:413,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">     self._update_x(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> self._update_fun()</span>
+<span class="ne">--&gt; </span><span class="mi">413</span><span class="s2"> self._update_grad()</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span><span class="s2"> return self.f, self.g</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:375,</span> in <span class="ni">ScalarFunction._update_grad</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">373</span><span class="s2"> if self._orig_grad in FD_METHODS:</span>
+<span class="g g-Whitespace">    </span><span class="mi">374</span><span class="s2">     self._update_fun()</span>
+<span class="ne">--&gt; </span><span class="mi">375</span><span class="s2"> self.g = self._wrapped_grad(self.x, f0=self.f)</span>
+<span class="g g-Whitespace">    </span><span class="mi">376</span><span class="s2"> self.g_updated = True</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:39,</span> in <span class="ni">_ScalarGradWrapper.__call__</span><span class="nt">(self, x, f0, **kwds)</span>
+<span class="g g-Whitespace">     </span><span class="mi">35</span><span class="s2"> def __call__(self, x, f0=None, **kwds):</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span><span class="s2">     # Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">     </span><span class="mi">37</span><span class="s2">     # The user of this class might want `x` to remain unchanged.</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span><span class="s2">     if callable(self.grad):</span>
+<span class="ne">---&gt; </span><span class="mi">39</span><span class="s2">         g = np.atleast_1d(self.grad(np.copy(x), *self.args))</span>
+<span class="g g-Whitespace">     </span><span class="mi">40</span><span class="s2">     elif self.grad in FD_METHODS:</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span><span class="s2">         g, dct = approx_derivative(</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span><span class="s2">             self.fun,</span>
+<span class="g g-Whitespace">     </span><span class="mi">43</span><span class="s2">             x,</span>
+<span class="g g-Whitespace">     </span><span class="mi">44</span><span class="s2">             f0=f0,</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span><span class="s2">             **self.finite_diff_options,</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span><span class="s2">         )</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:522,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">520</span><span class="s2"> if parameters.parallel:</span>
+<span class="g g-Whitespace">    </span><span class="mi">521</span><span class="s2">     futures = []</span>
+<span class="ne">--&gt; </span><span class="mi">522</span><span class="s2">     with ThreadPoolExecutor() as pool:</span>
+<span class="g g-Whitespace">    </span><span class="mi">523</span><span class="s2">         futures.append(</span>
+<span class="g g-Whitespace">    </span><span class="mi">524</span><span class="s2">             pool.submit(</span>
+<span class="g g-Whitespace">    </span><span class="mi">525</span><span class="s2">                 _cost_functions_numpy.calculate_grad_radial_vel,</span>
+<span class="s2">   (...)    539             )</span>
+<span class="g g-Whitespace">    </span><span class="mi">540</span><span class="s2">         )</span>
+<span class="g g-Whitespace">    </span><span class="mi">541</span><span class="s2">         if parameters.Cm &gt; 0:</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/_base.py:673,</span> in <span class="ni">Executor.__exit__</span><span class="nt">(self, exc_type, exc_val, exc_tb)</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span><span class="s2"> def __exit__(self, exc_type, exc_val, exc_tb):</span>
+<span class="ne">--&gt; </span><span class="mi">673</span><span class="s2">     self.shutdown(wait=True)</span>
+<span class="g g-Whitespace">    </span><span class="mi">674</span><span class="s2">     return False</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/concurrent/futures/thread.py:273,</span> in <span class="ni">ThreadPoolExecutor.shutdown</span><span class="nt">(self, wait, cancel_futures)</span>
+<span class="g g-Whitespace">    </span><span class="mi">271</span><span class="s2"> if wait:</span>
+<span class="g g-Whitespace">    </span><span class="mi">272</span><span class="s2">     for t in self._threads:</span>
+<span class="ne">--&gt; </span><span class="mi">273</span><span class="s2">         t.join()</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/threading.py:1133,</span> in <span class="ni">Thread.join</span><span class="nt">(self, timeout)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span><span class="s2"> if timeout is not None:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span><span class="s2">     timeout = max(timeout, 0)</span>
+<span class="ne">-&gt; </span><span class="mi">1133</span><span class="s2"> self._os_thread_handle.join(timeout)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
