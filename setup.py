@@ -41,7 +41,7 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 LICENSE = "BSD"
 PLATFORMS = "Linux, Windows, OSX"
 MAJOR = 2
-MINOR = 5
+MINOR = 6
 MICRO = 0
 
 
