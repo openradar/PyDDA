@@ -363,6 +363,54 @@
 <span class="n">laplace_filter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="calculate_echo_top_mask">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_echo_top_mask.html#pydda.cost_functions.calculate_echo_top_mask">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_echo_top_mask</span><span class="p">(</span><span class="n">vrs</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">above</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Finds the grid points that lie above the echo top, i.e. the points above</span>
+<span class="sd">    *above* km at which none of the radars report a valid radial velocity.</span>
+
+<span class="sd">    Holding w fixed at these points imposes an impermeability condition at the</span>
+<span class="sd">    echo top rather than at the (arbitrary) top of the analysis domain. See</span>
+<span class="sd">    Thompson et al. (2026), https://doi.org/10.5194/egusphere-2026-4631.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vrs: list of float arrays</span>
+<span class="sd">        List of radial velocities from each radar. Points without a valid</span>
+<span class="sd">        observation are expected to be filled with a large negative number</span>
+<span class="sd">        (-9999.0 in PyDDA's retrievals).</span>
+<span class="sd">    z: float array</span>
+<span class="sd">        Heights of the grid points in m. This must broadcast against the</span>
+<span class="sd">        members of *vrs*, i.e. the 3D *point_z* field of the Grid.</span>
+<span class="sd">    above: float</span>
+<span class="sd">        Minimum height of the impermeable layer in km. The condition is never</span>
+<span class="sd">        applied below this level, so that clear air near the surface does not</span>
+<span class="sd">        pin w to its first guess.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mask: 3D bool array</span>
+<span class="sd">        True wherever the impermeability condition is to be applied.</span>
+<span class="sd">    """</span>
+    <span class="n">n_obs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">vrs</span><span class="p">])</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">above</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">n_obs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply_upper_bc</span><span class="p">(</span><span class="n">grad_w</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Zeroes the vertical velocity gradient where the upper impermeability</span>
+<span class="sd">    condition applies. *upper_bc* is compared with == rather than *is* so that</span>
+<span class="sd">    both the integer modes and the legacy booleans are honored.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">grad_w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">upper_bc_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">grad_w</span><span class="p">[</span><span class="n">upper_bc_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">grad_w</span>
+
+
 <div class="viewcode-block" id="calculate_radial_vel_cost_function">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_radial_vel_cost_function.html#pydda.cost_functions.calculate_radial_vel_cost_function">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_radial_vel_cost_function</span><span class="p">(</span>
@@ -451,7 +499,8 @@
     <span class="n">weights</span><span class="p">,</span>
     <span class="n">rmsVr</span><span class="p">,</span>
     <span class="n">coeff</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">upper_bc_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
@@ -479,6 +528,14 @@
 <span class="sd">        Background velocity field name</span>
 <span class="sd">    weights: n_radars x_bins x y_bins float array</span>
 <span class="sd">        Data weights for each pair of radars</span>
+<span class="sd">    upper_bc: int</span>
+<span class="sd">        Upper boundary (impermeability) condition. 0 disables it, 1 enforces</span>
+<span class="sd">        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo</span>
+<span class="sd">        top as given by *upper_bc_mask*. The legacy booleans True and False</span>
+<span class="sd">        are equivalent to 1 and 0.</span>
+<span class="sd">    upper_bc_mask: 3D bool array or None</span>
+<span class="sd">        The grid points at which w is held fixed when *upper_bc* is 2, as</span>
+<span class="sd">        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y: 1-D float array</span>
@@ -537,8 +594,7 @@
 
     <span class="c1"># Impermeability condition</span>
     <span class="n">p_z1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">upper_bc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">p_z1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">p_z1</span> <span class="o">=</span> <span class="n">_apply_upper_bc</span><span class="p">(</span><span class="n">p_z1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">p_x1</span><span class="p">,</span> <span class="n">p_y1</span><span class="p">,</span> <span class="n">p_z1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
@@ -615,7 +671,7 @@
 <div class="viewcode-block" id="calculate_smoothness_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_smoothness_gradient.html#pydda.cost_functions.calculate_smoothness_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_smoothness_gradient</span><span class="p">(</span>
-    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Cx</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cy</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">Cz</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the smoothness cost function</span>
@@ -636,6 +692,14 @@
 <span class="sd">        Constant controlling smoothness in y-direction</span>
 <span class="sd">    Cz: float</span>
 <span class="sd">        Constant controlling smoothness in z-direction</span>
+<span class="sd">    upper_bc: int</span>
+<span class="sd">        Upper boundary (impermeability) condition. 0 disables it, 1 enforces</span>
+<span class="sd">        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo</span>
+<span class="sd">        top as given by *upper_bc_mask*. The legacy booleans True and False</span>
+<span class="sd">        are equivalent to 1 and 0.</span>
+<span class="sd">    upper_bc_mask: 3D bool array or None</span>
+<span class="sd">        The grid points at which w is held fixed when *upper_bc* is 2, as</span>
+<span class="sd">        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y: float array</span>
@@ -662,8 +726,7 @@
 
     <span class="c1"># Impermeability condition</span>
     <span class="n">grad_w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">upper_bc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">grad_w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">grad_w</span> <span class="o">=</span> <span class="n">_apply_upper_bc</span><span class="p">(</span><span class="n">grad_w</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="p">)</span>
 
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">grad_u</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -832,7 +895,7 @@
 <div class="viewcode-block" id="calculate_mass_continuity_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_mass_continuity_gradient.html#pydda.cost_functions.calculate_mass_continuity_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_mass_continuity_gradient</span><span class="p">(</span>
-    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">vrs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">above</span><span class="o">=</span><span class="mf">2.0</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1500.0</span><span class="p">,</span> <span class="n">anel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of mass continuity cost function. This is done by</span>
@@ -858,6 +921,14 @@
 <span class="sd">        Constant controlling contribution of mass continuity to cost function</span>
 <span class="sd">    anel: int</span>
 <span class="sd">        = 1 use anelastic approximation, 0=don't</span>
+<span class="sd">    upper_bc: int</span>
+<span class="sd">        Upper boundary (impermeability) condition. 0 disables it, 1 enforces</span>
+<span class="sd">        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo</span>
+<span class="sd">        top as given by *upper_bc_mask*. The legacy booleans True and False</span>
+<span class="sd">        are equivalent to 1 and 0.</span>
+<span class="sd">    upper_bc_mask: 3D bool array or None</span>
+<span class="sd">        The grid points at which w is held fixed when *upper_bc* is 2, as</span>
+<span class="sd">        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    y: float array</span>
@@ -879,15 +950,10 @@
     <span class="n">grad_v</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">div</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff</span>
     <span class="n">grad_w</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">div</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff</span>
 
-    <span class="c1"># Impermeability conditions</span>
-    <span class="n">grad_w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># surface is impermeable</span>
-    <span class="k">if</span> <span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># is True: # impermeable at the grid top</span>
-        <span class="n">grad_w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># impermeable at cloud top</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1000</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">z_mask</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="n">above</span> <span class="o">*</span> <span class="mi">1000</span>
-        <span class="n">n_mask</span> <span class="o">=</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">0</span>
-        <span class="n">grad_w</span><span class="p">[</span><span class="n">z_mask</span> <span class="o">&amp;</span> <span class="n">n_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Impermeability condition</span>
+    <span class="n">grad_w</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">grad_w</span> <span class="o">=</span> <span class="n">_apply_upper_bc</span><span class="p">(</span><span class="n">grad_w</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="p">)</span>
+
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">grad_u</span><span class="p">,</span> <span class="n">grad_v</span><span class="p">,</span> <span class="n">grad_w</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 
@@ -1088,7 +1154,7 @@
 <div class="viewcode-block" id="calculate_vertical_vorticity_gradient">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.cost_functions.calculate_vertical_vorticity_gradient.html#pydda.cost_functions.calculate_vertical_vorticity_gradient">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_vertical_vorticity_gradient</span><span class="p">(</span>
-    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">Ut</span><span class="p">,</span> <span class="n">Vt</span><span class="p">,</span> <span class="n">coeff</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">upper_bc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculates the gradient of the cost function due to deviance from vertical</span>
@@ -1114,6 +1180,14 @@
 <span class="sd">        V component of storm motion</span>
 <span class="sd">    coeff: float</span>
 <span class="sd">        Weighting coefficient</span>
+<span class="sd">    upper_bc: int</span>
+<span class="sd">        Upper boundary (impermeability) condition. 0 disables it, 1 enforces</span>
+<span class="sd">        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo</span>
+<span class="sd">        top as given by *upper_bc_mask*. The legacy booleans True and False</span>
+<span class="sd">        are equivalent to 1 and 0.</span>
+<span class="sd">    upper_bc_mask: 3D bool array or None</span>
+<span class="sd">        The grid points at which w is held fixed when *upper_bc* is 2, as</span>
+<span class="sd">        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.</span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Jv: 1D float array</span>
@@ -1188,8 +1262,7 @@
 
     <span class="c1"># Impermeability condition</span>
     <span class="n">w_grad</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">upper_bc</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">w_grad</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">w_grad</span> <span class="o">=</span> <span class="n">_apply_upper_bc</span><span class="p">(</span><span class="n">w_grad</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">u_grad</span><span class="p">,</span> <span class="n">v_grad</span><span class="p">,</span> <span class="n">w_grad</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span></div>
 

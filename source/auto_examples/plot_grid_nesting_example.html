@@ -552,10 +552,10 @@ No module named 'tensorflow'
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 0 and 1
 Calculating weights for radars 1 and 0
+Calculating weights for models...
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
-Starting solver 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Starting solver 
 rmsVR = 16.213679825765688
 Total points: 412470
 The max of w_init is 0.0
@@ -587,36 +587,36 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">57</span><span class="s2">     output_parameters = output_parameters.__dict__</span>
 <span class="g g-Whitespace">     </span><span class="mi">58</span><span class="s2">     if in_parent is True:</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1539,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1532</span><span class="s2">     w_init = new_grids[0]["w"].values.squeeze()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1534</span><span class="s2"> if (</span>
-<span class="g g-Whitespace">   </span><span class="mi">1535</span><span class="s2">     engine.lower() == "scipy"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1536</span><span class="s2">     or engine.lower() == "jax"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1537</span><span class="s2">     or engine.lower() == "auglag"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1538</span><span class="s2"> ):</span>
-<span class="ne">-&gt; </span><span class="mi">1539</span><span class="s2">     return _get_dd_wind_field_scipy(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1540</span><span class="s2">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1541</span><span class="s2">     )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1542</span><span class="s2"> elif engine.lower() == "tensorflow":</span>
-<span class="g g-Whitespace">   </span><span class="mi">1543</span><span class="s2">     return _get_dd_wind_field_tensorflow(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1544</span><span class="s2">         new_grids, u_init, v_init, w_init, **kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1545</span><span class="s2">     )</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1587,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1580</span><span class="s2">     w_init = new_grids[0]["w"].values.squeeze()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1582</span><span class="s2"> if (</span>
+<span class="g g-Whitespace">   </span><span class="mi">1583</span><span class="s2">     engine.lower() == "scipy"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1584</span><span class="s2">     or engine.lower() == "jax"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1585</span><span class="s2">     or engine.lower() == "auglag"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1586</span><span class="s2"> ):</span>
+<span class="ne">-&gt; </span><span class="mi">1587</span><span class="s2">     return _get_dd_wind_field_scipy(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1588</span><span class="s2">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1589</span><span class="s2">     )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1590</span><span class="s2"> elif engine.lower() == "tensorflow":</span>
+<span class="g g-Whitespace">   </span><span class="mi">1591</span><span class="s2">     return _get_dd_wind_field_tensorflow(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1592</span><span class="s2">         new_grids, u_init, v_init, w_init, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1593</span><span class="s2">     )</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:649,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, above, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">647</span><span class="s2"> parameters.print_out = False</span>
-<span class="g g-Whitespace">    </span><span class="mi">648</span><span class="s2"> if engine.lower() == "scipy":</span>
-<span class="ne">--&gt; </span><span class="mi">649</span><span class="s2">     winds = fmin_l_bfgs_b(</span>
-<span class="g g-Whitespace">    </span><span class="mi">650</span><span class="s2">         J_function,</span>
-<span class="g g-Whitespace">    </span><span class="mi">651</span><span class="s2">         winds,</span>
-<span class="g g-Whitespace">    </span><span class="mi">652</span><span class="s2">         args=(parameters,),</span>
-<span class="g g-Whitespace">    </span><span class="mi">653</span><span class="s2">         maxiter=max_iterations,</span>
-<span class="g g-Whitespace">    </span><span class="mi">654</span><span class="s2">         pgtol=tolerance,</span>
-<span class="g g-Whitespace">    </span><span class="mi">655</span><span class="s2">         bounds=bounds,</span>
-<span class="g g-Whitespace">    </span><span class="mi">656</span><span class="s2">         fprime=grad_J,</span>
-<span class="g g-Whitespace">    </span><span class="mi">657</span><span class="s2">         callback=_vert_velocity_callback,</span>
-<span class="g g-Whitespace">    </span><span class="mi">658</span><span class="s2">     )</span>
-<span class="g g-Whitespace">    </span><span class="mi">659</span><span class="s2"> else:</span>
-<span class="g g-Whitespace">    </span><span class="mi">661</span><span class="s2">     def loss_and_gradient(x):</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:667,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, above, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
+<span class="g g-Whitespace">    </span><span class="mi">665</span><span class="s2"> parameters.print_out = False</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span><span class="s2"> if engine.lower() == "scipy":</span>
+<span class="ne">--&gt; </span><span class="mi">667</span><span class="s2">     winds = fmin_l_bfgs_b(</span>
+<span class="g g-Whitespace">    </span><span class="mi">668</span><span class="s2">         J_function,</span>
+<span class="g g-Whitespace">    </span><span class="mi">669</span><span class="s2">         winds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">670</span><span class="s2">         args=(parameters,),</span>
+<span class="g g-Whitespace">    </span><span class="mi">671</span><span class="s2">         maxiter=max_iterations,</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span><span class="s2">         pgtol=tolerance,</span>
+<span class="g g-Whitespace">    </span><span class="mi">673</span><span class="s2">         bounds=bounds,</span>
+<span class="g g-Whitespace">    </span><span class="mi">674</span><span class="s2">         fprime=grad_J,</span>
+<span class="g g-Whitespace">    </span><span class="mi">675</span><span class="s2">         callback=_vert_velocity_callback,</span>
+<span class="g g-Whitespace">    </span><span class="mi">676</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">677</span><span class="s2"> else:</span>
+<span class="g g-Whitespace">    </span><span class="mi">679</span><span class="s2">     def loss_and_gradient(x):</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:259,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, maxfun, maxiter, callback, maxls)</span>
 <span class="g g-Whitespace">    </span><span class="mi">249</span><span class="s2"> callback = _wrap_callback(callback)</span>
@@ -634,32 +634,17 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">265</span><span class="s2">      'warnflag': res['status']}</span>
 <span class="g g-Whitespace">    </span><span class="mi">266</span><span class="s2"> f = res['fun']</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:420,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:412,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="s2"> g = g.astype(np.float64)</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2"> # x, f, g, wa, iwa, task, csave, lsave, isave, dsave = </span><span class="se">\</span>
+<span class="ne">--&gt; </span><span class="mi">412</span><span class="s2"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
 <span class="g g-Whitespace">    </span><span class="mi">413</span><span class="s2">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
 <span class="g g-Whitespace">    </span><span class="mi">415</span><span class="s2"> if task[0] == 3:</span>
 <span class="g g-Whitespace">    </span><span class="mi">416</span><span class="s2">     # The minimization routine wants f and g at the current x.</span>
 <span class="g g-Whitespace">    </span><span class="mi">417</span><span class="s2">     # Note that interruptions due to maxfun are postponed</span>
 <span class="g g-Whitespace">    </span><span class="mi">418</span><span class="s2">     # until the completion of the current minimization iteration.</span>
 <span class="g g-Whitespace">    </span><span class="mi">419</span><span class="s2">     # Overwrite f and g:</span>
-<span class="ne">--&gt; </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">421</span><span class="s2"> elif task[0] == 1:</span>
-<span class="g g-Whitespace">    </span><span class="mi">422</span><span class="s2">     # new iteration</span>
-<span class="g g-Whitespace">    </span><span class="mi">423</span><span class="s2">     n_iterations += 1</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:410,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">409</span><span class="s2"> def fun_and_grad(self, x):</span>
-<span class="ne">--&gt; </span><span class="mi">410</span><span class="s2">     if not np.array_equal(x, self.x):</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="s2">         self._update_x(x)</span>
-<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="s2">     self._update_fun()</span>
-
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/_core/numeric.py:2537,</span> in <span class="ni">array_equal</span><span class="nt">(a1, a2, equal_nan)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2535</span><span class="s2">     return False</span>
-<span class="g g-Whitespace">   </span><span class="mi">2536</span><span class="s2"> if not equal_nan:</span>
-<span class="ne">-&gt; </span><span class="mi">2537</span><span class="s2">     return builtins.bool((asanyarray(a1 == a2)).all())</span>
-<span class="g g-Whitespace">   </span><span class="mi">2539</span><span class="s2"> if a1 is a2:</span>
-<span class="g g-Whitespace">   </span><span class="mi">2540</span><span class="s2">     # nan will compare equal so an array will compare equal to itself.</span>
-<span class="g g-Whitespace">   </span><span class="mi">2541</span><span class="s2">     return True</span>
+<span class="g g-Whitespace">    </span><span class="mi">420</span><span class="s2">     f, g = func_and_grad(x)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>

@@ -723,6 +723,7 @@
             <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
             <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
             <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -737,6 +738,7 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
                 <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
                 <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                 <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
             <span class="p">)</span>
 
@@ -752,6 +754,7 @@
                 <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
                 <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
                 <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -776,6 +779,7 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
                 <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
                 <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                 <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
@@ -789,6 +793,8 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">v_model</span><span class="p">,</span>
                 <span class="n">parameters</span><span class="o">.</span><span class="n">w_model</span><span class="p">,</span>
                 <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -801,7 +807,6 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
                 <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
                 <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
-                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">const_boundary_cond</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
@@ -890,6 +895,7 @@
                         <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
                         <span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
                         <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                        <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                         <span class="kc">True</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
@@ -904,11 +910,10 @@
                             <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
-                            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
                             <span class="mi">1</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-                            <span class="n">above</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">above</span><span class="p">,</span>
+                            <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -925,6 +930,7 @@
                             <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                            <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -954,6 +960,7 @@
                             <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
                             <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                            <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -998,6 +1005,7 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
                 <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
                 <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1011,6 +1019,7 @@
                     <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
                     <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
                     <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                    <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1025,6 +1034,7 @@
                     <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
                     <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
                     <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                    <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1050,6 +1060,7 @@
                     <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
                     <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
                     <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                    <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1074,7 +1085,6 @@
                     <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span><span class="p">,</span>
                     <span class="n">Cp</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cpoint</span><span class="p">,</span>
                     <span class="n">roi</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">roi</span><span class="p">,</span>
-                    <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
                 <span class="p">)</span>
 
         <span class="c1"># Let's see if we need to enforce strong boundary conditions</span>
@@ -1257,6 +1267,7 @@
         <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+        <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1270,6 +1281,7 @@
             <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
             <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span><span class="p">,</span>
             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1284,6 +1296,7 @@
             <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
             <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1309,6 +1322,7 @@
             <span class="n">parameters</span><span class="o">.</span><span class="n">Vt</span><span class="p">,</span>
             <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cv</span><span class="p">,</span>
             <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cmod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>

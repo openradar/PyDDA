@@ -477,21 +477,19 @@ No module named 'tensorflow'
 Calculating weights for radars 0 and 2
 Calculating weights for radars 0 and 3
 Calculating weights for radars 1 and 0
+Calculating weights for radars 1 and 2
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 1 and 2
-Calculating weights for radars 1 and 3
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 1 and 3
 Calculating weights for radars 2 and 0
 Calculating weights for radars 2 and 1
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 2 and 3
+Calculating weights for radars 2 and 3
 Calculating weights for radars 3 and 0
-Calculating weights for radars 3 and 1
-Calculating weights for radars 3 and 2
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for models...
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Calculating weights for radars 3 and 1
+Calculating weights for radars 3 and 2
+Calculating weights for models...
 Starting solver 
 rmsVR = 7.359750110231316
 Total points: 399749
@@ -505,11 +503,11 @@ The max of w_init is 0.0
       0|4080.4252|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11190868002185009
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11190916903769695
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-     10|  92.4335|  17.0218|   0.0001|   0.0000|   0.0000|   0.0000|   0.0000|  48.1866
+     10|  92.4335|  17.0200|   0.0001|   0.0000|   0.0000|   0.0000|   0.0000|  48.1870
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w:  nan
@@ -527,36 +525,36 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">19</span>     <span class="n">Co</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
 <span class="g g-Whitespace">     </span><span class="mi">20</span>     <span class="n">Cm</span><span class="o">=</span><span class="mf">256.0</span><span class="p">,</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1539,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1532</span>     <span class="n">w_init</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_grids</span></a><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"w"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1534</span> <span class="k">if</span> <span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1535</span>     <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"scipy"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1536</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"jax"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1537</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"auglag"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1538</span> <span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1539</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_scipy</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1540</span>         <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_grids</span></a><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1541</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1542</span> <span class="k">elif</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"tensorflow"</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1543</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_tensorflow</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1544</span>         <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_grids</span></a><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1545</span>     <span class="p">)</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1587,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1580</span>     <span class="n">w_init</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_grids</span></a><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"w"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1582</span> <span class="k">if</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1583</span>     <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"scipy"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1584</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"jax"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1585</span>     <span class="ow">or</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"auglag"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1586</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1587</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_scipy</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1588</span>         <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_grids</span></a><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1589</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1590</span> <span class="k">elif</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"tensorflow"</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1591</span>     <span class="k">return</span> <span class="n">_get_dd_wind_field_tensorflow</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1592</span>         <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_grids</span></a><span class="p">,</span> <span class="n">u_init</span><span class="p">,</span> <span class="n">v_init</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1593</span>     <span class="p">)</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:649,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, model_fields, output_cost_functions, roi, above, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">647</span> <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="g g-Whitespace">    </span><span class="mi">648</span> <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"scipy"</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">649</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">650</span>         <span class="n">J_function</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">651</span>         <span class="n">winds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">652</span>         <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
-<span class="g g-Whitespace">    </span><span class="mi">653</span>         <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">654</span>         <span class="n">pgtol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">655</span>         <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">656</span>         <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">657</span>         <span class="n">callback</span><span class="o">=</span><span class="n">_vert_velocity_callback</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">658</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">659</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">661</span>     <span class="k">def</span><span class="w"> </span><span class="nf">loss_and_gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:667,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, above, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
+<span class="g g-Whitespace">    </span><span class="mi">665</span> <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span> <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"scipy"</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">667</span>     <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">668</span>         <span class="n">J_function</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">669</span>         <span class="n">winds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">670</span>         <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
+<span class="g g-Whitespace">    </span><span class="mi">671</span>         <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">672</span>         <span class="n">pgtol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">673</span>         <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">674</span>         <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">675</span>         <span class="n">callback</span><span class="o">=</span><span class="n">_vert_velocity_callback</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">676</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">677</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">679</span>     <span class="k">def</span><span class="w"> </span><span class="nf">loss_and_gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 
 <span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:259,</span> in <span class="ni">fmin_l_bfgs_b</span><span class="nt">(func, x0, fprime, args, approx_grad, bounds, m, factr, pgtol, epsilon, maxfun, maxiter, callback, maxls)</span>
 <span class="g g-Whitespace">    </span><span class="mi">249</span> <span class="n">callback</span> <span class="o">=</span> <span class="n">_wrap_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
@@ -574,17 +572,16 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">265</span>      <span class="s1">'warnflag'</span><span class="p">:</span> <span class="n">res</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]}</span>
 <span class="g g-Whitespace">    </span><span class="mi">266</span> <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">'fun'</span><span class="p">]</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:412,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">410</span> <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">411</span> <span class="c1"># x, f, g, wa, iwa, task, csave, lsave, isave, dsave = \</span>
-<span class="ne">--&gt; </span><span class="mi">412</span> <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">413</span>                <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span> <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">,</span> <span class="n">ln_task</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">415</span> <span class="k">if</span> <span class="n">task</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">416</span>     <span class="c1"># The minimization routine wants f and g at the current x.</span>
-<span class="g g-Whitespace">    </span><span class="mi">417</span>     <span class="c1"># Note that interruptions due to maxfun are postponed</span>
-<span class="g g-Whitespace">    </span><span class="mi">418</span>     <span class="c1"># until the completion of the current minimization iteration.</span>
-<span class="g g-Whitespace">    </span><span class="mi">419</span>     <span class="c1"># Overwrite f and g:</span>
-<span class="g g-Whitespace">    </span><span class="mi">420</span>     <span class="n">f</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">func_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:410,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">404</span> <span class="n">n_iterations</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">    </span><span class="mi">406</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">407</span>     <span class="c1"># g may become float32 if a user provides a function that calculates</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span>     <span class="c1"># the Jacobian in float32 (see gh-18730). The underlying code expects</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span>     <span class="c1"># float64, so upcast it</span>
+<span class="ne">--&gt; </span><span class="mi">410</span>     <span class="n">g</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span>     <span class="c1"># x, f, g, wa, iwa, task, csave, lsave, isave, dsave = \</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span>     <span class="n">_lbfgsb</span><span class="o">.</span><span class="n">setulb</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">low_bnd</span><span class="p">,</span> <span class="n">upper_bnd</span><span class="p">,</span> <span class="n">nbd</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">factr</span><span class="p">,</span> <span class="n">pgtol</span><span class="p">,</span> <span class="n">wa</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span>                    <span class="n">iwa</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">lsave</span><span class="p">,</span> <span class="n">isave</span><span class="p">,</span> <span class="n">dsave</span><span class="p">,</span> <span class="n">maxls</span><span class="p">,</span> <span class="n">ln_task</span><span class="p">)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
