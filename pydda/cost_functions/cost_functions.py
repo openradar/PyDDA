@@ -362,6 +362,7 @@ def grad_J(winds, parameters):
             parameters.rmsVr,
             coeff=parameters.Co,
             upper_bc=parameters.upper_bc,
+            upper_bc_mask=parameters.upper_bc_mask,
             lower_bc=parameters.lower_bc,
         )
 
@@ -376,6 +377,7 @@ def grad_J(winds, parameters):
                 parameters.dz,
                 coeff=parameters.Cm,
                 upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
                 lower_bc=parameters.lower_bc,
             )
 
@@ -391,6 +393,7 @@ def grad_J(winds, parameters):
                 Cy=parameters.Cy,
                 Cz=parameters.Cz,
                 upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
             )
 
         if parameters.Cb > 0:
@@ -415,6 +418,7 @@ def grad_J(winds, parameters):
                 parameters.Vt,
                 coeff=parameters.Cv,
                 upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
                 lower_bc=parameters.lower_bc,
             ).numpy()
 
@@ -428,6 +432,8 @@ def grad_J(winds, parameters):
                 parameters.v_model,
                 parameters.w_model,
                 coeff=parameters.Cmod,
+                upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
             )
 
         if parameters.Cpoint > 0:
@@ -440,7 +446,6 @@ def grad_J(winds, parameters):
                 parameters.point_list,
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
-                upper_bc=parameters.upper_bc,
             )
         if parameters.const_boundary_cond is True:
             grad = tf.reshape(
@@ -529,6 +534,7 @@ def grad_J(winds, parameters):
                         parameters.rmsVr,
                         parameters.Co,
                         parameters.upper_bc,
+                        parameters.upper_bc_mask,
                         True,
                     )
                 )
@@ -543,11 +549,10 @@ def grad_J(winds, parameters):
                             parameters.dx,
                             parameters.dy,
                             parameters.dz,
-                            parameters.vrs,
                             parameters.Cm,
                             1,
                             parameters.upper_bc,
-                            above=parameters.above,
+                            parameters.upper_bc_mask,
                         )
                     )
                 if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
@@ -564,6 +569,7 @@ def grad_J(winds, parameters):
                             parameters.Cy,
                             parameters.Cz,
                             parameters.upper_bc,
+                            parameters.upper_bc_mask,
                         )
                     )
                 if parameters.Cb > 0:
@@ -593,6 +599,7 @@ def grad_J(winds, parameters):
                             parameters.Vt,
                             parameters.Cv,
                             parameters.upper_bc,
+                            parameters.upper_bc_mask,
                         )
                     )
                 if parameters.Cmod > 0:
@@ -637,6 +644,7 @@ def grad_J(winds, parameters):
                 parameters.rmsVr,
                 coeff=parameters.Co,
                 upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
             )
 
             if parameters.Cm > 0:
@@ -650,6 +658,7 @@ def grad_J(winds, parameters):
                     parameters.dz,
                     coeff=parameters.Cm,
                     upper_bc=parameters.upper_bc,
+                    upper_bc_mask=parameters.upper_bc_mask,
                 )
 
             if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
@@ -664,6 +673,7 @@ def grad_J(winds, parameters):
                     Cy=parameters.Cy,
                     Cz=parameters.Cz,
                     upper_bc=parameters.upper_bc,
+                    upper_bc_mask=parameters.upper_bc_mask,
                 )
 
             if parameters.Cb > 0:
@@ -689,6 +699,7 @@ def grad_J(winds, parameters):
                     parameters.Vt,
                     coeff=parameters.Cv,
                     upper_bc=parameters.upper_bc,
+                    upper_bc_mask=parameters.upper_bc_mask,
                 )
 
             if parameters.Cmod > 0:
@@ -713,7 +724,6 @@ def grad_J(winds, parameters):
                     parameters.point_list,
                     Cp=parameters.Cpoint,
                     roi=parameters.roi,
-                    upper_bc=parameters.upper_bc,
                 )
 
         # Let's see if we need to enforce strong boundary conditions
@@ -895,6 +905,7 @@ def grad_jax(winds, parameters):
         parameters.rmsVr,
         coeff=parameters.Co,
         upper_bc=parameters.upper_bc,
+        upper_bc_mask=parameters.upper_bc_mask,
     )
 
     if parameters.Cm > 0:
@@ -908,6 +919,7 @@ def grad_jax(winds, parameters):
             parameters.dz,
             coeff=parameters.Cm,
             upper_bc=parameters.upper_bc,
+            upper_bc_mask=parameters.upper_bc_mask,
         )
 
     if parameters.Cx > 0 or parameters.Cy > 0 or parameters.Cz > 0:
@@ -922,6 +934,7 @@ def grad_jax(winds, parameters):
             Cy=parameters.Cy,
             Cz=parameters.Cz,
             upper_bc=parameters.upper_bc,
+            upper_bc_mask=parameters.upper_bc_mask,
         )
 
     if parameters.Cb > 0:
@@ -947,6 +960,7 @@ def grad_jax(winds, parameters):
             parameters.Vt,
             coeff=parameters.Cv,
             upper_bc=parameters.upper_bc,
+            upper_bc_mask=parameters.upper_bc_mask,
         ).numpy()
 
     if parameters.Cmod > 0:

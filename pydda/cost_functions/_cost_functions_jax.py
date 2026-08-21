@@ -10,6 +10,19 @@ except ImportError:
     JAX_AVAILABLE = False
 
 
+def _apply_upper_bc(grad_w, upper_bc, upper_bc_mask=None):
+    """
+    Zeroes the vertical velocity gradient where the upper impermeability
+    condition applies. *upper_bc* is compared with == rather than *is* so that
+    both the integer modes and the legacy booleans are honored.
+    """
+    if upper_bc == 1:
+        grad_w = grad_w.at[-1, :, :].set(0)
+    elif upper_bc == 2 and upper_bc_mask is not None:
+        grad_w = jnp.where(upper_bc_mask, 0.0, grad_w)
+    return grad_w
+
+
 def calculate_radial_vel_cost_function(
     vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
 ):
@@ -78,7 +91,18 @@ def calculate_radial_vel_cost_function(
 
 
 def calculate_grad_radial_vel(
-    vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff=1.0, upper_bc=True
+    vrs,
+    els,
+    azs,
+    u,
+    v,
+    w,
+    wts,
+    weights,
+    rmsVr,
+    coeff=1.0,
+    upper_bc=1,
+    upper_bc_mask=None,
 ):
     """
     Calculates the gradient of the cost function due to difference of wind
@@ -107,6 +131,15 @@ def calculate_grad_radial_vel(
         Background velocity field name
     weights: n_radars x_bins x y_bins float array
         Data weights for each pair of radars
+
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
 
     Returns
     -------
@@ -137,8 +170,7 @@ def calculate_grad_radial_vel(
 
     # Impermeability condition
     p_z1 = p_z1.at[0, :, :].set(0)
-    if upper_bc is True:
-        p_z1 = p_z1.at[-1, :, :].set(0)
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
     y = jnp.stack((p_x1, p_y1, p_z1), axis=0)
     return y.flatten()
 
@@ -218,7 +250,7 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
 
 
 def calculate_smoothness_gradient(
-    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=True
+    u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of the smoothness cost function
@@ -248,6 +280,15 @@ def calculate_smoothness_gradient(
     Cz: float
         Constant controlling smoothness in z-direction
 
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
+
     Returns
     -------
     y: float array
@@ -260,8 +301,7 @@ def calculate_smoothness_gradient(
 
     # Impermeability condition
     grad_w = grad_w.at[0, :, :].set(0)
-    if upper_bc is True:
-        grad_w = grad_w.at[-1, :, :].set(0)
+    grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
     y = jnp.stack([grad_u, grad_v, grad_w], axis=0)
 
     return y.flatten()
@@ -426,7 +466,7 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
 
 
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=True
+    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -455,6 +495,15 @@ def calculate_mass_continuity_gradient(
     anel: int
         = 1 use anelastic approximation, 0=don't
 
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
+
     Returns
     -------
     y: float array
@@ -472,8 +521,7 @@ def calculate_mass_continuity_gradient(
 
     # Impermeability condition
     grad_w = grad_w.at[0, :, :].set(0)
-    if upper_bc is True:
-        grad_w = grad_w.at[-1, :, :].set(0)
+    grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
     y = jnp.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
 
@@ -622,7 +670,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
 
 
 def calculate_vertical_vorticity_gradient(
-    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=True
+    u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5, upper_bc=1, upper_bc_mask=None
 ):
     """
     Calculates the gradient of the cost function due to deviance from vertical
@@ -650,6 +698,15 @@ def calculate_vertical_vorticity_gradient(
     coeff: float
         Weighting coefficient
 
+    upper_bc: int
+        Upper boundary (impermeability) condition. 0 disables it, 1 enforces
+        w = 0 at the top of the domain, and 2 enforces w = 0 above the echo
+        top as given by *upper_bc_mask*. The legacy booleans True and False
+        are equivalent to 1 and 0.
+    upper_bc_mask: 3D bool array or None
+        The grid points at which w is held fixed when *upper_bc* is 2, as
+        returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
+
     Returns
     -------
     Jv: 1D float array
@@ -675,9 +732,8 @@ def calculate_vertical_vorticity_gradient(
     )
     u_grad, v_grad, w_grad, _, _, _, _, _, _ = fun_vjp(1.0)
     # Impermeability condition
-    w_grad.at[0, :, :].set(0)
-    if upper_bc is True:
-        w_grad.at[-1, :, :].set(0)
+    w_grad = w_grad.at[0, :, :].set(0)
+    w_grad = _apply_upper_bc(w_grad, upper_bc, upper_bc_mask)
     y = jnp.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()
 
