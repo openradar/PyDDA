@@ -34,6 +34,3 @@ from .model_data import add_hrrr_constraint_to_grid
 from .model_data import make_constraint_from_era5
 from .model_data import download_needed_era_data
 from .station_data import get_iem_obs
-from .vad_data import make_constraint_from_vvad
-from .vad_data import vvad_retrieval
-from .vad_data import vvad_horizontal_wind
