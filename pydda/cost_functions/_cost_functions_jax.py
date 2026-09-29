@@ -414,7 +414,7 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     return gradJ * Cp
 
 
-def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
+def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, fluid=None):
     """
     Calculates the mass continuity cost function by taking the divergence
     of the wind field.
@@ -442,6 +442,11 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         Constant controlling contribution of mass continuity to cost function
     anel: int
         = 1 use anelastic approximation, 0=don't
+    fluid: 3D bool array or None
+        Mask of grid points that lie above the terrain surface, as returned by
+        :func:`pydda.terrain.terrain_ghost_cells`. Points below the terrain do
+        not contribute to the divergence penalty. Set to None to apply the
+        constraint everywhere, which is the behavior without terrain.
 
     Returns
     -------
@@ -462,11 +467,27 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         anel_term = w / rho * drho_dz
     else:
         anel_term = jnp.zeros(w.shape)
-    return coeff * jnp.sum(jnp.square(dudx + dvdy + dwdz + anel_term)) / 2.0
+
+    div2 = jnp.square(dudx + dvdy + dwdz + anel_term)
+    if fluid is not None:
+        div2 = fluid * div2
+    return coeff * jnp.sum(div2) / 2.0
 
 
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=1, upper_bc_mask=None
+    u,
+    v,
+    w,
+    z,
+    dx,
+    dy,
+    dz,
+    coeff=1500.0,
+    anel=1,
+    upper_bc=1,
+    upper_bc_mask=None,
+    lower_bc=1,
+    fluid=None,
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -515,15 +536,96 @@ def calculate_mass_continuity_gradient(
     else:
         z_in = z
     primals, fun_vjp = jax.vjp(
-        calculate_mass_continuity, u, v, w, z_in, dx, dy, dz, coeff, anel
+        calculate_mass_continuity, u, v, w, z_in, dx, dy, dz, coeff, anel, fluid
     )
-    grad_u, grad_v, grad_w, _, _, _, _, _, _ = fun_vjp(1.0)
+    grad_u, grad_v, grad_w, _, _, _, _, _, _, _ = fun_vjp(1.0)
 
     # Impermeability condition
-    grad_w = grad_w.at[0, :, :].set(0)
+    if lower_bc == 1:
+        grad_w = grad_w.at[0, :, :].set(0)
     grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
     y = jnp.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
+
+
+def calculate_terrain_cost(u, v, w, terrain, coeff=1.0):
+    """
+    Calculates the cost function enforcing no-penetration through terrain.
+
+    This is the penalty form of the ghost-cell immersed boundary condition
+    built by :func:`pydda.terrain.terrain_ghost_cells`. It replaces the flat
+    impermeability condition ``w = 0`` at the bottom of the domain with
+    no-penetration through the actual terrain surface, so that the retrieved
+    flow rises over terrain rather than through it.
+
+    Solid cells that are not ghost cells carry no boundary information and are
+    damped towards zero by the same coefficient, so that they do not wander
+    during the optimization.
+
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    terrain: dict
+        Terrain geometry as returned by
+        :func:`pydda.terrain.terrain_ghost_cells`.
+    coeff: float
+        Constant controlling contribution of the terrain condition to the cost
+        function.
+
+    Returns
+    -------
+    J: float
+        value of the terrain cost function
+    """
+    U = jnp.stack([u.ravel(), v.ravel(), w.ravel()], axis=1)
+    u_ghost = U[terrain["ghost_flat"]]
+    u_image = jnp.einsum("gsc,gs->gc", U[terrain["stencil_flat"]], terrain["stencil_w"])
+    c = u_ghost - jnp.einsum("gij,gj->gi", terrain["M"], u_image)
+
+    J = jnp.sum(jnp.square(c))
+    solid_free = terrain["solid_free_flat"]
+    if len(solid_free) > 0:
+        J = J + jnp.sum(jnp.square(U[solid_free]))
+    return coeff * J / 2.0
+
+
+def calculate_terrain_gradient(u, v, w, terrain, coeff=1.0):
+    """
+    Calculates the gradient of the terrain cost function.
+
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    terrain: dict
+        Terrain geometry as returned by
+        :func:`pydda.terrain.terrain_ghost_cells`.
+    coeff: float
+        Constant controlling contribution of the terrain condition to the cost
+        function.
+
+    Returns
+    -------
+    y: float array
+        value of gradient of the terrain cost function
+    """
+    primals, fun_vjp = jax.vjp(
+        lambda uu, vv, ww: calculate_terrain_cost(uu, vv, ww, terrain, coeff),
+        u,
+        v,
+        w,
+    )
+    grad_u, grad_v, grad_w = fun_vjp(1.0)
+    return jnp.stack([grad_u, grad_v, grad_w], axis=0).flatten()
 
 
 def calculate_background_cost(u, v, w, weights, u_back, v_back, Cb=0.01):
@@ -818,5 +920,95 @@ def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=
         calculate_model_cost, u, v, w, weights, u_model, v_model, w_model, coeff
     )
     u_grad, v_grad, w_grad, _, _, _, _, _ = fun_vjp(1.0)
+    y = jnp.stack([u_grad, v_grad, w_grad], axis=0)
+    return y.flatten().copy()
+
+
+def calculate_vad_cost(u, v, vad_weights, u_vad, v_vad, coeff=1.0):
+    """
+    Calculates the cost function for the VVAD constraint of Protat et al.
+    (2024), the sixth term of their Eq. (19),
+
+    .. math::
+
+        i_{vad} W_{vad} \\sum (U - U_{vad})^2 + (V - V_{vad})^2
+
+    Vertical velocities do not enter this cost function; the VVAD supplies
+    horizontal wind components only.
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    vad_weights: 3D array
+        Float array showing how much each point from the VVAD weighs into the
+        constraint. This carries the :math:`i_{vad}` switch of Eq. (19), i.e.
+        it is zero wherever more than one radar observes the point.
+    u_vad: 3D array
+        Float array with u component of wind field from the VVAD
+    v_vad: 3D array
+        Float array with v component of wind field from the VVAD
+    coeff: float
+        Weighting coefficient
+
+    Returns
+    -------
+    Jvad: float
+        Value of the VVAD cost function
+
+    References
+    ----------
+    Protat, A., V. Louf, and J. P. Brook, 2024: SWIRL: The First Australian
+    Operational Radar-Based 3D Wind Analysis System. *J. Atmos. Oceanic
+    Technol.*, **41**, 891-910, https://doi.org/10.1175/JTECH-D-23-0155.1.
+    """
+    return coeff * jnp.sum(
+        (jnp.square(u - u_vad) + jnp.square(v - v_vad)) * vad_weights
+    )
+
+
+def calculate_vad_gradient(
+    u, v, vad_weights, u_vad, v_vad, coeff=1.0, upper_bc=1, upper_bc_mask=None
+):
+    """
+    Calculates the gradient of the VVAD cost function. The gradient with
+    respect to w is zero everywhere, since the VVAD constrains the horizontal
+    components only.
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    vad_weights: 3D array
+        Float array showing how much each point from the VVAD weighs into the
+        constraint.
+    u_vad: 3D array
+        Float array with u component of wind field from the VVAD
+    v_vad: 3D array
+        Float array with v component of wind field from the VVAD
+    coeff: float
+        Weighting coefficient
+    upper_bc: int
+        Set to 1 to impose w = 0 at the top of the domain, 2 to impose it
+        above the echo top, and 0 for no upper boundary condition.
+    upper_bc_mask: 3D bool array or None
+        The echo top mask used when *upper_bc* is 2.
+
+    Returns
+    -------
+    y: 1D float array
+        Value of the gradient of the VVAD cost function
+    """
+    primals, fun_vjp = jax.vjp(
+        calculate_vad_cost, u, v, vad_weights, u_vad, v_vad, coeff
+    )
+    u_grad, v_grad, _, _, _, _ = fun_vjp(1.0)
+    w_grad = jnp.zeros(u.shape)
+    w_grad = _apply_upper_bc(w_grad, upper_bc, upper_bc_mask)
+
     y = jnp.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten().copy()

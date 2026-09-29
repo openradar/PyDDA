@@ -23,6 +23,9 @@ simply add (name) into the model_fields option of
      make_constraint_from_era5
      download_needed_era_data
      get_iem_obs
+     make_constraint_from_vvad
+     vvad_retrieval
+     vvad_horizontal_wind
 
 """
 
