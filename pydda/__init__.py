@@ -11,7 +11,6 @@ from . import initialization
 from . import tests
 from . import constraints
 from . import io
-from . import terrain
 
 
 __version__ = "2.5.0"
