@@ -268,6 +268,47 @@ def test_calculate_smoothness_cost():
     assert cost > 0
 
 
+def test_calculate_smoothness_gradient_matches_cost():
+    """The NumPy smoothness gradient must differentiate its objective."""
+    rng = np.random.default_rng(4)
+    shape = (5, 6, 7)
+    winds = rng.normal(size=(3,) + shape)
+    spacing = (1.3, 2.1, 0.7)
+    coeffs = (0.2, 0.7, 1.1)
+
+    def cost(x):
+        return pydda.cost_functions.calculate_smoothness_cost(
+            x[0], x[1], x[2], *spacing, *coeffs
+        )
+
+    gradient = pydda.cost_functions.calculate_smoothness_gradient(
+        *winds, *spacing, *coeffs, upper_bc=0
+    ).reshape(winds.shape)
+    direction = rng.normal(size=winds.shape)
+    direction[2, 0, :, :] = 0.0  # w is fixed at the lower boundary
+    epsilon = 1e-6
+    finite_difference = (cost(winds + epsilon * direction) - cost(
+        winds - epsilon * direction
+    )) / (2 * epsilon)
+    np.testing.assert_allclose(
+        np.sum(gradient * direction), finite_difference, rtol=2e-5, atol=2e-5
+    )
+
+
+def test_numpy_point_cost_accepts_roi():
+    """The SciPy objective passes roi through to the NumPy point cost."""
+    shape = (3, 3, 3)
+    zeros = np.zeros(shape)
+    point = [{"u": 1.0, "v": -1.0, "x": 0.0, "y": 0.0, "z": 0.0}]
+    cost = pydda.cost_functions.calculate_point_cost(
+        zeros, zeros, zeros, zeros, zeros, point, roi=100.0
+    )
+    assert np.isfinite(cost)
+    assert pydda.cost_functions.calculate_point_cost(
+        zeros, zeros, zeros, zeros, zeros, point, roi=0.1
+    ) > 0
+
+
 @pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
 def test_calculate_smoothness_cost_jax():
     """The Laplacian of a constant field is zero"""

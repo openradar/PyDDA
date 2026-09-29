@@ -300,6 +300,26 @@ def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     return np.sum(np.nan_to_num(x_term + y_term + z_term))
 
 
+def _gradient_adjoint(values, spacing, axis):
+    """Apply the transpose of ``np.gradient(..., spacing, axis=axis)``.
+
+    ``calculate_smoothness_cost`` uses first-order edge differences, so its
+    gradient must use the corresponding transpose operator rather than a
+    second call to ``np.gradient``.  Keeping this here also avoids changing
+    the discretization used by the existing objective function.
+    """
+    values = np.moveaxis(values, axis, -1)
+    result = np.zeros_like(values)
+    scale = 1.0 / spacing
+    result[..., 0] -= values[..., 0] * scale
+    result[..., 1] += values[..., 0] * scale
+    result[..., :-2] -= values[..., 1:-1] * (0.5 * scale)
+    result[..., 2:] += values[..., 1:-1] * (0.5 * scale)
+    result[..., -2] -= values[..., -1] * scale
+    result[..., -1] += values[..., -1] * scale
+    return np.moveaxis(result, -1, axis)
+
+
 def calculate_smoothness_gradient(
     u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5, upper_bc=1, upper_bc_mask=None
 ):
@@ -335,24 +355,28 @@ def calculate_smoothness_gradient(
     y: float array
         value of gradient of smoothness cost function
     """
-    du = np.zeros(w.shape)
-    dv = np.zeros(w.shape)
-    dw = np.zeros(w.shape)
-    grad_u = np.zeros(w.shape)
-    grad_v = np.zeros(w.shape)
-    grad_w = np.zeros(w.shape)
-    scipy.ndimage.laplace(u, du, mode="wrap")
-    scipy.ndimage.laplace(v, dv, mode="wrap")
-    scipy.ndimage.laplace(w, dw, mode="wrap")
-    du = du / dx
-    dv = dv / dy
-    dw = dw / dz
-    scipy.ndimage.laplace(du, grad_u, mode="wrap")
-    scipy.ndimage.laplace(dv, grad_v, mode="wrap")
-    scipy.ndimage.laplace(dw, grad_w, mode="wrap")
-    grad_u = grad_u / dx
-    grad_v = grad_v / dy
-    grad_w = grad_w / dz
+    dxx = lambda field: np.gradient(
+        np.gradient(field, dx, axis=2), dx, axis=2
+    )
+    dyy = lambda field: np.gradient(
+        np.gradient(field, dy, axis=1), dy, axis=1
+    )
+    dzz = lambda field: np.gradient(
+        np.gradient(field, dz, axis=0), dz, axis=0
+    )
+
+    sx = dxx(u) + dxx(v) + dxx(w)
+    sy = dyy(u) + dyy(v) + dyy(w)
+    sz = dzz(u) + dzz(v) + dzz(w)
+
+    base_gradient = 2 * (
+        Cx * _gradient_adjoint(_gradient_adjoint(sx, dx, 2), dx, 2)
+        + Cy * _gradient_adjoint(_gradient_adjoint(sy, dy, 1), dy, 1)
+        + Cz * _gradient_adjoint(_gradient_adjoint(sz, dz, 0), dz, 0)
+    )
+    grad_u = base_gradient
+    grad_v = base_gradient
+    grad_w = base_gradient.copy()
 
     # Impermeability condition
     grad_w[0, :, :] = 0
@@ -363,7 +387,21 @@ def calculate_smoothness_gradient(
     return y.flatten()
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2):
+def _point_weights(x, y, z, the_point, roi):
+    """Return normalized inverse-distance weights inside the point ROI."""
+    distance = np.sqrt(
+        (x - the_point["x"]) ** 2
+        + (y - the_point["y"]) ** 2
+        + (z - the_point["z"]) ** 2
+    )
+    weight = np.where(distance <= roi, 1.0 / np.maximum(distance, 1.0) ** 2, 0.0)
+    maximum = np.max(weight)
+    return weight / maximum if maximum > 0 else weight
+
+
+def calculate_point_cost(
+    u, v, x, y, z, point_list, Cp=1e-3, power=2, roi=500.0
+):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -400,14 +438,7 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2):
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
 
-        dist = np.sqrt(
-            (x - the_point["x"]) ** 2
-            + (y - the_point["y"]) ** 2
-            + (z - the_point["z"]) ** 2
-        )
-        dist = np.maximum(dist, 1.0)
-        weight = 1 / dist**2
-        weight = weight / np.max(weight)
+        weight = _point_weights(x, y, z, the_point, roi)
 
         J += np.sum(weight * ((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2))
 
@@ -451,14 +482,7 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_w = np.zeros_like(u)
 
     for the_point in point_list:
-        dist = np.sqrt(
-            (x - the_point["x"]) ** 2
-            + (y - the_point["y"]) ** 2
-            + (z - the_point["z"]) ** 2
-        )
-        dist = np.maximum(dist, 1.0)
-        weight = 1 / dist**2
-        weight = weight / np.max(weight)
+        weight = _point_weights(x, y, z, the_point, roi)
         gradJ_u += 2 * weight * (u - the_point["u"])
         gradJ_v += 2 * weight * (v - the_point["v"])
 
@@ -740,7 +764,7 @@ def calculate_vertical_vorticity_cost(u, v, w, dx, dy, dz, Ut, Vt, coeff=1e-5):
     dwdy = np.gradient(w, dy, axis=1)
     dwdx = np.gradient(w, dx, axis=2)
     dudx = np.gradient(u, dx, axis=2)
-    dvdy = np.gradient(v, dy, axis=2)
+    dvdy = np.gradient(v, dy, axis=1)
     dudy = np.gradient(u, dy, axis=1)
     zeta = dvdx - dudy
     dzeta_dx = np.gradient(zeta, dx, axis=2)
