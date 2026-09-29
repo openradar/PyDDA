@@ -355,15 +355,9 @@ def calculate_smoothness_gradient(
     y: float array
         value of gradient of smoothness cost function
     """
-    dxx = lambda field: np.gradient(
-        np.gradient(field, dx, axis=2), dx, axis=2
-    )
-    dyy = lambda field: np.gradient(
-        np.gradient(field, dy, axis=1), dy, axis=1
-    )
-    dzz = lambda field: np.gradient(
-        np.gradient(field, dz, axis=0), dz, axis=0
-    )
+    dxx = lambda field: np.gradient(np.gradient(field, dx, axis=2), dx, axis=2)
+    dyy = lambda field: np.gradient(np.gradient(field, dy, axis=1), dy, axis=1)
+    dzz = lambda field: np.gradient(np.gradient(field, dz, axis=0), dz, axis=0)
 
     sx = dxx(u) + dxx(v) + dxx(w)
     sy = dyy(u) + dyy(v) + dyy(w)
@@ -399,9 +393,7 @@ def _point_weights(x, y, z, the_point, roi):
     return weight / maximum if maximum > 0 else weight
 
 
-def calculate_point_cost(
-    u, v, x, y, z, point_list, Cp=1e-3, power=2, roi=500.0
-):
+def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2, roi=500.0):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -490,7 +482,7 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     return gradJ * Cp
 
 
-def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
+def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, fluid=None):
     """
     Calculates the mass continuity cost function by taking the divergence
     of the wind field.
@@ -516,6 +508,11 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         Constant controlling contribution of mass continuity to cost function
     anel: int
         = 1 use anelastic approximation, 0=don't
+    fluid: 3D bool array or None
+        Mask of grid points that lie above the terrain surface, as returned by
+        :func:`pydda.terrain.terrain_ghost_cells`. Points below the terrain do
+        not contribute to the divergence penalty. Set to None to apply the
+        constraint everywhere, which is the behavior without terrain.
     Returns
     -------
     J: float
@@ -533,11 +530,26 @@ def calculate_mass_continuity(u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
         anel_term = np.zeros(w.shape)
     div = dudx + dvdy + dwdz + anel_term
 
+    if fluid is not None:
+        return coeff * np.sum(fluid * np.square(div)) / 2.0
+
     return coeff * np.sum(np.square(div)) / 2.0
 
 
 def calculate_mass_continuity_gradient(
-    u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1, upper_bc=1, upper_bc_mask=None
+    u,
+    v,
+    w,
+    z,
+    dx,
+    dy,
+    dz,
+    coeff=1500.0,
+    anel=1,
+    upper_bc=1,
+    upper_bc_mask=None,
+    lower_bc=1,
+    fluid=None,
 ):
     """
     Calculates the gradient of mass continuity cost function. This is done by
@@ -571,6 +583,16 @@ def calculate_mass_continuity_gradient(
     upper_bc_mask: 3D bool array or None
         The grid points at which w is held fixed when *upper_bc* is 2, as
         returned by :func:`pydda.cost_functions.calculate_echo_top_mask`.
+    lower_bc: int
+        Lower boundary (impermeability) condition. 1 enforces w = 0 on the
+        bottom plane of the domain, which assumes flat ground there. 0
+        disables it, which is what the terrain boundary condition needs, since
+        over terrain the bottom plane is underground in some columns and free
+        air in others. The legacy booleans True and False are equivalent to 1
+        and 0.
+    fluid: 3D bool array or None
+        Mask of grid points above the terrain surface. See
+        :func:`calculate_mass_continuity`.
     Returns
     -------
     y: float array
@@ -588,16 +610,134 @@ def calculate_mass_continuity_gradient(
 
     div = dudx + dvdy + dwdz + anel_term
 
+    if fluid is not None:
+        div = fluid * div
+
     grad_u = -np.gradient(div, dx, axis=2) * coeff
     grad_v = -np.gradient(div, dy, axis=1) * coeff
     grad_w = -np.gradient(div, dz, axis=0) * coeff
 
     # Impermeability condition
-    grad_w[0, :, :] = 0
+    if lower_bc == 1:
+        grad_w[0, :, :] = 0
     grad_w = _apply_upper_bc(grad_w, upper_bc, upper_bc_mask)
 
     y = np.stack([grad_u, grad_v, grad_w], axis=0)
     return y.flatten()
+
+
+def _terrain_residual(u, v, w, terrain):
+    """
+    Ghost-cell immersed-boundary residual c = u_G - M u_I.
+
+    Zero exactly when the velocity interpolated to each image point, reflected
+    back through the terrain surface, matches the ghost cell value, i.e. when
+    the flow does not penetrate the terrain. Linear in (u, v, w).
+
+    Returns the stacked velocity array (n_points, 3) alongside the residual
+    (n_ghost, 3), since the gradient needs both.
+    """
+    U = np.stack([u.ravel(), v.ravel(), w.ravel()], axis=1)
+    u_ghost = U[terrain["ghost_flat"]]
+    u_image = np.einsum("gsc,gs->gc", U[terrain["stencil_flat"]], terrain["stencil_w"])
+    c = u_ghost - np.einsum("gij,gj->gi", terrain["M"], u_image)
+    return U, c
+
+
+def calculate_terrain_cost(u, v, w, terrain, coeff=1.0):
+    """
+    Calculates the cost function enforcing no-penetration through terrain.
+
+    This is the penalty form of the ghost-cell immersed boundary condition
+    built by :func:`pydda.terrain.terrain_ghost_cells`. It replaces the flat
+    impermeability condition ``w = 0`` at the bottom of the domain with
+    no-penetration through the actual terrain surface, so that the retrieved
+    flow rises over terrain rather than through it.
+
+    Solid cells that are not ghost cells carry no boundary information and are
+    damped towards zero by the same coefficient, so that they do not wander
+    during the optimization.
+
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    terrain: dict
+        Terrain geometry as returned by
+        :func:`pydda.terrain.terrain_ghost_cells`.
+    coeff: float
+        Constant controlling contribution of the terrain condition to the cost
+        function.
+
+    Returns
+    -------
+    J: float
+        value of the terrain cost function
+    """
+    U, c = _terrain_residual(u, v, w, terrain)
+    J = np.sum(np.square(c))
+    solid_free = terrain["solid_free_flat"]
+    if len(solid_free) > 0:
+        J += np.sum(np.square(U[solid_free]))
+    return coeff * J / 2.0
+
+
+def calculate_terrain_gradient(u, v, w, terrain, coeff=1.0):
+    """
+    Calculates the gradient of the terrain cost function.
+
+    The residual is linear in the wind field, so this gradient is exact rather
+    than an approximation.
+
+    Parameters
+    ----------
+    u: Float array
+        Float array with u component of wind field
+    v: Float array
+        Float array with v component of wind field
+    w: Float array
+        Float array with w component of wind field
+    terrain: dict
+        Terrain geometry as returned by
+        :func:`pydda.terrain.terrain_ghost_cells`.
+    coeff: float
+        Constant controlling contribution of the terrain condition to the cost
+        function.
+
+    Returns
+    -------
+    y: float array
+        value of gradient of the terrain cost function
+    """
+    U, c = _terrain_residual(u, v, w, terrain)
+    grad = np.zeros_like(U)
+
+    # Ghost cell indices are unique, so this is a plain assignment
+    grad[terrain["ghost_flat"]] += coeff * c
+
+    # Each image point scatters back onto its eight stencil corners, which are
+    # shared between neighboring ghost cells, so this has to accumulate.
+    stencil_flat = terrain["stencil_flat"]
+    contrib = (
+        -coeff
+        * terrain["stencil_w"][..., None]
+        * np.einsum("gij,gi->gj", terrain["M"], c)[:, None, :]
+    )
+    flat = stencil_flat.ravel()
+    for comp in range(3):
+        grad[:, comp] += np.bincount(
+            flat, weights=contrib[:, :, comp].ravel(), minlength=grad.shape[0]
+        )
+
+    solid_free = terrain["solid_free_flat"]
+    if len(solid_free) > 0:
+        grad[solid_free] += coeff * U[solid_free]
+
+    return grad.T.reshape((3,) + u.shape).flatten()
 
 
 def calculate_fall_speed(grid, refl_field=None, frz=4500.0):
@@ -973,6 +1113,93 @@ def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=
     for i in range(len(u_model)):
         u_grad += coeff * 2 * (u - u_model[i]) * weights[i]
         v_grad += coeff * 2 * (v - v_model[i]) * weights[i]
+
+    y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    return y.flatten()
+
+
+def calculate_vad_cost(u, v, vad_weights, u_vad, v_vad, coeff=1.0):
+    """
+    Calculates the cost function for the VVAD constraint of Protat et al.
+    (2024), the sixth term of their Eq. (19),
+
+    .. math::
+
+        i_{vad} W_{vad} \\sum (U - U_{vad})^2 + (V - V_{vad})^2
+
+    Vertical velocities do not enter this cost function; the VVAD supplies
+    horizontal wind components only.
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    vad_weights: 3D array
+        Float array showing how much each point from the VVAD weighs into the
+        constraint. This carries the :math:`i_{vad}` switch of Eq. (19), i.e.
+        it is zero wherever more than one radar observes the point.
+    u_vad: 3D array
+        Float array with u component of wind field from the VVAD
+    v_vad: 3D array
+        Float array with v component of wind field from the VVAD
+    coeff: float
+        Weighting coefficient
+
+    Returns
+    -------
+    Jvad: float
+        Value of the VVAD cost function
+
+    References
+    ----------
+    Protat, A., V. Louf, and J. P. Brook, 2024: SWIRL: The First Australian
+    Operational Radar-Based 3D Wind Analysis System. *J. Atmos. Oceanic
+    Technol.*, **41**, 891-910, https://doi.org/10.1175/JTECH-D-23-0155.1.
+    """
+    return coeff * np.sum((np.square(u - u_vad) + np.square(v - v_vad)) * vad_weights)
+
+
+def calculate_vad_gradient(
+    u, v, vad_weights, u_vad, v_vad, coeff=1.0, upper_bc=1, upper_bc_mask=None
+):
+    """
+    Calculates the gradient of the VVAD cost function, which is simply twice
+    the weighted difference between the analysis and the VVAD wind for each of
+    u and v. The gradient with respect to w is zero everywhere, since the VVAD
+    constrains the horizontal components only.
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    vad_weights: 3D array
+        Float array showing how much each point from the VVAD weighs into the
+        constraint.
+    u_vad: 3D array
+        Float array with u component of wind field from the VVAD
+    v_vad: 3D array
+        Float array with v component of wind field from the VVAD
+    coeff: float
+        Weighting coefficient
+    upper_bc: int
+        Set to 1 to impose w = 0 at the top of the domain, 2 to impose it
+        above the echo top, and 0 for no upper boundary condition.
+    upper_bc_mask: 3D bool array or None
+        The echo top mask used when *upper_bc* is 2.
+
+    Returns
+    -------
+    y: 1D float array
+        Value of the gradient of the VVAD cost function
+    """
+    u_grad = coeff * 2 * (u - u_vad) * vad_weights
+    v_grad = coeff * 2 * (v - v_vad) * vad_weights
+    w_grad = np.zeros(u.shape)
+    w_grad = _apply_upper_bc(w_grad, upper_bc, upper_bc_mask)
 
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()

@@ -33,8 +33,9 @@ Grids, _ = pydda.retrieval.get_dd_wind_field(
     frz=5000.0,
     filter_window=5,
     mask_outside_opt=True,
-    upper_bc=1,
+    upper_bc=2,
     wind_tol=0.5,
+    max_iterations=150,
     engine="scipy",
     parallel=False,
 )

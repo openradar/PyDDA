@@ -212,6 +212,12 @@ class DDParameters(object):
         self.Cv = 0.0
         self.Cmod = 0.0
         self.Cpoint = 0.0
+        self.Cterrain = 0.0
+        self.terrain = None
+        self.Cvad = 0.0
+        self.u_vad = None
+        self.v_vad = None
+        self.vad_weights = None
         self.Ut = 0.0
         self.Vt = 0.0
         self.upper_bc = 1
@@ -253,6 +259,9 @@ def _get_dd_wind_field_scipy(
     Cv=0.0,
     Cmod=0.0,
     Cpoint=0.0,
+    Cterrain=0.0,
+    terrain=None,
+    Cvad=0.0,
     cvtol=1e-2,
     gtol=1e-2,
     Jveltol=100.0,
@@ -272,6 +281,7 @@ def _get_dd_wind_field_scipy(
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=1,
+    lower_bc=1,
     above=2.0,
     model_fields=None,
     output_cost_functions=True,
@@ -323,6 +333,12 @@ def _get_dd_wind_field_scipy(
             raise ValueError(("Grids have unequal origin lat/lons!"))
 
         prev_grid = g
+
+    if Cvad > 0 and engine.lower() not in ("scipy", "jax"):
+        raise NotImplementedError(
+            'The VVAD constraint is only implemented for the "scipy" and '
+            '"jax" engines, not "%s".' % engine
+        )
 
     if engine.lower() == "auglag" and not TENSORFLOW_AVAILABLE:
         raise ModuleNotFoundError(
@@ -621,6 +637,58 @@ def _get_dd_wind_field_scipy(
         parameters.upper_bc_mask = calculate_echo_top_mask(
             parameters.vrs, parameters.z, above=above
         )
+
+    parameters.Cterrain = Cterrain
+    parameters.terrain = terrain
+    parameters.lower_bc = lower_bc
+    if Cterrain > 0:
+        if terrain is None:
+            raise ValueError(
+                "Cterrain is nonzero but no terrain was given. Build one with "
+                "pydda.terrain.terrain_ghost_cells and pass it as the terrain "
+                "keyword."
+            )
+        if engine.lower() not in ("scipy", "jax"):
+            raise NotImplementedError(
+                "The terrain boundary condition is only implemented for the "
+                '"scipy" and "jax" engines, not "%s". The augmented Lagrangian '
+                "engine would need it as an equality constraint rather than a "
+                "penalty." % engine
+            )
+        if lower_bc == 1:
+            # The flat impermeability condition and the terrain condition are
+            # mutually exclusive: over terrain the bottom plane of the domain
+            # is underground in some columns and free air in others.
+            print(
+                "Terrain boundary condition enabled, disabling the flat "
+                "impermeability condition at the bottom of the domain."
+            )
+            parameters.lower_bc = 0
+
+    parameters.Cvad = Cvad
+    if Cvad > 0:
+        if "U_vvad" not in Grids[0].variables or "V_vvad" not in Grids[0].variables:
+            raise ValueError(
+                "Cvad is nonzero but the Grid has no U_vvad/V_vvad fields. Add "
+                "them with pydda.constraints.make_constraint_from_vvad."
+            )
+        u_vad = Grids[0]["U_vvad"].values.squeeze()
+        v_vad = Grids[0]["V_vvad"].values.squeeze()
+
+        # i_vad of Eq. (19) of Protat et al. (2024): the VVAD constrains the
+        # horizontal wind only where multi-Doppler information is unavailable,
+        # i.e. at points seen by at most one radar. parameters.weights has
+        # already been binarized above, so summing over the radar axis counts
+        # the radars contributing at each point.
+        n_rad = np.sum(parameters.weights, axis=0)
+        has_vad = np.logical_and(np.isfinite(u_vad), np.isfinite(v_vad))
+        parameters.vad_weights = np.logical_and(n_rad <= 1, has_vad).astype(float)
+        parameters.u_vad = np.nan_to_num(u_vad)
+        parameters.v_vad = np.nan_to_num(v_vad)
+        print(
+            "VVAD constraint active at %d points." % int(parameters.vad_weights.sum())
+        )
+
     parameters.points = points
     parameters.point_list = points
     parameters.parallel = parallel
@@ -1446,6 +1514,34 @@ def get_dd_wind_field(
         Weight for cost function related to custom constraints.
     Cpoint: float
         Weight for cost function related to point observations.
+    Cterrain: float
+        Weight for the terrain (no-penetration) boundary condition. Set to a
+        value greater than zero to replace the flat impermeability condition
+        at the bottom of the domain with no-penetration through the actual
+        terrain surface, so that the retrieved flow rises over terrain rather
+        than through it. Requires *terrain*, and is only available for the
+        "scipy" and "jax" engines. The residual it penalizes has units of
+        m/s, the same as the radial velocity cost function, so a value of
+        order *Co* is a reasonable starting point.
+    terrain: dict or None
+        Terrain geometry as returned by
+        :py:func:`pydda.terrain.terrain_ghost_cells`. Needed when *Cterrain*
+        is nonzero, ignored otherwise.
+    Cvad: float
+        Weight for the VVAD constraint of Protat et al. (2024), the sixth term
+        of their Eq. (19). Set to a value greater than zero to nudge the
+        horizontal wind toward the velocity azimuth display reconstruction
+        wherever multi-Doppler information is unavailable, which supplies
+        winds in data voids such as the grid points below the lowest radar
+        gate. Requires the *U_vvad* and *V_vvad* fields, which are added by
+        :py:func:`pydda.constraints.make_constraint_from_vvad`, and is only
+        available for the "scipy" and "jax" engines. Protat et al. (2024) use
+        a weight of 1, equal to that of the radial velocity constraint.
+    lower_bc: int
+        Lower boundary (impermeability) condition. 1 enforces w = 0 on the
+        bottom plane of the domain, which assumes flat ground there, and is
+        the default. 0 disables it. Supplying a terrain boundary condition
+        sets this to 0 automatically, since the two are mutually exclusive.
     weights_obs: list of floating point arrays or None
         List of weights for each point in grid from each radar in Grids.
         Set to None to let PyDDA determine this automatically.
@@ -1588,6 +1684,16 @@ def get_dd_wind_field(
             new_grids, u_init, v_init, w_init, engine, **kwargs
         )
     elif engine.lower() == "tensorflow":
+        if kwargs.get("Cterrain", 0.0) > 0:
+            raise NotImplementedError(
+                "The terrain boundary condition is only implemented for the "
+                '"scipy" and "jax" engines, not "tensorflow".'
+            )
+        if kwargs.get("Cvad", 0.0) > 0:
+            raise NotImplementedError(
+                'The VVAD constraint is only implemented for the "scipy" and '
+                '"jax" engines, not "tensorflow".'
+            )
         return _get_dd_wind_field_tensorflow(
             new_grids, u_init, v_init, w_init, **kwargs
         )
