@@ -365,6 +365,7 @@
     <span class="n">TENSORFLOW_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 
     <span class="n">JAX_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
@@ -423,6 +424,7 @@
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">"Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"</span>
             <span class="p">)</span>
+        <span class="n">winds_input</span> <span class="o">=</span> <span class="n">winds</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">,</span>
             <span class="p">(</span>
@@ -435,18 +437,22 @@
         <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="o">-</span><span class="mf">100.0</span><span class="p">]))</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="mf">100.0</span><span class="p">]))</span>
         <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-        <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
-            <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">radial_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">radial_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"source_winds"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">winds_input</span><span class="p">:</span>
+            <span class="n">Jvel</span> <span class="o">=</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"cost"</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+                <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+                <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="c1"># print("apples Jvel", Jvel)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -535,6 +541,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Jpoint</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">"scipy"</span><span class="p">:</span>
+        <span class="n">winds_input</span> <span class="o">=</span> <span class="n">winds</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">,</span>
             <span class="p">(</span>
@@ -545,19 +552,23 @@
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="c1"># Had to change to float because Jax returns device array (use np.float_())</span>
-        <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
-            <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-            <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
-            <span class="n">parallel</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">radial_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">radial_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"source_winds"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">winds_input</span><span class="p">:</span>
+            <span class="n">Jvel</span> <span class="o">=</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"cost"</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Jvel</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_function</span><span class="p">(</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+                <span class="n">rmsVr</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+                <span class="n">weights</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+                <span class="n">parallel</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="c1"># print("apples Jvel", Jvel)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -747,6 +758,7 @@
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">"Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"</span>
             <span class="p">)</span>
+        <span class="n">winds_input</span> <span class="o">=</span> <span class="n">winds</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">,</span>
             <span class="p">(</span>
@@ -759,21 +771,25 @@
 
         <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="o">-</span><span class="mf">100.0</span><span class="p">]))</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">constant</span><span class="p">([</span><span class="mf">100.0</span><span class="p">]))</span>
-        <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
-            <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-            <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
-            <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">radial_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">radial_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"source_winds"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">winds_input</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">radial_cache</span><span class="p">[</span><span class="s2">"gradient"</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
+                <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
@@ -917,6 +933,7 @@
             <span class="p">)</span>
             <span class="n">grad</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">"scipy"</span><span class="p">:</span>
+        <span class="n">winds_input</span> <span class="o">=</span> <span class="n">winds</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">,</span>
             <span class="p">(</span>
@@ -926,7 +943,11 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
             <span class="p">),</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span><span class="p">:</span>
+        <span class="n">radial_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">use_radial_cache</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">radial_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"source_winds"</span><span class="p">]</span> <span class="ow">is</span> <span class="n">winds_input</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">use_radial_cache</span><span class="p">:</span>
             <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
                 <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -1068,20 +1089,23 @@
                     <span class="p">)</span>
             <span class="n">grad</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-                <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
-                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">use_radial_cache</span><span class="p">:</span>
+                <span class="n">grad</span> <span class="o">=</span> <span class="n">radial_cache</span><span class="p">[</span><span class="s2">"gradient"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">grad</span> <span class="o">=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_grad_radial_vel</span><span class="p">(</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+                    <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                    <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+                    <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+                    <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                    <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cm</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_mass_continuity_gradient</span><span class="p">(</span>
@@ -1224,6 +1248,126 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">"The gradient of the cost functions is"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">grad</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
     <span class="k">return</span> <span class="n">grad</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">J_and_grad</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Return the objective and gradient for a single optimizer callback.</span>
+
+<span class="sd">    SciPy's L-BFGS-B accepts a callable that returns ``(f, g)`` when</span>
+<span class="sd">    ``fprime`` is omitted.  Keeping this adapter here gives the optimizer one</span>
+<span class="sd">    callback per evaluation and provides a single place to add shared</span>
+<span class="sd">    objective/gradient intermediates in the future.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">"tensorflow"</span><span class="p">:</span>
+        <span class="n">shaped_winds</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">radial_cost</span><span class="p">,</span> <span class="n">radial_gradient</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">_cost_functions_tensorflow</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_and_gradient</span><span class="p">(</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+                <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+                <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+                <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+                <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
+                <span class="n">lower_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">previous_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"source_winds"</span><span class="p">:</span> <span class="n">winds</span><span class="p">,</span>
+            <span class="s2">"cost"</span><span class="p">:</span> <span class="n">radial_cost</span><span class="p">,</span>
+            <span class="s2">"gradient"</span><span class="p">:</span> <span class="n">radial_gradient</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">),</span> <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">previous_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span> <span class="o">=</span> <span class="n">previous_cache</span>
+
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">==</span> <span class="s2">"jax"</span><span class="p">:</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">objective_winds</span><span class="p">:</span> <span class="n">J_function_jax</span><span class="p">(</span><span class="n">objective_winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+        <span class="n">value</span><span class="p">,</span> <span class="n">gradient</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">objective</span><span class="p">)(</span><span class="n">winds</span><span class="p">)</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+            <span class="n">gradient</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">lower_bc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gradient</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">const_boundary_cond</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">gradient</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="n">gradient</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">engine</span> <span class="o">!=</span> <span class="s2">"scipy"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">),</span> <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+
+    <span class="n">shaped_winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+        <span class="n">winds</span><span class="p">,</span>
+        <span class="p">(</span>
+            <span class="mi">3</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">radial_cost</span><span class="p">,</span> <span class="n">radial_gradient</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_and_gradient</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
+            <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
+            <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
+            <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+            <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
+            <span class="n">parallel</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">previous_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"source_winds"</span><span class="p">:</span> <span class="n">winds</span><span class="p">,</span>
+        <span class="s2">"cost"</span><span class="p">:</span> <span class="n">radial_cost</span><span class="p">,</span>
+        <span class="s2">"gradient"</span><span class="p">:</span> <span class="n">radial_gradient</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">),</span> <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">previous_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span> <span class="o">=</span> <span class="n">previous_cache</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">J_function_jax</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>

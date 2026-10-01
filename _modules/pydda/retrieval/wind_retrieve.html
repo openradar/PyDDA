@@ -418,12 +418,9 @@
 
 <span class="c1"># imports changed to local import path to run on computer</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..cost_functions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-    <span class="n">J_function</span><span class="p">,</span>
-    <span class="n">grad_J</span><span class="p">,</span>
+    <span class="n">J_and_grad</span><span class="p">,</span>
     <span class="n">calculate_fall_speed</span><span class="p">,</span>
     <span class="n">calculate_echo_top_mask</span><span class="p">,</span>
-    <span class="n">grad_jax</span><span class="p">,</span>
-    <span class="n">J_function_jax</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.angles</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_azimuth_as_field</span><span class="p">,</span> <span class="n">add_elevation_as_field</span>
@@ -1091,22 +1088,19 @@
         <span class="n">parameters</span><span class="o">.</span><span class="n">print_out</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"scipy"</span><span class="p">:</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
-                <span class="n">J_function</span><span class="p">,</span>
+                <span class="n">J_and_grad</span><span class="p">,</span>
                 <span class="n">winds</span><span class="p">,</span>
                 <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">parameters</span><span class="p">,),</span>
                 <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
                 <span class="n">pgtol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
                 <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
-                <span class="n">fprime</span><span class="o">=</span><span class="n">grad_J</span><span class="p">,</span>
                 <span class="n">callback</span><span class="o">=</span><span class="n">_vert_velocity_callback</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
 
             <span class="k">def</span><span class="w"> </span><span class="nf">loss_and_gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-                <span class="n">x_loss</span> <span class="o">=</span> <span class="n">J_function_jax</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">"winds"</span><span class="p">],</span> <span class="n">parameters</span><span class="p">)</span>
-                <span class="n">x_grad</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">x_grad</span><span class="p">[</span><span class="s2">"winds"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grad_jax</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">"winds"</span><span class="p">],</span> <span class="n">parameters</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">x_loss</span><span class="p">,</span> <span class="n">x_grad</span>
+                <span class="n">x_loss</span><span class="p">,</span> <span class="n">x_gradient</span> <span class="o">=</span> <span class="n">J_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">"winds"</span><span class="p">],</span> <span class="n">parameters</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">x_loss</span><span class="p">,</span> <span class="p">{</span><span class="s2">"winds"</span><span class="p">:</span> <span class="n">x_gradient</span><span class="p">}</span>
 
             <span class="n">bounds</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">{</span><span class="s2">"winds"</span><span class="p">:</span> <span class="o">-</span><span class="n">max_wind_mag</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">winds</span><span class="o">.</span><span class="n">shape</span><span class="p">)},</span>
@@ -1683,7 +1677,7 @@
     <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">=</span> <span class="n">upper_bc</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span> <span class="o">=</span> <span class="n">points</span>
-    <span class="n">loss_and_gradient</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">J_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="p">),</span> <span class="n">grad_J</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="p">))</span>
+    <span class="n">loss_and_gradient</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">J_and_grad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
 
     <span class="n">winds</span> <span class="o">=</span> <span class="n">tfp</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">lbfgs_minimize</span><span class="p">(</span>
         <span class="n">loss_and_gradient</span><span class="p">,</span>

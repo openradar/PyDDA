@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**30:28.298** total execution time for 4 files **from source/auto_examples**:
+**25:56.553** total execution time for 4 files **from source/auto_examples**:
 
 .. container::
 
@@ -33,14 +33,14 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_source_auto_examples_plot_grid_nesting_example.py` (``plot_grid_nesting_example.py``)
-     - 15:39.308
+     - 12:51.967
      - 0.0
    * - :ref:`sphx_glr_source_auto_examples_plot_hurricane_florence.py` (``plot_hurricane_florence.py``)
-     - 07:17.062
+     - 08:40.534
      - 0.0
    * - :ref:`sphx_glr_source_auto_examples_plot_sydney_tornado.py` (``plot_sydney_tornado.py``)
-     - 06:07.891
+     - 03:23.596
      - 0.0
    * - :ref:`sphx_glr_source_auto_examples_plot_examples.py` (``plot_examples.py``)
-     - 01:24.036
+     - 01:00.456
      - 0.0
