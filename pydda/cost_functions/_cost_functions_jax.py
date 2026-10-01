@@ -24,7 +24,7 @@ def _apply_upper_bc(grad_w, upper_bc, upper_bc_mask=None):
 
 
 def calculate_radial_vel_cost_function(
-    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0
+    vrs, azs, els, u, v, w, wts, rmsVr, weights, coeff=1.0, radar_geometry=None
 ):
     """
     Calculates the cost function due to difference of the wind field from
@@ -80,11 +80,17 @@ def calculate_radial_vel_cost_function(
     J_o = 0
     lambda_o = coeff / (rmsVr * rmsVr)
     for i in range(len(vrs)):
-        v_ar = (
-            jnp.cos(els[i]) * jnp.sin(azs[i]) * u
-            + jnp.cos(els[i]) * jnp.cos(azs[i]) * v
-            + jnp.sin(els[i]) * (w - jnp.abs(wts[i]))
-        )
+        if radar_geometry is None:
+            x_projection = jnp.cos(els[i]) * jnp.sin(azs[i])
+            y_projection = jnp.cos(els[i]) * jnp.cos(azs[i])
+            sin_el = jnp.sin(els[i])
+            wts_abs = jnp.abs(wts[i])
+        else:
+            x_projection = radar_geometry["x_projection"][i]
+            y_projection = radar_geometry["y_projection"][i]
+            sin_el = radar_geometry["sin_el"][i]
+            wts_abs = radar_geometry["wts_abs"][i]
+        v_ar = x_projection * u + y_projection * v + sin_el * (w - wts_abs)
         the_weight = jnp.asarray(weights[i])
         J_o += lambda_o * jnp.sum(jnp.square(vrs[i] - v_ar) * the_weight)
     return J_o
@@ -307,7 +313,7 @@ def calculate_smoothness_gradient(
     return y.flatten()
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3):
+def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, point_weights=None):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -344,21 +350,26 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3):
         wind field and points.
     """
     J = 0.0
-    for the_point in point_list:
-        dist = jnp.sqrt(
-            (x - the_point["x"]) ** 2
-            + (y - the_point["y"]) ** 2
-            + (z - the_point["z"]) ** 2
-        )
-        dist = jnp.maximum(dist, 1.0)
-        weight = 1 / dist**2
-        weight = weight / jnp.sum(weight)
+    for point_index, the_point in enumerate(point_list):
+        if point_weights is None:
+            dist = jnp.sqrt(
+                (x - the_point["x"]) ** 2
+                + (y - the_point["y"]) ** 2
+                + (z - the_point["z"]) ** 2
+            )
+            dist = jnp.maximum(dist, 1.0)
+            weight = 1 / dist**2
+            weight = weight / jnp.sum(weight)
+        else:
+            weight = point_weights[point_index]
         J += jnp.sum(weight * ((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2))
 
     return J * Cp
 
 
-def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_gradient(
+    u, v, x, y, z, point_list, Cp=1e-3, roi=500.0, point_weights=None
+):
     """
     Calculates the gradient of the cost function related to point observations.
     A mean square error cost function term is applied to points that are within the sphere of influence
@@ -398,15 +409,18 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_v = jnp.zeros_like(v)
     gradJ_w = jnp.zeros_like(u)
 
-    for the_point in point_list:
-        dist = jnp.sqrt(
-            (x - the_point["x"]) ** 2
-            + (y - the_point["y"]) ** 2
-            + (z - the_point["z"]) ** 2
-        )
-        dist = jnp.maximum(dist, 1.0)
-        weight = 1 / dist**2
-        weight = weight / jnp.sum(weight)
+    for point_index, the_point in enumerate(point_list):
+        if point_weights is None:
+            dist = jnp.sqrt(
+                (x - the_point["x"]) ** 2
+                + (y - the_point["y"]) ** 2
+                + (z - the_point["z"]) ** 2
+            )
+            dist = jnp.maximum(dist, 1.0)
+            weight = 1 / dist**2
+            weight = weight / jnp.sum(weight)
+        else:
+            weight = point_weights[point_index]
         gradJ_u += 2 * (u - the_point["u"]) * weight
         gradJ_v += 2 * (v - the_point["v"]) * weight
 

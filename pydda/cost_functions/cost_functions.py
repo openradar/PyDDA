@@ -180,6 +180,7 @@ def J_function(winds, parameters):
                 parameters.point_list,
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
+                point_weights=parameters.point_weights,
             )
         else:
             Jpoint = 0
@@ -309,6 +310,7 @@ def J_function(winds, parameters):
                 parameters.point_list,
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
+                point_weights=parameters.point_weights,
             )
         else:
             Jpoint = 0
@@ -511,6 +513,7 @@ def grad_J(winds, parameters):
                 parameters.point_list,
                 Cp=parameters.Cpoint,
                 roi=parameters.roi,
+                point_weights=parameters.point_weights,
             )
         if parameters.const_boundary_cond is True:
             grad = tf.reshape(
@@ -711,6 +714,7 @@ def grad_J(winds, parameters):
                             parameters.point_list,
                             parameters.Cpoint,
                             parameters.roi,
+                            parameters.point_weights,
                         )
                     )
                 if parameters.Cvad > 0:
@@ -835,6 +839,7 @@ def grad_J(winds, parameters):
                     parameters.point_list,
                     Cp=parameters.Cpoint,
                     roi=parameters.roi,
+                    point_weights=parameters.point_weights,
                 )
 
             if parameters.Cvad > 0:
@@ -922,6 +927,7 @@ def J_and_grad(winds, parameters):
                 upper_bc=parameters.upper_bc,
                 upper_bc_mask=parameters.upper_bc_mask,
                 lower_bc=parameters.lower_bc,
+                radar_geometry=parameters.radar_geometry,
             )
         )
         previous_cache = getattr(parameters, "_radial_eval_cache", None)
@@ -992,6 +998,7 @@ def J_and_grad(winds, parameters):
             upper_bc=parameters.upper_bc,
             upper_bc_mask=parameters.upper_bc_mask,
             parallel=parameters.parallel,
+            radar_geometry=parameters.radar_geometry,
         )
     )
     previous_cache = getattr(parameters, "_radial_eval_cache", None)
@@ -1034,6 +1041,7 @@ def J_function_jax(winds, parameters):
         rmsVr=parameters.rmsVr,
         weights=parameters.weights,
         coeff=parameters.Co,
+        radar_geometry=parameters.radar_geometry,
     )
 
     if parameters.Cm > 0:
@@ -1131,6 +1139,7 @@ def J_function_jax(winds, parameters):
             parameters.point_list,
             Cp=parameters.Cpoint,
             roi=parameters.roi,
+            point_weights=parameters.point_weights,
         )
     else:
         Jpoint = 0
@@ -1273,6 +1282,7 @@ def grad_jax(winds, parameters):
             parameters.point_list,
             Cp=parameters.Cpoint,
             roi=parameters.roi,
+            point_weights=parameters.point_weights,
         )
 
     if parameters.Cvad > 0:

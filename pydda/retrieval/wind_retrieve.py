@@ -75,6 +75,54 @@ _wcurrmax = np.empty(0)
 iterations = 0
 
 
+def _precompute_point_weights(x, y, z, points, roi, engine):
+    """Precompute fixed point-constraint weights for optimizer iterations."""
+    if not points:
+        return []
+    cached = []
+    for point in points:
+        distance = np.sqrt(
+            (x - point["x"]) ** 2 + (y - point["y"]) ** 2 + (z - point["z"]) ** 2
+        )
+        if engine == "jax":
+            weight = 1.0 / np.maximum(distance, 1.0) ** 2
+            weight /= np.sum(weight)
+        else:
+            weight = np.where(
+                distance <= roi, 1.0 / np.maximum(distance, 1.0) ** 2, 0.0
+            )
+            maximum = np.max(weight)
+            if maximum > 0:
+                weight /= maximum
+        cached.append(weight)
+    return cached
+
+
+def _precompute_radar_geometry(els, azs, wts, engine):
+    """Precompute trigonometric radar projection coefficients."""
+    if engine == "tensorflow":
+        els = tf.stack(els)
+        azs = tf.stack(azs)
+        wts = tf.stack(wts)
+        cos_els = tf.math.cos(els)
+        return {
+            "x_projection": cos_els * tf.math.sin(azs),
+            "y_projection": cos_els * tf.math.cos(azs),
+            "sin_el": tf.math.sin(els),
+            "wts_abs": tf.math.abs(wts),
+        }
+    els = np.stack(els)
+    azs = np.stack(azs)
+    wts = np.stack(wts)
+    cos_els = np.cos(els)
+    return {
+        "x_projection": cos_els * np.sin(azs),
+        "y_projection": cos_els * np.cos(azs),
+        "sin_el": np.sin(els),
+        "wts_abs": np.abs(wts),
+    }
+
+
 class DDParameters(object):
     """
     This is a helper class for inserting more arguments into the :func:`pydda.cost_functions.J_function` and
@@ -232,6 +280,8 @@ class DDParameters(object):
         self.Jveltol = 100.0
         self.const_boundary_cond = False
         self.parallel = False
+        self.radar_geometry = None
+        self.point_weights = []
 
 
 def _get_dd_wind_field_scipy(
@@ -689,6 +739,12 @@ def _get_dd_wind_field_scipy(
     parameters.points = points
     parameters.point_list = points
     parameters.parallel = parallel
+    parameters.radar_geometry = _precompute_radar_geometry(
+        parameters.els, parameters.azs, parameters.wts, engine.lower()
+    )
+    parameters.point_weights = _precompute_point_weights(
+        parameters.x, parameters.y, parameters.z, points, roi, engine.lower()
+    )
     _wprevmax = np.zeros(parameters.grid_shape)
     _wcurrmax = np.zeros(parameters.grid_shape)
     iterations = 0
@@ -1319,6 +1375,20 @@ def _get_dd_wind_field_tensorflow(
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
+    parameters.radar_geometry = _precompute_radar_geometry(
+        parameters.els, parameters.azs, parameters.wts, "tensorflow"
+    )
+    parameters.point_weights = [
+        tf.constant(weight, dtype=tf.float32)
+        for weight in _precompute_point_weights(
+            Grids[0]["point_x"].values,
+            Grids[0]["point_y"].values,
+            Grids[0]["point_z"].values,
+            points,
+            roi,
+            "tensorflow",
+        )
+    ]
     loss_and_gradient = lambda x: J_and_grad(x, parameters)
 
     winds = tfp.optimizer.lbfgs_minimize(
