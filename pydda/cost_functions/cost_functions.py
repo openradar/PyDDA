@@ -10,6 +10,7 @@ except ImportError:
     TENSORFLOW_AVAILABLE = False
 
 try:
+    import jax
     import jax.numpy as jnp
 
     JAX_AVAILABLE = True
@@ -178,6 +179,7 @@ def J_function(winds, parameters):
         else:
             Jpoint = 0
     elif parameters.engine == "scipy":
+        winds_input = winds
         winds = np.reshape(
             winds,
             (
@@ -188,19 +190,23 @@ def J_function(winds, parameters):
             ),
         )
         # Had to change to float because Jax returns device array (use np.float_())
-        Jvel = _cost_functions_numpy.calculate_radial_vel_cost_function(
-            parameters.vrs,
-            parameters.azs,
-            parameters.els,
-            winds[0],
-            winds[1],
-            winds[2],
-            parameters.wts,
-            rmsVr=parameters.rmsVr,
-            weights=parameters.weights,
-            coeff=parameters.Co,
-            parallel=parameters.parallel,
-        )
+        radial_cache = getattr(parameters, "_radial_eval_cache", None)
+        if radial_cache is not None and radial_cache["source_winds"] is winds_input:
+            Jvel = radial_cache["cost"]
+        else:
+            Jvel = _cost_functions_numpy.calculate_radial_vel_cost_function(
+                parameters.vrs,
+                parameters.azs,
+                parameters.els,
+                winds[0],
+                winds[1],
+                winds[2],
+                parameters.wts,
+                rmsVr=parameters.rmsVr,
+                weights=parameters.weights,
+                coeff=parameters.Co,
+                parallel=parameters.parallel,
+            )
         # print("apples Jvel", Jvel)
 
         if parameters.Cm > 0:
@@ -557,6 +563,7 @@ def grad_J(winds, parameters):
             )
             grad = tf.reshape(grad, [-1])
     elif parameters.engine == "scipy":
+        winds_input = winds
         winds = np.reshape(
             winds,
             (
@@ -566,7 +573,11 @@ def grad_J(winds, parameters):
                 parameters.grid_shape[2],
             ),
         )
-        if parameters.parallel:
+        radial_cache = getattr(parameters, "_radial_eval_cache", None)
+        use_radial_cache = (
+            radial_cache is not None and radial_cache["source_winds"] is winds_input
+        )
+        if parameters.parallel and not use_radial_cache:
             futures = []
             with ThreadPoolExecutor() as pool:
                 futures.append(
@@ -708,20 +719,23 @@ def grad_J(winds, parameters):
                     )
             grad = sum(f.result() for f in futures)
         else:
-            grad = _cost_functions_numpy.calculate_grad_radial_vel(
-                parameters.vrs,
-                parameters.els,
-                parameters.azs,
-                winds[0],
-                winds[1],
-                winds[2],
-                parameters.wts,
-                parameters.weights,
-                parameters.rmsVr,
-                coeff=parameters.Co,
-                upper_bc=parameters.upper_bc,
-                upper_bc_mask=parameters.upper_bc_mask,
-            )
+            if use_radial_cache:
+                grad = radial_cache["gradient"].copy()
+            else:
+                grad = _cost_functions_numpy.calculate_grad_radial_vel(
+                    parameters.vrs,
+                    parameters.els,
+                    parameters.azs,
+                    winds[0],
+                    winds[1],
+                    winds[2],
+                    parameters.wts,
+                    parameters.weights,
+                    parameters.rmsVr,
+                    coeff=parameters.Co,
+                    upper_bc=parameters.upper_bc,
+                    upper_bc_mask=parameters.upper_bc_mask,
+                )
 
             if parameters.Cm > 0:
                 grad += _cost_functions_numpy.calculate_mass_continuity_gradient(
@@ -863,6 +877,156 @@ def grad_J(winds, parameters):
     if parameters.Nfeval % 10 == 0:
         print("The gradient of the cost functions is", str(np.linalg.norm(grad, 2)))
     return grad
+
+
+def J_and_grad(winds, parameters):
+    """Return the objective and gradient for a single optimizer callback.
+
+    SciPy's L-BFGS-B accepts a callable that returns ``(f, g)`` when
+    ``fprime`` is omitted.  Keeping this adapter here gives the optimizer one
+    callback per evaluation and provides a single place to add shared
+    objective/gradient intermediates in the future.
+    """
+    if parameters.engine == "tensorflow":
+        with tf.GradientTape() as tape:
+            tape.watch(winds)
+            value = J_function(winds, parameters)
+        gradient = tape.gradient(value, winds)
+        gradient = tf.reshape(
+            gradient,
+            (
+                3,
+                parameters.grid_shape[0],
+                parameters.grid_shape[1],
+                parameters.grid_shape[2],
+            ),
+        )
+        if parameters.lower_bc == 1:
+            gradient = tf.tensor_scatter_nd_update(
+                gradient,
+                [[2, 0, 0, 0]],
+                [0.0],
+            )
+            gradient = tf.concat(
+                [
+                    gradient[:2],
+                    tf.concat(
+                        [
+                            tf.zeros_like(gradient[2:3, 0:1]),
+                            gradient[2:3, 1:],
+                        ],
+                        axis=1,
+                    ),
+                ],
+                axis=0,
+            )
+        if parameters.upper_bc == 1:
+            gradient = tf.concat(
+                [
+                    gradient[:2],
+                    tf.concat(
+                        [
+                            gradient[2:3, :-1],
+                            tf.zeros_like(gradient[2:3, -1:]),
+                        ],
+                        axis=1,
+                    ),
+                ],
+                axis=0,
+            )
+        elif parameters.upper_bc == 2 and parameters.upper_bc_mask is not None:
+            w_gradient = tf.where(
+                tf.cast(parameters.upper_bc_mask, tf.bool),
+                tf.zeros_like(gradient[2]),
+                gradient[2],
+            )
+            gradient = tf.concat([gradient[:2], w_gradient[None]], axis=0)
+        if parameters.const_boundary_cond is True:
+            mask = np.ones(
+                (
+                    3,
+                    parameters.grid_shape[0],
+                    parameters.grid_shape[1],
+                    parameters.grid_shape[2],
+                ),
+                dtype=np.float32,
+            )
+            mask[:, :, 0, :] = 0
+            mask[:, :, -1, :] = 0
+            mask[:, :, :, 0] = 0
+            mask[:, :, :, -1] = 0
+            gradient *= tf.constant(mask)
+        return value, tf.reshape(gradient, [-1])
+
+    if parameters.engine == "jax":
+        objective = lambda objective_winds: J_function_jax(objective_winds, parameters)
+        value, gradient = jax.value_and_grad(objective)(winds)
+        gradient = jnp.reshape(
+            gradient,
+            (
+                3,
+                parameters.grid_shape[0],
+                parameters.grid_shape[1],
+                parameters.grid_shape[2],
+            ),
+        )
+        if parameters.lower_bc == 1:
+            gradient = gradient.at[2, 0].set(0)
+        if parameters.upper_bc == 1:
+            gradient = gradient.at[2, -1].set(0)
+        elif parameters.upper_bc == 2 and parameters.upper_bc_mask is not None:
+            gradient = gradient.at[2].set(
+                jnp.where(parameters.upper_bc_mask, 0, gradient[2])
+            )
+        if parameters.const_boundary_cond is True:
+            gradient = gradient.at[:, :, 0, :].set(0)
+            gradient = gradient.at[:, :, -1, :].set(0)
+            gradient = gradient.at[:, :, :, 0].set(0)
+            gradient = gradient.at[:, :, :, -1].set(0)
+        return value, gradient.flatten()
+
+    if parameters.engine != "scipy":
+        return J_function(winds, parameters), grad_J(winds, parameters)
+
+    shaped_winds = np.reshape(
+        winds,
+        (
+            3,
+            parameters.grid_shape[0],
+            parameters.grid_shape[1],
+            parameters.grid_shape[2],
+        ),
+    )
+    radial_cost, radial_gradient = (
+        _cost_functions_numpy.calculate_radial_vel_cost_and_gradient(
+            parameters.vrs,
+            parameters.els,
+            parameters.azs,
+            shaped_winds[0],
+            shaped_winds[1],
+            shaped_winds[2],
+            parameters.wts,
+            parameters.weights,
+            parameters.rmsVr,
+            coeff=parameters.Co,
+            upper_bc=parameters.upper_bc,
+            upper_bc_mask=parameters.upper_bc_mask,
+            parallel=parameters.parallel,
+        )
+    )
+    previous_cache = getattr(parameters, "_radial_eval_cache", None)
+    parameters._radial_eval_cache = {
+        "source_winds": winds,
+        "cost": radial_cost,
+        "gradient": radial_gradient,
+    }
+    try:
+        return J_function(winds, parameters), grad_J(winds, parameters)
+    finally:
+        if previous_cache is None:
+            del parameters._radial_eval_cache
+        else:
+            parameters._radial_eval_cache = previous_cache
 
 
 def J_function_jax(winds, parameters):
