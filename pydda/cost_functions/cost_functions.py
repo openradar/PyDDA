@@ -67,6 +67,7 @@ def J_function(winds, parameters):
             raise ImportError(
                 "Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"
             )
+        winds_input = winds
         winds = tf.reshape(
             winds,
             (
@@ -79,18 +80,22 @@ def J_function(winds, parameters):
         winds = tf.math.maximum(winds, tf.constant([-100.0]))
         winds = tf.math.minimum(winds, tf.constant([100.0]))
         # Had to change to float because Jax returns device array (use np.float_())
-        Jvel = _cost_functions_tensorflow.calculate_radial_vel_cost_function(
-            parameters.vrs,
-            parameters.azs,
-            parameters.els,
-            winds[0],
-            winds[1],
-            winds[2],
-            parameters.wts,
-            rmsVr=parameters.rmsVr,
-            weights=parameters.weights,
-            coeff=parameters.Co,
-        )
+        radial_cache = getattr(parameters, "_radial_eval_cache", None)
+        if radial_cache is not None and radial_cache["source_winds"] is winds_input:
+            Jvel = radial_cache["cost"]
+        else:
+            Jvel = _cost_functions_tensorflow.calculate_radial_vel_cost_function(
+                parameters.vrs,
+                parameters.azs,
+                parameters.els,
+                winds[0],
+                winds[1],
+                winds[2],
+                parameters.wts,
+                rmsVr=parameters.rmsVr,
+                weights=parameters.weights,
+                coeff=parameters.Co,
+            )
         # print("apples Jvel", Jvel)
 
         if parameters.Cm > 0:
@@ -393,6 +398,7 @@ def grad_J(winds, parameters):
             raise ImportError(
                 "Tensorflow 2.5 or greater is needed in order to use TensorFlow-based PyDDA!"
             )
+        winds_input = winds
         winds = tf.reshape(
             winds,
             (
@@ -405,21 +411,25 @@ def grad_J(winds, parameters):
 
         winds = tf.math.maximum(winds, tf.constant([-100.0]))
         winds = tf.math.minimum(winds, tf.constant([100.0]))
-        grad = _cost_functions_tensorflow.calculate_grad_radial_vel(
-            parameters.vrs,
-            parameters.els,
-            parameters.azs,
-            winds[0],
-            winds[1],
-            winds[2],
-            parameters.wts,
-            parameters.weights,
-            parameters.rmsVr,
-            coeff=parameters.Co,
-            upper_bc=parameters.upper_bc,
-            upper_bc_mask=parameters.upper_bc_mask,
-            lower_bc=parameters.lower_bc,
-        )
+        radial_cache = getattr(parameters, "_radial_eval_cache", None)
+        if radial_cache is not None and radial_cache["source_winds"] is winds_input:
+            grad = tf.identity(radial_cache["gradient"])
+        else:
+            grad = _cost_functions_tensorflow.calculate_grad_radial_vel(
+                parameters.vrs,
+                parameters.els,
+                parameters.azs,
+                winds[0],
+                winds[1],
+                winds[2],
+                parameters.wts,
+                parameters.weights,
+                parameters.rmsVr,
+                coeff=parameters.Co,
+                upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
+                lower_bc=parameters.lower_bc,
+            )
 
         if parameters.Cm > 0:
             grad += _cost_functions_tensorflow.calculate_mass_continuity_gradient(
@@ -888,12 +898,8 @@ def J_and_grad(winds, parameters):
     objective/gradient intermediates in the future.
     """
     if parameters.engine == "tensorflow":
-        with tf.GradientTape() as tape:
-            tape.watch(winds)
-            value = J_function(winds, parameters)
-        gradient = tape.gradient(value, winds)
-        gradient = tf.reshape(
-            gradient,
+        shaped_winds = tf.reshape(
+            winds,
             (
                 3,
                 parameters.grid_shape[0],
@@ -901,62 +907,36 @@ def J_and_grad(winds, parameters):
                 parameters.grid_shape[2],
             ),
         )
-        if parameters.lower_bc == 1:
-            gradient = tf.tensor_scatter_nd_update(
-                gradient,
-                [[2, 0, 0, 0]],
-                [0.0],
+        radial_cost, radial_gradient = (
+            _cost_functions_tensorflow.calculate_radial_vel_cost_and_gradient(
+                parameters.vrs,
+                parameters.els,
+                parameters.azs,
+                shaped_winds[0],
+                shaped_winds[1],
+                shaped_winds[2],
+                parameters.wts,
+                parameters.weights,
+                parameters.rmsVr,
+                coeff=parameters.Co,
+                upper_bc=parameters.upper_bc,
+                upper_bc_mask=parameters.upper_bc_mask,
+                lower_bc=parameters.lower_bc,
             )
-            gradient = tf.concat(
-                [
-                    gradient[:2],
-                    tf.concat(
-                        [
-                            tf.zeros_like(gradient[2:3, 0:1]),
-                            gradient[2:3, 1:],
-                        ],
-                        axis=1,
-                    ),
-                ],
-                axis=0,
-            )
-        if parameters.upper_bc == 1:
-            gradient = tf.concat(
-                [
-                    gradient[:2],
-                    tf.concat(
-                        [
-                            gradient[2:3, :-1],
-                            tf.zeros_like(gradient[2:3, -1:]),
-                        ],
-                        axis=1,
-                    ),
-                ],
-                axis=0,
-            )
-        elif parameters.upper_bc == 2 and parameters.upper_bc_mask is not None:
-            w_gradient = tf.where(
-                tf.cast(parameters.upper_bc_mask, tf.bool),
-                tf.zeros_like(gradient[2]),
-                gradient[2],
-            )
-            gradient = tf.concat([gradient[:2], w_gradient[None]], axis=0)
-        if parameters.const_boundary_cond is True:
-            mask = np.ones(
-                (
-                    3,
-                    parameters.grid_shape[0],
-                    parameters.grid_shape[1],
-                    parameters.grid_shape[2],
-                ),
-                dtype=np.float32,
-            )
-            mask[:, :, 0, :] = 0
-            mask[:, :, -1, :] = 0
-            mask[:, :, :, 0] = 0
-            mask[:, :, :, -1] = 0
-            gradient *= tf.constant(mask)
-        return value, tf.reshape(gradient, [-1])
+        )
+        previous_cache = getattr(parameters, "_radial_eval_cache", None)
+        parameters._radial_eval_cache = {
+            "source_winds": winds,
+            "cost": radial_cost,
+            "gradient": radial_gradient,
+        }
+        try:
+            return J_function(winds, parameters), grad_J(winds, parameters)
+        finally:
+            if previous_cache is None:
+                del parameters._radial_eval_cache
+            else:
+                parameters._radial_eval_cache = previous_cache
 
     if parameters.engine == "jax":
         objective = lambda objective_winds: J_function_jax(objective_winds, parameters)
