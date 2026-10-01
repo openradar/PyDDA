@@ -87,6 +87,7 @@ from . import _cost_functions_jax as jax
 from ._cost_functions_numpy import calculate_radial_vel_cost_function
 from ._cost_functions_numpy import calculate_fall_speed
 from ._cost_functions_numpy import calculate_grad_radial_vel
+from ._cost_functions_numpy import calculate_radial_vel_cost_and_gradient
 from ._cost_functions_numpy import calculate_mass_continuity
 from ._cost_functions_numpy import calculate_mass_continuity_gradient
 from ._cost_functions_numpy import calculate_smoothness_cost
@@ -99,4 +100,4 @@ from ._cost_functions_numpy import calculate_model_cost
 from ._cost_functions_numpy import calculate_model_gradient
 from ._cost_functions_numpy import calculate_point_cost, calculate_point_gradient
 from ._cost_functions_numpy import calculate_echo_top_mask
-from .cost_functions import J_function, grad_J, grad_jax, J_function_jax
+from .cost_functions import J_function, J_and_grad, grad_J, grad_jax, J_function_jax

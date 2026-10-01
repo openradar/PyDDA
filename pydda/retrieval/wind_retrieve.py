@@ -63,12 +63,9 @@ except ImportError:
 
 # imports changed to local import path to run on computer
 from ..cost_functions import (
-    J_function,
-    grad_J,
+    J_and_grad,
     calculate_fall_speed,
     calculate_echo_top_mask,
-    grad_jax,
-    J_function_jax,
 )
 from copy import deepcopy
 from .angles import add_azimuth_as_field, add_elevation_as_field
@@ -733,22 +730,19 @@ def _get_dd_wind_field_scipy(
         parameters.print_out = False
         if engine.lower() == "scipy":
             winds = fmin_l_bfgs_b(
-                J_function,
+                J_and_grad,
                 winds,
                 args=(parameters,),
                 maxiter=max_iterations,
                 pgtol=tolerance,
                 bounds=bounds,
-                fprime=grad_J,
                 callback=_vert_velocity_callback,
             )
         else:
 
             def loss_and_gradient(x):
-                x_loss = J_function_jax(x["winds"], parameters)
-                x_grad = {}
-                x_grad["winds"] = grad_jax(x["winds"], parameters)
-                return x_loss, x_grad
+                x_loss, x_gradient = J_and_grad(x["winds"], parameters)
+                return x_loss, {"winds": x_gradient}
 
             bounds = (
                 {"winds": -max_wind_mag * jnp.ones(winds.shape)},
@@ -1325,7 +1319,7 @@ def _get_dd_wind_field_tensorflow(
     parameters.upper_bc = upper_bc
     parameters.points = points
     parameters.point_list = points
-    loss_and_gradient = lambda x: (J_function(x, parameters), grad_J(x, parameters))
+    loss_and_gradient = lambda x: J_and_grad(x, parameters)
 
     winds = tfp.optimizer.lbfgs_minimize(
         loss_and_gradient,

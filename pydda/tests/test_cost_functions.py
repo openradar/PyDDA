@@ -81,6 +81,30 @@ def test_calculate_rad_velocity_cost_parallel():
     np.testing.assert_allclose(parallel_grad, serial_grad)
 
 
+def test_calculate_rad_velocity_cost_and_gradient_shares_result():
+    """The combined radar evaluator matches the separate evaluations."""
+    vrs, azs, els, wts, weights = _make_radvel_inputs()
+    rng = np.random.default_rng(42)
+    u = rng.random((20, 20, 20))
+    v = rng.random((20, 20, 20))
+    w = rng.random((20, 20, 20))
+
+    combined_cost, combined_grad = (
+        pydda.cost_functions.calculate_radial_vel_cost_and_gradient(
+            vrs, els, azs, u, v, w, wts, weights, 1.0
+        )
+    )
+    separate_cost = pydda.cost_functions.calculate_radial_vel_cost_function(
+        vrs, azs, els, u, v, w, wts, 1.0, weights
+    )
+    separate_grad = pydda.cost_functions.calculate_grad_radial_vel(
+        vrs, els, azs, u, v, w, wts, weights, 1.0
+    )
+
+    np.testing.assert_allclose(combined_cost, separate_cost)
+    np.testing.assert_allclose(combined_grad, separate_grad)
+
+
 @pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
 def test_calculate_rad_velocity_cost_jax():
     """Test with a zero velocity field radar"""

@@ -95,6 +95,51 @@ def calculate_radial_vel_cost_function(
     return J_o
 
 
+def calculate_radial_vel_cost_and_gradient(
+    vrs,
+    els,
+    azs,
+    u,
+    v,
+    w,
+    wts,
+    weights,
+    rmsVr,
+    coeff=1.0,
+    upper_bc=1,
+    upper_bc_mask=None,
+    lower_bc=True,
+):
+    """Calculate radar cost and gradient while sharing each radar residual."""
+    lambda_o = coeff / (rmsVr * rmsVr)
+    costs = []
+    p_x1 = tf.zeros_like(u)
+    p_y1 = tf.zeros_like(v)
+    p_z1 = tf.zeros_like(w)
+
+    for i in range(len(vrs)):
+        cos_el = tf.math.cos(els[i])
+        sin_el = tf.math.sin(els[i])
+        v_ar = (
+            cos_el * tf.math.sin(azs[i]) * u
+            + cos_el * tf.math.cos(azs[i]) * v
+            + sin_el * (w - tf.math.abs(wts[i]))
+        )
+        residual = v_ar - vrs[i]
+        costs.append(lambda_o * tf.reduce_sum(tf.math.square(residual) * weights[i]))
+        p_x1 += 2 * residual * cos_el * tf.math.sin(azs[i]) * weights[i] * lambda_o
+        p_y1 += 2 * residual * cos_el * tf.math.cos(azs[i]) * weights[i] * lambda_o
+        p_z1 += 2 * residual * sin_el * weights[i] * lambda_o
+
+    if lower_bc:
+        p_z1 = tf.concat(
+            [tf.zeros_like(p_z1[0:1]), p_z1[1:]],
+            axis=0,
+        )
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
+    return tf.add_n(costs), tf.reshape(tf.stack((p_x1, p_y1, p_z1)), [-1])
+
+
 def calculate_grad_radial_vel(
     vrs,
     els,

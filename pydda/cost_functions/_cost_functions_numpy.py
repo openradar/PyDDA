@@ -235,6 +235,70 @@ def calculate_grad_radial_vel(
     return y.flatten()
 
 
+def calculate_radial_vel_cost_and_gradient(
+    vrs,
+    els,
+    azs,
+    u,
+    v,
+    w,
+    wts,
+    weights,
+    rmsVr,
+    coeff=1.0,
+    upper_bc=1,
+    upper_bc_mask=None,
+    parallel=False,
+):
+    """Calculate radar cost and gradient while sharing the radar projection.
+
+    This is used by the combined SciPy optimizer callback.  The existing
+    cost-only and gradient-only functions remain available for callers that
+    need just one result.
+    """
+    lambda_o = coeff / (rmsVr * rmsVr)
+
+    if parallel:
+        vrs_arr = np.stack(vrs)
+        els_arr = np.stack(els)
+        azs_arr = np.stack(azs)
+        wts_arr = np.stack(wts)
+        cos_els = np.cos(els_arr)
+        sin_els = np.sin(els_arr)
+        x_projection = cos_els * np.sin(azs_arr)
+        y_projection = cos_els * np.cos(azs_arr)
+        v_ar = (
+            x_projection * u[np.newaxis]
+            + y_projection * v[np.newaxis]
+            + sin_els * (w[np.newaxis] - np.abs(wts_arr))
+        )
+        residual = v_ar - vrs_arr
+        cost = lambda_o * np.sum(np.square(residual) * weights)
+        p_x1 = np.sum(2 * residual * x_projection * weights, axis=0) * lambda_o
+        p_y1 = np.sum(2 * residual * y_projection * weights, axis=0) * lambda_o
+        p_z1 = np.sum(2 * residual * sin_els * weights, axis=0) * lambda_o
+    else:
+        cost = 0.0
+        p_x1 = np.zeros(vrs[0].shape)
+        p_y1 = np.zeros(vrs[0].shape)
+        p_z1 = np.zeros(vrs[0].shape)
+        for vr, el, az, wt, weight in zip(vrs, els, azs, wts, weights):
+            cos_el = np.cos(el)
+            sin_el = np.sin(el)
+            x_projection = cos_el * np.sin(az)
+            y_projection = cos_el * np.cos(az)
+            v_ar = x_projection * u + y_projection * v + sin_el * (w - np.abs(wt))
+            residual = v_ar - vr
+            cost += lambda_o * np.sum(np.square(residual) * weight)
+            p_x1 += 2 * residual * x_projection * weight * lambda_o
+            p_y1 += 2 * residual * y_projection * weight * lambda_o
+            p_z1 += 2 * residual * sin_el * weight * lambda_o
+
+    p_z1[0, :, :] = 0
+    p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)
+    return cost, np.stack((p_x1, p_y1, p_z1), axis=0).flatten()
+
+
 def calculate_smoothness_cost(u, v, w, dx, dy, dz, Cx=1e-5, Cy=1e-5, Cz=1e-5):
     """
     Calculates the smoothness cost function by taking the Laplacian of the
