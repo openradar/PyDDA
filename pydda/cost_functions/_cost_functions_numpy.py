@@ -249,6 +249,7 @@ def calculate_radial_vel_cost_and_gradient(
     upper_bc=1,
     upper_bc_mask=None,
     parallel=False,
+    radar_geometry=None,
 ):
     """Calculate radar cost and gradient while sharing the radar projection.
 
@@ -260,17 +261,24 @@ def calculate_radial_vel_cost_and_gradient(
 
     if parallel:
         vrs_arr = np.stack(vrs)
-        els_arr = np.stack(els)
-        azs_arr = np.stack(azs)
-        wts_arr = np.stack(wts)
-        cos_els = np.cos(els_arr)
-        sin_els = np.sin(els_arr)
-        x_projection = cos_els * np.sin(azs_arr)
-        y_projection = cos_els * np.cos(azs_arr)
+        if radar_geometry is None:
+            els_arr = np.stack(els)
+            azs_arr = np.stack(azs)
+            wts_arr = np.stack(wts)
+            cos_els = np.cos(els_arr)
+            sin_els = np.sin(els_arr)
+            x_projection = cos_els * np.sin(azs_arr)
+            y_projection = cos_els * np.cos(azs_arr)
+            wts_abs = np.abs(wts_arr)
+        else:
+            x_projection = radar_geometry["x_projection"]
+            y_projection = radar_geometry["y_projection"]
+            sin_els = radar_geometry["sin_el"]
+            wts_abs = radar_geometry["wts_abs"]
         v_ar = (
             x_projection * u[np.newaxis]
             + y_projection * v[np.newaxis]
-            + sin_els * (w[np.newaxis] - np.abs(wts_arr))
+            + sin_els * (w[np.newaxis] - wts_abs)
         )
         residual = v_ar - vrs_arr
         cost = lambda_o * np.sum(np.square(residual) * weights)
@@ -282,12 +290,21 @@ def calculate_radial_vel_cost_and_gradient(
         p_x1 = np.zeros(vrs[0].shape)
         p_y1 = np.zeros(vrs[0].shape)
         p_z1 = np.zeros(vrs[0].shape)
-        for vr, el, az, wt, weight in zip(vrs, els, azs, wts, weights):
-            cos_el = np.cos(el)
-            sin_el = np.sin(el)
-            x_projection = cos_el * np.sin(az)
-            y_projection = cos_el * np.cos(az)
-            v_ar = x_projection * u + y_projection * v + sin_el * (w - np.abs(wt))
+        for index, (vr, wt, weight) in enumerate(zip(vrs, wts, weights)):
+            if radar_geometry is None:
+                el = els[index]
+                az = azs[index]
+                cos_el = np.cos(el)
+                sin_el = np.sin(el)
+                x_projection = cos_el * np.sin(az)
+                y_projection = cos_el * np.cos(az)
+                wts_abs = np.abs(wt)
+            else:
+                x_projection = radar_geometry["x_projection"][index]
+                y_projection = radar_geometry["y_projection"][index]
+                sin_el = radar_geometry["sin_el"][index]
+                wts_abs = radar_geometry["wts_abs"][index]
+            v_ar = x_projection * u + y_projection * v + sin_el * (w - wts_abs)
             residual = v_ar - vr
             cost += lambda_o * np.sum(np.square(residual) * weight)
             p_x1 += 2 * residual * x_projection * weight * lambda_o
@@ -457,7 +474,9 @@ def _point_weights(x, y, z, the_point, roi):
     return weight / maximum if maximum > 0 else weight
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2, roi=500.0):
+def calculate_point_cost(
+    u, v, x, y, z, point_list, Cp=1e-3, power=2, roi=500.0, point_weights=None
+):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -490,18 +509,24 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2, roi=500.0)
         The cost function related to the difference between wind field and points.
     """
     J = 0.0
-    for the_point in point_list:
+    for point_index, the_point in enumerate(point_list):
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
 
-        weight = _point_weights(x, y, z, the_point, roi)
+        weight = (
+            point_weights[point_index]
+            if point_weights is not None
+            else _point_weights(x, y, z, the_point, roi)
+        )
 
         J += np.sum(weight * ((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2))
 
     return J * Cp
 
 
-def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_gradient(
+    u, v, x, y, z, point_list, Cp=1e-3, roi=500.0, point_weights=None
+):
     """
     Calculates the gradient of the cost function related to point observations.
     A mean square error cost function term is applied to points that are within the sphere of influence
@@ -537,8 +562,12 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_v = np.zeros_like(v)
     gradJ_w = np.zeros_like(u)
 
-    for the_point in point_list:
-        weight = _point_weights(x, y, z, the_point, roi)
+    for point_index, the_point in enumerate(point_list):
+        weight = (
+            point_weights[point_index]
+            if point_weights is not None
+            else _point_weights(x, y, z, the_point, roi)
+        )
         gradJ_u += 2 * weight * (u - the_point["u"])
         gradJ_v += 2 * weight * (v - the_point["v"])
 

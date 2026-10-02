@@ -109,6 +109,7 @@ def calculate_radial_vel_cost_and_gradient(
     upper_bc=1,
     upper_bc_mask=None,
     lower_bc=True,
+    radar_geometry=None,
 ):
     """Calculate radar cost and gradient while sharing each radar residual."""
     lambda_o = coeff / (rmsVr * rmsVr)
@@ -118,17 +119,22 @@ def calculate_radial_vel_cost_and_gradient(
     p_z1 = tf.zeros_like(w)
 
     for i in range(len(vrs)):
-        cos_el = tf.math.cos(els[i])
-        sin_el = tf.math.sin(els[i])
-        v_ar = (
-            cos_el * tf.math.sin(azs[i]) * u
-            + cos_el * tf.math.cos(azs[i]) * v
-            + sin_el * (w - tf.math.abs(wts[i]))
-        )
+        if radar_geometry is None:
+            cos_el = tf.math.cos(els[i])
+            sin_el = tf.math.sin(els[i])
+            x_projection = cos_el * tf.math.sin(azs[i])
+            y_projection = cos_el * tf.math.cos(azs[i])
+            wts_abs = tf.math.abs(wts[i])
+        else:
+            x_projection = radar_geometry["x_projection"][i]
+            y_projection = radar_geometry["y_projection"][i]
+            sin_el = radar_geometry["sin_el"][i]
+            wts_abs = radar_geometry["wts_abs"][i]
+        v_ar = x_projection * u + y_projection * v + sin_el * (w - wts_abs)
         residual = v_ar - vrs[i]
         costs.append(lambda_o * tf.reduce_sum(tf.math.square(residual) * weights[i]))
-        p_x1 += 2 * residual * cos_el * tf.math.sin(azs[i]) * weights[i] * lambda_o
-        p_y1 += 2 * residual * cos_el * tf.math.cos(azs[i]) * weights[i] * lambda_o
+        p_x1 += 2 * residual * x_projection * weights[i] * lambda_o
+        p_y1 += 2 * residual * y_projection * weights[i] * lambda_o
         p_z1 += 2 * residual * sin_el * weights[i] * lambda_o
 
     if lower_bc:
@@ -383,7 +389,9 @@ def calculate_smoothness_gradient(
     return tf.reshape(y, (3 * np.prod(u.shape),))
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_cost(
+    u, v, x, y, z, point_list, Cp=1e-3, roi=500.0, point_weights=None
+):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -421,26 +429,31 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
     J = tf.Variable(0.0)
 
-    for the_point in point_list:
+    for point_index, the_point in enumerate(point_list):
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
         up = tf.ones_like(u) * the_point["u"]
         vp = tf.ones_like(v) * the_point["v"]
-        dist = tf.math.sqrt(
-            (x - the_point["x"]) ** 2
-            + (y - the_point["y"]) ** 2
-            + (z - the_point["z"]) ** 2
-        )
-        dist = tf.math.maximum(dist, 1.0)
-        weight = 1 / dist**2
-        weight = weight / tf.reduce_max(weight)
+        if point_weights is None:
+            dist = tf.math.sqrt(
+                (x - the_point["x"]) ** 2
+                + (y - the_point["y"]) ** 2
+                + (z - the_point["z"]) ** 2
+            )
+            dist = tf.math.maximum(dist, 1.0)
+            weight = 1 / dist**2
+            weight = weight / tf.reduce_max(weight)
+        else:
+            weight = point_weights[point_index]
 
         J.assign_add(tf.math.reduce_sum(((u - up) ** 2 + (v - vp) ** 2) * weight))
 
     return J * Cp
 
 
-def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_gradient(
+    u, v, x, y, z, point_list, Cp=1e-3, roi=500.0, point_weights=None
+):
     """
     Calculates the gradient of the cost function related to point observations.
     A mean square error cost function term is applied to points that are within the sphere of influence
@@ -477,20 +490,23 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_u = tf.Variable(tf.zeros(u.shape, dtype=tf.float32))
     gradJ_v = tf.Variable(tf.zeros(v.shape, dtype=tf.float32))
     gradJ_w = tf.Variable(tf.zeros(u.shape, dtype=tf.float32))
-    for the_point in point_list:
+    for point_index, the_point in enumerate(point_list):
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
         up = tf.ones_like(u, dtype=tf.float32) * the_point["u"]
         vp = tf.ones_like(v, dtype=tf.float32) * the_point["v"]
 
-        dist = tf.math.sqrt(
-            (x - the_point["x"]) ** 2
-            + (y - the_point["y"]) ** 2
-            + (z - the_point["z"]) ** 2
-        )
-        dist = tf.math.maximum(dist, 1.0)
-        weight = 1 / dist**2
-        weight = weight / tf.reduce_max(weight)
+        if point_weights is None:
+            dist = tf.math.sqrt(
+                (x - the_point["x"]) ** 2
+                + (y - the_point["y"]) ** 2
+                + (z - the_point["z"]) ** 2
+            )
+            dist = tf.math.maximum(dist, 1.0)
+            weight = 1 / dist**2
+            weight = weight / tf.reduce_max(weight)
+        else:
+            weight = point_weights[point_index]
         gradJ_u.assign_add((2 * (u - up) * weight))
         gradJ_v.assign_add((2 * (v - vp) * weight))
     gradJ = tf.stack([gradJ_u, gradJ_v, gradJ_w], axis=0)
