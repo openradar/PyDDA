@@ -25,6 +25,27 @@ from . import _cost_functions_numpy
 from . import _cost_functions_tensorflow
 
 
+_gradient_pool = None
+
+
+def _get_gradient_pool():
+    """Return the process-wide executor used by parallel SciPy gradients."""
+    global _gradient_pool
+    if _gradient_pool is None:
+        _gradient_pool = ThreadPoolExecutor()
+    return _gradient_pool
+
+
+class _GradientPoolLease:
+    """Borrow the shared gradient pool without shutting it down."""
+
+    def __enter__(self):
+        return _get_gradient_pool()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return False
+
+
 def _fluid_mask(parameters):
     """
     The above-terrain mask used to restrict the mass continuity constraint,
@@ -211,7 +232,7 @@ def J_function(winds, parameters):
                 rmsVr=parameters.rmsVr,
                 weights=parameters.weights,
                 coeff=parameters.Co,
-                parallel=parameters.parallel,
+                parallel=False,
             )
         # print("apples Jvel", Jvel)
 
@@ -590,9 +611,10 @@ def grad_J(winds, parameters):
         use_radial_cache = (
             radial_cache is not None and radial_cache["source_winds"] is winds_input
         )
-        if parameters.parallel and not use_radial_cache:
+        # Retain the compatibility keyword, but disable threaded gradients.
+        if False:
             futures = []
-            with ThreadPoolExecutor() as pool:
+            with _GradientPoolLease() as pool:
                 futures.append(
                     pool.submit(
                         _cost_functions_numpy.calculate_grad_radial_vel,
@@ -997,7 +1019,7 @@ def J_and_grad(winds, parameters):
             coeff=parameters.Co,
             upper_bc=parameters.upper_bc,
             upper_bc_mask=parameters.upper_bc_mask,
-            parallel=parameters.parallel,
+            parallel=False,
             radar_geometry=parameters.radar_geometry,
         )
     )

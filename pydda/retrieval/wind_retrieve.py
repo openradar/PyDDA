@@ -1701,9 +1701,8 @@ def get_dd_wind_field(
     max_wind_mag: float
         Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| < x` m/s.
     parallel: bool
-        If True, enables parallelized cost and gradient computations for the scipy engine.
-        This vectorizes the radar loop in the radial velocity cost/gradient functions and
-        computes independent constraint gradients concurrently using a thread pool.
+        Deprecated compatibility argument. Retrievals use the serial/vectorized
+        gradient path regardless of this value.
         Default is False.
 
     Returns
