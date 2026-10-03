@@ -585,18 +585,18 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">57</span><span class="sd">     output_parameters = output_parameters.__dict__</span>
 <span class="g g-Whitespace">     </span><span class="mi">58</span><span class="sd">     if in_parent is True:</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1747,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1740</span><span class="sd">     w_init = new_grids[0]["w"].values.squeeze()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1742</span><span class="sd"> if (</span>
-<span class="g g-Whitespace">   </span><span class="mi">1743</span><span class="sd">     engine.lower() == "scipy"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1744</span><span class="sd">     or engine.lower() == "jax"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1745</span><span class="sd">     or engine.lower() == "auglag"</span>
-<span class="g g-Whitespace">   </span><span class="mi">1746</span><span class="sd"> ):</span>
-<span class="ne">-&gt; </span><span class="mi">1747</span><span class="sd">     return _get_dd_wind_field_scipy(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1748</span><span class="sd">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1749</span><span class="sd">     )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1750</span><span class="sd"> elif engine.lower() == "tensorflow":</span>
-<span class="g g-Whitespace">   </span><span class="mi">1751</span><span class="sd">     if kwargs.get("Cterrain", 0.0) &gt; 0:</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:1746,</span> in <span class="ni">get_dd_wind_field</span><span class="nt">(Grids, u_init, v_init, w_init, engine, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1739</span><span class="sd">     w_init = new_grids[0]["w"].values.squeeze()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1741</span><span class="sd"> if (</span>
+<span class="g g-Whitespace">   </span><span class="mi">1742</span><span class="sd">     engine.lower() == "scipy"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1743</span><span class="sd">     or engine.lower() == "jax"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1744</span><span class="sd">     or engine.lower() == "auglag"</span>
+<span class="g g-Whitespace">   </span><span class="mi">1745</span><span class="sd"> ):</span>
+<span class="ne">-&gt; </span><span class="mi">1746</span><span class="sd">     return _get_dd_wind_field_scipy(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1747</span><span class="sd">         new_grids, u_init, v_init, w_init, engine, **kwargs</span>
+<span class="g g-Whitespace">   </span><span class="mi">1748</span><span class="sd">     )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1749</span><span class="sd"> elif engine.lower() == "tensorflow":</span>
+<span class="g g-Whitespace">   </span><span class="mi">1750</span><span class="sd">     if kwargs.get("Cterrain", 0.0) &gt; 0:</span>
 
 <span class="nn">File ~/work/PyDDA/PyDDA/pydda/retrieval/wind_retrieve.py:788,</span> in <span class="ni">_get_dd_wind_field_scipy</span><span class="nt">(Grids, u_init, v_init, w_init, engine, points, vel_name, refl_field, u_back, v_back, z_back, frz, Co, Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Cpoint, Cterrain, terrain, Cvad, cvtol, gtol, Jveltol, Ut, Vt, low_pass_filter, mask_outside_opt, weights_obs, weights_model, weights_bg, max_iterations, mask_w_outside_opt, filter_type, filter_window, filter_order, leise_nstep, min_bca, max_bca, upper_bc, lower_bc, above, model_fields, output_cost_functions, roi, wind_tol, tolerance, const_boundary_cond, max_wind_mag, parallel)</span>
 <span class="g g-Whitespace">    </span><span class="mi">786</span><span class="sd"> parameters.print_out = False</span>
@@ -629,33 +629,92 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">    </span><span class="mi">265</span><span class="sd">      'warnflag': res['status']}</span>
 <span class="g g-Whitespace">    </span><span class="mi">266</span><span class="sd"> f = res['fun']</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:426,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">423</span><span class="sd"> n_iterations += 1</span>
-<span class="g g-Whitespace">    </span><span class="mi">425</span><span class="sd"> intermediate_result = OptimizeResult(x=x, fun=f)</span>
-<span class="ne">--&gt; </span><span class="mi">426</span><span class="sd"> if _call_callback_maybe_halt(callback, intermediate_result):</span>
-<span class="g g-Whitespace">    </span><span class="mi">427</span><span class="sd">     task[0] = 5</span>
-<span class="g g-Whitespace">    </span><span class="mi">428</span><span class="sd">     task[1] = 505</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_lbfgsb_py.py:420,</span> in <span class="ni">_minimize_lbfgsb</span><span class="nt">(fun, x0, args, jac, bounds, maxcor, ftol, gtol, eps, maxfun, maxiter, callback, maxls, finite_diff_rel_step, workers, **unknown_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">412</span><span class="sd"> _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="sd">                iwa, task, lsave, isave, dsave, maxls, ln_task)</span>
+<span class="g g-Whitespace">    </span><span class="mi">415</span><span class="sd"> if task[0] == 3:</span>
+<span class="g g-Whitespace">    </span><span class="mi">416</span><span class="sd">     # The minimization routine wants f and g at the current x.</span>
+<span class="g g-Whitespace">    </span><span class="mi">417</span><span class="sd">     # Note that interruptions due to maxfun are postponed</span>
+<span class="g g-Whitespace">    </span><span class="mi">418</span><span class="sd">     # until the completion of the current minimization iteration.</span>
+<span class="g g-Whitespace">    </span><span class="mi">419</span><span class="sd">     # Overwrite f and g:</span>
+<span class="ne">--&gt; </span><span class="mi">420</span><span class="sd">     f, g = func_and_grad(x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">421</span><span class="sd"> elif task[0] == 1:</span>
+<span class="g g-Whitespace">    </span><span class="mi">422</span><span class="sd">     # new iteration</span>
+<span class="g g-Whitespace">    </span><span class="mi">423</span><span class="sd">     n_iterations += 1</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:938,</span> in <span class="ni">_call_callback_maybe_halt</span><span class="nt">(callback, res)</span>
-<span class="g g-Whitespace">    </span><span class="mi">936</span><span class="sd">     return False</span>
-<span class="g g-Whitespace">    </span><span class="mi">937</span><span class="sd"> try:</span>
-<span class="ne">--&gt; </span><span class="mi">938</span><span class="sd">     callback(res)</span>
-<span class="g g-Whitespace">    </span><span class="mi">939</span><span class="sd">     return False</span>
-<span class="g g-Whitespace">    </span><span class="mi">940</span><span class="sd"> except StopIteration:</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:412,</span> in <span class="ni">ScalarFunction.fun_and_grad</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">410</span><span class="sd"> if not np.array_equal(x, self.x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">411</span><span class="sd">     self._update_x(x)</span>
+<span class="ne">--&gt; </span><span class="mi">412</span><span class="sd"> self._update_fun()</span>
+<span class="g g-Whitespace">    </span><span class="mi">413</span><span class="sd"> self._update_grad()</span>
+<span class="g g-Whitespace">    </span><span class="mi">414</span><span class="sd"> return self.f, self.g</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_optimize.py:106,</span> in <span class="ni">_wrap_callback.&lt;locals&gt;.wrapped_callback</span><span class="nt">(res)</span>
-<span class="g g-Whitespace">    </span><span class="mi">105</span><span class="sd"> def wrapped_callback(res):</span>
-<span class="ne">--&gt; </span><span class="mi">106</span><span class="sd">     return callback(np.copy(res.x))</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_differentiable_functions.py:362,</span> in <span class="ni">ScalarFunction._update_fun</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="sd"> def _update_fun(self):</span>
+<span class="g g-Whitespace">    </span><span class="mi">361</span><span class="sd">     if not self.f_updated:</span>
+<span class="ne">--&gt; </span><span class="mi">362</span><span class="sd">         fx = self._wrapped_fun(self.x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">363</span><span class="sd">         self._nfev += 1</span>
+<span class="g g-Whitespace">    </span><span class="mi">364</span><span class="sd">         if fx &lt; self._lowest_f:</span>
 
-<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:992,</span> in <span class="ni">copy</span><span class="nt">(a, order, subok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">924</span><span class="sd"> @array_function_dispatch(_copy_dispatcher)</span>
-<span class="g g-Whitespace">    </span><span class="mi">925</span><span class="sd"> def copy(a, order='K', subok=False):</span>
-<span class="g g-Whitespace">    </span><span class="mi">926</span><span class="sd">     """</span>
-<span class="g g-Whitespace">    </span><span class="mi">927</span>     <span class="n">Return</span> <span class="n">an</span> <span class="n">array</span> <span class="n">copy</span> <span class="n">of</span> <span class="n">the</span> <span class="n">given</span> <span class="nb">object</span><span class="o">.</span>
-<span class="g g-Whitespace">    </span><span class="mi">928</span> 
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">990</span>     <span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
-<span class="g g-Whitespace">    </span><span class="mi">991</span>     <span class="s2">"""</span>
-<span class="ne">--&gt; </span><span class="mi">992</span><span class="s2">     return array(a, order=order, subok=subok, copy=True)</span>
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/_lib/_util.py:544,</span> in <span class="ni">_ScalarFunctionWrapper.__call__</span><span class="nt">(self, x)</span>
+<span class="g g-Whitespace">    </span><span class="mi">541</span><span class="sd"> def __call__(self, x):</span>
+<span class="g g-Whitespace">    </span><span class="mi">542</span><span class="sd">     # Send a copy because the user may overwrite it.</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span><span class="sd">     # The user of this class might want `x` to remain unchanged.</span>
+<span class="ne">--&gt; </span><span class="mi">544</span><span class="sd">     fx = self.f(np.copy(x), *self.args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">545</span><span class="sd">     self.nfev += 1</span>
+<span class="g g-Whitespace">    </span><span class="mi">547</span><span class="sd">     # Make sure the function returns a true scalar</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_optimize.py:80,</span> in <span class="ni">MemoizeJac.__call__</span><span class="nt">(self, x, *args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">78</span><span class="sd"> def __call__(self, x, *args):</span>
+<span class="g g-Whitespace">     </span><span class="mi">79</span><span class="sd">     """</span> <span class="n">returns</span> <span class="n">the</span> <span class="n">function</span> <span class="n">value</span> <span class="s2">"""</span>
+<span class="ne">---&gt; </span><span class="mi">80</span><span class="s2">     self._compute_if_needed(x, *args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">81</span><span class="s2">     return self._value</span>
+
+<span class="nn">File /usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_optimize.py:74,</span> in <span class="ni">MemoizeJac._compute_if_needed</span><span class="nt">(self, x, *args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span><span class="s2"> if not np.all(x == self.x) or self._value is None or self.jac is None:</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span><span class="s2">     self.x = np.asarray(x).copy()</span>
+<span class="ne">---&gt; </span><span class="mi">74</span><span class="s2">     fg = self.fun(x, *args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">75</span><span class="s2">     self.jac = fg[1]</span>
+<span class="g g-Whitespace">     </span><span class="mi">76</span><span class="s2">     self._value = fg[0]</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:1009,</span> in <span class="ni">J_and_grad</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">997</span><span class="s2">     return J_function(winds, parameters), grad_J(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">999</span><span class="s2"> shaped_winds = np.reshape(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1000</span><span class="s2">     winds,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1001</span><span class="s2">     (</span>
+<span class="s2">   (...)   1006     ),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1007</span><span class="s2"> )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1008</span><span class="s2"> radial_cost, radial_gradient = (</span>
+<span class="ne">-&gt; </span><span class="mi">1009</span><span class="s2">     _cost_functions_numpy.calculate_radial_vel_cost_and_gradient(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1010</span><span class="s2">         parameters.vrs,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1011</span><span class="s2">         parameters.els,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1012</span><span class="s2">         parameters.azs,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1013</span><span class="s2">         shaped_winds[0],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1014</span><span class="s2">         shaped_winds[1],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1015</span><span class="s2">         shaped_winds[2],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1016</span><span class="s2">         parameters.wts,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1017</span><span class="s2">         parameters.weights,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1018</span><span class="s2">         parameters.rmsVr,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1019</span><span class="s2">         coeff=parameters.Co,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1020</span><span class="s2">         upper_bc=parameters.upper_bc,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1021</span><span class="s2">         upper_bc_mask=parameters.upper_bc_mask,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1022</span><span class="s2">         parallel=False,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1023</span><span class="s2">         radar_geometry=parameters.radar_geometry,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1024</span><span class="s2">     )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1025</span><span class="s2"> )</span>
+<span class="g g-Whitespace">   </span><span class="mi">1026</span><span class="s2"> previous_cache = getattr(parameters, "_radial_eval_cache", None)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1027</span><span class="s2"> parameters._radial_eval_cache = {</span>
+<span class="g g-Whitespace">   </span><span class="mi">1028</span><span class="s2">     "source_winds": winds,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1029</span><span class="s2">     "cost": radial_cost,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1030</span><span class="s2">     "gradient": radial_gradient,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1031</span><span class="s2"> }</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:312,</span> in <span class="ni">calculate_radial_vel_cost_and_gradient</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc, upper_bc_mask, parallel, radar_geometry)</span>
+<span class="g g-Whitespace">    </span><span class="mi">310</span><span class="s2">         p_x1 += 2 * residual * x_projection * weight * lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">311</span><span class="s2">         p_y1 += 2 * residual * y_projection * weight * lambda_o</span>
+<span class="ne">--&gt; </span><span class="mi">312</span><span class="s2">         p_z1 += 2 * residual * sin_el * weight * lambda_o</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span><span class="s2"> p_z1[0, :, :] = 0</span>
+<span class="g g-Whitespace">    </span><span class="mi">315</span><span class="s2"> p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>

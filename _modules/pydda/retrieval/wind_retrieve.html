@@ -2061,9 +2061,8 @@
 <span class="sd">    max_wind_mag: float</span>
 <span class="sd">        Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| &lt; x` m/s.</span>
 <span class="sd">    parallel: bool</span>
-<span class="sd">        If True, enables parallelized cost and gradient computations for the scipy engine.</span>
-<span class="sd">        This vectorizes the radar loop in the radial velocity cost/gradient functions and</span>
-<span class="sd">        computes independent constraint gradients concurrently using a thread pool.</span>
+<span class="sd">        Deprecated compatibility argument. Retrievals use the serial/vectorized</span>
+<span class="sd">        gradient path regardless of this value.</span>
 <span class="sd">        Default is False.</span>
 
 <span class="sd">    Returns</span>

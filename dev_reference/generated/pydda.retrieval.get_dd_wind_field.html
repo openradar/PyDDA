@@ -586,9 +586,8 @@ This is only for the TensorFlow-based engine.</p></li>
 <li><p><strong>wind_tol</strong> (<em>float</em>) – Stop iterations after maximum change in winds is less than this value.</p></li>
 <li><p><strong>tolerance</strong> (<em>float</em>) – Tolerance for <span class="math notranslate nohighlight">\(L_{2}\)</span> norm of gradient before stopping.</p></li>
 <li><p><strong>max_wind_mag</strong> (<em>float</em>) – Constrain the optimization to have <span class="math notranslate nohighlight">\(|u|\)</span>, <span class="math notranslate nohighlight">\(|v|\)</span>, and <span class="math notranslate nohighlight">\(|w| &lt; x\)</span> m/s.</p></li>
-<li><p><strong>parallel</strong> (<em>bool</em>) – If True, enables parallelized cost and gradient computations for the scipy engine.
-This vectorizes the radar loop in the radial velocity cost/gradient functions and
-computes independent constraint gradients concurrently using a thread pool.
+<li><p><strong>parallel</strong> (<em>bool</em>) – Deprecated compatibility argument. Retrievals use the serial/vectorized
+gradient path regardless of this value.
 Default is False.</p></li>
 </ul>
 </dd>
