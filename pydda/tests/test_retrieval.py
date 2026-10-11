@@ -80,6 +80,30 @@ def test_make_updraft_from_convergence_field():
     assert np.ma.max(new_w > 3)
 
 
+def test_list_of_pyart_grids():
+    """A list of several Py-ART Grids is converted once per grid."""
+    Grids = []
+    for _ in range(2):
+        Grid = pyart.testing.make_empty_grid(
+            (20, 40, 40), ((0, 10000), (-20000, 20000), (-20000, 20000))
+        )
+        Grid.add_field("one_field", {"data": np.ma.ones((20, 40, 40))})
+        Grids.append(Grid)
+
+    u = v = w = np.zeros((20, 40, 40))
+    new_grids, _ = pydda.retrieval.get_dd_wind_field(
+        Grids,
+        u,
+        v,
+        w,
+        max_iterations=1,
+        vel_name="one_field",
+        refl_field="one_field",
+    )
+    assert len(new_grids) == 2
+    assert all(isinstance(g, xr.Dataset) for g in new_grids)
+
+
 def _twpice_grids():
     """The TWP-ICE grid pair used by the retrieval tests, with a first guess
     taken from the sounding (which has w = 0 everywhere)."""
