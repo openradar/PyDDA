@@ -1716,8 +1716,7 @@ def get_dd_wind_field(
 
     if isinstance(Grids, list):
         if isinstance(Grids[0], pyart.core.Grid):
-            for x in Grids:
-                new_grids = [read_from_pyart_grid(x) for x in Grids]
+            new_grids = [read_from_pyart_grid(x) for x in Grids]
         else:
             new_grids = Grids
     elif isinstance(Grids, pyart.core.Grid):
