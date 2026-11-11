@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Denver hail case: flat versus DEM immersed-boundary retrieval\n\nThis example shows the complete terrain-boundary workflow used for the\n18 June 2018 Denver hail case.  The selected volume scans are close to\n23:30 UTC:\n\n* KFTG: ``KFTG20180618_233053_V06``\n* KCYS: ``KCYS20180618_233041_V06``\n\nThe Level-II files are available from the public Unidata NEXRAD archive.\nThe DEM is an SRTM v3 (approximately EGM96 orthometric) mosaic.  The large\ninput files are intentionally not shipped with PyDDA.  Run the case-data\npreparation workflow first, or set ``CASE_DIR`` to a directory containing the\ntwo Py-ART grids and the DEM NetCDF file.\n\nThe example compares the default flat lower boundary with the DEM-driven\nimmersed-boundary condition.  On sloping terrain, the physical condition is\n``u dot n = 0``; ``w = 0`` is the special case for a horizontal surface.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# sphinx_gallery_thumbnail_number = 1\n\nfrom pathlib import Path\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nimport pydda\nimport xarray as xr\n\n\n# The case-data directory is created by the reproducible workflow scripts in\n# scripts/run_denver_hail_20180618_2330.py.  Change this path when running the\n# example from another checkout.\nCASE_DIR = Path(\"data/denver_hail_20180618_2330\")\nGRID_DIR = CASE_DIR / \"grid\"\nTERRAIN_DIR = CASE_DIR / \"retrieval_terrain\"\nDEM_PATH = Path(\"data/denver_hail_20180619/dem/denver_srtm_3arcsec.nc\")\nRUN_RETRIEVAL = False\n\n\ndef retrieve(grids, terrain=None):\n    \"\"\"Run a default PyDDA retrieval, optionally with terrain IBM enabled.\"\"\"\n    initialized = [\n        pydda.initialization.make_constant_wind_field(\n            grid, (0.0, 0.0, 0.0), vel_field=\"velocity\"\n        )\n        for grid in grids\n    ]\n    kwargs = {\"vel_name\": \"velocity\", \"engine\": \"scipy\"}\n    if terrain is not None:\n        kwargs.update(Cterrain=1.0, terrain=terrain)\n    return pydda.retrieval.get_dd_wind_field(initialized, **kwargs)[0]\n\n\ndef plot_3km_difference(flat, terrain, terrain_geometry):\n    \"\"\"Plot terrain-aware minus flat winds at 3 km.\"\"\"\n    flat_u = flat[\"u\"].values.squeeze()\n    flat_v = flat[\"v\"].values.squeeze()\n    flat_w = flat[\"w\"].values.squeeze()\n    terrain_u = terrain[\"u\"].values.squeeze()\n    terrain_v = terrain[\"v\"].values.squeeze()\n    terrain_w = terrain[\"w\"].values.squeeze()\n\n    delta_w = terrain_w[6] - flat_w[6]\n    delta_speed = np.hypot(terrain_u[6], terrain_v[6]) - np.hypot(flat_u[6], flat_v[6])\n    x = flat.x.values / 1000.0\n    y = flat.y.values / 1000.0\n\n    fig, axes = plt.subplots(1, 2, figsize=(14, 6), constrained_layout=True)\n    for ax, field, title, label in (\n        (axes[0], delta_w, r\"$\\Delta w$ [m/s]\", \"Updraft difference\"),\n        (\n            axes[1],\n            delta_speed,\n            r\"$\\Delta |V|$ [m/s]\",\n            \"Horizontal wind-speed difference\",\n        ),\n    ):\n        limit = np.nanpercentile(np.abs(field), 98)\n        mesh = ax.pcolormesh(\n            x, y, field, cmap=\"RdBu_r\", vmin=-limit, vmax=limit, shading=\"auto\"\n        )\n        ax.contour(x, y, field, levels=[0.0], colors=\"k\", linewidths=0.7)\n        ax.set(xlim=(-75, 75), ylim=(-75, 75), xlabel=\"X [km]\", ylabel=\"Y [km]\")\n        ax.set_title(title)\n        fig.colorbar(mesh, ax=ax, label=label)\n    fig.suptitle(\"Denver hail case: terrain-aware minus flat retrieval at 3 km\")\n    return fig\n\n\nif GRID_DIR.joinpath(\"KFTG_grid.nc\").exists() and DEM_PATH.exists():\n    radar_grids = [\n        pydda.io.read_grid(GRID_DIR / \"KFTG_grid.nc\"),\n        pydda.io.read_grid(GRID_DIR / \"KCYS_grid.nc\"),\n    ]\n    dem = xr.open_dataarray(DEM_PATH)\n    terrain_geometry = pydda.terrain.terrain_ghost_cells(radar_grids[0], dem)\n\n    if RUN_RETRIEVAL:\n        flat_grids = retrieve(radar_grids)\n        terrain_grids = retrieve(radar_grids, terrain=terrain_geometry)\n    elif TERRAIN_DIR.joinpath(\"KFTG_denver_hail_20180618_2330_retrieval.nc\").exists():\n        # Use precomputed fields for a fast gallery build. Set RUN_RETRIEVAL=True\n        # above to execute both solves from the gridded radar data.\n        flat_grids = pydda.io.read_grid(\n            CASE_DIR / \"retrieval/KFTG_denver_hail_20180618_2330_retrieval.nc\"\n        )\n        terrain_grids = pydda.io.read_grid(\n            TERRAIN_DIR / \"KFTG_denver_hail_20180618_2330_retrieval.nc\"\n        )\n    else:\n        flat_grids = terrain_grids = None\n\n    if flat_grids is not None:\n        plot_3km_difference(flat_grids, terrain_grids, terrain_geometry)\nelse:\n    print(\n        \"Denver case data not found; prepare the case data first, then rerun \"\n        \"this example.\"\n    )"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.14.10"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

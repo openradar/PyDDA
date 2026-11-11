@@ -87,6 +87,23 @@ In this section, we show different examples on:
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows the complete terrain-boundary workflow used for the 18 June 2018 Denver hail case.  The selected volume scans are close to 23:30 UTC:">
+
+.. only:: html
+
+  .. image:: /source/auto_examples/images/thumb/sphx_glr_plot_denver_hail_terrain_thumb.png
+    :alt:
+
+  :doc:`/source/auto_examples/plot_denver_hail_terrain`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Denver hail case: flat versus DEM immersed-boundary retrieval</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -101,6 +118,7 @@ In this section, we show different examples on:
    /source/auto_examples/plot_sydney_tornado
    /source/auto_examples/plot_examples
    /source/auto_examples/plot_grid_nesting_example
+   /source/auto_examples/plot_denver_hail_terrain
 
 
 .. only:: html
