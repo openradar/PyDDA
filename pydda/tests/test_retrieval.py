@@ -338,6 +338,22 @@ def test_twpice_case():
     assert w_max > 5
 
 
+def test_twpice_case_bg_weights():
+    """Each level's background weights follow that level's coverage."""
+    kwargs = dict(
+        max_iterations=1, vel_name="corrected_velocity", refl_field="reflectivity"
+    )
+    _, parameters = pydda.retrieval.get_dd_wind_field(list(_twpice_grids()), **kwargs)
+    covered = parameters.weights.sum(axis=0) > 0
+    np.testing.assert_array_equal(parameters.bg_weights, np.where(covered, 0, 1))
+
+    weights_bg = np.random.default_rng(0).integers(0, 2, covered.shape)
+    _, parameters = pydda.retrieval.get_dd_wind_field(
+        list(_twpice_grids()), weights_bg=weights_bg, **kwargs
+    )
+    np.testing.assert_array_equal(parameters.bg_weights, weights_bg)
+
+
 def test_twpice_case_parallel():
     """TWP-ICE case with parallel=True should produce physically consistent results
     and match the serial retrieval."""

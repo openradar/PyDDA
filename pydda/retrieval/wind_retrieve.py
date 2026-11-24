@@ -563,7 +563,7 @@ def _get_dd_wind_field_scipy(
                                 ~parameters.els[j][k].mask,
                             )
                         )
-                        cur_array = parameters.bg_weights[k]
+                        cur_array = parameters.bg_weights[k].copy()
                         cur_array[
                             np.logical_or.reduce(
                                 (
@@ -574,9 +574,9 @@ def _get_dd_wind_field_scipy(
                             )
                         ] = 1
                         cur_array[~valid] = 1
-                        parameters.bg_weights[i] += cur_array
+                        parameters.bg_weights[k] += cur_array
                     else:
-                        parameters.bg_weights[i] = weights_bg[i]
+                        parameters.bg_weights[k] = weights_bg[k]
 
         print("Calculating weights for models...")
         coverage_grade = parameters.weights.sum(axis=0)
@@ -1197,7 +1197,7 @@ def _get_dd_wind_field_tensorflow(
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
 
                     if weights_bg is None:
-                        cur_array = parameters.bg_weights[k]
+                        cur_array = parameters.bg_weights[k].copy()
                         valid = np.logical_and.reduce(
                             (
                                 ~parameters.vrs[i][k].mask,
@@ -1243,9 +1243,9 @@ def _get_dd_wind_field_tensorflow(
                             )
                         ] = 1
                         cur_array[~valid] = 1
-                        parameters.bg_weights[i] += cur_array
+                        parameters.bg_weights[k] += cur_array
                     else:
-                        parameters.bg_weights[i] = weights_bg[i]
+                        parameters.bg_weights[k] = weights_bg[k]
 
         print("Calculating weights for models...")
         coverage_grade = parameters.weights.sum(axis=0)
