@@ -505,7 +505,7 @@ The max of w_init is 0.0
       0|4080.4252|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000|   0.0000
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.12208368625646192
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.12208368625662412
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
@@ -515,21 +515,14 @@ The max of w_init is 0.0
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Max change in w:  nan
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11469278158160577
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.11469278158162828
+Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
      20|  85.8892|  20.6679|   0.0001|   0.0000|   0.0000|   0.0000|   0.0000|  94.1776
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.07331884235807853
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.07331884235808792
+Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
      30|  84.9256|  21.3641|   0.0001|   0.0000|   0.0000|   0.0000|   0.0000|  96.2424
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.13249227771053818
 </pre></div>
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
@@ -636,44 +629,72 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">75</span>     <span class="bp">self</span><span class="o">.</span><span class="n">jac</span> <span class="o">=</span> <span class="n">fg</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="g g-Whitespace">     </span><span class="mi">76</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">fg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:1009,</span> in <span class="ni">J_and_grad</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">997</span>     <span class="k">return</span> <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">),</span> <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">999</span> <span class="n">shaped_winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1000</span>     <span class="n">winds</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1001</span>     <span class="p">(</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>   <span class="mi">1006</span>     <span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1007</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1008</span> <span class="n">radial_cost</span><span class="p">,</span> <span class="n">radial_gradient</span> <span class="o">=</span> <span class="p">(</span>
-<span class="ne">-&gt; </span><span class="mi">1009</span>     <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_radial_vel_cost_and_gradient</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1010</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1011</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">els</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1012</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">azs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1013</span>         <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1014</span>         <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1015</span>         <span class="n">shaped_winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1016</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">wts</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1017</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1018</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1019</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Co</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1020</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1021</span>         <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1022</span>         <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1023</span>         <span class="n">radar_geometry</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">radar_geometry</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1024</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1025</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1026</span> <span class="n">previous_cache</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">"_radial_eval_cache"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:1033,</span> in <span class="ni">J_and_grad</span><span class="nt">(winds, parameters)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1027</span> <span class="n">parameters</span><span class="o">.</span><span class="n">_radial_eval_cache</span> <span class="o">=</span> <span class="p">{</span>
 <span class="g g-Whitespace">   </span><span class="mi">1028</span>     <span class="s2">"source_winds"</span><span class="p">:</span> <span class="n">winds</span><span class="p">,</span>
 <span class="g g-Whitespace">   </span><span class="mi">1029</span>     <span class="s2">"cost"</span><span class="p">:</span> <span class="n">radial_cost</span><span class="p">,</span>
 <span class="g g-Whitespace">   </span><span class="mi">1030</span>     <span class="s2">"gradient"</span><span class="p">:</span> <span class="n">radial_gradient</span><span class="p">,</span>
 <span class="g g-Whitespace">   </span><span class="mi">1031</span> <span class="p">}</span>
+<span class="g g-Whitespace">   </span><span class="mi">1032</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1033</span>     <span class="k">return</span> <span class="n">J_function</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">),</span> <span class="n">grad_J</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1034</span> <span class="k">finally</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1035</span>     <span class="k">if</span> <span class="n">previous_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:312,</span> in <span class="ni">calculate_radial_vel_cost_and_gradient</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc, upper_bc_mask, parallel, radar_geometry)</span>
-<span class="g g-Whitespace">    </span><span class="mi">310</span>         <span class="n">p_x1</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">residual</span> <span class="o">*</span> <span class="n">x_projection</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">311</span>         <span class="n">p_y1</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">residual</span> <span class="o">*</span> <span class="n">y_projection</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">lambda_o</span>
-<span class="ne">--&gt; </span><span class="mi">312</span>         <span class="n">p_z1</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">residual</span> <span class="o">*</span> <span class="n">sin_el</span> <span class="o">*</span> <span class="n">weight</span> <span class="o">*</span> <span class="n">lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span> <span class="n">p_z1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="g g-Whitespace">    </span><span class="mi">315</span> <span class="n">p_z1</span> <span class="o">=</span> <span class="n">_apply_upper_bc</span><span class="p">(</span><span class="n">p_z1</span><span class="p">,</span> <span class="n">upper_bc</span><span class="p">,</span> <span class="n">upper_bc_mask</span><span class="p">)</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:802,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span>     <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_terrain_gradient</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">795</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">798</span>         <span class="n">coeff</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cterrain</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">801</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">802</span>     <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_smoothness_gradient</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">803</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">804</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">805</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">806</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dx</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">807</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">808</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">dz</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">809</span>         <span class="n">Cx</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cx</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">810</span>         <span class="n">Cy</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cy</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">811</span>         <span class="n">Cz</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">Cz</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">812</span>         <span class="n">upper_bc</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">813</span>         <span class="n">upper_bc_mask</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc_mask</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">814</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">816</span> <span class="k">if</span> <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">817</span>     <span class="n">grad</span> <span class="o">+=</span> <span class="n">_cost_functions_numpy</span><span class="o">.</span><span class="n">calculate_background_gradient</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">818</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<span class="g g-Whitespace">    </span><span class="mi">819</span>         <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">824</span>         <span class="n">parameters</span><span class="o">.</span><span class="n">Cb</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">825</span>     <span class="p">)</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:444,</span> in <span class="ni">calculate_smoothness_gradient</span><span class="nt">(u, v, w, dx, dy, dz, Cx, Cy, Cz, upper_bc, upper_bc_mask)</span>
+<span class="g g-Whitespace">    </span><span class="mi">441</span> <span class="n">dzz</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">field</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">443</span> <span class="n">sx</span> <span class="o">=</span> <span class="n">dxx</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">dxx</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">dxx</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">444</span> <span class="n">sy</span> <span class="o">=</span> <span class="n">dyy</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">dyy</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">dyy</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">445</span> <span class="n">sz</span> <span class="o">=</span> <span class="n">dzz</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">dzz</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">dzz</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">447</span> <span class="n">base_gradient</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">Cx</span> <span class="o">*</span> <span class="n">_gradient_adjoint</span><span class="p">(</span><span class="n">_gradient_adjoint</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dx</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">449</span>     <span class="o">+</span> <span class="n">Cy</span> <span class="o">*</span> <span class="n">_gradient_adjoint</span><span class="p">(</span><span class="n">_gradient_adjoint</span><span class="p">(</span><span class="n">sy</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dy</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span>     <span class="o">+</span> <span class="n">Cz</span> <span class="o">*</span> <span class="n">_gradient_adjoint</span><span class="p">(</span><span class="n">_gradient_adjoint</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dz</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:440,</span> in <span class="ni">calculate_smoothness_gradient.&lt;locals&gt;.&lt;lambda&gt;</span><span class="nt">(field)</span>
+<span class="g g-Whitespace">    </span><span class="mi">407</span><span class="w"> </span><span class="sd">"""</span>
+<span class="g g-Whitespace">    </span><span class="mi">408</span><span class="sd"> Calculates the gradient of the smoothness cost function</span>
+<span class="g g-Whitespace">    </span><span class="mi">409</span><span class="sd"> by taking the Laplacian of the Laplacian of the wind field.</span>
+<span class="sd">   (...)    437     value of gradient of smoothness cost function</span>
+<span class="g g-Whitespace">    </span><span class="mi">438</span><span class="sd"> """</span>
+<span class="g g-Whitespace">    </span><span class="mi">439</span> <span class="n">dxx</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">field</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">dx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">440</span> <span class="n">dyy</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">field</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">dy</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">441</span> <span class="n">dzz</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">field</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">dz</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">443</span> <span class="n">sx</span> <span class="o">=</span> <span class="n">dxx</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">+</span> <span class="n">dxx</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">dxx</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+<span class="nn">File ~/miniconda3/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:1325,</span> in <span class="ni">gradient</span><span class="nt">(f, axis, edge_order, *varargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1322</span> <span class="n">slice4</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1324</span> <span class="k">if</span> <span class="n">uniform_spacing</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1325</span>     <span class="n">out</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slice1</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slice4</span><span class="p">)]</span> <span class="o">-</span> <span class="n">f</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">slice2</span><span class="p">)])</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">ax_dx</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1326</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1327</span>     <span class="n">dx1</span> <span class="o">=</span> <span class="n">ax_dx</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>

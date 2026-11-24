@@ -568,13 +568,6 @@ The max of w_init is 0.0
       0|4115.2916|   0.0000|   0.0000|   0.0000|   0.0000|11243.5276|   0.0000|   0.0000
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The gradient of the cost functions is 0.18510953113545145
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  | Max w  
-     10| 156.0050|  45.5946|   0.0133|   0.0000|   0.0000| 436.1589|   0.0000|  39.2553
-</pre></div>
-</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
 <span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">68</span>
@@ -686,44 +679,62 @@ The max of w_init is 0.0
 <span class="g g-Whitespace">     </span><span class="mi">75</span><span class="s2">     self.jac = fg[1]</span>
 <span class="g g-Whitespace">     </span><span class="mi">76</span><span class="s2">     self._value = fg[0]</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:1009,</span> in <span class="ni">J_and_grad</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">997</span><span class="s2">     return J_function(winds, parameters), grad_J(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">999</span><span class="s2"> shaped_winds = np.reshape(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1000</span><span class="s2">     winds,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1001</span><span class="s2">     (</span>
-<span class="s2">   (...)   1006     ),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1007</span><span class="s2"> )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1008</span><span class="s2"> radial_cost, radial_gradient = (</span>
-<span class="ne">-&gt; </span><span class="mi">1009</span><span class="s2">     _cost_functions_numpy.calculate_radial_vel_cost_and_gradient(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1010</span><span class="s2">         parameters.vrs,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1011</span><span class="s2">         parameters.els,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1012</span><span class="s2">         parameters.azs,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1013</span><span class="s2">         shaped_winds[0],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1014</span><span class="s2">         shaped_winds[1],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1015</span><span class="s2">         shaped_winds[2],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1016</span><span class="s2">         parameters.wts,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1017</span><span class="s2">         parameters.weights,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1018</span><span class="s2">         parameters.rmsVr,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1019</span><span class="s2">         coeff=parameters.Co,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1020</span><span class="s2">         upper_bc=parameters.upper_bc,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1021</span><span class="s2">         upper_bc_mask=parameters.upper_bc_mask,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1022</span><span class="s2">         parallel=False,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1023</span><span class="s2">         radar_geometry=parameters.radar_geometry,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1024</span><span class="s2">     )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1025</span><span class="s2"> )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1026</span><span class="s2"> previous_cache = getattr(parameters, "_radial_eval_cache", None)</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:1033,</span> in <span class="ni">J_and_grad</span><span class="nt">(winds, parameters)</span>
 <span class="g g-Whitespace">   </span><span class="mi">1027</span><span class="s2"> parameters._radial_eval_cache = {</span>
 <span class="g g-Whitespace">   </span><span class="mi">1028</span><span class="s2">     "source_winds": winds,</span>
 <span class="g g-Whitespace">   </span><span class="mi">1029</span><span class="s2">     "cost": radial_cost,</span>
 <span class="g g-Whitespace">   </span><span class="mi">1030</span><span class="s2">     "gradient": radial_gradient,</span>
 <span class="g g-Whitespace">   </span><span class="mi">1031</span><span class="s2"> }</span>
+<span class="g g-Whitespace">   </span><span class="mi">1032</span><span class="s2"> try:</span>
+<span class="ne">-&gt; </span><span class="mi">1033</span><span class="s2">     return J_function(winds, parameters), grad_J(winds, parameters)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1034</span><span class="s2"> finally:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1035</span><span class="s2">     if previous_cache is None:</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:312,</span> in <span class="ni">calculate_radial_vel_cost_and_gradient</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc, upper_bc_mask, parallel, radar_geometry)</span>
-<span class="g g-Whitespace">    </span><span class="mi">310</span><span class="s2">         p_x1 += 2 * residual * x_projection * weight * lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">311</span><span class="s2">         p_y1 += 2 * residual * y_projection * weight * lambda_o</span>
-<span class="ne">--&gt; </span><span class="mi">312</span><span class="s2">         p_z1 += 2 * residual * sin_el * weight * lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span><span class="s2"> p_z1[0, :, :] = 0</span>
-<span class="g g-Whitespace">    </span><span class="mi">315</span><span class="s2"> p_z1 = _apply_upper_bc(p_z1, upper_bc, upper_bc_mask)</span>
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:777,</span> in <span class="ni">grad_J</span><span class="nt">(winds, parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">761</span><span class="s2">     grad = _cost_functions_numpy.calculate_grad_radial_vel(</span>
+<span class="g g-Whitespace">    </span><span class="mi">762</span><span class="s2">         parameters.vrs,</span>
+<span class="g g-Whitespace">    </span><span class="mi">763</span><span class="s2">         parameters.els,</span>
+<span class="s2">   (...)    773         upper_bc_mask=parameters.upper_bc_mask,</span>
+<span class="g g-Whitespace">    </span><span class="mi">774</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">776</span><span class="s2"> if parameters.Cm &gt; 0:</span>
+<span class="ne">--&gt; </span><span class="mi">777</span><span class="s2">     grad += _cost_functions_numpy.calculate_mass_continuity_gradient(</span>
+<span class="g g-Whitespace">    </span><span class="mi">778</span><span class="s2">         winds[0],</span>
+<span class="g g-Whitespace">    </span><span class="mi">779</span><span class="s2">         winds[1],</span>
+<span class="g g-Whitespace">    </span><span class="mi">780</span><span class="s2">         winds[2],</span>
+<span class="g g-Whitespace">    </span><span class="mi">781</span><span class="s2">         parameters.z,</span>
+<span class="g g-Whitespace">    </span><span class="mi">782</span><span class="s2">         parameters.dx,</span>
+<span class="g g-Whitespace">    </span><span class="mi">783</span><span class="s2">         parameters.dy,</span>
+<span class="g g-Whitespace">    </span><span class="mi">784</span><span class="s2">         parameters.dz,</span>
+<span class="g g-Whitespace">    </span><span class="mi">785</span><span class="s2">         coeff=parameters.Cm,</span>
+<span class="g g-Whitespace">    </span><span class="mi">786</span><span class="s2">         upper_bc=parameters.upper_bc,</span>
+<span class="g g-Whitespace">    </span><span class="mi">787</span><span class="s2">         upper_bc_mask=parameters.upper_bc_mask,</span>
+<span class="g g-Whitespace">    </span><span class="mi">788</span><span class="s2">         lower_bc=parameters.lower_bc,</span>
+<span class="g g-Whitespace">    </span><span class="mi">789</span><span class="s2">         fluid=_fluid_mask(parameters),</span>
+<span class="g g-Whitespace">    </span><span class="mi">790</span><span class="s2">     )</span>
+<span class="g g-Whitespace">    </span><span class="mi">792</span><span class="s2"> if parameters.Cterrain &gt; 0:</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span><span class="s2">     grad += _cost_functions_numpy.calculate_terrain_gradient(</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span><span class="s2">         winds[0],</span>
+<span class="g g-Whitespace">    </span><span class="mi">795</span><span class="s2">         winds[1],</span>
+<span class="s2">   (...)    798         coeff=parameters.Cterrain,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span><span class="s2">     )</span>
+
+<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:695,</span> in <span class="ni">calculate_mass_continuity_gradient</span><span class="nt">(u, v, w, z, dx, dy, dz, coeff, anel, upper_bc, upper_bc_mask, lower_bc, fluid)</span>
+<span class="g g-Whitespace">    </span><span class="mi">647</span><span class="s2"> """</span>
+<span class="g g-Whitespace">    </span><span class="mi">648</span> <span class="n">Calculates</span> <span class="n">the</span> <span class="n">gradient</span> <span class="n">of</span> <span class="n">mass</span> <span class="n">continuity</span> <span class="n">cost</span> <span class="n">function</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">done</span> <span class="n">by</span>
+<span class="g g-Whitespace">    </span><span class="mi">649</span> <span class="n">taking</span> <span class="n">the</span> <span class="n">negative</span> <span class="n">gradient</span> <span class="n">of</span> <span class="n">the</span> <span class="n">divergence</span> <span class="n">of</span> <span class="n">the</span> <span class="n">wind</span> <span class="n">field</span><span class="o">.</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">692</span>     <span class="n">value</span> <span class="n">of</span> <span class="n">gradient</span> <span class="n">of</span> <span class="n">mass</span> <span class="n">continuity</span> <span class="n">cost</span> <span class="n">function</span>
+<span class="g g-Whitespace">    </span><span class="mi">693</span> <span class="s2">"""</span>
+<span class="g g-Whitespace">    </span><span class="mi">694</span><span class="s2"> dudx = np.gradient(u, dx, axis=2)</span>
+<span class="ne">--&gt; </span><span class="mi">695</span><span class="s2"> dvdy = np.gradient(v, dy, axis=1)</span>
+<span class="g g-Whitespace">    </span><span class="mi">696</span><span class="s2"> dwdz = np.gradient(w, dz, axis=0)</span>
+<span class="g g-Whitespace">    </span><span class="mi">697</span><span class="s2"> if anel == 1:</span>
+
+<span class="nn">File ~/miniconda3/envs/pydda-docs/lib/python3.14/site-packages/numpy/lib/_function_base_impl.py:1350,</span> in <span class="ni">gradient</span><span class="nt">(f, axis, edge_order, *varargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1348</span><span class="s2"> dx_0 = ax_dx if uniform_spacing else ax_dx[0]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1349</span><span class="s2"> # 1D equivalent -- out[0] = (f[1] - f[0]) / (x[1] - x[0])</span>
+<span class="ne">-&gt; </span><span class="mi">1350</span><span class="s2"> out[tuple(slice1)] = (f[tuple(slice2)] - f[tuple(slice3)]) / dx_0</span>
+<span class="g g-Whitespace">   </span><span class="mi">1352</span><span class="s2"> slice1[axis] = -1</span>
+<span class="g g-Whitespace">   </span><span class="mi">1353</span><span class="s2"> slice2[axis] = -1</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
