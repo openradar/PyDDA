@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Guide and example on how to use nested grids with DataTrees &#8212; PyDDA 2.5.0 documentation</title>
+    <title>Guide and example on how to use nested grids with DataTrees &#8212; PyDDA 2.7.0 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
@@ -44,11 +44,11 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=3c4615cf"></script>
+    <script src="../../_static/documentation_options.js?v=dfec817d"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/auto_examples/plot_grid_nesting_example';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.5.0" />
+  <meta name="docsearch:version" content="2.7.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.5.0 documentation</p>
+    <p class="title logo__title">PyDDA 2.7.0 documentation</p>
   
 </a></div>
     
@@ -537,7 +537,7 @@ Plot the coarse grid output and finer grid output
 ##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.5.0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Welcome to PyDDA 2.7.0
 If you are using PyDDA in your publications, please cite:
 Jackson et al. (2020) Journal of Open Research Science
 Detecting Jax...
@@ -682,51 +682,25 @@ The max of w_init is 0.0
 <span class="ne">---&gt; </span><span class="mi">80</span><span class="s2">     self._compute_if_needed(x, *args)</span>
 <span class="g g-Whitespace">     </span><span class="mi">81</span><span class="s2">     return self._value</span>
 
-<span class="nn">File ~/miniconda3/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_optimize.py:74,</span> in <span class="ni">MemoizeJac._compute_if_needed</span><span class="nt">(self, x, *args)</span>
-<span class="g g-Whitespace">     </span><span class="mi">72</span><span class="s2"> if not np.all(x == self.x) or self._value is None or self.jac is None:</span>
-<span class="g g-Whitespace">     </span><span class="mi">73</span><span class="s2">     self.x = np.asarray(x).copy()</span>
-<span class="ne">---&gt; </span><span class="mi">74</span><span class="s2">     fg = self.fun(x, *args)</span>
-<span class="g g-Whitespace">     </span><span class="mi">75</span><span class="s2">     self.jac = fg[1]</span>
-<span class="g g-Whitespace">     </span><span class="mi">76</span><span class="s2">     self._value = fg[0]</span>
+<span class="nn">File ~/miniconda3/envs/pydda-docs/lib/python3.14/site-packages/scipy/optimize/_optimize.py:72,</span> in <span class="ni">MemoizeJac._compute_if_needed</span><span class="nt">(self, x, *args)</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span><span class="s2"> def _compute_if_needed(self, x, *args):</span>
+<span class="ne">---&gt; </span><span class="mi">72</span><span class="s2">     if not np.all(x == self.x) or self._value is None or self.jac is None:</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span><span class="s2">         self.x = np.asarray(x).copy()</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span><span class="s2">         fg = self.fun(x, *args)</span>
 
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/cost_functions.py:1009,</span> in <span class="ni">J_and_grad</span><span class="nt">(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">997</span><span class="s2">     return J_function(winds, parameters), grad_J(winds, parameters)</span>
-<span class="g g-Whitespace">    </span><span class="mi">999</span><span class="s2"> shaped_winds = np.reshape(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1000</span><span class="s2">     winds,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1001</span><span class="s2">     (</span>
-<span class="s2">   (...)   1006     ),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1007</span><span class="s2"> )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1008</span><span class="s2"> radial_cost, radial_gradient = (</span>
-<span class="ne">-&gt; </span><span class="mi">1009</span><span class="s2">     _cost_functions_numpy.calculate_radial_vel_cost_and_gradient(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1010</span><span class="s2">         parameters.vrs,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1011</span><span class="s2">         parameters.els,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1012</span><span class="s2">         parameters.azs,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1013</span><span class="s2">         shaped_winds[0],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1014</span><span class="s2">         shaped_winds[1],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1015</span><span class="s2">         shaped_winds[2],</span>
-<span class="g g-Whitespace">   </span><span class="mi">1016</span><span class="s2">         parameters.wts,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1017</span><span class="s2">         parameters.weights,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1018</span><span class="s2">         parameters.rmsVr,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1019</span><span class="s2">         coeff=parameters.Co,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1020</span><span class="s2">         upper_bc=parameters.upper_bc,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1021</span><span class="s2">         upper_bc_mask=parameters.upper_bc_mask,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1022</span><span class="s2">         parallel=False,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1023</span><span class="s2">         radar_geometry=parameters.radar_geometry,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1024</span><span class="s2">     )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1025</span><span class="s2"> )</span>
-<span class="g g-Whitespace">   </span><span class="mi">1026</span><span class="s2"> previous_cache = getattr(parameters, "_radial_eval_cache", None)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1027</span><span class="s2"> parameters._radial_eval_cache = {</span>
-<span class="g g-Whitespace">   </span><span class="mi">1028</span><span class="s2">     "source_winds": winds,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1029</span><span class="s2">     "cost": radial_cost,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1030</span><span class="s2">     "gradient": radial_gradient,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1031</span><span class="s2"> }</span>
-
-<span class="nn">File ~/work/PyDDA/PyDDA/pydda/cost_functions/_cost_functions_numpy.py:309,</span> in <span class="ni">calculate_radial_vel_cost_and_gradient</span><span class="nt">(vrs, els, azs, u, v, w, wts, weights, rmsVr, coeff, upper_bc, upper_bc_mask, parallel, radar_geometry)</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span><span class="s2"> v_ar = x_projection * u + y_projection * v + sin_el * (w - wts_abs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span><span class="s2"> residual = v_ar - vr</span>
-<span class="ne">--&gt; </span><span class="mi">309</span><span class="s2"> cost += lambda_o * np.sum(np.square(residual) * weight)</span>
-<span class="g g-Whitespace">    </span><span class="mi">310</span><span class="s2"> p_x1 += 2 * residual * x_projection * weight * lambda_o</span>
-<span class="g g-Whitespace">    </span><span class="mi">311</span><span class="s2"> p_y1 += 2 * residual * y_projection * weight * lambda_o</span>
+<span class="nn">File ~/miniconda3/envs/pydda-docs/lib/python3.14/site-packages/numpy/_core/fromnumeric.py:2581,</span> in <span class="ni">_all_dispatcher</span><span class="nt">(a, axis, out, keepdims, where)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2476</span><span class="s2">     """</span>
+<span class="g g-Whitespace">   </span><span class="mi">2477</span>     <span class="n">Test</span> <span class="n">whether</span> <span class="nb">any</span> <span class="n">array</span> <span class="n">element</span> <span class="n">along</span> <span class="n">a</span> <span class="n">given</span> <span class="n">axis</span> <span class="n">evaluates</span> <span class="n">to</span> <span class="kc">True</span><span class="o">.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2478</span> 
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>   <span class="mi">2575</span> 
+<span class="g g-Whitespace">   </span><span class="mi">2576</span>     <span class="s2">"""</span>
+<span class="g g-Whitespace">   </span><span class="mi">2577</span><span class="s2">     return _wrapreduction_any_all(a, np.logical_or, 'any', axis, out,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2578</span><span class="s2">                                   keepdims=keepdims, where=where)</span>
+<span class="ne">-&gt; </span><span class="mi">2581</span><span class="s2"> def _all_dispatcher(a, axis=None, out=None, keepdims=None, *,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2582</span><span class="s2">                     where=None):</span>
+<span class="g g-Whitespace">   </span><span class="mi">2583</span><span class="s2">     return (a, where, out)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2586</span><span class="s2"> @array_function_dispatch(_all_dispatcher)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2587</span><span class="s2"> def all(a, axis=None, out=None, keepdims=np._NoValue, *, where=np._NoValue):</span>
 
 <span class="ne">KeyboardInterrupt</span>: 
 </pre></div>
