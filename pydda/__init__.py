@@ -14,7 +14,7 @@ from . import io
 from . import terrain
 
 
-__version__ = "2.5.0"
+__version__ = "2.7.0"
 
 print("Welcome to PyDDA %s" % __version__)
 print("If you are using PyDDA in your publications, please cite:")
